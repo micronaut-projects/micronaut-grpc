@@ -101,7 +101,19 @@ function addJsClass() {
 </div>
 
 
-
+<div class="paragraph">
+<p>GRPC includes tracing based on OpenCensus, however if you wish to use Micronaut&#8217;s integration with Jaeger or Zipkin you can do so by adding the following dependencies:</p>
+</div>
+<div class="listingblock">
+<div class="title">Enabling Tracing with GRPC</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">testCompile "io.micronaut:micronaut-tracing"
+testCompile 'io.opentracing.contrib:opentracing-grpc:0.0.10'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You then need to <a href="https://docs.micronaut.io/latest/guide/index.html#distributedTracing">configure either Jaeger or Zipkin</a> appropriately.</p>
+</div>
 
 
                 <div style="clear:both;margin-top:15px;"></div>

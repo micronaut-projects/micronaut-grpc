@@ -128,7 +128,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html#getBuilder--">getBuilder()</a></span> - Method in class io.micronaut.grpc.tracing.<a href="io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing">GrpcServerTracingInterceptorConfiguration</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.GrpcSslConfiguration.html#getCertChain--">getCertChain()</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration.GrpcSslConfiguration</a></dt>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html#getCertChain--">getCertChain()</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#getChannelBuilder--">getChannelBuilder()</a></span> - Method in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
 <dd>&nbsp;</dd>
@@ -140,7 +140,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html#getPort--">getPort()</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server">GrpcEmbeddedServer</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.GrpcSslConfiguration.html#getPrivateKey--">getPrivateKey()</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration.GrpcSslConfiguration</a></dt>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html#getPrivateKey--">getPrivateKey()</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html#getScheme--">getScheme()</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server">GrpcEmbeddedServer</a></dt>
 <dd>&nbsp;</dd>
@@ -226,10 +226,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#GrpcServerConfiguration-io.micronaut.context.env.Environment-java.lang.String-java.lang.Integer-java.util.concurrent.ExecutorService-">GrpcServerConfiguration(Environment, String, Integer, ExecutorService)</a></span> - Constructor for class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="io/micronaut/grpc/server/GrpcServerConfiguration.GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server"><span class="typeNameLink">GrpcServerConfiguration.GrpcSslConfiguration</span></a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
-<dd>
-<div class="block">Configuration properties for SSL</div>
-</dd>
 <dt><a href="io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing"><span class="typeNameLink">GrpcServerTracingInterceptorConfiguration</span></a> - Class in <a href="io/micronaut/grpc/tracing/package-summary.html">io.micronaut.grpc.tracing</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html#GrpcServerTracingInterceptorConfiguration-io.opentracing.Tracer-">GrpcServerTracingInterceptorConfiguration(Tracer)</a></span> - Constructor for class io.micronaut.grpc.tracing.<a href="io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing">GrpcServerTracingInterceptorConfiguration</a></dt>
@@ -238,7 +234,9 @@
 <dd>
 <div class="block">A meta annotation for annotation GRPC services.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.GrpcSslConfiguration.html#GrpcSslConfiguration--">GrpcSslConfiguration()</a></span> - Constructor for class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration.GrpcSslConfiguration</a></dt>
+<dt><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server"><span class="typeNameLink">GrpcSslConfiguration</span></a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html#GrpcSslConfiguration--">GrpcSslConfiguration()</a></span> - Constructor for class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/tracing/GrpcTracingInterceptorFactory.html" title="class in io.micronaut.grpc.tracing"><span class="typeNameLink">GrpcTracingInterceptorFactory</span></a> - Class in <a href="io/micronaut/grpc/tracing/package-summary.html">io.micronaut.grpc.tracing</a></dt>
 <dd>&nbsp;</dd>
@@ -348,7 +346,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/tracing/GrpcTracingInterceptorFactory.html#serverTracingInterceptor-io.micronaut.grpc.tracing.GrpcServerTracingInterceptorConfiguration-">serverTracingInterceptor(GrpcServerTracingInterceptorConfiguration)</a></span> - Method in class io.micronaut.grpc.tracing.<a href="io/micronaut/grpc/tracing/GrpcTracingInterceptorFactory.html" title="class in io.micronaut.grpc.tracing">GrpcTracingInterceptorFactory</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.GrpcSslConfiguration.html#setCertChain-java.lang.String-">setCertChain(String)</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration.GrpcSslConfiguration</a></dt>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html#setCertChain-java.lang.String-">setCertChain(String)</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/tracing/GrpcClientTracingInterceptorConfiguration.html#setClientCloseDecorator-io.opentracing.contrib.grpc.ClientCloseDecorator-">setClientCloseDecorator(ClientCloseDecorator)</a></span> - Method in class io.micronaut.grpc.tracing.<a href="io/micronaut/grpc/tracing/GrpcClientTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing">GrpcClientTracingInterceptorConfiguration</a></dt>
 <dd>
@@ -372,13 +370,13 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcNamedManagedChannelConfiguration.html#setNameResolverFactory-io.grpc.NameResolver.Factory-">setNameResolverFactory(NameResolver.Factory)</a></span> - Method in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcNamedManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcNamedManagedChannelConfiguration</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.GrpcSslConfiguration.html#setPrivateKey-java.lang.String-">setPrivateKey(String)</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration.GrpcSslConfiguration</a></dt>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html#setPrivateKey-java.lang.String-">setPrivateKey(String)</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html#setServerCloseDecorator-io.opentracing.contrib.grpc.ServerCloseDecorator-">setServerCloseDecorator(ServerCloseDecorator)</a></span> - Method in class io.micronaut.grpc.tracing.<a href="io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing">GrpcServerTracingInterceptorConfiguration</a></dt>
 <dd>
 <div class="block">Decorates the server span with custom data when the gRPC call is closed.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#setServerConfiguration-io.micronaut.grpc.server.GrpcServerConfiguration.GrpcSslConfiguration-">setServerConfiguration(GrpcServerConfiguration.GrpcSslConfiguration)</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#setServerConfiguration-io.micronaut.grpc.server.GrpcSslConfiguration-">setServerConfiguration(GrpcSslConfiguration)</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
 <dd>
 <div class="block">Sets the SSL configuration.</div>
 </dd>
