@@ -1,1 +1,9 @@
-TODO
+This project allows building GRPC servers and clients with Micronaut.
+
+Micronaut add the following features to the GRPC experience:
+
+* Compile Time Dependency Injection (DI) and Aspect Oriented Programming (AOP)
+* Service Discovery and Registrations
+* Distributed Tracing
+* Cloud Native Configuration
+

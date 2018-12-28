@@ -1,2 +1,8 @@
 introduction:
   title: Introduction
+gettingStarted: Getting Started
+server: GRPC Server
+client: GRPC Clients
+serviceDiscovery: Service Discovery
+tracing: Distributed Tracing
+

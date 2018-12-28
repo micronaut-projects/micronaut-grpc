@@ -4,10 +4,9 @@ plugins {
     id "net.ltgt.apt-eclipse" version "0.18"
     id "net.ltgt.apt-idea" version "0.18"
     id 'com.google.protobuf' version '0.8.5'
+    id "application"
+    id "java"
 }
-
-apply plugin:"application"
-apply plugin:"java"
 
 version "0.1"
 group "helloworld"
