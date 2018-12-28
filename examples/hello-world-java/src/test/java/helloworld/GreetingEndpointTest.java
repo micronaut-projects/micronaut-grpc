@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import javax.inject.Inject;
 
 @MicronautTest
-public class GreetingServiceTest {
+public class GreetingEndpointTest {
 
     @Inject
     GreeterGrpc.GreeterBlockingStub blockingStub;
