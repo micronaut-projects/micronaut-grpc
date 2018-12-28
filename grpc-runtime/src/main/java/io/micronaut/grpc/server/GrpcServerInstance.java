@@ -2,7 +2,6 @@ package io.micronaut.grpc.server;
 
 import io.micronaut.core.convert.value.ConvertibleValues;
 import io.micronaut.core.util.CollectionUtils;
-import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.metadata.ServiceInstanceMetadataContributor;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.EmbeddedServerInstance;

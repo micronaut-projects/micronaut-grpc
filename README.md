@@ -4,7 +4,9 @@ This project includes integration between [Micronaut](http://micronaut.io) and [
 
 ## Documentation
 
-Coming soon...
+This project is not yet released.
+
+See the [Snapshot Documentation](https://micronaut-projects.github.io/micronaut-grpc/snapshot/guide/index.html) for more information.
 
 ## Examples
 

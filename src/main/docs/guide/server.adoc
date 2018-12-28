@@ -49,6 +49,16 @@ Alternatively if you prefer programmatic configuration you can write a `BeanCrea
 include::grpc-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderListener.java[]
 ----
 
+=== Auto Configured Types
+
+By default the server will automatically be dependency injected with beans of the following types:
+
+* `io.grpc.BindableService` - Any services declared as beans
+* `io.grpc.ServerInterceptor` - Any interceptors declared as beans
+* `io.grpc.ServerTransportFilter` - Any transport filters declared as beans
+
+In addition, by default the server will be setup to use Micronaut's I/O executor service.
+
 === Testing the Server
 
 To test the server it is recommended that you use https://github.com/micronaut-projects/micronaut-test[Micronaut Test].

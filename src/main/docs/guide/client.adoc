@@ -1,0 +1,72 @@
+Micronaut for GRPC does not create client beans automatically for you. Instead you must expose which client stubs you application needs using a `@Factory`.
+
+You can dependency inject a `io.grpc.ManagedChannel` into the factory. The channel can be configured using properties defined under `grpc.client` by default.
+
+For example, if you wish to disable secure communication:
+
+[source,yaml]
+----
+grpc:
+    client:
+        plaintext: true
+        max-retry-attempts: 10
+----
+
+Any property of the `io.grpc.netty.NettyChannelBuilder` type can be configured.
+
+Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
+
+.Configuring the NettyChannelBuilder
+[source,java]
+----
+include::grpc-runtime/src/test/groovy/io/micronaut/grpc/ManagedChannelBuilderListener.java[]
+----
+
+The value of the `@GrpcChannel` annotation can be used to specify the target server, the configuration for which can also be externalized:
+
+[source,java]
+----
+@Factory
+class Clients {
+    @Singleton
+    GreeterGrpc.GreeterStub reactiveStub(
+        @GrpcChannel("http://${my.server}:${my.port}")
+        ManagedChannel channel) {
+        return GreeterGrpc.newStub(
+                channel
+        );
+    }
+}
+----
+
+The above example requires that `my.server` and `my.port` are specified in `application.yml` (or via environment variables `MY_SERVER` and `MY_PORT`). You can also externalize this further into configuration and provide channel specific configuration.
+
+For example given the following configuration:
+
+[source,yaml]
+----
+grpc:
+    channels:
+        greet:
+            address: 'http://${my.server}:${my.port}'
+            plaintext: true
+            max-retry-attempts: 10
+----
+
+You can then define the `@GrpcChannel` annotation as follows:
+
+[source,java]
+----
+@Singleton
+GreeterGrpc.GreeterStub reactiveStub(
+    @GrpcChannel("greet")
+    ManagedChannel channel) {
+    return GreeterGrpc.newStub(
+            channel
+    );
+}
+----
+
+The ID `greet` is used to reference the configuration for `grpc.channels.greet`.
+
+Using service IDs in this way is the preferred way to setup GRPC clients, because it works nicely with Service Discovery (see the next section).
