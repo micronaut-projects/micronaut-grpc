@@ -29,10 +29,10 @@ class GrpcTracingSpec extends Specification {
         given:
         MockTracer tracer = tracer
         PollingConditions conditions = new PollingConditions(timeout: 3, delay: 0.5)
+        testBean.sayHello("Fred") == "Hello Fred"
 
         expect:
         conditions.eventually {
-            testBean.sayHello("Fred") == "Hello Fred"
             myInterceptor.intercepted
             tracer.finishedSpans().size()  == 2
             tracer.finishedSpans()[0].operationName() == 'helloworld.Greeter/SayHello'

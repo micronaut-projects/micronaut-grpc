@@ -9,7 +9,8 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * An annotation that can be used to inject a GRPC client.
+ * A meta annotation for annotation GRPC services. Note that annotation is more
+ * for documentation purposes and not strictly necessary.
  *
  * @author graemerocher
  * @since 1.0
