@@ -1,40 +1,47 @@
 package helloworld;
-
+// tag::imports[]
 import io.grpc.ManagedChannel;
-import io.micronaut.context.annotation.Bean;
-import io.micronaut.context.annotation.Factory;
+import io.micronaut.context.annotation.*;
 import io.micronaut.grpc.annotation.GrpcChannel;
 import io.micronaut.grpc.server.GrpcServerChannel;
 import io.micronaut.test.annotation.MicronautTest;
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
+// end::imports[]
 
-@MicronautTest
+// tag::test[]
+@MicronautTest // <1>
 public class GreetingEndpointTest {
 
     @Inject
-    GreeterGrpc.GreeterBlockingStub blockingStub;
+    GreeterGrpc.GreeterBlockingStub blockingStub; // <2>
 
     @Test
     void testHelloWorld() {
-        Assertions.assertEquals(
+        final HelloRequest request = HelloRequest.newBuilder() // <3>
+                                                 .setName("Fred")
+                                                 .build();
+        assertEquals(
                 "Hello Fred",
-                blockingStub.sayHello(HelloRequest.newBuilder().setName("Fred").build())
+                blockingStub.sayHello(request)
                             .getMessage()
         );
     }
 
 }
+// end::test[]
 
+// tag::clients[]
 @Factory
 class Clients {
     @Bean
     GreeterGrpc.GreeterBlockingStub blockingStub(
-            @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) {
-        return GreeterGrpc.newBlockingStub(
+            @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) { // <1>
+        return GreeterGrpc.newBlockingStub( // <2>
                 channel
         );
     }
 }
+// end::clients[]

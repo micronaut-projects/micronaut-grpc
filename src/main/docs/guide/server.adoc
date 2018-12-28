@@ -49,3 +49,36 @@ Alternatively if you prefer programmatic configuration you can write a `BeanCrea
 include::grpc-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderListener.java[]
 ----
 
+=== Testing the Server
+
+To test the server it is recommended that you use https://github.com/micronaut-projects/micronaut-test[Micronaut Test].
+
+TIP: For detailed instructions on how to setup Micronaut Test for either Spock or JUnit 5 see the https://micronaut-projects.github.io/micronaut-test/latest/guide/index.html[documentation] on the subject.
+
+
+You can then define a blocking stub bean in `src/test/java`. For example:
+
+.Defining Test Clients
+[source,java]
+----
+include::examples/hello-world-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=clients]
+----
+
+<1> A `ManagedChannel` is injected that can communicate with the server.
+<2> The generated GRPC client blocking stub is created.
+
+The above example uses the `@GrpcChannel` annotation to inject a GRPC `ManagedChannel` that can communicate with the running server. This channel will be automatically be shutdown when the application shuts down.
+
+Now that you have a test client, writing the test becomes trivial:
+
+.Writing a Test
+[source,java]
+----
+include::examples/hello-world-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=imports]
+
+include::examples/hello-world-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=test]
+----
+
+<1> The test is annotated with `@MicronautTest`
+<2> The client stub is injected into the test
+<3> A request is sent and the response asserted.
