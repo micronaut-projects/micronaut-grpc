@@ -74,13 +74,13 @@ var activeTableTab = "activeTableTab";
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
@@ -112,7 +112,8 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>@Singleton
- @Requires(missingBeans=io.micronaut.runtime.server.EmbeddedServer.class) @Requires(classes=io.grpc.ServerBuilder.class)
+ @Secondary
+ @Requires(classes=io.grpc.ServerBuilder.class)
 public class <span class="typeNameLabel">GrpcEmbeddedServer</span>
 extends java.lang.Object
 implements io.micronaut.runtime.server.EmbeddedServer</pre>
@@ -122,29 +123,6 @@ implements io.micronaut.runtime.server.EmbeddedServer</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-<ul class="blockList">
-<li class="blockList"><a name="constructor.summary">
-<!--   -->
-</a>
-<h3>Constructor Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Constructor Summary table, listing constructors, and an explanation">
-<caption><span>Constructors</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcEmbeddedServer.html#GrpcEmbeddedServer-io.micronaut.context.ApplicationContext-io.micronaut.runtime.ApplicationConfiguration-io.micronaut.grpc.server.GrpcServerConfiguration-io.grpc.ServerBuilder-io.micronaut.context.event.ApplicationEventPublisher-io.micronaut.discovery.cloud.ComputeInstanceMetadataResolver-java.util.List-">GrpcEmbeddedServer</a></span>(io.micronaut.context.ApplicationContext&nbsp;applicationContext,
-                  io.micronaut.runtime.ApplicationConfiguration&nbsp;applicationConfiguration,
-                  <a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a>&nbsp;grpcServerConfiguration,
-                  io.grpc.ServerBuilder&lt;?&gt;&nbsp;serverBuilder,
-                  io.micronaut.context.event.ApplicationEventPublisher&nbsp;eventPublisher,
-                  io.micronaut.discovery.cloud.ComputeInstanceMetadataResolver&nbsp;computeInstanceMetadataResolver,
-                  java.util.List&lt;io.micronaut.discovery.metadata.ServiceInstanceMetadataContributor&gt;&nbsp;metadataContributors)</code>&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
 <!-- ========== METHOD SUMMARY =========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method.summary">
@@ -242,36 +220,6 @@ implements io.micronaut.runtime.server.EmbeddedServer</pre>
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-<ul class="blockList">
-<li class="blockList"><a name="constructor.detail">
-<!--   -->
-</a>
-<h3>Constructor Detail</h3>
-<a name="GrpcEmbeddedServer-io.micronaut.context.ApplicationContext-io.micronaut.runtime.ApplicationConfiguration-io.micronaut.grpc.server.GrpcServerConfiguration-io.grpc.ServerBuilder-io.micronaut.context.event.ApplicationEventPublisher-io.micronaut.discovery.cloud.ComputeInstanceMetadataResolver-java.util.List-">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>GrpcEmbeddedServer</h4>
-<pre>public&nbsp;GrpcEmbeddedServer(@Nonnull
-                          io.micronaut.context.ApplicationContext&nbsp;applicationContext,
-                          @Nonnull
-                          io.micronaut.runtime.ApplicationConfiguration&nbsp;applicationConfiguration,
-                          @Nonnull
-                          <a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a>&nbsp;grpcServerConfiguration,
-                          @Nonnull
-                          io.grpc.ServerBuilder&lt;?&gt;&nbsp;serverBuilder,
-                          @Nonnull
-                          io.micronaut.context.event.ApplicationEventPublisher&nbsp;eventPublisher,
-                          @Nullable
-                          io.micronaut.discovery.cloud.ComputeInstanceMetadataResolver&nbsp;computeInstanceMetadataResolver,
-                          @Nullable
-                          java.util.List&lt;io.micronaut.discovery.metadata.ServiceInstanceMetadataContributor&gt;&nbsp;metadataContributors)</pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ============ METHOD DETAIL ========== -->
 <ul class="blockList">
 <li class="blockList"><a name="method.detail">
@@ -496,13 +444,13 @@ public&nbsp;<a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguratio
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
-<li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
