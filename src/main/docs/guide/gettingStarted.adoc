@@ -1,1 +1,76 @@
-To get started you
+To get started you need first create a Micronaut project. The easiest way to do this is with the CLI:
+
+[source,bash]
+----
+$ mn create-app helloworld
+----
+
+=== Configuring Gradle
+
+To configure Gradle, first apply the `com.google.protobuf` plugin:
+
+[source,groovy]
+----
+plugins {
+    ...
+include::examples/hello-world-java/build.gradle[tags=plugin]
+}
+
+----
+
+Then configure the GRPC and protobuf plugins:
+
+[source,groovy]
+----
+include::examples/hello-world-java/build.gradle[tags=config]
+----
+
+Finally add the following dependencies to your build:
+
+.build.gradle
+[source,groovy,subs="attributes"]
+----
+compile "io.micronaut.grpc:micronaut-grpc-runtime:{version}"
+----
+
+NOTE: Ifyou wish to use GRPC standalone without the Micronaut HTTP server you should comment ouf the `micronaut-http-server-netty` dependency.
+
+You can then run:
+
+[source,bash]
+$ ./gradlew generateProto
+
+To generate the Java sources from protobuf definitions in `src/main/proto`.
+
+=== Configuring Maven
+
+For Maven create a maven project first:
+
+[source,bash]
+----
+$ mn create-app helloworld --build
+----
+
+Then configure the Protobuf plugin appropriately:
+
+[source,xml]
+----
+include::examples/hello-world-java/pom.xml[tags=plugin, indent=0]
+----
+
+You can then run:
+
+[source,bash]
+$ ./mvnw generate-sources
+
+To generate the Java sources from protobuf definitions in `src/main/proto`.
+
+=== Defining a Protobuf File
+
+Once you have the build setup you can define a Protobuf file for your GRPC service. For example:
+
+.src/main/proto/helloworld.proto
+[source,protobuf]
+----
+include::examples/hello-world-java/src/main/proto/helloworld.proto[]
+----

@@ -3,7 +3,9 @@ plugins {
     id "com.github.johnrengelman.shadow" version "4.0.2"
     id "net.ltgt.apt-eclipse" version "0.18"
     id "net.ltgt.apt-idea" version "0.18"
+//   tag::plugin[]
     id 'com.google.protobuf' version '0.8.5'
+//   end::plugin[]
     id "application"
     id "java"
 }
@@ -11,10 +13,7 @@ plugins {
 version "0.1"
 group "helloworld"
 
-ext {
-    protocVersion="3.5.1"
-    grpcVersion="1.17.1"
-}
+
 
 repositories {
     mavenLocal()
@@ -60,6 +59,12 @@ tasks.withType(JavaCompile){
     options.compilerArgs.add('-parameters')
 }
 
+// tag::config[]
+ext {
+    protocVersion="3.5.1"
+    grpcVersion="1.17.1"
+}
+
 sourceSets {
     main {
         java {
@@ -78,3 +83,4 @@ protobuf {
         all()*.plugins { grpc {} }
     }
 }
+// end::config[]

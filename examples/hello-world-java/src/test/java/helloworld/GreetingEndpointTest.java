@@ -26,14 +26,15 @@ public class GreetingEndpointTest {
         );
     }
 
-    @Factory
-    static class Clients {
-        @Bean
-        GreeterGrpc.GreeterBlockingStub blockingStub(
-                @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) {
-            return GreeterGrpc.newBlockingStub(
-                    channel
-            );
-        }
+}
+
+@Factory
+class Clients {
+    @Bean
+    GreeterGrpc.GreeterBlockingStub blockingStub(
+            @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) {
+        return GreeterGrpc.newBlockingStub(
+                channel
+        );
     }
 }

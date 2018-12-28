@@ -1,0 +1,51 @@
+=== Writing a Simple GRPC Server
+
+To implement a GRPC server for the previously defined `helloworld.proto` definition you first need to generate the Java stubs using Gradle or Maven then create a class that extends from `GreeterGrpc.GreeterImplBase`.
+
+For example:
+
+.GreeterGrpc.GreeterImplBase Example
+[source,java]
+----
+include::examples/hello-world-java/src/main/java/helloworld/GreetingEndpoint.java[tags=imports]
+
+include::examples/hello-world-java/src/main/java/helloworld/GreetingEndpoint.java[tags=clazz]
+----
+
+<1> The class extends from `GreeterGrpc.GreeterImplBase` and is annotated with `javax.inject.Singleton`
+<2> You can dependency inject other beans into the implementation. In this case `GreetingService` is dependency injected.
+<3> The `StreamObserver` is used to send a response to the client.
+
+=== Running the GRPC Server
+
+To run the server use the `Application` class or run `./gradlew run` for Gradle or `./mvnw compile exec:exec` for Maven.
+
+
+The server by default runs on port 50051, however you can configure which port the server runs on by setting `grpc.server.port` to whichever value you wish (a value of -1 will use a random port).
+
+=== Configuring the GRPC Server
+
+The server can be be configured in a number of different ways. You can use the `io.micronaut.grpc.server.GrpcServerConfiguration` type to configure any property of GRPC's `NettyServerBuilder` class via `application.yml`.
+
+For example:
+
+.Configuring the GRPC server
+[source,yaml]
+----
+grpc:
+    server:
+        port: 8080
+        keep-alive-time: 3h
+        max-inbound-message-size: 1024
+        cert-chain: '/path/to/my.cert'
+        private-key: '/path/to/my.key'
+----
+
+Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
+
+.Configuring the ServerBuilder
+[source,java]
+----
+include::grpc-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderListener.java[]
+----
+
