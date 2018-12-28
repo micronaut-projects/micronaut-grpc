@@ -4,7 +4,9 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.context.annotation.Secondary;
 import io.micronaut.context.event.ApplicationEventPublisher;
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.util.ArgumentUtils;
 import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.cloud.ComputeInstanceMetadata;
@@ -34,7 +36,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
 
 @Singleton
-@Requires(missingBeans = EmbeddedServer.class)
+@Secondary
 @Requires(classes = ServerBuilder.class)
 public class GrpcEmbeddedServer implements EmbeddedServer {
 
@@ -48,7 +50,8 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
     private final List<ServiceInstanceMetadataContributor> metadataContributors;
     private ServiceInstance serviceInstance;
 
-    public GrpcEmbeddedServer(
+    @Internal
+    GrpcEmbeddedServer(
             @Nonnull ApplicationContext applicationContext,
             @Nonnull ApplicationConfiguration applicationConfiguration,
             @Nonnull GrpcServerConfiguration grpcServerConfiguration,
