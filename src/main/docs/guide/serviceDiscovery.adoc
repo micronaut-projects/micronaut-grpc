@@ -1,0 +1,71 @@
+When using `@GrpcChannel` with a service ID without explicitly configuring the address of the service will trigger GRPC's `NameResolver` and attempt to do service discovery.
+
+The default strategy for this is to use DNS based discovery. So for example you can do:
+
+[source,java]
+----
+@GrpcChannel("dns://greeter")
+----
+
+Where DNS has been configured to know the address of the `greeter` service.
+
+Alternatively, if you prefer to use a service discovery server then you can use integration with Micronaut service discovery.
+
+=== Service Discovery with Consul
+
+You can use Micronaut's built-in service discovery features with any supported server (Consul and Eureka currently).
+
+The way in which this is done is the https://docs.micronaut.io/latest/guide/index.html#serviceDiscoveryConsul[same as a regular Micronaut service].
+
+==== Registering a GRPC Service with Consul
+
+To register a GRPC service with Consul first add the `micronaut-discovery-client` dependency:
+
+[source,groovy]
+----
+runtime "io.micronaut:micronaut-discovery-client"
+----
+
+Then setup Consul correctly:
+
+[source,yaml]
+----
+micronaut:
+    application:
+        name: greeter
+consul:
+    client:
+        registration:
+            enabled: true
+        defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+----
+
+==== Discoverying Services via Consul
+
+To discovery services via Consul and the Micronaut `DiscoveryClient` abstraction enable Consul and GRPC service discovery:
+
+[source,yaml]
+----
+grpc:
+    client:
+        discovery:
+            enabled: true
+consul:
+    client:
+        defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+----
+
+Then use the value `greeter` to discover the service when injecting the channel:
+
+[source,java]
+----
+@Singleton
+@Bean
+GreeterGrpc.GreeterStub greeterStub(
+    @GrpcChannel("greeter")
+    ManagedChannel channel) {
+    return GreeterGrpc.newStub(
+            channel
+    );
+}
+----

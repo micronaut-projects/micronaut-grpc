@@ -1,0 +1,10 @@
+GRPC includes tracing based on OpenCensus, however if you wish to use Micronaut's integration with Jaeger or Zipkin you can do so by adding the following dependencies:
+
+.Enabling Tracing with GRPC
+[source,groovy]
+----
+testCompile "io.micronaut:micronaut-tracing"
+testCompile 'io.opentracing.contrib:opentracing-grpc:0.0.10'
+----
+
+You then need to https://docs.micronaut.io/latest/guide/index.html#distributedTracing[configure either Jaeger or Zipkin] appropriately.

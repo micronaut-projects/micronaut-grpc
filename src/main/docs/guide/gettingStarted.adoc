@@ -5,6 +5,8 @@ To get started you need first create a Micronaut project. The easiest way to do 
 $ mn create-app helloworld
 ----
 
+TIP: See the https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples[Examples] in the repository that provides examples in Java, Kotlin and Groovy.
+
 === Configuring Gradle
 
 To configure Gradle, first apply the `com.google.protobuf` plugin:

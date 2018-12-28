@@ -2,8 +2,6 @@ package io.micronaut.grpc.server;
 
 import com.google.common.base.Preconditions;
 import io.grpc.ServerBuilder;
-import io.grpc.ServerInterceptor;
-import io.grpc.ServerTransportFilter;
 import io.grpc.netty.NettyServerBuilder;
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.annotation.ConfigurationProperties;
@@ -12,7 +10,6 @@ import io.micronaut.context.env.Environment;
 import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.convert.format.ReadableBytes;
 import io.micronaut.core.io.socket.SocketUtils;
-import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.scheduling.TaskExecutors;
 
 import javax.annotation.Nonnull;
@@ -191,29 +188,4 @@ public class GrpcServerConfiguration {
         }
     }
 
-    /**
-     * Configuration properties for SSL
-     */
-    @ConfigurationProperties("ssl")
-    public static class GrpcSslConfiguration {
-        private String certChain;
-
-        private String privateKey;
-
-        public Optional<String> getCertChain() {
-            return Optional.ofNullable(certChain);
-        }
-
-        public void setCertChain(@Nullable String certChain) {
-            this.certChain = certChain;
-        }
-
-        public Optional<String> getPrivateKey() {
-            return Optional.ofNullable(privateKey);
-        }
-
-        public void setPrivateKey(@Nullable String privateKey) {
-            this.privateKey = privateKey;
-        }
-    }
 }

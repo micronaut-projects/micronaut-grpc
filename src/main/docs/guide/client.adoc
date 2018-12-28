@@ -47,7 +47,7 @@ For example given the following configuration:
 ----
 grpc:
     channels:
-        greet:
+        greeter:
             address: 'http://${my.server}:${my.port}'
             plaintext: true
             max-retry-attempts: 10
@@ -59,7 +59,7 @@ You can then define the `@GrpcChannel` annotation as follows:
 ----
 @Singleton
 GreeterGrpc.GreeterStub reactiveStub(
-    @GrpcChannel("greet")
+    @GrpcChannel("greeter")
     ManagedChannel channel) {
     return GreeterGrpc.newStub(
             channel
@@ -67,6 +67,6 @@ GreeterGrpc.GreeterStub reactiveStub(
 }
 ----
 
-The ID `greet` is used to reference the configuration for `grpc.channels.greet`.
+The ID `greeter` is used to reference the configuration for `grpc.channels.greeter`.
 
 Using service IDs in this way is the preferred way to setup GRPC clients, because it works nicely with Service Discovery (see the next section).
