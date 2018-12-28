@@ -1,0 +1,12 @@
+micronaut:
+    application:
+        name: hello-world-java
+grpc:
+    server:
+        port: 8080
+# Uncomment to enable service discovery with Consul
+#consul:
+#    client:
+#        registration:
+#            enabled: true
+#        defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"

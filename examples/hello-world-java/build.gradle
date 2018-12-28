@@ -1,0 +1,81 @@
+plugins {
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id "com.github.johnrengelman.shadow" version "4.0.2"
+    id "net.ltgt.apt-eclipse" version "0.18"
+    id "net.ltgt.apt-idea" version "0.18"
+    id 'com.google.protobuf' version '0.8.5'
+}
+
+apply plugin:"application"
+apply plugin:"java"
+
+version "0.1"
+group "helloworld"
+
+ext {
+    protocVersion="3.5.1"
+    grpcVersion="1.17.1"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://jcenter.bintray.com" }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'io.micronaut:micronaut-bom:1.0.2'
+    }
+}
+
+dependencies {
+    annotationProcessor "io.micronaut:micronaut-inject-java"
+    annotationProcessor "io.micronaut:micronaut-validation"
+    compileOnly "io.micronaut:micronaut-inject-java"
+    compile "io.micronaut:micronaut-inject"
+    compile "io.micronaut:micronaut-validation"
+    compile "io.micronaut:micronaut-runtime"
+    compile "io.micronaut.grpc:micronaut-grpc-runtime:1.0.0.BUILD-SNAPSHOT"
+
+    compile "io.micronaut:micronaut-discovery-client"
+    runtime "ch.qos.logback:logback-classic:1.2.3"
+    testCompile 'io.micronaut.test:micronaut-test-junit5:1.0.1'
+    testCompile "org.mockito:mockito-junit-jupiter:2.22.0"
+    testCompile "io.micronaut:micronaut-inject-java"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+shadowJar {
+    mergeServiceFiles()
+}
+
+run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
+
+mainClassName = "helloworld.Application"
+tasks.withType(JavaCompile){
+    options.encoding = "UTF-8"
+    options.compilerArgs.add('-parameters')
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
