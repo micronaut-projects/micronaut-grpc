@@ -103,7 +103,106 @@ function addJsClass() {
 </div>
 
 
+<div class="paragraph">
+<p>Micronaut for GRPC does not create client beans automatically for you. Instead you must expose which client stubs you application needs using a <code>@Factory</code>.</p>
+</div>
+<div class="paragraph">
+<p>You can dependency inject a <code>io.grpc.ManagedChannel</code> into the factory. The channel can be configured using properties defined under <code>grpc.client</code> by default.</p>
+</div>
+<div class="paragraph">
+<p>For example, if you wish to disable secure communication:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">grpc:
+    client:
+        plaintext: true
+        max-retry-attempts: 10</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Any property of the <code>io.grpc.netty.NettyChannelBuilder</code> type can be configured.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreationListener</code> for example:</p>
+</div>
+<div class="listingblock">
+<div class="title">Configuring the NettyChannelBuilder</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package io.micronaut.grpc;
 
+import io.grpc.ManagedChannelBuilder;
+import io.micronaut.context.event.BeanCreatedEvent;
+import io.micronaut.context.event.BeanCreatedEventListener;
+
+import javax.inject.Singleton;
+
+@Singleton
+public class ManagedChannelBuilderListener implements BeanCreatedEventListener&lt;ManagedChannelBuilder&lt;?&gt;&gt; {
+    @Override
+    public ManagedChannelBuilder&lt;?&gt; onCreated(BeanCreatedEvent&lt;ManagedChannelBuilder&lt;?&gt;&gt; event) {
+        final ManagedChannelBuilder&lt;?&gt; channelBuilder = event.getBean();
+        channelBuilder.maxInboundMessageSize(1024);
+        return channelBuilder;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The value of the <code>@GrpcChannel</code> annotation can be used to specify the target server, the configuration for which can also be externalized:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Factory
+class Clients {
+    @Singleton
+    GreeterGrpc.GreeterStub reactiveStub(
+        @GrpcChannel("http://${my.server}:${my.port}")
+        ManagedChannel channel) {
+        return GreeterGrpc.newStub(
+                channel
+        );
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The above example requires that <code>my.server</code> and <code>my.port</code> are specified in <code>application.yml</code> (or via environment variables <code>MY_SERVER</code> and <code>MY_PORT</code>). You can also externalize this further into configuration and provide channel specific configuration.</p>
+</div>
+<div class="paragraph">
+<p>For example given the following configuration:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">grpc:
+    channels:
+        greet:
+            address: 'http://${my.server}:${my.port}'
+            plaintext: true
+            max-retry-attempts: 10</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can then define the <code>@GrpcChannel</code> annotation as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Singleton
+GreeterGrpc.GreeterStub reactiveStub(
+    @GrpcChannel("greet")
+    ManagedChannel channel) {
+    return GreeterGrpc.newStub(
+            channel
+    );
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The ID <code>greet</code> is used to reference the configuration for <code>grpc.channels.greet</code>.</p>
+</div>
+<div class="paragraph">
+<p>Using service IDs in this way is the preferred way to setup GRPC clients, because it works nicely with Service Discovery (see the next section).</p>
+</div>
 
 
                 <div style="clear:both;margin-top:15px;"></div>

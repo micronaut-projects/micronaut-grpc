@@ -211,6 +211,28 @@ public class ServerBuilderListener implements BeanCreatedEventListener&lt;Server
 </div>
 </div>
 <div class="sect2">
+<h3 id="_auto_configured_types">Auto Configured Types</h3>
+<div class="paragraph">
+<p>By default the server will automatically be dependency injected with beans of the following types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>io.grpc.BindableService</code> - Any services declared as beans</p>
+</li>
+<li>
+<p><code>io.grpc.ServerInterceptor</code> - Any interceptors declared as beans</p>
+</li>
+<li>
+<p><code>io.grpc.ServerTransportFilter</code> - Any transport filters declared as beans</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In addition, by default the server will be setup to use Micronaut&#8217;s I/O executor service.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_testing_the_server">Testing the Server</h3>
 <div class="paragraph">
 <p>To test the server it is recommended that you use <a href="https://github.com/micronaut-projects/micronaut-test">Micronaut Test</a>.</p>
