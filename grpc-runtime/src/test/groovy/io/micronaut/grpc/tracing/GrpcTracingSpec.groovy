@@ -8,6 +8,7 @@ import io.micronaut.test.annotation.MockBean
 import io.opentracing.Tracer
 import io.opentracing.mock.MockTracer
 import spock.lang.Specification
+import spock.util.concurrent.PollingConditions
 
 import javax.inject.Inject
 
@@ -27,15 +28,18 @@ class GrpcTracingSpec extends Specification {
     void "test hello world grpc with tracing enabled"() {
         given:
         MockTracer tracer = tracer
+        PollingConditions conditions = new PollingConditions(timeout: 3, delay: 0.5)
 
         expect:
-        testBean.sayHello("Fred") == "Hello Fred"
-        myInterceptor.intercepted
-        tracer.finishedSpans().size()  == 2
-        tracer.finishedSpans()[0].operationName() == 'helloworld.Greeter/SayHello'
-        tracer.finishedSpans()[1].operationName() == 'helloworld.Greeter/SayHello'
-        tracer.finishedSpans().find { it.tags().get('span.kind') == 'client' }
-        tracer.finishedSpans().find { it.tags().get('span.kind') == 'server' }
+        conditions.eventually {
+            testBean.sayHello("Fred") == "Hello Fred"
+            myInterceptor.intercepted
+            tracer.finishedSpans().size()  == 2
+            tracer.finishedSpans()[0].operationName() == 'helloworld.Greeter/SayHello'
+            tracer.finishedSpans()[1].operationName() == 'helloworld.Greeter/SayHello'
+            tracer.finishedSpans().find { it.tags().get('span.kind') == 'client' }
+            tracer.finishedSpans().find { it.tags().get('span.kind') == 'server' }
+        }
     }
 
 
