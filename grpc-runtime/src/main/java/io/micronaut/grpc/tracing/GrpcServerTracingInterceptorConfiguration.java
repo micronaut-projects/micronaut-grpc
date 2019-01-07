@@ -4,6 +4,7 @@ import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.grpc.server.GrpcServerConfiguration;
 import io.opentracing.Tracer;
+import io.opentracing.contrib.grpc.ClientTracingInterceptor;
 import io.opentracing.contrib.grpc.ServerCloseDecorator;
 import io.opentracing.contrib.grpc.ServerSpanDecorator;
 import io.opentracing.contrib.grpc.ServerTracingInterceptor;
@@ -12,6 +13,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
+/**
+ * Adds a {@link ServerTracingInterceptor} when OpenTracing for GRPC is on the classpath
+ * and allows integration with Zipkin and Jaeger.
+ *
+ * @author graemerocher
+ * @since 1.0
+ */
 @ConfigurationProperties(GrpcServerTracingInterceptorConfiguration.PREFIX)
 public class GrpcServerTracingInterceptorConfiguration {
 

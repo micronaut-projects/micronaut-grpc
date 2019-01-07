@@ -11,6 +11,13 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PreDestroy;
 import javax.inject.Singleton;
 
+/**
+ * Application event listener that will startup the {@link GrpcEmbeddedServer} as a secondary server
+ * on a different port allowing Micronaut's HTTP server and GRPC to run side by side.
+ *
+ * @author graemerocher
+ * @since 1.0
+ */
 @Internal
 @Singleton
 class GrpcEmbeddedServerListener implements ApplicationEventListener<ServerStartupEvent>, AutoCloseable {
