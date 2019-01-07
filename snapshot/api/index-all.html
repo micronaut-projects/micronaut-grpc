@@ -173,29 +173,43 @@
 <div class="block">An annotation that can be used to inject a GRPC <code>ManagedChannel</code>.</div>
 </dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcChannelBuilderFactory.html" title="class in io.micronaut.grpc.channels"><span class="typeNameLink">GrpcChannelBuilderFactory</span></a> - Class in <a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Factory class for creating <code>NettyChannelBuilder</code> instances.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcChannelBuilderFactory.html#GrpcChannelBuilderFactory-io.micronaut.context.ApplicationContext-java.util.concurrent.ExecutorService-">GrpcChannelBuilderFactory(ApplicationContext, ExecutorService)</a></span> - Constructor for class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcChannelBuilderFactory.html" title="class in io.micronaut.grpc.channels">GrpcChannelBuilderFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcChannelScope.html" title="class in io.micronaut.grpc.channels"><span class="typeNameLink">GrpcChannelScope</span></a> - Class in <a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">A custom scope for injecting <code>ManagedChannel</code> instances that are dependency injected and shutdown when
+ the application shuts down.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcChannelScope.html#GrpcChannelScope-io.micronaut.context.ApplicationContext-">GrpcChannelScope(ApplicationContext)</a></span> - Constructor for class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcChannelScope.html" title="class in io.micronaut.grpc.channels">GrpcChannelScope</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/tracing/GrpcClientTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing"><span class="typeNameLink">GrpcClientTracingInterceptorConfiguration</span></a> - Class in <a href="io/micronaut/grpc/tracing/package-summary.html">io.micronaut.grpc.tracing</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Adds a <code>ClientTracingInterceptor</code> when OpenTracing for GRPC is on the classpath
+ and allows integration with Zipkin and Jaeger.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/tracing/GrpcClientTracingInterceptorConfiguration.html#GrpcClientTracingInterceptorConfiguration-io.opentracing.Tracer-">GrpcClientTracingInterceptorConfiguration(Tracer)</a></span> - Constructor for class io.micronaut.grpc.tracing.<a href="io/micronaut/grpc/tracing/GrpcClientTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing">GrpcClientTracingInterceptorConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcDefaultManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels"><span class="typeNameLink">GrpcDefaultManagedChannelConfiguration</span></a> - Class in <a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Default configuration for all GRPC clients.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcDefaultManagedChannelConfiguration.html#GrpcDefaultManagedChannelConfiguration-java.lang.String-io.micronaut.context.env.Environment-java.util.concurrent.ExecutorService-">GrpcDefaultManagedChannelConfiguration(String, Environment, ExecutorService)</a></span> - Constructor for class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcDefaultManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcDefaultManagedChannelConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server"><span class="typeNameLink">GrpcEmbeddedServer</span></a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Implementation of the <code>EmbeddedServer</code> interface for GRPC.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels"><span class="typeNameLink">GrpcManagedChannelConfiguration</span></a> - Class in <a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#GrpcManagedChannelConfiguration-java.lang.String-io.micronaut.context.env.Environment-java.util.concurrent.ExecutorService-">GrpcManagedChannelConfiguration(String, Environment, ExecutorService)</a></span> - Constructor for class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcManagedChannelFactory.html" title="class in io.micronaut.grpc.channels"><span class="typeNameLink">GrpcManagedChannelFactory</span></a> - Class in <a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Factory bean for creating <code>ManagedChannel</code> instances</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcManagedChannelFactory.html#GrpcManagedChannelFactory-io.micronaut.context.ApplicationContext-">GrpcManagedChannelFactory(ApplicationContext)</a></span> - Constructor for class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelFactory.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcNamedManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels"><span class="typeNameLink">GrpcNamedManagedChannelConfiguration</span></a> - Class in <a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a></dt>
@@ -203,11 +217,16 @@
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcNamedManagedChannelConfiguration.html#GrpcNamedManagedChannelConfiguration-java.lang.String-io.micronaut.context.env.Environment-java.util.concurrent.ExecutorService-">GrpcNamedManagedChannelConfiguration(String, Environment, ExecutorService)</a></span> - Constructor for class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcNamedManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcNamedManagedChannelConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverFactory.html" title="class in io.micronaut.grpc.discovery"><span class="typeNameLink">GrpcNameResolverFactory</span></a> - Class in <a href="io/micronaut/grpc/discovery/package-summary.html">io.micronaut.grpc.discovery</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Activates <a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery"><code>GrpcNameResolverProvider</code></a> when <a href="io/micronaut/grpc/discovery/GrpcNameResolverFactory.html#ENABLED"><code>GrpcNameResolverFactory.ENABLED</code></a> is set to true.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/discovery/GrpcNameResolverFactory.html#GrpcNameResolverFactory--">GrpcNameResolverFactory()</a></span> - Constructor for class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverFactory.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery"><span class="typeNameLink">GrpcNameResolverProvider</span></a> - Class in <a href="io/micronaut/grpc/discovery/package-summary.html">io.micronaut.grpc.discovery</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Implementation of <code>NameResolverProvider</code> that allows using Micronaut's <code>DiscoveryClient</code>
+ to perform service discovery.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#GrpcNameResolverProvider-io.micronaut.discovery.DiscoveryClient-java.util.List-">GrpcNameResolverProvider(DiscoveryClient, List&lt;ServiceInstanceList&gt;)</a></span> - Constructor for class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcServerBuilder.html" title="class in io.micronaut.grpc.server"><span class="typeNameLink">GrpcServerBuilder</span></a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
@@ -217,15 +236,22 @@
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerBuilder.html#GrpcServerBuilder--">GrpcServerBuilder()</a></span> - Constructor for class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerBuilder.html" title="class in io.micronaut.grpc.server">GrpcServerBuilder</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcServerChannel.html" title="class in io.micronaut.grpc.server"><span class="typeNameLink">GrpcServerChannel</span></a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">A factory that returns a <code>ManagedChannel</code> allowing communication with the embedded server.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerChannel.html#GrpcServerChannel--">GrpcServerChannel()</a></span> - Constructor for class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerChannel.html" title="class in io.micronaut.grpc.server">GrpcServerChannel</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server"><span class="typeNameLink">GrpcServerConfiguration</span></a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Configuration for the GRPC server.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#GrpcServerConfiguration-io.micronaut.context.env.Environment-java.lang.String-java.lang.Integer-java.util.concurrent.ExecutorService-">GrpcServerConfiguration(Environment, String, Integer, ExecutorService)</a></span> - Constructor for class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing"><span class="typeNameLink">GrpcServerTracingInterceptorConfiguration</span></a> - Class in <a href="io/micronaut/grpc/tracing/package-summary.html">io.micronaut.grpc.tracing</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Adds a <code>ServerTracingInterceptor</code> when OpenTracing for GRPC is on the classpath
+ and allows integration with Zipkin and Jaeger.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html#GrpcServerTracingInterceptorConfiguration-io.opentracing.Tracer-">GrpcServerTracingInterceptorConfiguration(Tracer)</a></span> - Constructor for class io.micronaut.grpc.tracing.<a href="io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing">GrpcServerTracingInterceptorConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/annotation/GrpcService.html" title="annotation in io.micronaut.grpc.annotation"><span class="typeNameLink">GrpcService</span></a> - Annotation Type in <a href="io/micronaut/grpc/annotation/package-summary.html">io.micronaut.grpc.annotation</a></dt>
@@ -233,11 +259,15 @@
 <div class="block">A meta annotation for annotation GRPC services.</div>
 </dd>
 <dt><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server"><span class="typeNameLink">GrpcSslConfiguration</span></a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Configuration for the SSL properties of GRPC</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html#GrpcSslConfiguration--">GrpcSslConfiguration()</a></span> - Constructor for class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/tracing/GrpcTracingInterceptorFactory.html" title="class in io.micronaut.grpc.tracing"><span class="typeNameLink">GrpcTracingInterceptorFactory</span></a> - Class in <a href="io/micronaut/grpc/tracing/package-summary.html">io.micronaut.grpc.tracing</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Factory that builds the Tracing interceptors</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/tracing/GrpcTracingInterceptorFactory.html#GrpcTracingInterceptorFactory--">GrpcTracingInterceptorFactory()</a></span> - Constructor for class io.micronaut.grpc.tracing.<a href="io/micronaut/grpc/tracing/GrpcTracingInterceptorFactory.html" title="class in io.micronaut.grpc.tracing">GrpcTracingInterceptorFactory</a></dt>
 <dd>&nbsp;</dd>
 </dl>
@@ -257,13 +287,21 @@
 <dt><a href="io/micronaut/grpc/annotation/package-summary.html">io.micronaut.grpc.annotation</a> - package io.micronaut.grpc.annotation</dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a> - package io.micronaut.grpc.channels</dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Classes related to GRPC channels and clients.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/discovery/package-summary.html">io.micronaut.grpc.discovery</a> - package io.micronaut.grpc.discovery</dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Classes related to GRPC service discovery.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a> - package io.micronaut.grpc.server</dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Classes related to the GRPC server.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/tracing/package-summary.html">io.micronaut.grpc.tracing</a> - package io.micronaut.grpc.tracing</dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Classes related to distributed tracing.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#isAvailable--">isAvailable()</a></span> - Method in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html#isRunning--">isRunning()</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server">GrpcEmbeddedServer</a></dt>

@@ -72,6 +72,10 @@
  @Requires(classes={io.opentracing.Tracer.class,io.opentracing.contrib.grpc.ClientTracingInterceptor.class,io.opentracing.contrib.grpc.ServerTracingInterceptor.class}) @Requires(beans=io.opentracing.Tracer.class)
 </p>
 <h1 title="Package" class="title">Package&nbsp;io.micronaut.grpc.tracing</h1>
+<div class="docSummary">
+<div class="block">Classes related to distributed tracing.</div>
+</div>
+<p>See:&nbsp;<a href="#package.description">Description</a></p>
 </div>
 <div class="contentContainer">
 <ul class="blockList">
@@ -85,20 +89,33 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../io/micronaut/grpc/tracing/GrpcClientTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing">GrpcClientTracingInterceptorConfiguration</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Adds a <code>ClientTracingInterceptor</code> when OpenTracing for GRPC is on the classpath
+ and allows integration with Zipkin and Jaeger.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing">GrpcServerTracingInterceptorConfiguration</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Adds a <code>ServerTracingInterceptor</code> when OpenTracing for GRPC is on the classpath
+ and allows integration with Zipkin and Jaeger.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../io/micronaut/grpc/tracing/GrpcTracingInterceptorFactory.html" title="class in io.micronaut.grpc.tracing">GrpcTracingInterceptorFactory</a></td>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Factory that builds the Tracing interceptors</div>
+</td>
 </tr>
 </tbody>
 </table>
 </li>
 </ul>
+<a name="package.description">
+<!--   -->
+</a>
+<h2 title="Package io.micronaut.grpc.tracing Description">Package io.micronaut.grpc.tracing Description</h2>
+<div class="block">Classes related to distributed tracing.</div>
 </div>
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 <div class="bottomNav"><a name="navbar.bottom">
