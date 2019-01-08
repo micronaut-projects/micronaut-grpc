@@ -132,6 +132,11 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
     }
 
     @Override
+    public boolean isServer() {
+        return true;
+    }
+
+    @Override
     public URI getURI() {
         return URI.create(getScheme() + "://" + getHost() + ":" + getPort());
     }
@@ -181,7 +186,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
                     applicationContext.publishEvent(new ServiceShutdownEvent(serviceInstance));
                 }
             } finally {
-                server.shutdown();
+                server.shutdownNow();
             }
 
         }
