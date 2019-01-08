@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -183,10 +183,14 @@ implements io.micronaut.runtime.server.EmbeddedServer</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcEmbeddedServer.html#isRunning--">isRunning</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcEmbeddedServer.html#isServer--">isServer</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>io.micronaut.runtime.server.EmbeddedServer</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcEmbeddedServer.html#start--">start</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>io.micronaut.runtime.server.EmbeddedServer</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcEmbeddedServer.html#stop--">stop</a></span>()</code>&nbsp;</td>
 </tr>
@@ -199,18 +203,11 @@ implements io.micronaut.runtime.server.EmbeddedServer</pre>
 <code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
 </ul>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.io.micronaut.runtime.server.EmbeddedServer">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;io.micronaut.runtime.server.EmbeddedServer</h3>
-<code>isServer</code></li>
-</ul>
-<ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.io.micronaut.runtime.EmbeddedApplication">
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;io.micronaut.runtime.EmbeddedApplication</h3>
-<code>getEnvironment</code></li>
+<code>getEnvironment, isForceExit</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.io.micronaut.context.LifeCycle">
@@ -310,6 +307,21 @@ public&nbsp;<a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguratio
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getURL</code>&nbsp;in interface&nbsp;<code>io.micronaut.runtime.server.EmbeddedServer</code></dd>
+</dl>
+</li>
+</ul>
+<a name="isServer--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isServer</h4>
+<pre>public&nbsp;boolean&nbsp;isServer()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code>isServer</code>&nbsp;in interface&nbsp;<code>io.micronaut.runtime.EmbeddedApplication&lt;io.micronaut.runtime.server.EmbeddedServer&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code>isServer</code>&nbsp;in interface&nbsp;<code>io.micronaut.runtime.server.EmbeddedServer</code></dd>
 </dl>
 </li>
 </ul>
