@@ -1,0 +1,22 @@
+This project also includes a module that adds the ability to encode and decode Protocol buffers messages with the Micronaut HTTP server.
+
+To use this add the `micronaut-protobuff-support` dependency:
+
+.Adding to `build.gradle`
+[source,groovy,subs="attributes"]
+----
+runtime "io.micronaut.grpc:micronaut-protobuff-support:{version}"
+----
+
+.Adding to `pom.xml`
+[source,xml,subs="attributes"]
+----
+<dependency>
+  <groupId>io.micronaut.grpc</groupId>
+  <artifactId>micronaut-protobuff-support</artifactId>
+  <scope>runtime</scope>
+  <version>{version}</version>
+</dependency>
+----
+
+Micronaut will now support the encoding and decoding requests / responses of type `application/x-protobuf`.

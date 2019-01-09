@@ -1,6 +1,10 @@
 Micronaut for GRPC does not create client beans automatically for you. Instead you must expose which client stubs you application needs using a `@Factory`.
 
-You can dependency inject a `io.grpc.ManagedChannel` into the factory. The channel can be configured using properties defined under `grpc.client` by default.
+You can dependency inject a `io.grpc.ManagedChannel` into the factory. Each injected `io.grpc.ManagedChannel` will automatically be shutdown when the application shuts down.
+
+=== Configuring ManagedChannel Instances
+
+The channel can be configured using properties defined under `grpc.client` by default.
 
 For example, if you wish to disable secure communication:
 
@@ -12,6 +16,8 @@ grpc:
         max-retry-attempts: 10
 ----
 
+Properties under `grpc.client` are global properties and are the defaults used unless named configuration exists under `grpc.channels.[NAME]`.
+
 Any property of the `io.grpc.netty.NettyChannelBuilder` type can be configured.
 
 Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
@@ -21,6 +27,15 @@ Alternatively if you prefer programmatic configuration you can write a `BeanCrea
 ----
 include::grpc-runtime/src/test/groovy/io/micronaut/grpc/ManagedChannelBuilderListener.java[]
 ----
+
+=== Auto Injected Types
+
+By default each channel will automatically be dependency injected with beans of the following types:
+
+* `io.grpc.ClientInterceptor` - Any client interceptors declared as beans
+* `io.grpc.NameResolver` - The configured name resolver
+
+=== Creating Client Stub Beans
 
 The value of the `@GrpcChannel` annotation can be used to specify the target server, the configuration for which can also be externalized:
 

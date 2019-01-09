@@ -1,11 +1,25 @@
-To get started you need first create a Micronaut project. The easiest way to do this is with the CLI:
+To get started you need first create a Micronaut project. The easiest way to do this is with the CLI.
+
+With Micronaut 1.1 or above you can use the GRPC profile:
+
+[source,bash]
+----
+$ mn create-app helloworld --profile grpc --lang java --build gradle
+----
+
+TIP: Replace `java` with `kotlin` or `groovy to change language and the `build` flag with `maven` to use Maven instead.
+
+See also the https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples[Examples] in the repository that provides examples in Java, Kotlin and Groovy.
+
+To manually setup GRPC you can create an application:
 
 [source,bash]
 ----
 $ mn create-app helloworld
 ----
 
-TIP: See the https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples[Examples] in the repository that provides examples in Java, Kotlin and Groovy.
+Then follow the below steps depending on the build system chosen.
+
 
 === Configuring Gradle
 
@@ -35,7 +49,7 @@ Finally add the following dependencies to your build:
 compile "io.micronaut.grpc:micronaut-grpc-runtime:{version}"
 ----
 
-NOTE: Ifyou wish to use GRPC standalone without the Micronaut HTTP server you should comment ouf the `micronaut-http-server-netty` dependency.
+NOTE: If you wish to use GRPC standalone without the Micronaut HTTP server you should comment ouf the `micronaut-http-server-netty` dependency.
 
 You can then run:
 
@@ -76,3 +90,5 @@ Once you have the build setup you can define a Protobuf file for your GRPC servi
 ----
 include::examples/hello-world-java/src/main/proto/helloworld.proto[]
 ----
+
+TIP: With the Micronaut 1.1 or above CLI you can generate a service with `mn create-grpc-service helloworld` which will create the `proto` file and class that implements the stub.

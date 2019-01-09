@@ -49,7 +49,7 @@ Alternatively if you prefer programmatic configuration you can write a `BeanCrea
 include::grpc-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderListener.java[]
 ----
 
-=== Auto Configured Types
+=== Auto Injected Types
 
 By default the server will automatically be dependency injected with beans of the following types:
 
