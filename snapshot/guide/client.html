@@ -47,6 +47,9 @@ function addJsClass() {
                         <div class="toc-item" style="margin-left:0"><a href="../guide/tracing.html"><strong>6</strong><span>Distributed Tracing</span></a>
                         </div>
                         
+                        <div class="toc-item" style="margin-left:0"><a href="../guide/protocolBuffers.html"><strong>7</strong><span>Protocol Buffers Support</span></a>
+                        </div>
+                        
                     </div>
                 </div>
             </li>
@@ -98,7 +101,12 @@ function addJsClass() {
 <p>Micronaut for GRPC does not create client beans automatically for you. Instead you must expose which client stubs you application needs using a <code>@Factory</code>.</p>
 </div>
 <div class="paragraph">
-<p>You can dependency inject a <code>io.grpc.ManagedChannel</code> into the factory. The channel can be configured using properties defined under <code>grpc.client</code> by default.</p>
+<p>You can dependency inject a <code>io.grpc.ManagedChannel</code> into the factory. Each injected <code>io.grpc.ManagedChannel</code> will automatically be shutdown when the application shuts down.</p>
+</div>
+<div class="sect2">
+<h3 id="_configuring_managedchannel_instances">Configuring ManagedChannel Instances</h3>
+<div class="paragraph">
+<p>The channel can be configured using properties defined under <code>grpc.client</code> by default.</p>
 </div>
 <div class="paragraph">
 <p>For example, if you wish to disable secure communication:</p>
@@ -110,6 +118,9 @@ function addJsClass() {
         plaintext: true
         max-retry-attempts: 10</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Properties under <code>grpc.client</code> are global properties and are the defaults used unless named configuration exists under <code>grpc.channels.[NAME]</code>.</p>
 </div>
 <div class="paragraph">
 <p>Any property of the <code>io.grpc.netty.NettyChannelBuilder</code> type can be configured.</p>
@@ -139,6 +150,25 @@ public class ManagedChannelBuilderListener implements BeanCreatedEventListener&l
 }</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_auto_injected_types">Auto Injected Types</h3>
+<div class="paragraph">
+<p>By default each channel will automatically be dependency injected with beans of the following types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>io.grpc.ClientInterceptor</code> - Any client interceptors declared as beans</p>
+</li>
+<li>
+<p><code>io.grpc.NameResolver</code> - The configured name resolver</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_creating_client_stub_beans">Creating Client Stub Beans</h3>
 <div class="paragraph">
 <p>The value of the <code>@GrpcChannel</code> annotation can be used to specify the target server, the configuration for which can also be externalized:</p>
 </div>
@@ -193,6 +223,7 @@ GreeterGrpc.GreeterStub reactiveStub(
 </div>
 <div class="paragraph">
 <p>Using service IDs in this way is the preferred way to setup GRPC clients, because it works nicely with Service Discovery (see the next section).</p>
+</div>
 </div>
 
 

@@ -53,6 +53,8 @@
                                 
                                 <div class="toc-item" style="margin-left:0"><a href="#tracing"><strong>6</strong><span>Distributed Tracing</span></a></div>
                                 
+                                <div class="toc-item" style="margin-left:0"><a href="#protocolBuffers"><strong>7</strong><span>Protocol Buffers Support</span></a></div>
+                                
                             </div>
                         </div>
                     </li>
@@ -88,6 +90,8 @@
         
         <div class="toc-item" style="margin-left:0px" id="toc-item-tracing"><a href="#tracing"><strong>6</strong><span>Distributed Tracing</span></a></div>
         
+        <div class="toc-item" style="margin-left:0px" id="toc-item-protocolBuffers"><a href="#protocolBuffers"><strong>7</strong><span>Protocol Buffers Support</span></a></div>
+        
         </div>
     </div>
     
@@ -113,7 +117,7 @@
 <p>This project allows building GRPC servers and clients with Micronaut.</p>
 </div>
 <div class="paragraph">
-<p>Micronaut add the following features to the GRPC experience:</p>
+<p>Micronaut adds the following features to the GRPC experience:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -143,11 +147,14 @@
 
 
 <div class="paragraph">
-<p>To get started you need first create a Micronaut project. The easiest way to do this is with the CLI:</p>
+<p>To get started you need first create a Micronaut project. The easiest way to do this is with the CLI.</p>
+</div>
+<div class="paragraph">
+<p>With Micronaut 1.1 or above you can use the GRPC profile:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld --profile grpc --lang java --build gradle</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -157,10 +164,24 @@
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-See the <a href="https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples">Examples</a> in the repository that provides examples in Java, Kotlin and Groovy.
+Replace <code>java</code> with <code>kotlin</code> or <code>groovy to change language and the `build</code> flag with <code>maven</code> to use Maven instead.
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>See also the <a href="https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples">Examples</a> in the repository that provides examples in Java, Kotlin and Groovy.</p>
+</div>
+<div class="paragraph">
+<p>To manually setup GRPC you can create an application:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then follow the below steps depending on the build system chosen.</p>
 </div>
 <div class="sect2">
 <h3 id="_configuring_gradle">Configuring Gradle</h3>
@@ -221,7 +242,7 @@ protobuf {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Ifyou wish to use GRPC standalone without the Micronaut HTTP server you should comment ouf the <code>micronaut-http-server-netty</code> dependency.
+If you wish to use GRPC standalone without the Micronaut HTTP server you should comment ouf the <code>micronaut-http-server-netty</code> dependency.
 </td>
 </tr>
 </table>
@@ -343,6 +364,18 @@ message HelloReply {
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+With the Micronaut 1.1 or above CLI you can generate a service with <code>mn create-grpc-service helloworld</code> which will create the <code>proto</code> file and class that implements the stub.
+</td>
+</tr>
+</table>
+</div>
 </div>
 
 
@@ -463,7 +496,7 @@ public class ServerBuilderListener implements BeanCreatedEventListener&lt;Server
 </div>
 </div>
 <div class="sect2">
-<h3 id="_auto_configured_types">Auto Configured Types</h3>
+<h3 id="_auto_injected_types">Auto Injected Types</h3>
 <div class="paragraph">
 <p>By default the server will automatically be dependency injected with beans of the following types:</p>
 </div>
@@ -603,7 +636,12 @@ public class GreetingEndpointTest {
 <p>Micronaut for GRPC does not create client beans automatically for you. Instead you must expose which client stubs you application needs using a <code>@Factory</code>.</p>
 </div>
 <div class="paragraph">
-<p>You can dependency inject a <code>io.grpc.ManagedChannel</code> into the factory. The channel can be configured using properties defined under <code>grpc.client</code> by default.</p>
+<p>You can dependency inject a <code>io.grpc.ManagedChannel</code> into the factory. Each injected <code>io.grpc.ManagedChannel</code> will automatically be shutdown when the application shuts down.</p>
+</div>
+<div class="sect2">
+<h3 id="_configuring_managedchannel_instances">Configuring ManagedChannel Instances</h3>
+<div class="paragraph">
+<p>The channel can be configured using properties defined under <code>grpc.client</code> by default.</p>
 </div>
 <div class="paragraph">
 <p>For example, if you wish to disable secure communication:</p>
@@ -615,6 +653,9 @@ public class GreetingEndpointTest {
         plaintext: true
         max-retry-attempts: 10</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Properties under <code>grpc.client</code> are global properties and are the defaults used unless named configuration exists under <code>grpc.channels.[NAME]</code>.</p>
 </div>
 <div class="paragraph">
 <p>Any property of the <code>io.grpc.netty.NettyChannelBuilder</code> type can be configured.</p>
@@ -644,6 +685,25 @@ public class ManagedChannelBuilderListener implements BeanCreatedEventListener&l
 }</code></pre>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_auto_injected_types">Auto Injected Types</h3>
+<div class="paragraph">
+<p>By default each channel will automatically be dependency injected with beans of the following types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>io.grpc.ClientInterceptor</code> - Any client interceptors declared as beans</p>
+</li>
+<li>
+<p><code>io.grpc.NameResolver</code> - The configured name resolver</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_creating_client_stub_beans">Creating Client Stub Beans</h3>
 <div class="paragraph">
 <p>The value of the <code>@GrpcChannel</code> annotation can be used to specify the target server, the configuration for which can also be externalized:</p>
 </div>
@@ -698,6 +758,7 @@ GreeterGrpc.GreeterStub reactiveStub(
 </div>
 <div class="paragraph">
 <p>Using service IDs in this way is the preferred way to setup GRPC clients, because it works nicely with Service Discovery (see the next section).</p>
+</div>
 </div>
 
 
@@ -818,6 +879,43 @@ runtime 'io.opentracing.contrib:opentracing-grpc:0.0.10'</code></pre>
 </div>
 <div class="paragraph">
 <p>You then need to <a href="https://docs.micronaut.io/latest/guide/index.html#distributedTracing">configure either Jaeger or Zipkin</a> appropriately.</p>
+</div>
+
+
+<h1 id="protocolBuffers">7 Protocol Buffers Support</h1>
+
+<div class='contribute-btn'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/protocolBuffers.adoc"'>
+        <i class='fa fa-pencil-square-o'></i> Improve this doc
+    </button>
+</div>
+
+
+<div class="paragraph">
+<p>This project also includes a module that adds the ability to encode and decode Protocol buffers messages with the Micronaut HTTP server.</p>
+</div>
+<div class="paragraph">
+<p>To use this add the <code>micronaut-protobuff-support</code> dependency:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding to <code>build.gradle</code></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">runtime "io.micronaut.grpc:micronaut-protobuff-support:1.0.0.BUILD-SNAPSHOT"</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Adding to <code>pom.xml</code></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml"><dependency>
+  <groupId>io.micronaut.grpc</groupId>
+  <artifactId>micronaut-protobuff-support</artifactId>
+  <scope>runtime</scope>
+  <version>1.0.0.BUILD-SNAPSHOT</version>
+</dependency></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Micronaut will now support the encoding and decoding requests / responses of type <code>application/x-protobuf</code>.</p>
 </div>
 
     </div>

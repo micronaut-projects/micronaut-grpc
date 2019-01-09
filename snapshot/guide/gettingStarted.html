@@ -47,6 +47,9 @@ function addJsClass() {
                         <div class="toc-item" style="margin-left:0"><a href="../guide/tracing.html"><strong>6</strong><span>Distributed Tracing</span></a>
                         </div>
                         
+                        <div class="toc-item" style="margin-left:0"><a href="../guide/protocolBuffers.html"><strong>7</strong><span>Protocol Buffers Support</span></a>
+                        </div>
+                        
                     </div>
                 </div>
             </li>
@@ -95,11 +98,14 @@ function addJsClass() {
 
 
 <div class="paragraph">
-<p>To get started you need first create a Micronaut project. The easiest way to do this is with the CLI:</p>
+<p>To get started you need first create a Micronaut project. The easiest way to do this is with the CLI.</p>
+</div>
+<div class="paragraph">
+<p>With Micronaut 1.1 or above you can use the GRPC profile:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld --profile grpc --lang java --build gradle</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -109,10 +115,24 @@ function addJsClass() {
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-See the <a href="https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples">Examples</a> in the repository that provides examples in Java, Kotlin and Groovy.
+Replace <code>java</code> with <code>kotlin</code> or <code>groovy to change language and the `build</code> flag with <code>maven</code> to use Maven instead.
 </td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>See also the <a href="https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples">Examples</a> in the repository that provides examples in Java, Kotlin and Groovy.</p>
+</div>
+<div class="paragraph">
+<p>To manually setup GRPC you can create an application:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then follow the below steps depending on the build system chosen.</p>
 </div>
 <div class="sect2">
 <h3 id="_configuring_gradle">Configuring Gradle</h3>
@@ -173,7 +193,7 @@ protobuf {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Ifyou wish to use GRPC standalone without the Micronaut HTTP server you should comment ouf the <code>micronaut-http-server-netty</code> dependency.
+If you wish to use GRPC standalone without the Micronaut HTTP server you should comment ouf the <code>micronaut-http-server-netty</code> dependency.
 </td>
 </tr>
 </table>
@@ -294,6 +314,18 @@ message HelloReply {
   string message = 1;
 }</code></pre>
 </div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+With the Micronaut 1.1 or above CLI you can generate a service with <code>mn create-grpc-service helloworld</code> which will create the <code>proto</code> file and class that implements the stub.
+</td>
+</tr>
+</table>
 </div>
 </div>
 
