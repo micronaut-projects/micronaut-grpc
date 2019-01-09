@@ -1,0 +1,27 @@
+<configuration>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <File>build/test.log.txt</File>
+        <Append>false</Append>
+        <encoder>
+            <pattern>%d %-5p %c - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <logger name="io.micronaut.http.client" level="TRACE"/>
+    <logger name="io.micronaut.http.server.netty.RoutingInBoundHandler" level="TRACE"/>
+    <logger name="org.apache.commons.logging.simplelog.log.org.apache.http" level="TRACE"/>
+
+</configuration>
