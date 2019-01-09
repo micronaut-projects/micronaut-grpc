@@ -2,11 +2,11 @@ package io.micronaut
 
 import com.example.wire.Example
 
-class ProgramacticControllerSpec extends BaseSpec {
+class ProgramaticControllerSpec extends BaseSpec {
 
     String url = embeddedServer.getURL().toString() + '/town'
 
-    void "sample city should be dublin/using programatic controller controller"() {
+    void "sample city should be dublin/using programmatic controller controller"() {
         when:'The message is requested from the sever=[#url]'
             def response = getMessage(url, Example.GeoPoint.class)
         and:'The message is parser'

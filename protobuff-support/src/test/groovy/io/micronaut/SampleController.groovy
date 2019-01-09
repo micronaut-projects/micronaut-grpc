@@ -6,7 +6,7 @@ import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.Post
-import io.micronaut.http.codec.ProtobufferCodec
+import io.micronaut.protobuf.codec.ProtobufferCodec
 
 @Controller
 @CompileStatic

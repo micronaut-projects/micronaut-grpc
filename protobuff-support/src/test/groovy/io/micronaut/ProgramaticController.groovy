@@ -3,7 +3,7 @@ package io.micronaut
 import com.example.wire.Example
 import groovy.transform.CompileStatic
 import io.micronaut.http.annotation.Get
-import io.micronaut.http.codec.ProtobufferCodec
+import io.micronaut.protobuf.codec.ProtobufferCodec
 
 @CompileStatic
 class ProgramaticController {
