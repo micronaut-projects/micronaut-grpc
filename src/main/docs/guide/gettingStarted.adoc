@@ -7,7 +7,7 @@ With Micronaut 1.1 or above you can use the GRPC profile:
 $ mn create-app helloworld --profile grpc --lang java --build gradle
 ----
 
-TIP: Replace `java` with `kotlin` or `groovy to change language and the `build` flag with `maven` to use Maven instead.
+TIP: Replace `java` with `kotlin` or `groovy` to change language and the `build` flag with `maven` to use Maven instead.
 
 See also the https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples[Examples] in the repository that provides examples in Java, Kotlin and Groovy.
 
