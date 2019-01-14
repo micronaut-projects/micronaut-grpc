@@ -21,10 +21,7 @@ The way in which this is done is the https://docs.micronaut.io/latest/guide/inde
 
 To register a GRPC service with Consul first add the `micronaut-discovery-client` dependency:
 
-[source,groovy]
-----
-runtime "io.micronaut:micronaut-discovery-client"
-----
+dependency:micronaut-discovery-client[scope="runtime"]
 
 Then setup Consul correctly:
 
