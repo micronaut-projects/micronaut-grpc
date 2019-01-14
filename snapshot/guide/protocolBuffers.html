@@ -101,22 +101,22 @@ function addJsClass() {
 <div class="paragraph">
 <p>To use this add the <code>micronaut-protobuff-support</code> dependency:</p>
 </div>
-<div class="listingblock">
-<div class="title">Adding to <code>build.gradle</code></div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">runtime "io.micronaut.grpc:micronaut-protobuff-support:1.0.0.BUILD-SNAPSHOT"</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-protobuff-support:1.0.0.BUILD-SNAPSHOT'</span></code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">Adding to <code>pom.xml</code></div>
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml"><dependency>
-  <groupId>io.micronaut.grpc</groupId>
-  <artifactId>micronaut-protobuff-support</artifactId>
-  <scope>runtime</scope>
-  <version>1.0.0.BUILD-SNAPSHOT</version>
-</dependency></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-protobuff-support&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0.BUILD-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
+</div>
+</p>
 </div>
 <div class="paragraph">
 <p>Micronaut will now support the encoding and decoding requests / responses of type <code>application/x-protobuf</code>.</p>

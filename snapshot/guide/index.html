@@ -870,10 +870,22 @@ GreeterGrpc.GreeterStub reactiveStub(
 <div class="paragraph">
 <p>To register a GRPC service with Consul first add the <code>micronaut-discovery-client</code> dependency:</p>
 </div>
-<div class="listingblock">
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">runtime "io.micronaut:micronaut-discovery-client"</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">runtime <span class="hljs-string">'io.micronaut:micronaut-discovery-client'</span></code></pre>
 </div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-discovery-client&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</p>
 </div>
 <div class="paragraph">
 <p>Then setup Consul correctly:</p>
@@ -939,12 +951,39 @@ GreeterGrpc.GreeterStub greeterStub(
 <div class="paragraph">
 <p>GRPC includes tracing based on OpenCensus, however if you wish to use Micronaut&#8217;s integration with Jaeger or Zipkin you can do so by adding the following dependencies:</p>
 </div>
-<div class="listingblock">
-<div class="title">Enabling Tracing with GRPC</div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "io.micronaut:micronaut-tracing"
-runtime 'io.opentracing.contrib:opentracing-grpc:0.0.10'</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut:micronaut-tracing'</span></code></pre>
 </div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-tracing&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</p>
+</div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">runtime <span class="hljs-string">'io.opentracing.contrib:opentracing-grpc:0.0.10'</span></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.opentracing.contrib&lt;/groupId&gt;
+    &lt;artifactId&gt;opentracing-grpc&lt;/artifactId&gt;
+    &lt;version&gt;0.0.10&lt;/version&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</p>
 </div>
 <div class="paragraph">
 <p>You then need to <a href="https://docs.micronaut.io/latest/guide/index.html#distributedTracing">configure either Jaeger or Zipkin</a> appropriately.</p>
@@ -966,22 +1005,22 @@ runtime 'io.opentracing.contrib:opentracing-grpc:0.0.10'</code></pre>
 <div class="paragraph">
 <p>To use this add the <code>micronaut-protobuff-support</code> dependency:</p>
 </div>
-<div class="listingblock">
-<div class="title">Adding to <code>build.gradle</code></div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">runtime "io.micronaut.grpc:micronaut-protobuff-support:1.0.0.BUILD-SNAPSHOT"</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-protobuff-support:1.0.0.BUILD-SNAPSHOT'</span></code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">Adding to <code>pom.xml</code></div>
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml"><dependency>
-  <groupId>io.micronaut.grpc</groupId>
-  <artifactId>micronaut-protobuff-support</artifactId>
-  <scope>runtime</scope>
-  <version>1.0.0.BUILD-SNAPSHOT</version>
-</dependency></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-protobuff-support&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0.BUILD-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
+</div>
+</p>
 </div>
 <div class="paragraph">
 <p>Micronaut will now support the encoding and decoding requests / responses of type <code>application/x-protobuf</code>.</p>
