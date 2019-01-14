@@ -4,13 +4,8 @@ To implement a GRPC server for the previously defined `helloworld.proto` definit
 
 For example:
 
-.GreeterGrpc.GreeterImplBase Example
-[source,java]
-----
-include::examples/hello-world-java/src/main/java/helloworld/GreetingEndpoint.java[tags=imports]
+snippet::helloworld.GreetingEndpoint[tags="imports,clazz", project-base="examples/hello-world", source="main"]
 
-include::examples/hello-world-java/src/main/java/helloworld/GreetingEndpoint.java[tags=clazz]
-----
 
 <1> The class extends from `GreeterGrpc.GreeterImplBase` and is annotated with `javax.inject.Singleton`
 <2> You can dependency inject other beans into the implementation. In this case `GreetingService` is dependency injected.
@@ -81,13 +76,7 @@ The above example uses the `@GrpcChannel` annotation to inject a GRPC `ManagedCh
 
 Now that you have a test client, writing the test becomes trivial:
 
-.Writing a Test
-[source,java]
-----
-include::examples/hello-world-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=imports]
-
-include::examples/hello-world-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=test]
-----
+snippet::helloworld.GreetingEndpointTest[tags="imports,test", project-base="examples/hello-world"]
 
 <1> The test is annotated with `@MicronautTest`
 <2> The client stub is injected into the test
