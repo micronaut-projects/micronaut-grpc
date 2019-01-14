@@ -105,29 +105,74 @@ function addJsClass() {
 <div class="paragraph">
 <p>For example:</p>
 </div>
-<div class="listingblock">
-<div class="title">GreeterGrpc.GreeterImplBase Example</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import io.grpc.stub.StreamObserver;
+<pre class="highlight"><code class="language-java" data-lang="java">import io.grpc.stub.StreamObserver;
 import javax.inject.Singleton;
 
 @Singleton
-public class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <i class="conum" data-value="1"></i><b>(1)</b>
+public class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <b class="conum">(1)</b>
 
     private final GreetingService greetingService;
 
-    <i class="conum" data-value="2"></i><b>(2)</b>
+    <b class="conum">(2)</b>
     public GreetingEndpoint(GreetingService greetingService) {
         this.greetingService = greetingService;
     }
 
     @Override
     public void sayHello(HelloRequest request, StreamObserver&lt;HelloReply&gt; responseObserver) {
-        <i class="conum" data-value="3"></i><b>(3)</b>
+        <b class="conum">(3)</b>
         final String message = greetingService.sayHello(request.getName());
         HelloReply reply = HelloReply.newBuilder().setMessage(message).build();
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.CompileStatic
+import io.grpc.stub.StreamObserver
+import javax.inject.Singleton
+
+@CompileStatic
+@Singleton
+class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <b class="conum">(1)</b>
+
+    final GreetingService greetingService
+
+    <b class="conum">(2)</b>
+    GreetingEndpoint(GreetingService greetingService) {
+        this.greetingService = greetingService
+    }
+
+    @Override
+    void sayHello(HelloRequest request, StreamObserver&lt;HelloReply&gt; responseObserver) {
+        <b class="conum">(3)</b>
+        HelloReply.newBuilder().with {
+            message = greetingService.sayHello(request.name)
+            responseObserver.onNext(build())
+            responseObserver.onCompleted()
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">import io.grpc.stub.StreamObserver
+import javax.inject.Singleton
+
+@Singleton <b class="conum">(1)</b>
+class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpc.GreeterImplBase() { <b class="conum">(2)</b>
+    override fun sayHello(request: HelloRequest, responseObserver: StreamObserver&lt;HelloReply&gt;) {
+    	<b class="conum">(3)</b>
+        val message = greetingService.sayHello(request.name)
+        val reply = HelloReply.newBuilder().setMessage(message).build()
+        responseObserver.onNext(reply)
+        responseObserver.onCompleted()
     }
 }</code></pre>
 </div>
@@ -169,7 +214,7 @@ public class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <i class="co
 <div class="listingblock">
 <div class="title">Configuring the GRPC server</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">grpc:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     server:
         port: 8080
         keep-alive-time: 3h
@@ -184,7 +229,7 @@ public class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <i class="co
 <div class="listingblock">
 <div class="title">Configuring the ServerBuilder</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package io.micronaut.grpc;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.micronaut.grpc;
 
 import io.grpc.ServerBuilder;
 import io.micronaut.context.event.BeanCreatedEvent;
@@ -249,7 +294,7 @@ For detailed instructions on how to setup Micronaut Test for either Spock or JUn
 <div class="listingblock">
 <div class="title">Defining Test Clients</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Factory
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Factory
 class Clients {
     @Bean
     GreeterGrpc.GreeterBlockingStub blockingStub(
@@ -279,10 +324,9 @@ class Clients {
 <div class="paragraph">
 <p>Now that you have a test client, writing the test becomes trivial:</p>
 </div>
-<div class="listingblock">
-<div class="title">Writing a Test</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import io.grpc.ManagedChannel;
+<pre class="highlight"><code class="language-java" data-lang="java">import io.grpc.ManagedChannel;
 import io.micronaut.context.annotation.*;
 import io.micronaut.grpc.annotation.GrpcChannel;
 import io.micronaut.grpc.server.GrpcServerChannel;
@@ -292,15 +336,15 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
-@MicronautTest <i class="conum" data-value="1"></i><b>(1)</b>
+@MicronautTest <b class="conum">(1)</b>
 public class GreetingEndpointTest {
 
     @Inject
-    GreeterGrpc.GreeterBlockingStub blockingStub; <i class="conum" data-value="2"></i><b>(2)</b>
+    GreeterGrpc.GreeterBlockingStub blockingStub; <b class="conum">(2)</b>
 
     @Test
     void testHelloWorld() {
-        final HelloRequest request = HelloRequest.newBuilder() <i class="conum" data-value="3"></i><b>(3)</b>
+        final HelloRequest request = HelloRequest.newBuilder() <b class="conum">(3)</b>
                                                  .setName("Fred")
                                                  .build();
         assertEquals(

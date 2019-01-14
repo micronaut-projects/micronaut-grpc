@@ -105,7 +105,7 @@ function addJsClass() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@GrpcChannel("dns://greeter")</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@GrpcChannel("dns://greeter")</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -129,7 +129,7 @@ function addJsClass() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">runtime "io.micronaut:micronaut-discovery-client"</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">runtime "io.micronaut:micronaut-discovery-client"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -137,7 +137,7 @@ function addJsClass() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">micronaut:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">micronaut:
     application:
         name: greeter
 consul:
@@ -155,7 +155,7 @@ consul:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">grpc:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     client:
         discovery:
             enabled: true
@@ -169,7 +169,7 @@ consul:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Singleton
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton
 @Bean
 GreeterGrpc.GreeterStub greeterStub(
     @GrpcChannel("greeter")

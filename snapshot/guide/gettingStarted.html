@@ -105,7 +105,7 @@ function addJsClass() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld --profile grpc --lang java --build gradle</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mn create-app helloworld --profile grpc --lang java --build gradle</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -128,7 +128,7 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy to change lan
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mn create-app helloworld</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -141,7 +141,7 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy to change lan
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">plugins {
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
     ...
     id 'com.google.protobuf' version '0.8.5'
 }</code></pre>
@@ -152,7 +152,7 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy to change lan
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ext {
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
     protocVersion="3.5.1"
     grpcVersion="1.17.1"
 }
@@ -180,10 +180,26 @@ protobuf {
 <div class="paragraph">
 <p>Finally add the following dependencies to your build:</p>
 </div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grc:micronaut-spring'</span></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut.grc&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-spring&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</p>
+</div>
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">compile "io.micronaut.grpc:micronaut-grpc-runtime:1.0.0.BUILD-SNAPSHOT"</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "io.micronaut.grpc:micronaut-grpc-runtime:1.0.0.BUILD-SNAPSHOT"</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -203,7 +219,7 @@ If you wish to use GRPC standalone without the Micronaut HTTP server you should 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ ./gradlew generateProto</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ ./gradlew generateProto</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -217,7 +233,7 @@ If you wish to use GRPC standalone without the Micronaut HTTP server you should 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld --build</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mn create-app helloworld --build</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -225,7 +241,7 @@ If you wish to use GRPC standalone without the Micronaut HTTP server you should 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;plugin&gt;
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plugin&gt;
   &lt;groupId&gt;com.github.os72&lt;/groupId&gt;
   &lt;artifactId&gt;protoc-jar-maven-plugin&lt;/artifactId&gt;
   &lt;version&gt;3.6.0.2&lt;/version&gt;
@@ -261,7 +277,7 @@ If you wish to use GRPC standalone without the Micronaut HTTP server you should 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ ./mvnw generate-sources</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ ./mvnw generate-sources</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -276,7 +292,7 @@ If you wish to use GRPC standalone without the Micronaut HTTP server you should 
 <div class="listingblock">
 <div class="title">src/main/proto/helloworld.proto</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-protobuf" data-lang="protobuf">// Copyright 2015 The gRPC Authors
+<pre class="highlightjs highlight"><code class="language-protobuf hljs" data-lang="protobuf">// Copyright 2015 The gRPC Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.

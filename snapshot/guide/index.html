@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="../css/highlight/agate.css">
     <script src="../js/highlight.pack.js"></script>
     <script src="../js/guide.js"></script>
+    <script src="../js/multi-language-sample.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="../css/multi-language-sample.css"/>
     <script src="../js/docs.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.13/clipboard.min.js"></script>
     <script type="text/javascript">
@@ -68,6 +70,13 @@
                 <li class="mobile">
                     <a title="Go to API documentation" href="../api/index.html" class="button">API</a>
                 </li>
+                <li class="desktop">
+                    <a title="Go to Configuration Reference documentation" href="../guide/configurationreference.html" class="button">Configuration Reference</a>
+                </li>
+                <li class="mobile">
+                    <a title="Go to Configuration Reference documentation" href="../guide/configurationreference.html" class="button">Conf</a>
+                </li>
+
             </ul>
 
         </div>
@@ -154,7 +163,7 @@
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld --profile grpc --lang java --build gradle</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mn create-app helloworld --profile grpc --lang java --build gradle</code></pre>
 </div>
 </div>
 <div class="admonitionblock tip">
@@ -177,7 +186,7 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy to change lan
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mn create-app helloworld</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -190,7 +199,7 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy to change lan
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">plugins {
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
     ...
     id 'com.google.protobuf' version '0.8.5'
 }</code></pre>
@@ -201,7 +210,7 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy to change lan
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">ext {
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
     protocVersion="3.5.1"
     grpcVersion="1.17.1"
 }
@@ -229,10 +238,26 @@ protobuf {
 <div class="paragraph">
 <p>Finally add the following dependencies to your build:</p>
 </div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grc:micronaut-spring'</span></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut.grc&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-spring&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</p>
+</div>
 <div class="listingblock">
 <div class="title">build.gradle</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">compile "io.micronaut.grpc:micronaut-grpc-runtime:1.0.0.BUILD-SNAPSHOT"</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "io.micronaut.grpc:micronaut-grpc-runtime:1.0.0.BUILD-SNAPSHOT"</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -252,7 +277,7 @@ If you wish to use GRPC standalone without the Micronaut HTTP server you should 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ ./gradlew generateProto</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ ./gradlew generateProto</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -266,7 +291,7 @@ If you wish to use GRPC standalone without the Micronaut HTTP server you should 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ mn create-app helloworld --build</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mn create-app helloworld --build</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -274,7 +299,7 @@ If you wish to use GRPC standalone without the Micronaut HTTP server you should 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;plugin&gt;
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plugin&gt;
   &lt;groupId&gt;com.github.os72&lt;/groupId&gt;
   &lt;artifactId&gt;protoc-jar-maven-plugin&lt;/artifactId&gt;
   &lt;version&gt;3.6.0.2&lt;/version&gt;
@@ -310,7 +335,7 @@ If you wish to use GRPC standalone without the Micronaut HTTP server you should 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ ./mvnw generate-sources</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ ./mvnw generate-sources</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -325,7 +350,7 @@ If you wish to use GRPC standalone without the Micronaut HTTP server you should 
 <div class="listingblock">
 <div class="title">src/main/proto/helloworld.proto</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-protobuf" data-lang="protobuf">// Copyright 2015 The gRPC Authors
+<pre class="highlightjs highlight"><code class="language-protobuf hljs" data-lang="protobuf">// Copyright 2015 The gRPC Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -396,29 +421,74 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 <div class="paragraph">
 <p>For example:</p>
 </div>
-<div class="listingblock">
-<div class="title">GreeterGrpc.GreeterImplBase Example</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import io.grpc.stub.StreamObserver;
+<pre class="highlight"><code class="language-java" data-lang="java">import io.grpc.stub.StreamObserver;
 import javax.inject.Singleton;
 
 @Singleton
-public class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <i class="conum" data-value="1"></i><b>(1)</b>
+public class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <b class="conum">(1)</b>
 
     private final GreetingService greetingService;
 
-    <i class="conum" data-value="2"></i><b>(2)</b>
+    <b class="conum">(2)</b>
     public GreetingEndpoint(GreetingService greetingService) {
         this.greetingService = greetingService;
     }
 
     @Override
     public void sayHello(HelloRequest request, StreamObserver&lt;HelloReply&gt; responseObserver) {
-        <i class="conum" data-value="3"></i><b>(3)</b>
+        <b class="conum">(3)</b>
         final String message = greetingService.sayHello(request.getName());
         HelloReply reply = HelloReply.newBuilder().setMessage(message).build();
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.CompileStatic
+import io.grpc.stub.StreamObserver
+import javax.inject.Singleton
+
+@CompileStatic
+@Singleton
+class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <b class="conum">(1)</b>
+
+    final GreetingService greetingService
+
+    <b class="conum">(2)</b>
+    GreetingEndpoint(GreetingService greetingService) {
+        this.greetingService = greetingService
+    }
+
+    @Override
+    void sayHello(HelloRequest request, StreamObserver&lt;HelloReply&gt; responseObserver) {
+        <b class="conum">(3)</b>
+        HelloReply.newBuilder().with {
+            message = greetingService.sayHello(request.name)
+            responseObserver.onNext(build())
+            responseObserver.onCompleted()
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">import io.grpc.stub.StreamObserver
+import javax.inject.Singleton
+
+@Singleton <b class="conum">(1)</b>
+class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpc.GreeterImplBase() { <b class="conum">(2)</b>
+    override fun sayHello(request: HelloRequest, responseObserver: StreamObserver&lt;HelloReply&gt;) {
+    	<b class="conum">(3)</b>
+        val message = greetingService.sayHello(request.name)
+        val reply = HelloReply.newBuilder().setMessage(message).build()
+        responseObserver.onNext(reply)
+        responseObserver.onCompleted()
     }
 }</code></pre>
 </div>
@@ -460,7 +530,7 @@ public class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <i class="co
 <div class="listingblock">
 <div class="title">Configuring the GRPC server</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">grpc:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     server:
         port: 8080
         keep-alive-time: 3h
@@ -475,7 +545,7 @@ public class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <i class="co
 <div class="listingblock">
 <div class="title">Configuring the ServerBuilder</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package io.micronaut.grpc;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.micronaut.grpc;
 
 import io.grpc.ServerBuilder;
 import io.micronaut.context.event.BeanCreatedEvent;
@@ -540,7 +610,7 @@ For detailed instructions on how to setup Micronaut Test for either Spock or JUn
 <div class="listingblock">
 <div class="title">Defining Test Clients</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Factory
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Factory
 class Clients {
     @Bean
     GreeterGrpc.GreeterBlockingStub blockingStub(
@@ -570,10 +640,9 @@ class Clients {
 <div class="paragraph">
 <p>Now that you have a test client, writing the test becomes trivial:</p>
 </div>
-<div class="listingblock">
-<div class="title">Writing a Test</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">import io.grpc.ManagedChannel;
+<pre class="highlight"><code class="language-java" data-lang="java">import io.grpc.ManagedChannel;
 import io.micronaut.context.annotation.*;
 import io.micronaut.grpc.annotation.GrpcChannel;
 import io.micronaut.grpc.server.GrpcServerChannel;
@@ -583,15 +652,15 @@ import org.junit.jupiter.api.Test;
 
 import javax.inject.Inject;
 
-@MicronautTest <i class="conum" data-value="1"></i><b>(1)</b>
+@MicronautTest <b class="conum">(1)</b>
 public class GreetingEndpointTest {
 
     @Inject
-    GreeterGrpc.GreeterBlockingStub blockingStub; <i class="conum" data-value="2"></i><b>(2)</b>
+    GreeterGrpc.GreeterBlockingStub blockingStub; <b class="conum">(2)</b>
 
     @Test
     void testHelloWorld() {
-        final HelloRequest request = HelloRequest.newBuilder() <i class="conum" data-value="3"></i><b>(3)</b>
+        final HelloRequest request = HelloRequest.newBuilder() <b class="conum">(3)</b>
                                                  .setName("Fred")
                                                  .build();
         assertEquals(
@@ -648,7 +717,7 @@ public class GreetingEndpointTest {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">grpc:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     client:
         plaintext: true
         max-retry-attempts: 10</code></pre>
@@ -666,7 +735,7 @@ public class GreetingEndpointTest {
 <div class="listingblock">
 <div class="title">Configuring the NettyChannelBuilder</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package io.micronaut.grpc;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.micronaut.grpc;
 
 import io.grpc.ManagedChannelBuilder;
 import io.micronaut.context.event.BeanCreatedEvent;
@@ -709,7 +778,7 @@ public class ManagedChannelBuilderListener implements BeanCreatedEventListener&l
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Factory
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Factory
 class Clients {
     @Singleton
     GreeterGrpc.GreeterStub reactiveStub(
@@ -730,7 +799,7 @@ class Clients {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">grpc:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     channels:
         greeter:
             address: 'http://${my.server}:${my.port}'
@@ -743,7 +812,7 @@ class Clients {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Singleton
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton
 GreeterGrpc.GreeterStub reactiveStub(
     @GrpcChannel("greeter")
     ManagedChannel channel) {
@@ -779,7 +848,7 @@ GreeterGrpc.GreeterStub reactiveStub(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@GrpcChannel("dns://greeter")</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@GrpcChannel("dns://greeter")</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -803,7 +872,7 @@ GreeterGrpc.GreeterStub reactiveStub(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">runtime "io.micronaut:micronaut-discovery-client"</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">runtime "io.micronaut:micronaut-discovery-client"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -811,7 +880,7 @@ GreeterGrpc.GreeterStub reactiveStub(
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">micronaut:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">micronaut:
     application:
         name: greeter
 consul:
@@ -829,7 +898,7 @@ consul:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">grpc:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     client:
         discovery:
             enabled: true
@@ -843,7 +912,7 @@ consul:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Singleton
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton
 @Bean
 GreeterGrpc.GreeterStub greeterStub(
     @GrpcChannel("greeter")
@@ -873,7 +942,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <div class="listingblock">
 <div class="title">Enabling Tracing with GRPC</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">compile "io.micronaut:micronaut-tracing"
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">compile "io.micronaut:micronaut-tracing"
 runtime 'io.opentracing.contrib:opentracing-grpc:0.0.10'</code></pre>
 </div>
 </div>
@@ -900,13 +969,13 @@ runtime 'io.opentracing.contrib:opentracing-grpc:0.0.10'</code></pre>
 <div class="listingblock">
 <div class="title">Adding to <code>build.gradle</code></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">runtime "io.micronaut.grpc:micronaut-protobuff-support:1.0.0.BUILD-SNAPSHOT"</code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">runtime "io.micronaut.grpc:micronaut-protobuff-support:1.0.0.BUILD-SNAPSHOT"</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Adding to <code>pom.xml</code></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml"><dependency>
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml"><dependency>
   <groupId>io.micronaut.grpc</groupId>
   <artifactId>micronaut-protobuff-support</artifactId>
   <scope>runtime</scope>

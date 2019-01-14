@@ -113,7 +113,7 @@ function addJsClass() {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">grpc:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     client:
         plaintext: true
         max-retry-attempts: 10</code></pre>
@@ -131,7 +131,7 @@ function addJsClass() {
 <div class="listingblock">
 <div class="title">Configuring the NettyChannelBuilder</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">package io.micronaut.grpc;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.micronaut.grpc;
 
 import io.grpc.ManagedChannelBuilder;
 import io.micronaut.context.event.BeanCreatedEvent;
@@ -174,7 +174,7 @@ public class ManagedChannelBuilderListener implements BeanCreatedEventListener&l
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Factory
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Factory
 class Clients {
     @Singleton
     GreeterGrpc.GreeterStub reactiveStub(
@@ -195,7 +195,7 @@ class Clients {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">grpc:
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     channels:
         greeter:
             address: 'http://${my.server}:${my.port}'
@@ -208,7 +208,7 @@ class Clients {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Singleton
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton
 GreeterGrpc.GreeterStub reactiveStub(
     @GrpcChannel("greeter")
     ManagedChannel channel) {
