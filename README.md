@@ -8,6 +8,10 @@ This project is not yet released.
 
 See the [Snapshot Documentation](https://micronaut-projects.github.io/micronaut-grpc/snapshot/guide/index.html) for more information.
 
+To generate the docs use: 
+
+`./gradlew docs --no-daemon`
+
 ## Examples
 
 Examples for Java, Kotlin and Groovy can be found in the [examples](https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples) directory.
