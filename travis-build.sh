@@ -39,6 +39,9 @@ if [[ $EXIT_STATUS -eq 0 ]]; then
         ./gradlew --stop
         ./gradlew check --no-daemon || EXIT_STATUS=$?
 
+        if [[ $EXIT_STATUS -eq 0 ]]; then
+           ./gradlew pTML --no-daemon || EXIT_STATUS=$?
+        fi
 
         if [[ $EXIT_STATUS -eq 0 ]]; then
             cd examples/hello-world-groovy
