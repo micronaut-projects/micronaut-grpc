@@ -17,8 +17,7 @@ ext {
 
 repositories {
     mavenLocal()
-    mavenCentral()
-    maven { url "https://jcenter.bintray.com" }
+    jcenter()
 }
 
 dependencyManagement {
@@ -30,7 +29,7 @@ dependencyManagement {
 dependencies {
     compile "io.micronaut:micronaut-runtime-groovy"
     compile "io.micronaut:micronaut-validation"
-    compile "io.micronaut.grpc:micronaut-grpc-runtime:1.0.0.BUILD-SNAPSHOT"
+    compile "io.micronaut.grpc:micronaut-grpc-runtime:1.0.0.M1"
     compile "io.micronaut:micronaut-discovery-client"
 
     compileOnly "io.micronaut:micronaut-inject-groovy"
