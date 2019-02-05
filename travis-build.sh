@@ -38,6 +38,23 @@ if [[ $EXIT_STATUS -eq 0 ]]; then
 
         ./gradlew --stop
         ./gradlew check --no-daemon || EXIT_STATUS=$?
+
+
+        if [[ $EXIT_STATUS -eq 0 ]]; then
+            cd examples/hello-world-groovy
+            ./gradlew check --no-daemon  || EXIT_STATUS=$?
+            cd ../..
+        fi
+        if [[ $EXIT_STATUS -eq 0 ]]; then
+            cd examples/hello-world-java
+            ./gradlew check --no-daemon  || EXIT_STATUS=$?
+            cd ../..
+        fi
+        if [[ $EXIT_STATUS -eq 0 ]]; then
+            cd examples/hello-world-kotlin
+            ./gradlew check --no-daemon  || EXIT_STATUS=$?
+            cd ../..
+        fi
     fi
 fi
 
