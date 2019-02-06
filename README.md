@@ -1,6 +1,6 @@
 # Micronaut GRPC
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.micronaut.grpc/micronaut-grpc-runtime.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.micronaut.grpc%22%20AND%20a:%22micronaut-grp-runtime%22)
+[![Maven Central](https://img.shields.io/maven-central/v/io.micronaut.grpc/micronaut-grpc-runtime.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.micronaut.grpc%22%20AND%20a:%22micronaut-grpc-runtime%22)
 [![Build Status](https://travis-ci.org/micronaut-projects/micronaut-grpc.svg?branch=master)](https://travis-ci.org/micronaut-projects/micronaut-grpc)
 
 This project includes integration between [Micronaut](http://micronaut.io) and [GRPC](https://grpc.io).
