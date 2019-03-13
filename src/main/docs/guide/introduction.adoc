@@ -7,3 +7,14 @@ Micronaut adds the following features to the GRPC experience:
 * Distributed Tracing
 * Cloud Native Configuration
 
+=== Release History
+
+==== 1.0.0.RC1
+
+* Upgrade to GRPC `1.19.0`
+* Upgrade to Protobuf `3.7.0`
+* Upgrade to Open Tracing GRPC `0.0.14`
+
+==== 1.0.0.M1
+
+* Initial Release

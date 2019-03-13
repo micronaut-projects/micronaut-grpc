@@ -11,7 +11,7 @@ dependencies {
     compile "io.micronaut:micronaut-runtime:$micronautVersion"
     compileOnly "io.micronaut:micronaut-discovery-client:$micronautVersion"
     compileOnly "io.micronaut:micronaut-tracing:$micronautVersion"
-    compileOnly 'io.opentracing.contrib:opentracing-grpc:0.0.10'
+    compileOnly 'io.opentracing.contrib:opentracing-grpc:0.0.14'
     compile "io.grpc:grpc-netty:$grpcVersion"
 	compile "io.grpc:grpc-protobuf:$grpcVersion"
 	compile "io.grpc:grpc-stub:$grpcVersion"
