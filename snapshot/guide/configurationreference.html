@@ -53,9 +53,9 @@
             </div>
 <div class="sect2">
 <h3 id="_grpc_runtime_config_properties">Grpc Runtime Config Properties</h3>
-<a id="io.micronaut.grpc.server.GrpcSslConfiguration" href="#io.micronaut.grpc.server.GrpcSslConfiguration">&#128279;</a>
+<a id="io.micronaut.grpc.tracing.GrpcClientTracingInterceptorConfiguration" href="#io.micronaut.grpc.tracing.GrpcClientTracingInterceptorConfiguration">&#128279;</a>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 1. Configuration Properties for <a href="../api/io/micronaut/grpc/server/GrpcSslConfiguration.html">GrpcSslConfiguration</a></caption>
+<caption class="title">Table 1. Configuration Properties for <a href="../api/io/micronaut/grpc/tracing/GrpcClientTracingInterceptorConfiguration.html">GrpcClientTracingInterceptorConfiguration</a></caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -70,26 +70,51 @@
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.ssl-context</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.netty.handler.ssl.SslContext</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.operation-name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.OperationNameConstructor</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.ssl.cert-chain</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.streaming</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.ssl.private-key</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.traced-attributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ClientTracingInterceptor$ClientRequestAttribute[]</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.verbosity</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.active-span-source</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ActiveSpanSource</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.active-span-context-source</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ActiveSpanContextSource</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.client-span-decorator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ClientSpanDecorator</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.client-close-decorator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ClientCloseDecorator</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
 <div style="page-break-after: always;"></div>
-<a id="io.micronaut.grpc.channels.GrpcNamedManagedChannelConfiguration" href="#io.micronaut.grpc.channels.GrpcNamedManagedChannelConfiguration">&#128279;</a>
+<a id="io.micronaut.grpc.tracing.GrpcServerTracingInterceptorConfiguration" href="#io.micronaut.grpc.tracing.GrpcServerTracingInterceptorConfiguration">&#128279;</a>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 2. Configuration Properties for <a href="../api/io/micronaut/grpc/channels/GrpcNamedManagedChannelConfiguration.html">GrpcNamedManagedChannelConfiguration</a></caption>
+<caption class="title">Table 2. Configuration Properties for <a href="../api/io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html">GrpcServerTracingInterceptorConfiguration</a></caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -104,178 +129,33 @@
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.for-address</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.net.SocketAddress</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.operation-name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.OperationNameConstructor</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.for-target</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.traced-attributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ServerTracingInterceptor$ServerRequestAttribute[]</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.channel-type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.Class</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.negotiation-type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.netty.NegotiationType</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.event-loop-group</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.netty.channel.EventLoopGroup</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.ssl-context</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.netty.handler.ssl.SslContext</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.flow-control-window</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.max-inbound-metadata-size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.plaintext</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.streaming</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.transport-security</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.verbosity</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.keep-alive-time</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.server-span-decorator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ServerSpanDecorator</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.keep-alive-timeout</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.keep-alive-without-calls</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.local-socket-picker</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.netty.NettyChannelBuilder$LocalSocketPicker</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.max-inbound-message-size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.direct-executor</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.executor</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.util.concurrent.Executor</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.intercept</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.util.List</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.name-resolver-factory</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.NameResolver$Factory</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.default-load-balancing-policy</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.enable-full-stream-decompression</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.decompressor-registry</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.DecompressorRegistry</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.compressor-registry</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.CompressorRegistry</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.r-agent</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.override-authority</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.idle-timeout</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.max-retry-attempts</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.max-hedged-attempts</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.retry-buffer-size</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.per-rpc-buffer-limit</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.disable-retry</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.enable-retry</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.set-binary-log</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.BinaryLog</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.max-trace-events</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.build</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.server-close-decorator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ServerCloseDecorator</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
@@ -310,6 +190,11 @@
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.channel-type</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.Class</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.channel-factory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.netty.channel.ChannelFactory</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -468,7 +353,250 @@
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.proxy-detector</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.ProxyDetector</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.build</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<a id="io.micronaut.grpc.server.GrpcSslConfiguration" href="#io.micronaut.grpc.server.GrpcSslConfiguration">&#128279;</a>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 4. Configuration Properties for <a href="../api/io/micronaut/grpc/server/GrpcSslConfiguration.html">GrpcSslConfiguration</a></caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.ssl.cert-chain</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.ssl.private-key</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.ssl-context</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.netty.handler.ssl.SslContext</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<a id="io.micronaut.grpc.channels.GrpcNamedManagedChannelConfiguration" href="#io.micronaut.grpc.channels.GrpcNamedManagedChannelConfiguration">&#128279;</a>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 5. Configuration Properties for <a href="../api/io/micronaut/grpc/channels/GrpcNamedManagedChannelConfiguration.html">GrpcNamedManagedChannelConfiguration</a></caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.for-address</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.net.SocketAddress</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.for-target</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.channel-type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.Class</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.channel-factory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.netty.channel.ChannelFactory</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.negotiation-type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.netty.NegotiationType</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.event-loop-group</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.netty.channel.EventLoopGroup</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.ssl-context</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.netty.handler.ssl.SslContext</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.flow-control-window</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.max-inbound-metadata-size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.plaintext</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.transport-security</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.keep-alive-time</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.keep-alive-timeout</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.keep-alive-without-calls</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.local-socket-picker</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.netty.NettyChannelBuilder$LocalSocketPicker</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.max-inbound-message-size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.direct-executor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.executor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.util.concurrent.Executor</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.intercept</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.util.List</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.name-resolver-factory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.NameResolver$Factory</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.default-load-balancing-policy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.enable-full-stream-decompression</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.decompressor-registry</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.DecompressorRegistry</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.compressor-registry</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.CompressorRegistry</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.r-agent</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.override-authority</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.idle-timeout</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.time.Duration</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.max-retry-attempts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.max-hedged-attempts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.retry-buffer-size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.per-rpc-buffer-limit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">long</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.disable-retry</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.enable-retry</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.set-binary-log</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.BinaryLog</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.max-trace-events</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.proxy-detector</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.ProxyDetector</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.build</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -477,7 +605,7 @@
 <div style="page-break-after: always;"></div>
 <a id="io.micronaut.grpc.server.GrpcServerConfiguration" href="#io.micronaut.grpc.server.GrpcServerConfiguration">&#128279;</a>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 4. Configuration Properties for <a href="../api/io/micronaut/grpc/server/GrpcServerConfiguration.html">GrpcServerConfiguration</a></caption>
+<caption class="title">Table 6. Configuration Properties for <a href="../api/io/micronaut/grpc/server/GrpcServerConfiguration.html">GrpcServerConfiguration</a></caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -498,6 +626,11 @@
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.for-address</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.net.SocketAddress</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.add-listen-address</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.net.SocketAddress</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -629,114 +762,6 @@
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.set-transport-tracer-factory</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.internal.TransportTracer$Factory</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-<div style="page-break-after: always;"></div>
-<a id="io.micronaut.grpc.tracing.GrpcClientTracingInterceptorConfiguration" href="#io.micronaut.grpc.tracing.GrpcClientTracingInterceptorConfiguration">&#128279;</a>
-<table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 5. Configuration Properties for <a href="../api/io/micronaut/grpc/tracing/GrpcClientTracingInterceptorConfiguration.html">GrpcClientTracingInterceptorConfiguration</a></caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Property</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.operation-name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.OperationNameConstructor</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.streaming</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.traced-attributes</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ClientTracingInterceptor$ClientRequestAttribute[]</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.verbosity</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.active-span-source</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ActiveSpanSource</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.active-span-context-source</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ActiveSpanContextSource</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.client-span-decorator</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ClientSpanDecorator</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.client-close-decorator</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ClientCloseDecorator</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-<div style="page-break-after: always;"></div>
-<a id="io.micronaut.grpc.tracing.GrpcServerTracingInterceptorConfiguration" href="#io.micronaut.grpc.tracing.GrpcServerTracingInterceptorConfiguration">&#128279;</a>
-<table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 6. Configuration Properties for <a href="../api/io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html">GrpcServerTracingInterceptorConfiguration</a></caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Property</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.operation-name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.OperationNameConstructor</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.traced-attributes</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ServerTracingInterceptor$ServerRequestAttribute[]</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.streaming</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.verbosity</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.server-span-decorator</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ServerSpanDecorator</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.tracing.server-close-decorator</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ServerCloseDecorator</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
