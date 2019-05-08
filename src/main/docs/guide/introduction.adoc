@@ -1,4 +1,4 @@
-This project allows building GRPC servers and clients with Micronaut.
+This project allows building https://grpc.io[GRPC] servers and clients with Micronaut.
 
 Micronaut adds the following features to the GRPC experience:
 
