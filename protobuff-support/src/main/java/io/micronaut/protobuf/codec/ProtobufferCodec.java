@@ -156,6 +156,8 @@ public class ProtobufferCodec implements MediaTypeCodec {
     public <T> byte[] encode(T object) throws CodecException {
         if (object instanceof Message) {
             return ((Message) object).toByteArray();
+        } else if (object instanceof byte[]) {
+            return ((byte[]) object);
         }
         return new byte[0];
     }
