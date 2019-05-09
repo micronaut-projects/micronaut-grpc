@@ -15,5 +15,10 @@ class SimpleHttpPostSpec extends BaseSpec {
             Example.GeoPoint city = Example.GeoPoint.parseFrom(response)
         then:'Should be Dublin'
             SampleController.DUBLIN == city
+
+        when:'The byte[] is posted to the server=[#url]'
+            response = postMessage(url, message.toByteArray())
+        then:'The message is parsed'
+            Example.GeoPoint.parseFrom(response) == SampleController.DUBLIN
     }
 }

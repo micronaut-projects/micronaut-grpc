@@ -41,4 +41,14 @@ abstract class BaseSpec extends Specification {
                 byte[].class
         )
     }
+
+    byte[] postMessage(String url, byte[] message) {
+        return rxHttpClient.toBlocking().retrieve(
+                HttpRequest.POST(url, message)
+                        .header(HttpHeaders.CONTENT_TYPE, ProtobufferCodec.PROTOBUFFER_ENCODED)
+                        .header(ProtobufferCodec.X_PROTOBUF_MESSAGE_HEADER, message.class.name)
+                        .header(HttpHeaders.ACCEPT, ProtobufferCodec.PROTOBUFFER_ENCODED),
+                byte[].class
+        )
+    }
 }
