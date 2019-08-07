@@ -109,7 +109,7 @@
         <h1>Micronaut GRPC</h1>
         <p></p>
         <p>Integration between Micronaut and GRPC</p>
-        <p><strong>Version:</strong> 1.0.2.BUILD-SNAPSHOT</p>
+        <p><strong>Version:</strong> 1.1.0.BUILD-SNAPSHOT</p>
     </div>
     
 
@@ -270,7 +270,7 @@ protobuf {
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-grpc-runtime:1.0.2.BUILD-SNAPSHOT'</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-grpc-runtime:1.1.0.BUILD-SNAPSHOT'</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -278,7 +278,7 @@ protobuf {
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-grpc-runtime&lt;/artifactId&gt;
-    &lt;version&gt;1.0.2.BUILD-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.1.0.BUILD-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -569,7 +569,22 @@ class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpc.Gree
 <div class="listingblock">
 <div class="title">Configuring the ServerBuilder</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.micronaut.grpc;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">/*
+ * Copyright 2017-2019 original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.micronaut.grpc;
 
 import io.grpc.ServerBuilder;
 import io.micronaut.context.event.BeanCreatedEvent;
@@ -759,7 +774,22 @@ public class GreetingEndpointTest {
 <div class="listingblock">
 <div class="title">Configuring the NettyChannelBuilder</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package io.micronaut.grpc;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">/*
+ * Copyright 2017-2019 original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package io.micronaut.grpc;
 
 import io.grpc.ManagedChannelBuilder;
 import io.micronaut.context.event.BeanCreatedEvent;
@@ -1032,7 +1062,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-protobuff-support:1.0.2.BUILD-SNAPSHOT'</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-protobuff-support:1.1.0.BUILD-SNAPSHOT'</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1040,7 +1070,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-protobuff-support&lt;/artifactId&gt;
-    &lt;version&gt;1.0.2.BUILD-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.1.0.BUILD-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
