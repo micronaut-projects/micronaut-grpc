@@ -11,6 +11,7 @@ buildscript {
         classpath 'io.github.groovylang.groovydoc:groovydoc-gradle-plugin:1.0.1'
         classpath "io.micronaut.docs:micronaut-docs-asciidoc-extensions:$micronautDocsVersion"
         classpath "io.micronaut.docs:micronaut-docs-gradle-plugins:$micronautDocsVersion"
+        classpath "io.spring.nohttp:nohttp-gradle:0.0.3.RELEASE"
     }
 }
 
@@ -19,9 +20,7 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
-    maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
 }
 
 version project.projectVersion
@@ -47,18 +46,15 @@ subprojects { Project subproject ->
 
     
     repositories {
-        mavenLocal()
         maven { url "https://repo.grails.org/grails/core" }
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     }
     
     apply plugin:"groovy"
     apply plugin:"java"
-
+    apply plugin: "io.spring.nohttp"
+    
     sourceCompatibility = '1.8'
     targetCompatibility = '1.8'
-    apply from:"https://raw.githubusercontent.com/micronaut-projects/micronaut-core/01e2b1ef1255b584e9e5c1965d334e1190e2ade5/gradle/publishing.gradle"
-        
 
     jar {
         manifest {
@@ -68,6 +64,7 @@ subprojects { Project subproject ->
         }
     }
 
+    apply from:"https://raw.githubusercontent.com/micronaut-projects/micronaut-build/f7ecafbd37dae3ab0d2598adf6af31aef5e20b1c/publishing.gradle"
     bintray.publish = true
 
     tasks.withType(Test) {
@@ -106,7 +103,9 @@ subprojects { Project subproject ->
 
         testCompile "cglib:cglib-nodep:2.2.2"
         testCompile "org.objenesis:objenesis:3.0.1"
-
+        testCompile("org.spockframework:spock-core:${spockVersion}") {
+            exclude module:'groovy-all'
+        }
         testRuntime "ch.qos.logback:logback-classic:1.2.3"
         testCompile "org.codehaus.groovy:groovy-test:$groovyVersion"
     }
@@ -116,7 +115,23 @@ subprojects { Project subproject ->
     }
 
     task allDeps(type: DependencyReportTask) {}
+
+     apply plugin: 'checkstyle'
+
+    checkstyle {
+        toolVersion = 8.10
+        configFile = rootProject.file('config/checkstyle/checkstyle.xml')
+
+        // Per submodule
+        maxErrors = 1
+        maxWarnings = 10
+
+        showViolations = true
+    }
+    checkstyleTest.enabled = false  
+    
+    apply from:"https://raw.githubusercontent.com/micronaut-projects/micronaut-build/f7ecafbd37dae3ab0d2598adf6af31aef5e20b1c/license.gradle"  
 }
 
-apply from:"https://raw.githubusercontent.com/micronaut-projects/micronaut-docs/v1.0.0.M4/gradle/docs.gradle"
+apply from:"https://raw.githubusercontent.com/micronaut-projects/micronaut-docs/v1.0.3/gradle/docs.gradle"
 

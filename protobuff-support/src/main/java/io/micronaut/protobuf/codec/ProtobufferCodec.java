@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.protobuf.codec;
 
 import com.google.protobuf.ExtensionRegistry;
@@ -62,6 +61,10 @@ public class ProtobufferCodec implements MediaTypeCodec {
 
     private final ExtensionRegistry extensionRegistry;
 
+    /**
+     * Default constructor.
+     * @param extensionRegistry The extension registry
+     */
     public ProtobufferCodec(ExtensionRegistry extensionRegistry) {
         this.extensionRegistry = extensionRegistry;
     }
@@ -77,7 +80,6 @@ public class ProtobufferCodec implements MediaTypeCodec {
         mediaTypes.add(PROTOBUFFER_ENCODED_TYPE);
         return mediaTypes;
     }
-
 
     @Override
     public <T> T decode(Argument<T> type, InputStream inputStream) throws CodecException {
@@ -177,6 +179,9 @@ public class ProtobufferCodec implements MediaTypeCodec {
     /**
      * Create a new {@code Message.Builder} instance for the given class.
      * <p>This method uses a ConcurrentHashMap for caching method lookups.
+     *
+     * @param clazz The class.
+     * @return The message builder
      */
     public Optional<Message.Builder> getMessageBuilder(Class<? extends Message> clazz) {
         try {

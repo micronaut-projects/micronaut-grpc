@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.grpc.channels;
 
 import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.micronaut.context.ApplicationContext;
-import io.micronaut.context.BeanContext;
 import io.micronaut.context.BeanResolutionContext;
 import io.micronaut.context.exceptions.DependencyInjectionException;
 import io.micronaut.context.scope.CustomScope;
@@ -56,6 +54,10 @@ public class GrpcChannelScope implements CustomScope<GrpcChannel>, AutoCloseable
 
     private final ApplicationContext applicationContext;
 
+    /**
+     * Default constructor.
+     * @param applicationContext The application context
+     */
     public GrpcChannelScope(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
@@ -79,7 +81,7 @@ public class GrpcChannelScope implements CustomScope<GrpcChannel>, AutoCloseable
         if (StringUtils.isEmpty(value)) {
             throw new DependencyInjectionException(resolutionContext, argument, "No value specified to @GrpcChannel annotation");
         }
-        if (!Channel.class.isAssignableFrom(argument.getType()) ) {
+        if (!Channel.class.isAssignableFrom(argument.getType())) {
             throw new DependencyInjectionException(resolutionContext, argument, "@GrpcChannel used on type that is not a Channel");
         }
 

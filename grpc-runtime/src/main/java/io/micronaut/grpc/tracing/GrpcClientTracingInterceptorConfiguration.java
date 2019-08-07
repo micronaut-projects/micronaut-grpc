@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.grpc.tracing;
 
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.annotation.ConfigurationProperties;
-import io.micronaut.context.annotation.Requires;
 import io.micronaut.grpc.channels.GrpcDefaultManagedChannelConfiguration;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.grpc.*;
@@ -42,6 +40,10 @@ public class GrpcClientTracingInterceptorConfiguration {
     @ConfigurationBuilder(prefixes = "with", allowZeroArgs = true)
     protected final ClientTracingInterceptor.Builder builder;
 
+    /**
+     * Default constructor.
+     * @param tracer The tracer
+     */
     protected GrpcClientTracingInterceptorConfiguration(Tracer tracer) {
         this.builder = new ClientTracingInterceptor.Builder(tracer);
     }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.grpc.channels;
 
 import io.grpc.NameResolver;
@@ -25,8 +24,21 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.util.concurrent.ExecutorService;
 
+/**
+ * Constructs a named channel configuration for each property specified in {@link GrpcManagedChannelConfiguration#PREFIX}.
+ *
+ * @author graemerocher
+ * @since 1.0.0
+ */
 @EachProperty(GrpcManagedChannelConfiguration.PREFIX)
 public class GrpcNamedManagedChannelConfiguration extends GrpcManagedChannelConfiguration {
+
+    /**
+     * Default constructor.
+     * @param name The name
+     * @param env The environment
+     * @param executorService The executor service
+     */
     public GrpcNamedManagedChannelConfiguration(
             @Parameter String name,
             Environment env,

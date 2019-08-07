@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.grpc.server;
 
 import io.grpc.Server;
@@ -72,6 +71,16 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
     private final List<ServiceInstanceMetadataContributor> metadataContributors;
     private ServiceInstance serviceInstance;
 
+    /**
+     * Default constructor.
+     * @param applicationContext The application context
+     * @param applicationConfiguration The application configuration
+     * @param grpcServerConfiguration The GRPC server configuration
+     * @param serverBuilder The server builder
+     * @param eventPublisher The event publisher
+     * @param computeInstanceMetadataResolver The computed instance metadata
+     * @param metadataContributors The metadata contributors
+     */
     @Internal
     GrpcEmbeddedServer(
             @Nonnull ApplicationContext applicationContext,
@@ -181,7 +190,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
         if (running.compareAndSet(true, false)) {
 
             try {
-                eventPublisher.publishEvent(new ServerShutdownEvent( this));
+                eventPublisher.publishEvent(new ServerShutdownEvent(this));
                 if (serviceInstance != null) {
                     applicationContext.publishEvent(new ServiceShutdownEvent(serviceInstance));
                 }

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.grpc.server;
 
 import com.google.common.base.Preconditions;
@@ -60,6 +59,13 @@ public class GrpcServerConfiguration {
     private GrpcSslConfiguration serverConfiguration = new GrpcSslConfiguration();
     private boolean secure = false;
 
+    /**
+     * Default constructor.
+     * @param environment The environment
+     * @param serverHost The server host
+     * @param serverPort The server port
+     * @param executorService The IO executor service
+     */
     public GrpcServerConfiguration(
             Environment environment,
             @Property(name = HOST) @Nullable String serverHost,
@@ -138,7 +144,7 @@ public class GrpcServerConfiguration {
      *
      * <p>This is cumulative size of the metadata. The precise calculation is
      * implementation-dependent, but implementations are encouraged to follow the calculation used for
-     * <a href="http://httpwg.org/specs/rfc7540.html#rfc.section.6.5.2">
+     * <a href="https://httpwg.org/specs/rfc7540.html#rfc.section.6.5.2">
      * HTTP/2's SETTINGS_MAX_HEADER_LIST_SIZE</a>. It sums the bytes from each entry's key and value,
      * plus 32 bytes of overhead per entry.
      *
@@ -174,7 +180,7 @@ public class GrpcServerConfiguration {
 
             final boolean hasCert = certChain.isPresent();
             final boolean hasPrivateKey = privateKey.isPresent();
-            if(hasCert && hasPrivateKey) {
+            if (hasCert && hasPrivateKey) {
                 try {
                     try (InputStream certStream = certChain.get()) {
                         try (InputStream keyStream = privateKey.get()) {
@@ -196,8 +202,7 @@ public class GrpcServerConfiguration {
                         // ignore
                     }
                     throw new ConfigurationException("Both 'cert-chain' and 'private-key' properties should be configured");
-                }
-                else if (hasPrivateKey) {
+                } else if (hasPrivateKey) {
                     try {
                         privateKey.get().close();
                     } catch (IOException e) {

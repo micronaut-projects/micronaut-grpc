@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.grpc.channels;
 
 import io.grpc.ClientInterceptor;
@@ -39,7 +38,11 @@ public class GrpcChannelBuilderFactory {
     private final ApplicationContext beanContext;
     private final ExecutorService executorService;
 
-
+    /**
+     * Default constructor.
+     * @param beanContext The bean context
+     * @param executorService The I/O executor service
+     */
     public GrpcChannelBuilderFactory(
             ApplicationContext beanContext,
             @javax.inject.Named(TaskExecutors.IO) ExecutorService executorService) {
@@ -47,11 +50,16 @@ public class GrpcChannelBuilderFactory {
         this.executorService = executorService;
     }
 
+    /**
+     * Constructor a managed channel build for the given target name and interceptors.
+     * @param target The target name
+     * @param interceptors The interceptors
+     * @return The channel builder
+     */
     @Bean
     @Prototype
     protected NettyChannelBuilder managedChannelBuilder(@Parameter String target, List<ClientInterceptor> interceptors) {
-        GrpcManagedChannelConfiguration config = beanContext.findBean(GrpcManagedChannelConfiguration.class, Qualifiers.byName(target)).orElseGet(() ->
-                {
+        GrpcManagedChannelConfiguration config = beanContext.findBean(GrpcManagedChannelConfiguration.class, Qualifiers.byName(target)).orElseGet(() -> {
                     final GrpcDefaultManagedChannelConfiguration mcc = new GrpcDefaultManagedChannelConfiguration(
                             target,
                             beanContext.getEnvironment(),

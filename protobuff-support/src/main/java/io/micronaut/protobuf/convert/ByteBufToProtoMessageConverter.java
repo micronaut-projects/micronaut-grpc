@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.protobuf.convert;
 
 import com.google.protobuf.Message;
@@ -29,7 +28,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- * Converts Protocol buffer messages from Netty {@link ByteBuf}
+ * Converts Protocol buffer messages from Netty {@link ByteBuf}.
  *
  * @author graemerocher
  * @author luistrigueiros
@@ -40,6 +39,10 @@ public class ByteBufToProtoMessageConverter implements TypeConverter<ByteBuf, Me
 
     private final ProtobufferCodec codec;
 
+    /**
+     * Default constructor.
+     * @param codec The codec
+     */
     public ByteBufToProtoMessageConverter(ProtobufferCodec codec) {
         this.codec = codec;
     }

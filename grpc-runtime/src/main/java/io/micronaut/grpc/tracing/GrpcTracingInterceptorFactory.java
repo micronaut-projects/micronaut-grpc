@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.micronaut.grpc.tracing;
 
 import io.grpc.ClientInterceptor;
@@ -21,14 +20,12 @@ import io.grpc.ServerInterceptor;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
-import io.opentracing.contrib.grpc.ClientTracingInterceptor;
-import io.opentracing.contrib.grpc.ServerTracingInterceptor;
 
 import javax.annotation.Nonnull;
 import javax.inject.Singleton;
 
 /**
- * Factory that builds the Tracing interceptors
+ * Factory that builds the Tracing interceptors.
  *
  * @author graemerocher
  * @since 1.0
@@ -36,6 +33,11 @@ import javax.inject.Singleton;
 @Factory
 public class GrpcTracingInterceptorFactory {
 
+    /**
+     * The server interceptor.
+     * @param configuration The configuration
+     * @return The server interceptor
+     */
     @Requires(beans = GrpcServerTracingInterceptorConfiguration.class)
     @Singleton
     @Bean
@@ -43,6 +45,11 @@ public class GrpcTracingInterceptorFactory {
         return configuration.getBuilder().build();
     }
 
+    /**
+     * The client interceptor.
+     * @param configuration The configuration
+     * @return The client interceptor
+     */
     @Requires(beans = GrpcClientTracingInterceptorConfiguration.class)
     @Singleton
     @Bean
