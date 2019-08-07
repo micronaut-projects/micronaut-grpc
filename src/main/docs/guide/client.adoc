@@ -1,4 +1,4 @@
-Micronaut for GRPC does not create client beans automatically for you. Instead you must expose which client stubs you application needs using a `@Factory`.
+Micronaut for GRPC does not create client beans automatically for you. Instead you must expose which client stubs your application needs using a `@Factory`.
 
 You can dependency inject a `io.grpc.ManagedChannel` into the factory. Each injected `io.grpc.ManagedChannel` will automatically be shutdown when the application shuts down.
 
