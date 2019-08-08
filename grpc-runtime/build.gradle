@@ -30,7 +30,7 @@ dependencies {
 // compileJava.options.forkOptions.jvmArgs = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005']
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:3.7.0" }
+    protoc { artifact = "com.google.protobuf:protoc:3.9.1" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.19.0" }
     }
@@ -49,7 +49,7 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:3.7.0" }
+    protoc { artifact = "com.google.protobuf:protoc:3.9.1" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.19.0" }
     }
