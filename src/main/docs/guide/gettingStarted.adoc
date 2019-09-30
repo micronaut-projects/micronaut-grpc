@@ -45,7 +45,7 @@ Finally add the following dependencies to your build:
 
 dependency:micronaut-grpc-runtime[version="{version}", groupId="io.micronaut.grpc"]
 
-NOTE: If you wish to use GRPC standalone without the Micronaut HTTP server you should comment ouf the `micronaut-http-server-netty` dependency.
+NOTE: If you wish to use GRPC standalone without the Micronaut HTTP server you should comment out the `micronaut-http-server-netty` dependency.
 
 You can then run:
 
