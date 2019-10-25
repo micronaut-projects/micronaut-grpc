@@ -51,7 +51,7 @@ public class GrpcServerConfiguration {
     public static final String HOST = PREFIX + ".host";
     public static final int DEFAULT_PORT = 50051;
 
-    @ConfigurationBuilder(prefixes = "")
+    @ConfigurationBuilder(prefixes = "", excludes = "protocolNegotiator")
     protected final NettyServerBuilder serverBuilder;
     private final int serverPort;
     private final String serverHost;

@@ -12,9 +12,9 @@ dependencies {
     compileOnly "io.micronaut:micronaut-discovery-client:$micronautVersion"
     compileOnly "io.micronaut:micronaut-tracing:$micronautVersion"
     compileOnly 'io.opentracing.contrib:opentracing-grpc:0.0.14'
-    compile "io.grpc:grpc-netty:1.19.0"
-	compile "io.grpc:grpc-protobuf:1.24.0"
-	compile "io.grpc:grpc-stub:1.24.0"
+    compile "io.grpc:grpc-netty:$grpcVersion"
+    compile "io.grpc:grpc-protobuf:$grpcVersion"
+    compile "io.grpc:grpc-stub:$grpcVersion"
 
     testCompile "io.micronaut:micronaut-discovery-client:$micronautVersion"
     testCompile 'io.opentracing:opentracing-mock:0.32.0-RC1'
@@ -32,7 +32,7 @@ dependencies {
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:3.7.0" }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.24.0" }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
@@ -51,7 +51,7 @@ sourceSets {
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:3.7.0" }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.24.0" }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
