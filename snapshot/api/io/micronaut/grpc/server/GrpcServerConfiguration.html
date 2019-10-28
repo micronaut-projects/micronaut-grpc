@@ -320,7 +320,8 @@ extends java.lang.Object</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>serverBuilder</h4>
-<pre>@ConfigurationBuilder(prefixes="")
+<pre>@ConfigurationBuilder(prefixes="",
+                      excludes="protocolNegotiator")
 protected final&nbsp;io.grpc.netty.NettyServerBuilder serverBuilder</pre>
 </li>
 </ul>
