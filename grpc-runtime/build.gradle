@@ -17,7 +17,7 @@ dependencies {
     compile "io.grpc:grpc-stub:$grpcVersion"
 
     testCompile "io.micronaut:micronaut-discovery-client:$micronautVersion"
-    testCompile 'io.opentracing:opentracing-mock:0.32.0-RC1'
+    testCompile 'io.opentracing:opentracing-mock:0.33.0'
     testCompile "io.micronaut:micronaut-tracing:$micronautVersion"
     testCompile 'io.opentracing.contrib:opentracing-grpc:0.2.1'
     testCompile 'io.jaegertracing:jaeger-core:0.32.0'
