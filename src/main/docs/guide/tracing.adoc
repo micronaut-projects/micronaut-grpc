@@ -2,6 +2,6 @@ GRPC includes tracing based on OpenCensus, however if you wish to use Micronaut'
 
 dependency:micronaut-tracing[scope="compile"]
 
-dependency:opentracing-grpc[scope="runtime", version="0.0.10", groupId="io.opentracing.contrib"]
+dependency:opentracing-grpc[scope="runtime", version="0.2.1", groupId="io.opentracing.contrib"]
 
 You then need to https://docs.micronaut.io/latest/guide/index.html#distributedTracing[configure either Jaeger or Zipkin] appropriately.

@@ -9,6 +9,12 @@ Micronaut adds the following features to the GRPC experience:
 
 === Release History
 
+==== 1.1.0
+
+* Upgrade to GRPC `1.25.0`
+* Upgrade to Protobuf `3.10.1`
+* Upgrade to Open Tracing GRPC `0.2.1`
+
 ==== 1.0.0.RC1
 
 * Upgrade to GRPC `1.19.0`
