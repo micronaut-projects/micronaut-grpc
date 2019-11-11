@@ -20,7 +20,7 @@ dependencies {
     testCompile 'io.opentracing:opentracing-mock:0.33.0'
     testCompile "io.micronaut:micronaut-tracing:$micronautVersion"
     testCompile 'io.opentracing.contrib:opentracing-grpc:0.2.1'
-    testCompile 'io.jaegertracing:jaeger-core:0.32.0'
+    testCompile 'io.jaegertracing:jaeger-core:1.0.0'
     testCompile "io.micronaut:micronaut-inject-groovy:$micronautVersion"
     testCompile "io.micronaut:micronaut-inject-java:$micronautVersion"
     testCompile 'io.micronaut.test:micronaut-test-spock:1.1.2'
