@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 /**
- * Adds a {@link ClientTracingInterceptor} when OpenTracing for GRPC is on the classpath
+ * Adds a {@link TracingClientInterceptor} when OpenTracing for GRPC is on the classpath
  * and allows integration with Zipkin and Jaeger.
  *
  * @author graemerocher
@@ -38,20 +38,20 @@ public class GrpcClientTracingInterceptorConfiguration {
     public static final String PREFIX = GrpcDefaultManagedChannelConfiguration.PREFIX + ".tracing";
 
     @ConfigurationBuilder(prefixes = "with", allowZeroArgs = true)
-    protected final ClientTracingInterceptor.Builder builder;
+    protected final TracingClientInterceptor.Builder builder;
 
     /**
      * Default constructor.
      * @param tracer The tracer
      */
     protected GrpcClientTracingInterceptorConfiguration(Tracer tracer) {
-        this.builder = new ClientTracingInterceptor.Builder(tracer);
+        this.builder = TracingClientInterceptor.newBuilder().withTracer(tracer);
     }
 
     /**
-     * @return The {@link ServerTracingInterceptor.Builder}
+     * @return The {@link TracingClientInterceptor.Builder}
      */
-    public @Nonnull ClientTracingInterceptor.Builder getBuilder() {
+    public @Nonnull TracingClientInterceptor.Builder getBuilder() {
         return builder;
     }
 

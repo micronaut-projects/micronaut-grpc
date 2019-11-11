@@ -21,14 +21,14 @@ import io.micronaut.grpc.server.GrpcServerConfiguration;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.grpc.ServerCloseDecorator;
 import io.opentracing.contrib.grpc.ServerSpanDecorator;
-import io.opentracing.contrib.grpc.ServerTracingInterceptor;
+import io.opentracing.contrib.grpc.TracingServerInterceptor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 /**
- * Adds a {@link ServerTracingInterceptor} when OpenTracing for GRPC is on the classpath
+ * Adds a {@link TracingServerInterceptor} when OpenTracing for GRPC is on the classpath
  * and allows integration with Zipkin and Jaeger.
  *
  * @author graemerocher
@@ -40,20 +40,20 @@ public class GrpcServerTracingInterceptorConfiguration {
     public static final String PREFIX = GrpcServerConfiguration.PREFIX + ".tracing";
 
     @ConfigurationBuilder(prefixes = "with", allowZeroArgs = true)
-    protected final ServerTracingInterceptor.Builder builder;
+    protected final TracingServerInterceptor.Builder builder;
 
     /**
      * Default constructor.
      * @param tracer The tracer
      */
     protected GrpcServerTracingInterceptorConfiguration(Tracer tracer) {
-        this.builder = new ServerTracingInterceptor.Builder(tracer);
+        this.builder = TracingServerInterceptor.newBuilder().withTracer(tracer);
     }
 
     /**
-     * @return The {@link ServerTracingInterceptor.Builder}
+     * @return The {@link TracingServerInterceptor.Builder}
      */
-    public @Nonnull ServerTracingInterceptor.Builder getBuilder() {
+    public @Nonnull TracingServerInterceptor.Builder getBuilder() {
         return builder;
     }
 
