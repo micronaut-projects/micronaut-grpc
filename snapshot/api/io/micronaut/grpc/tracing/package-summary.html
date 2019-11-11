@@ -69,7 +69,7 @@
 <!-- ========= END OF TOP NAVBAR ========= -->
 <div class="header">
 <p>@Configuration
- @Requires(classes={io.opentracing.Tracer.class,io.opentracing.contrib.grpc.ClientTracingInterceptor.class,io.opentracing.contrib.grpc.ServerTracingInterceptor.class}) @Requires(beans=io.opentracing.Tracer.class)
+ @Requires(classes={io.opentracing.Tracer.class,io.opentracing.contrib.grpc.TracingClientInterceptor.class,io.opentracing.contrib.grpc.TracingServerInterceptor.class}) @Requires(beans=io.opentracing.Tracer.class)
 </p>
 <h1 title="Package" class="title">Package&nbsp;io.micronaut.grpc.tracing</h1>
 <div class="docSummary">
@@ -90,14 +90,14 @@
 <tr class="altColor">
 <td class="colFirst"><a href="../../../../io/micronaut/grpc/tracing/GrpcClientTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing">GrpcClientTracingInterceptorConfiguration</a></td>
 <td class="colLast">
-<div class="block">Adds a <code>ClientTracingInterceptor</code> when OpenTracing for GRPC is on the classpath
+<div class="block">Adds a <code>TracingClientInterceptor</code> when OpenTracing for GRPC is on the classpath
  and allows integration with Zipkin and Jaeger.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="../../../../io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.tracing">GrpcServerTracingInterceptorConfiguration</a></td>
 <td class="colLast">
-<div class="block">Adds a <code>ServerTracingInterceptor</code> when OpenTracing for GRPC is on the classpath
+<div class="block">Adds a <code>TracingServerInterceptor</code> when OpenTracing for GRPC is on the classpath
  and allows integration with Zipkin and Jaeger.</div>
 </td>
 </tr>

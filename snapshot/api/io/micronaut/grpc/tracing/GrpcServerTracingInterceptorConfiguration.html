@@ -110,7 +110,7 @@ var activeTableTab = "activeTableTab";
 <pre>@ConfigurationProperties(value="grpc.server.tracing")
 public class <span class="typeNameLabel">GrpcServerTracingInterceptorConfiguration</span>
 extends java.lang.Object</pre>
-<div class="block">Adds a <code>ServerTracingInterceptor</code> when OpenTracing for GRPC is on the classpath
+<div class="block">Adds a <code>TracingServerInterceptor</code> when OpenTracing for GRPC is on the classpath
  and allows integration with Zipkin and Jaeger.</div>
 <dl>
 <dt><span class="simpleTagLabel">Since:</span></dt>
@@ -137,7 +137,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected io.opentracing.contrib.grpc.ServerTracingInterceptor.Builder</code></td>
+<td class="colFirst"><code>protected io.opentracing.contrib.grpc.TracingServerInterceptor.Builder</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html#builder">builder</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -181,7 +181,7 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>io.opentracing.contrib.grpc.ServerTracingInterceptor.Builder</code></td>
+<td class="colFirst"><code>io.opentracing.contrib.grpc.TracingServerInterceptor.Builder</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/tracing/GrpcServerTracingInterceptorConfiguration.html#getBuilder--">getBuilder</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -239,7 +239,7 @@ extends java.lang.Object</pre>
 <h4>builder</h4>
 <pre>@ConfigurationBuilder(prefixes="with",
                       allowZeroArgs=true)
-protected final&nbsp;io.opentracing.contrib.grpc.ServerTracingInterceptor.Builder builder</pre>
+protected final&nbsp;io.opentracing.contrib.grpc.TracingServerInterceptor.Builder builder</pre>
 </li>
 </ul>
 </li>
@@ -279,10 +279,10 @@ protected final&nbsp;io.opentracing.contrib.grpc.ServerTracingInterceptor.Builde
 <li class="blockList">
 <h4>getBuilder</h4>
 <pre>@Nonnull
-public&nbsp;io.opentracing.contrib.grpc.ServerTracingInterceptor.Builder&nbsp;getBuilder()</pre>
+public&nbsp;io.opentracing.contrib.grpc.TracingServerInterceptor.Builder&nbsp;getBuilder()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The <code>ServerTracingInterceptor.Builder</code></dd>
+<dd>The <code>TracingServerInterceptor.Builder</code></dd>
 </dl>
 </li>
 </ul>

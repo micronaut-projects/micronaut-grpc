@@ -210,8 +210,8 @@ extends io.grpc.NameResolverProvider</pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>io.grpc.NameResolver</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#newNameResolver-java.net.URI-io.grpc.Attributes-">newNameResolver</a></span>(java.net.URI&nbsp;targetUri,
-               io.grpc.Attributes&nbsp;params)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#newNameResolver-java.net.URI-io.grpc.NameResolver.Args-">newNameResolver</a></span>(java.net.URI&nbsp;targetUri,
+               io.grpc.NameResolver.Args&nbsp;args)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
@@ -324,15 +324,14 @@ extends io.grpc.NameResolverProvider</pre>
 </dl>
 </li>
 </ul>
-<a name="newNameResolver-java.net.URI-io.grpc.Attributes-">
+<a name="newNameResolver-java.net.URI-io.grpc.NameResolver.Args-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>newNameResolver</h4>
-<pre>@Nullable
-public&nbsp;io.grpc.NameResolver&nbsp;newNameResolver(java.net.URI&nbsp;targetUri,
-                                                      io.grpc.Attributes&nbsp;params)</pre>
+<pre>public&nbsp;io.grpc.NameResolver&nbsp;newNameResolver(java.net.URI&nbsp;targetUri,
+                                            io.grpc.NameResolver.Args&nbsp;args)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>newNameResolver</code>&nbsp;in class&nbsp;<code>io.grpc.NameResolver.Factory</code></dd>
