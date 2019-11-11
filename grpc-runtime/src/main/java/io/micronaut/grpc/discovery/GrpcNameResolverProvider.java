@@ -69,10 +69,8 @@ public class GrpcNameResolverProvider extends NameResolverProvider {
         return PRIORITY;
     }
 
-    @Nullable
     @Override
-    public NameResolver newNameResolver(URI targetUri, Attributes params) {
-
+    public NameResolver newNameResolver(URI targetUri, NameResolver.Args args) {
         final String serviceId = targetUri.toString();
         if (!NameUtils.isHyphenatedLowerCase(serviceId)) {
             throw new IllegalArgumentException("Invalid service ID [" + serviceId + "]. Service IDs should be kebab-case (lowercase / hyphen separated). For example 'greeting-service'.");
@@ -93,7 +91,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider {
                     if (serviceInstanceList.getID().equals(serviceId)) {
                         listener.onAddresses(
                                 toAddresses(serviceInstanceList.getInstances()),
-                                params
+                                Attributes.EMPTY
                         );
                         return;
                     }
@@ -104,17 +102,17 @@ public class GrpcNameResolverProvider extends NameResolverProvider {
                             if (CollectionUtils.isNotEmpty(instances)) {
                                 final List<EquivalentAddressGroup> servers = toAddresses(instances);
                                 listener.onAddresses(
-                                        servers, params
+                                        servers, Attributes.EMPTY
                                 );
                             } else {
                                 if (targetUri.getHost() != null && targetUri.getPort() > -1) {
                                     listener.onAddresses(
                                             Collections.singletonList(new EquivalentAddressGroup(
-                                                   new InetSocketAddress(
-                                                           targetUri.getHost(),
-                                                           targetUri.getPort()
-                                                   )
-                                            )), params
+                                                    new InetSocketAddress(
+                                                            targetUri.getHost(),
+                                                            targetUri.getPort()
+                                                    )
+                                            )), Attributes.EMPTY
                                     );
                                 } else {
                                     listener.onError(Status.UNAVAILABLE.withCause(
