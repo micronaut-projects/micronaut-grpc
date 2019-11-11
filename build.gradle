@@ -133,5 +133,5 @@ subprojects { Project subproject ->
     apply from:"https://raw.githubusercontent.com/micronaut-projects/micronaut-build/f7ecafbd37dae3ab0d2598adf6af31aef5e20b1c/license.gradle"  
 }
 
-apply from:"https://raw.githubusercontent.com/micronaut-projects/micronaut-docs/v1.0.3/gradle/docs.gradle"
+apply from:"https://raw.githubusercontent.com/micronaut-projects/micronaut-docs/v1.0.5/gradle/docs.gradle"
 
