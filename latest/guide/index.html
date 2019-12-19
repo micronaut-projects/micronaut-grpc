@@ -109,7 +109,7 @@
         <h1>Micronaut GRPC</h1>
         <p></p>
         <p>Integration between Micronaut and GRPC</p>
-        <p><strong>Version:</strong> 1.1.0</p>
+        <p><strong>Version:</strong> 1.1.1</p>
     </div>
     
 
@@ -146,6 +146,16 @@
 </div>
 <div class="sect2">
 <h3 id="_release_history">Release History</h3>
+<div class="sect3">
+<h4 id="_1_1_1">1.1.1</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Upgrade to GRPC <code>1.26.0</code></p>
+</li>
+</ul>
+</div>
+</div>
 <div class="sect3">
 <h4 id="_1_1_0">1.1.0</h4>
 <div class="ulist">
@@ -286,7 +296,7 @@ protobuf {
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-grpc-runtime:1.1.0'</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-grpc-runtime:1.1.1'</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -294,7 +304,7 @@ protobuf {
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-grpc-runtime&lt;/artifactId&gt;
-    &lt;version&gt;1.1.0&lt;/version&gt;
+    &lt;version&gt;1.1.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -872,7 +882,7 @@ class Clients {
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     channels:
         greeter:
-            address: 'http://${my.server}:${my.port}'
+            address: '${my.server}:${my.port}'
             plaintext: true
             max-retry-attempts: 10</code></pre>
 </div>
@@ -1078,7 +1088,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-protobuff-support:1.1.0'</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-protobuff-support:1.1.1'</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1086,7 +1096,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-protobuff-support&lt;/artifactId&gt;
-    &lt;version&gt;1.1.0&lt;/version&gt;
+    &lt;version&gt;1.1.1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
