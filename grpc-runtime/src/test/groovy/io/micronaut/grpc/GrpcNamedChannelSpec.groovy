@@ -37,7 +37,7 @@ class GrpcNamedChannelSpec extends Specification {
         def channel = testBean.blockingStub.channel
         expect:
         channel != null
-        
+
         testBean.sayHello("Fred") == "Hello 2 Fred"
         config.name == 'greeter'
         embeddedServer.close()

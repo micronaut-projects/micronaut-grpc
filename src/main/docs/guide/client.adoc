@@ -63,7 +63,7 @@ For example given the following configuration:
 grpc:
     channels:
         greeter:
-            address: 'http://${my.server}:${my.port}'
+            address: '${my.server}:${my.port}'
             plaintext: true
             max-retry-attempts: 10
 ----
