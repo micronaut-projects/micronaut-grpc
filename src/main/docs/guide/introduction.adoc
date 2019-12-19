@@ -9,6 +9,10 @@ Micronaut adds the following features to the GRPC experience:
 
 === Release History
 
+==== 1.1.1
+
+* Upgrade to GRPC `1.26.0`
+
 ==== 1.1.0
 
 * Upgrade to GRPC `1.25.0`

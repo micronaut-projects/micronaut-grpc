@@ -36,8 +36,8 @@ import java.util.concurrent.ExecutorService;
  */
 public abstract class GrpcManagedChannelConfiguration implements Named {
     public static final String PREFIX = "grpc.channels";
-    public static final String SETTING_TARGET = PREFIX + ".target";
-    public static final String SETTING_URL = PREFIX + ".url";
+    public static final String SETTING_TARGET = ".target";
+    public static final String SETTING_URL = ".address";
     protected final String name;
 
     @ConfigurationBuilder(prefixes = {"use", ""}, allowZeroArgs = true)
@@ -52,12 +52,12 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
      */
     public GrpcManagedChannelConfiguration(String name, Environment env, ExecutorService executorService) {
         this.name = name;
-        final Optional<SocketAddress> socketAddress = env.getProperty(SETTING_URL, SocketAddress.class);
+        final Optional<SocketAddress> socketAddress = env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class);
         if (socketAddress.isPresent()) {
             resolveName = false;
             this.channelBuilder = NettyChannelBuilder.forAddress(socketAddress.get());
         } else {
-            final Optional<String> target = env.getProperty(SETTING_TARGET, String.class);
+            final Optional<String> target = env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class);
             if (target.isPresent()) {
                 this.channelBuilder = NettyChannelBuilder.forTarget(
                         target.get()
