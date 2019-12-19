@@ -32,7 +32,7 @@ dependencies {
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protocVersion" }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.25.0" }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.26.0" }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
@@ -51,7 +51,7 @@ sourceSets {
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protocVersion" }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.25.0" }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.26.0" }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
