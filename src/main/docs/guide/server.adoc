@@ -32,8 +32,9 @@ grpc:
         port: 8080
         keep-alive-time: 3h
         max-inbound-message-size: 1024
-        cert-chain: '/path/to/my.cert'
-        private-key: '/path/to/my.key'
+        ssl:
+            cert-chain: '/path/to/my.cert'
+            private-key: '/path/to/my.key'
 ----
 
 Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
