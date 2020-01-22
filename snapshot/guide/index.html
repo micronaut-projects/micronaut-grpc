@@ -585,8 +585,9 @@ class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpc.Gree
         port: 8080
         keep-alive-time: 3h
         max-inbound-message-size: 1024
-        cert-chain: '/path/to/my.cert'
-        private-key: '/path/to/my.key'</code></pre>
+        ssl:
+            cert-chain: '/path/to/my.cert'
+            private-key: '/path/to/my.key'</code></pre>
 </div>
 </div>
 <div class="paragraph">
