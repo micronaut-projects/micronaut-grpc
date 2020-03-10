@@ -63,7 +63,8 @@ subprojects { Project subproject ->
         }
     }
 
-    apply from:"https://raw.githubusercontent.com/micronaut-projects/micronaut-build/3ca806eb776b72483a4c0fda5ff1a5caebe0c281/publishing.gradle"
+    apply from:"https://raw.githubusercontent.com/micronaut-projects/micronaut-build/v${micronautBuildVersion}/publishing.gradle"
+
     bintray.publish = true
 
     tasks.withType(Test) {
