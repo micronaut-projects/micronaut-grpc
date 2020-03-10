@@ -6,3 +6,4 @@ client: GRPC Clients
 serviceDiscovery: Service Discovery
 tracing: Distributed Tracing
 protocolBuffers: Protocol Buffers Support
+repository: Repository
