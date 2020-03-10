@@ -28,6 +28,7 @@
 <body class="body" id="docs" onload="addJsClass();" onhashchange="highlightMenu()">
 
 <div id="table-of-content-nav-link" class="desktop">
+    <a id="theme-switcher" title="Switch to dark theme" href="javascript:switchTheme(true)"><i class="fa fa-moon-o"></i></a>
     <a title="Collapse/Open Table of contents" title="Hide Table of Contents" href="javascript:hideTableOfContents();" class="button">[ + ]</a>
 </div>
 
@@ -38,8 +39,7 @@
         </div>
         <div class="navLinks">
             <ul>
-                    <li>
-                        <div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)" class="desktop">
+                    <li><div id="nav-summary" onmouseover="toggleNavSummary(false)" onmouseout="toggleNavSummary(true)" class="desktop">
                             <a href="../guide/index.html" class="button">Table of contents</a>
                             <div id="nav-summary-childs" style="display:none;">
                                 
@@ -56,6 +56,8 @@
                                 <div class="toc-item" style="margin-left:0"><a href="#tracing"><strong>6</strong><span>Distributed Tracing</span></a></div>
                                 
                                 <div class="toc-item" style="margin-left:0"><a href="#protocolBuffers"><strong>7</strong><span>Protocol Buffers Support</span></a></div>
+                                
+                                <div class="toc-item" style="margin-left:0"><a href="#repository"><strong>8</strong><span>Repository</span></a></div>
                                 
                             </div>
                         </div>
@@ -76,7 +78,6 @@
                 <li class="mobile">
                     <a title="Go to Configuration Reference documentation" href="../guide/configurationreference.html" class="button">Conf</a>
                 </li>
-
             </ul>
 
         </div>
@@ -101,6 +102,8 @@
         
         <div class="toc-item" style="margin-left:0px" id="toc-item-protocolBuffers"><a href="#protocolBuffers"><strong>7</strong><span>Protocol Buffers Support</span></a></div>
         
+        <div class="toc-item" style="margin-left:0px" id="toc-item-repository"><a href="#repository"><strong>8</strong><span>Repository</span></a></div>
+        
         </div>
     </div>
     
@@ -109,11 +112,10 @@
         <h1>Micronaut GRPC</h1>
         <p></p>
         <p>Integration between Micronaut and GRPC</p>
-        <p><strong>Version:</strong> 1.1.2.BUILD-SNAPSHOT</p>
+        <p><strong>Version:</strong> <select style='max-width: 200px' onChange='window.document.location.href=this.options[this.selectedIndex].value;'><option selected='selected' value='https://micronaut-projects.github.io/micronaut-grpc/snapshot/guide/index.html'>1.1.2.BUILD-SNAPSHOT</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.1.1/guide/index.html'>1.1.1</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.1.0/guide/index.html'>1.1.0</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.0.1/guide/index.html'>1.0.1</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.0.0/guide/index.html'>1.0.0</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.0.0.RC1/guide/index.html'>1.0.0.RC1</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.0.0.M1/guide/index.html'>1.0.0.M1</option></select></p>
     </div>
     
-
-<h1 id="introduction">1 Introduction</h1>
+<h1 id="introduction"><a class="anchor" href="#introduction"></a>1 Introduction</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/introduction.adoc"'>
@@ -200,8 +202,7 @@
 </div>
 </div>
 
-
-<h1 id="gettingStarted">2 Getting Started</h1>
+<h1 id="gettingStarted"><a class="anchor" href="#gettingStarted"></a>2 Getting Started</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/gettingStarted.adoc"'>
@@ -295,8 +296,9 @@ protobuf {
 </div>
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-grpc-runtime:1.1.2.BUILD-SNAPSHOT'</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-runtime:1.1.2.BUILD-SNAPSHOT")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -453,8 +455,7 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 </div>
 </div>
 
-
-<h1 id="server">3 GRPC Server</h1>
+<h1 id="server"><a class="anchor" href="#server"></a>3 GRPC Server</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/server.adoc"'>
@@ -757,8 +758,7 @@ public class GreetingEndpointTest {
 </div>
 </div>
 
-
-<h1 id="client">4 GRPC Clients</h1>
+<h1 id="client"><a class="anchor" href="#client"></a>4 GRPC Clients</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/client.adoc"'>
@@ -911,8 +911,7 @@ GreeterGrpc.GreeterStub reactiveStub(
 </div>
 </div>
 
-
-<h1 id="serviceDiscovery">5 Service Discovery</h1>
+<h1 id="serviceDiscovery"><a class="anchor" href="#serviceDiscovery"></a>5 Service Discovery</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/serviceDiscovery.adoc"'>
@@ -953,8 +952,9 @@ GreeterGrpc.GreeterStub reactiveStub(
 </div>
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">runtime <span class="hljs-string">'io.micronaut:micronaut-discovery-client'</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">runtime(<span class="hljs-string">"io.micronaut:micronaut-discovery-client")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1019,8 +1019,7 @@ GreeterGrpc.GreeterStub greeterStub(
 </div>
 </div>
 
-
-<h1 id="tracing">6 Distributed Tracing</h1>
+<h1 id="tracing"><a class="anchor" href="#tracing"></a>6 Distributed Tracing</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/tracing.adoc"'>
@@ -1034,8 +1033,9 @@ GreeterGrpc.GreeterStub greeterStub(
 </div>
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut:micronaut-tracing'</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut:micronaut-tracing")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1050,8 +1050,9 @@ GreeterGrpc.GreeterStub greeterStub(
 </div>
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">runtime <span class="hljs-string">'io.opentracing.contrib:opentracing-grpc:0.2.1'</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">runtime(<span class="hljs-string">"io.opentracing.contrib:opentracing-grpc:0.2.1")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1070,8 +1071,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <p>You then need to <a href="https://docs.micronaut.io/latest/guide/index.html#distributedTracing">configure either Jaeger or Zipkin</a> appropriately.</p>
 </div>
 
-
-<h1 id="protocolBuffers">7 Protocol Buffers Support</h1>
+<h1 id="protocolBuffers"><a class="anchor" href="#protocolBuffers"></a>7 Protocol Buffers Support</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/protocolBuffers.adoc"'>
@@ -1088,8 +1088,9 @@ GreeterGrpc.GreeterStub greeterStub(
 </div>
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="gradle">compile <span class="hljs-string">'io.micronaut.grpc:micronaut-protobuff-support:1.1.2.BUILD-SNAPSHOT'</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-support:1.1.2.BUILD-SNAPSHOT")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1105,6 +1106,22 @@ GreeterGrpc.GreeterStub greeterStub(
 </div>
 <div class="paragraph">
 <p>Micronaut will now support the encoding and decoding requests / responses of type <code>application/x-protobuf</code>.</p>
+</div>
+
+<h1 id="repository"><a class="anchor" href="#repository"></a>8 Repository</h1>
+
+<div class='contribute-btn'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/repository.adoc"'>
+        <i class='fa fa-pencil-square-o'></i> Improve this doc
+    </button>
+</div>
+
+
+<div class="paragraph">
+<p>You can find the source code of this project in this repository:</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/micronaut-projects/micronaut-grpc">https://github.com/micronaut-projects/micronaut-grpc</a></p>
 </div>
 
     </div>
