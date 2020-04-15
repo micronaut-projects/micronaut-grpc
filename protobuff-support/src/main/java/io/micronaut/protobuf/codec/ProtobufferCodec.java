@@ -165,7 +165,7 @@ public class ProtobufferCodec implements MediaTypeCodec {
     }
 
     @Override
-    public <T> ByteBuffer encode(T object, ByteBufferFactory allocator) throws CodecException {
+    public <T, B> ByteBuffer<B> encode(T object, ByteBufferFactory<?, B> allocator) throws CodecException {
         return allocator.copiedBuffer(encode(object));
     }
 

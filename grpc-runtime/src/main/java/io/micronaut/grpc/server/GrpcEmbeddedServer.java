@@ -26,8 +26,8 @@ import io.micronaut.core.util.ArgumentUtils;
 import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.cloud.ComputeInstanceMetadata;
 import io.micronaut.discovery.cloud.ComputeInstanceMetadataResolver;
-import io.micronaut.discovery.event.ServiceShutdownEvent;
-import io.micronaut.discovery.event.ServiceStartedEvent;
+import io.micronaut.discovery.event.ServiceReadyEvent;
+import io.micronaut.discovery.event.ServiceStoppedEvent;
 import io.micronaut.discovery.metadata.ServiceInstanceMetadataContributor;
 import io.micronaut.runtime.ApplicationConfiguration;
 import io.micronaut.runtime.exceptions.ApplicationStartupException;
@@ -176,7 +176,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
                             metadata,
                             metadataContributors
                     );
-                    applicationContext.publishEvent(new ServiceStartedEvent(serviceInstance));
+                    applicationContext.publishEvent(new ServiceReadyEvent(serviceInstance));
                 });
             } catch (IOException e) {
                 throw new ApplicationStartupException("Unable to start GRPC server: " + e.getMessage(), e);
@@ -192,7 +192,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
             try {
                 eventPublisher.publishEvent(new ServerShutdownEvent(this));
                 if (serviceInstance != null) {
-                    applicationContext.publishEvent(new ServiceShutdownEvent(serviceInstance));
+                    applicationContext.publishEvent(new ServiceStoppedEvent(serviceInstance));
                 }
             } finally {
                 server.shutdownNow();

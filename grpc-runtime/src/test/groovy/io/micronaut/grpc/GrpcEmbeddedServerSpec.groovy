@@ -16,14 +16,12 @@
 package io.micronaut.grpc
 
 import io.micronaut.context.ApplicationContext
-import io.micronaut.discovery.event.ServiceShutdownEvent
-import io.micronaut.discovery.event.ServiceStartedEvent
+import io.micronaut.discovery.event.ServiceReadyEvent
+import io.micronaut.discovery.event.ServiceStoppedEvent
 import io.micronaut.grpc.server.GrpcEmbeddedServer
 import io.micronaut.runtime.event.annotation.EventListener
-import io.micronaut.runtime.server.EmbeddedServer
 import io.micronaut.runtime.server.event.ServerShutdownEvent
 import io.micronaut.runtime.server.event.ServerStartupEvent
-import io.micronaut.test.annotation.MicronautTest
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
@@ -40,9 +38,9 @@ class GrpcEmbeddedServerSpec extends Specification {
         then:
         embeddedServer.isRunning()
         consumer.startup != null
-        consumer.serviceStarted == null
+        consumer.serviceReadyEvent == null
         consumer.shutdown == null
-        consumer.serviceShutdownEvent == null
+        consumer.serviceStoppedEvent == null
 
         when:
         embeddedServer.stop()
@@ -50,7 +48,7 @@ class GrpcEmbeddedServerSpec extends Specification {
 
         then:
         consumer.shutdown != null
-        consumer.serviceShutdownEvent == null
+        consumer.serviceStoppedEvent == null
         conditions.eventually {
             embeddedServer.getServer().isTerminated()
         }
@@ -69,9 +67,9 @@ class GrpcEmbeddedServerSpec extends Specification {
         then:
         embeddedServer.isRunning()
         consumer.startup != null
-        consumer.serviceStarted != null
+        consumer.serviceReadyEvent != null
         consumer.shutdown == null
-        consumer.serviceShutdownEvent == null
+        consumer.serviceStoppedEvent == null
 
         when:
         embeddedServer.stop()
@@ -79,7 +77,7 @@ class GrpcEmbeddedServerSpec extends Specification {
 
         then:
         consumer.shutdown != null
-        consumer.serviceShutdownEvent != null
+        consumer.serviceStoppedEvent != null
         conditions.eventually {
             embeddedServer.getServer().isTerminated()
         }
@@ -90,8 +88,8 @@ class GrpcEmbeddedServerSpec extends Specification {
     static class EventConsumer {
         ServerStartupEvent startup
         ServerShutdownEvent shutdown
-        ServiceStartedEvent serviceStarted
-        ServiceShutdownEvent serviceShutdownEvent
+        ServiceReadyEvent serviceReadyEvent
+        ServiceStoppedEvent serviceStoppedEvent
 
         @EventListener
         void receive1(ServerStartupEvent startup) {
@@ -104,13 +102,13 @@ class GrpcEmbeddedServerSpec extends Specification {
         }
 
         @EventListener
-        void receive3(ServiceStartedEvent serviceStarted) {
-            this.serviceStarted = serviceStarted
+        void receive3(ServiceReadyEvent serviceReadyEvent) {
+            this.serviceReadyEvent = serviceReadyEvent
         }
 
         @EventListener
-        void receive4(ServiceShutdownEvent serviceShutdownEvent) {
-            this.serviceShutdownEvent = serviceShutdownEvent
+        void receive4(ServiceStoppedEvent serviceStoppedEvent) {
+            this.serviceStoppedEvent = serviceStoppedEvent
         }
     }
 }
