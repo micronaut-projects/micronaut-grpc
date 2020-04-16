@@ -1,7 +1,7 @@
 plugins {
     id "net.ltgt.apt-eclipse" version "0.21"
     id "net.ltgt.apt-idea" version "0.21"
-    id "com.google.protobuf" version "0.8.11"
+    id "com.google.protobuf" version "0.8.12"
 }
 
 dependencies {
