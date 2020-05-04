@@ -211,7 +211,7 @@ class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpc.Gree
 <p>To run the server use the <code>Application</code> class or run <code>./gradlew run</code> for Gradle or <code>./mvnw compile exec:exec</code> for Maven.</p>
 </div>
 <div class="paragraph">
-<p>The server by default runs on port 50051, however you can configure which port the server runs on by setting <code>grpc.server.port</code> to whichever value you wish (a value of -1 will use a random port).</p>
+<p>The server by default runs on port 50051, however you can configure which port the server runs on by setting <code>grpc.server.port</code> to whichever value you wish (a value of <code>${random.port}</code> will use a random port).</p>
 </div>
 </div>
 <div class="sect2">
