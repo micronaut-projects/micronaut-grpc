@@ -16,7 +16,6 @@
 package io.micronaut.grpc.tracing;
 
 import io.grpc.ClientInterceptor;
-import io.grpc.ServerInterceptor;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
@@ -31,20 +30,7 @@ import javax.inject.Singleton;
  * @since 1.0
  */
 @Factory
-public class GrpcTracingInterceptorFactory {
-
-    /**
-     * The server interceptor.
-     * @param configuration The configuration
-     * @return The server interceptor
-     */
-    @Requires(beans = GrpcServerTracingInterceptorConfiguration.class)
-    @Singleton
-    @Bean
-    protected @Nonnull ServerInterceptor serverTracingInterceptor(@Nonnull GrpcServerTracingInterceptorConfiguration configuration) {
-        return configuration.getBuilder().build();
-    }
-
+public class GrpcClientTracingInterceptorFactory {
     /**
      * The client interceptor.
      * @param configuration The configuration

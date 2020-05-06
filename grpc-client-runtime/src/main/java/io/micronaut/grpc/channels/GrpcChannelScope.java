@@ -24,7 +24,6 @@ import io.micronaut.context.scope.CustomScope;
 import io.micronaut.core.type.Argument;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.grpc.annotation.GrpcChannel;
-import io.micronaut.grpc.server.GrpcServerChannel;
 import io.micronaut.inject.BeanDefinition;
 import io.micronaut.inject.BeanIdentifier;
 import io.micronaut.inject.ParametrizedProvider;
@@ -85,8 +84,8 @@ public class GrpcChannelScope implements CustomScope<GrpcChannel>, AutoCloseable
             throw new DependencyInjectionException(resolutionContext, argument, "@GrpcChannel used on type that is not a Channel");
         }
 
-        if (GrpcServerChannel.NAME.equalsIgnoreCase(value)) {
-            return (T) applicationContext.getBean(ManagedChannel.class, Qualifiers.byName(GrpcServerChannel.NAME));
+        if ("grpc-server".equalsIgnoreCase(value)) {
+            return (T) applicationContext.getBean(ManagedChannel.class, Qualifiers.byName("grpc-server"));
         }
 
         if (!(provider instanceof ParametrizedProvider)) {

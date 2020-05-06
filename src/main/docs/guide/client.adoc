@@ -25,7 +25,7 @@ Alternatively if you prefer programmatic configuration you can write a `BeanCrea
 .Configuring the NettyChannelBuilder
 [source,java]
 ----
-include::grpc-runtime/src/test/groovy/io/micronaut/grpc/ManagedChannelBuilderListener.java[]
+include::grpc-server-runtime/src/test/groovy/io/micronaut/grpc/ManagedChannelBuilderListener.java[]
 ----
 
 === Auto Injected Types
