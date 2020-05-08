@@ -592,6 +592,9 @@ class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpc.Gree
 </div>
 </div>
 <div class="paragraph">
+<p>By default the GRPC server will be enabled. To disable the GRPC server, set <code>grpc.server.enabled</code> to false.</p>
+</div>
+<div class="paragraph">
 <p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreationListener</code> for example:</p>
 </div>
 <div class="listingblock">
