@@ -16,6 +16,7 @@
 package io.micronaut.grpc.server;
 
 import io.micronaut.context.BeanContext;
+import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.runtime.server.EmbeddedServer;
@@ -35,6 +36,7 @@ import javax.inject.Singleton;
  */
 @Internal
 @Singleton
+@Requires(beans = GrpcEmbeddedServer.class)
 class GrpcEmbeddedServerListener implements ApplicationEventListener<ServerStartupEvent>, AutoCloseable {
     private static final Logger LOG = LoggerFactory.getLogger(GrpcEmbeddedServerListener.class);
 

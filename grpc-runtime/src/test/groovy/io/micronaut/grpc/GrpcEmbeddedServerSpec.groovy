@@ -16,6 +16,7 @@
 package io.micronaut.grpc
 
 import io.micronaut.context.ApplicationContext
+import io.micronaut.context.exceptions.NoSuchBeanException
 import io.micronaut.discovery.event.ServiceReadyEvent
 import io.micronaut.discovery.event.ServiceStoppedEvent
 import io.micronaut.grpc.server.GrpcEmbeddedServer
@@ -81,6 +82,18 @@ class GrpcEmbeddedServerSpec extends Specification {
         conditions.eventually {
             embeddedServer.getServer().isTerminated()
         }
+
+    }
+
+    void "test server does not exist when disabled"() {
+
+        when:
+        ApplicationContext.run(GrpcEmbeddedServer, [
+                'grpc.server.enabled': false
+        ])
+
+        then:
+        thrown NoSuchBeanException
 
     }
 

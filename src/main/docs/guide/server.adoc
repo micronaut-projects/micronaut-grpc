@@ -37,6 +37,8 @@ grpc:
             private-key: '/path/to/my.key'
 ----
 
+By default the GRPC server will be enabled. To disable the GRPC server, set `grpc.server.enabled` to false.
+
 Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
 
 .Configuring the ServerBuilder
