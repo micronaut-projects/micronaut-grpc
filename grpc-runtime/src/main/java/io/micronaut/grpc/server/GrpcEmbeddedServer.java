@@ -23,6 +23,7 @@ import io.micronaut.context.annotation.Secondary;
 import io.micronaut.context.event.ApplicationEventPublisher;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.util.ArgumentUtils;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.cloud.ComputeInstanceMetadata;
 import io.micronaut.discovery.cloud.ComputeInstanceMetadataResolver;
@@ -59,6 +60,7 @@ import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
 @Singleton
 @Secondary
 @Requires(classes = ServerBuilder.class)
+@Requires(property = GrpcServerConfiguration.ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 public class GrpcEmbeddedServer implements EmbeddedServer {
 
     private final ApplicationContext applicationContext;
