@@ -44,7 +44,7 @@ Alternatively if you prefer programmatic configuration you can write a `BeanCrea
 .Configuring the ServerBuilder
 [source,java]
 ----
-include::grpc-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderListener.java[]
+include::grpc-server-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderListener.java[]
 ----
 
 === Auto Injected Types
