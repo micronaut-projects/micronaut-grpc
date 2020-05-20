@@ -179,7 +179,7 @@ class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <b class="conum">(1
 @Suppress("unused")
 class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.GreeterCoroutineImplBase() { <b class="conum">(2)</b>
     override suspend fun sayHello(request: HelloRequest): HelloReply {
-    	<b class="conum">(3)</b>
+        <b class="conum">(3)</b>
         val message = greetingService.sayHello(request.name)
         val reply = HelloReply.newBuilder().setMessage(message).build()
         return reply
