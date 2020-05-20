@@ -29,7 +29,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("io.micronaut:micronaut-runtime")
-    implementation("io.micronaut.grpc:micronaut-grpc-runtime")
+//    implementation("io.micronaut.grpc:micronaut-grpc-runtime")
+    implementation("io.micronaut.grpc:micronaut-grpc-server-runtime:$micronautGrpcVersion")
+    implementation("io.micronaut.grpc:micronaut-grpc-client-runtime:$micronautGrpcVersion")
     implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
 
     runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
