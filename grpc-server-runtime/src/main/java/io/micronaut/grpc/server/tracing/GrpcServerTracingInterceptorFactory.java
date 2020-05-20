@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.grpc.tracing;
+package io.micronaut.grpc.server.tracing;
 
-import io.grpc.ClientInterceptor;
+import io.grpc.ServerInterceptor;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
@@ -30,16 +30,17 @@ import javax.inject.Singleton;
  * @since 1.0
  */
 @Factory
-public class GrpcClientTracingInterceptorFactory {
+public class GrpcServerTracingInterceptorFactory {
+
     /**
-     * The client interceptor.
+     * The server interceptor.
      * @param configuration The configuration
-     * @return The client interceptor
+     * @return The server interceptor
      */
-    @Requires(beans = GrpcClientTracingInterceptorConfiguration.class)
+    @Requires(beans = GrpcServerTracingInterceptorConfiguration.class)
     @Singleton
     @Bean
-    protected @Nonnull ClientInterceptor clientTracingInterceptor(@Nonnull GrpcClientTracingInterceptorConfiguration configuration) {
+    protected @Nonnull ServerInterceptor serverTracingInterceptor(@Nonnull GrpcServerTracingInterceptorConfiguration configuration) {
         return configuration.getBuilder().build();
     }
 }

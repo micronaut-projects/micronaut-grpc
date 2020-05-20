@@ -19,7 +19,7 @@
 @Configuration
 @Requires(classes = {Tracer.class, TracingClientInterceptor.class, io.opentracing.contrib.grpc.TracingServerInterceptor.class})
 @Requires(beans = Tracer.class)
-package io.micronaut.grpc.tracing;
+package io.micronaut.grpc.server.tracing;
 
 import io.micronaut.context.annotation.Configuration;
 import io.micronaut.context.annotation.Requires;

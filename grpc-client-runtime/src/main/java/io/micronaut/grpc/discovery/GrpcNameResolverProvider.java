@@ -25,7 +25,6 @@ import io.micronaut.discovery.exceptions.NoAvailableServiceException;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
 
-import javax.annotation.Nullable;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;

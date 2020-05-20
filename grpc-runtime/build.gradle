@@ -1,0 +1,4 @@
+dependencies {
+    api project(":grpc-client-runtime")
+    api project(":grpc-server-runtime")
+}
