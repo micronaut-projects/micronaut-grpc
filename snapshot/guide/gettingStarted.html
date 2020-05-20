@@ -109,15 +109,23 @@ function addJsClass() {
 
 
 <div class="paragraph">
-<p>To get started you need first create a Micronaut project. The easiest way to do this is with the CLI.</p>
+<p>To get started you need first create a Micronaut project. The easiest way to do this is with the Micronaut Launch:</p>
 </div>
-<div class="paragraph">
-<p>With Micronaut 1.1 or above you can use the GRPC profile:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mn create-app helloworld --profile grpc --lang java --build gradle</code></pre>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Go to <a href="https://micronaut.io/launch/">Micronaut Launch</a></p>
+</li>
+<li>
+<p>Select "gRPC Application" under "Application Type"</p>
+</li>
+<li>
+<p>Choose a Language / Build System etc.</p>
+</li>
+<li>
+<p>Click Generate</p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -192,17 +200,41 @@ protobuf {
 <p>Finally add the following dependencies to your build:</p>
 </div>
 <div class="paragraph">
+<p>For gRPC servers:</p>
+</div>
+<div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-runtime:2.0.0.BUILD-SNAPSHOT")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-server-runtime:2.0.0.BUILD-SNAPSHOT")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
-    &lt;artifactId&gt;micronaut-grpc-runtime&lt;/artifactId&gt;
+    &lt;artifactId&gt;micronaut-grpc-server-runtime&lt;/artifactId&gt;
+    &lt;version&gt;2.0.0.BUILD-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</p>
+</div>
+<div class="paragraph">
+<p>For gRPC clients:</p>
+</div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-client-runtime:2.0.0.BUILD-SNAPSHOT")</span></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-grpc-client-runtime&lt;/artifactId&gt;
     &lt;version&gt;2.0.0.BUILD-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
