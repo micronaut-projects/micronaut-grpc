@@ -43,7 +43,11 @@ include::examples/hello-world-java/build.gradle[tags=config]
 
 Finally add the following dependencies to your build:
 
-dependency:micronaut-grpc-runtime[version="{version}", groupId="io.micronaut.grpc"]
+For grpc servers:
+dependency:micronaut-grpc-server-runtime[version="{version}", groupId="io.micronaut.grpc"]
+
+For GRPC clients:
+dependency:micronaut-grpc-client-runtime[version="{version}", groupId="io.micronaut.grpc"]
 
 NOTE: If you wish to use GRPC standalone without the Micronaut HTTP server you should comment out the `micronaut-http-server-netty` dependency.
 
