@@ -1,10 +1,9 @@
 plugins {
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
-    id "com.github.johnrengelman.shadow" version "4.0.2"
+    id "com.github.johnrengelman.shadow" version "5.2.0"
     id "net.ltgt.apt-eclipse" version "0.18"
     id "net.ltgt.apt-idea" version "0.18"
 //   tag::plugin[]
-    id 'com.google.protobuf' version '0.8.5'
+    id 'com.google.protobuf' version '0.8.12'
 //   end::plugin[]
     id "application"
     id "java"
@@ -20,27 +19,48 @@ repositories {
     jcenter()
 }
 
-dependencyManagement {
-    imports {
-        mavenBom 'io.micronaut:micronaut-bom:1.0.4'
+ext {
+    micronautVersion = "2.0.0.M3"
+    micronautGrpcVersion = "2.0.0.M3"
+}
+
+configurations {
+    all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            String group = details.requested.group
+            if(group == 'io.micronaut.grpc') {
+                details.useVersion(micronautGrpcVersion)
+            }
+        }
     }
 }
 
 dependencies {
-    annotationProcessor "io.micronaut:micronaut-inject-java"
-    annotationProcessor "io.micronaut:micronaut-validation"
-    compileOnly "io.micronaut:micronaut-inject-java"
-    compile "io.micronaut:micronaut-inject"
-    compile "io.micronaut:micronaut-validation"
-    compile "io.micronaut:micronaut-runtime"
-    compile "io.micronaut.grpc:micronaut-grpc-runtime:1.0.0.M1"
+    annotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    testAnnotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))    
 
-    compile "io.micronaut:micronaut-discovery-client"
-    runtime "ch.qos.logback:logback-classic:1.2.3"
-    testCompile 'io.micronaut.test:micronaut-test-junit5:1.0.2'
-    testCompile "org.mockito:mockito-junit-jupiter:2.22.0"
-    testCompile "io.micronaut:micronaut-inject-java"
-    testRuntime "org.junit.jupiter:junit-jupiter-engine:5.3.0"
+    annotationProcessor("io.micronaut:micronaut-inject-java")
+    annotationProcessor("io.micronaut:micronaut-validation")
+    
+    compileOnly "io.micronaut:micronaut-inject-java"
+    implementation "io.micronaut:micronaut-inject"
+    implementation "io.micronaut:micronaut-validation"
+    implementation "io.micronaut:micronaut-runtime"
+    
+    implementation "io.micronaut.grpc:micronaut-grpc-runtime"
+
+    implementation "io.micronaut:micronaut-discovery-client"
+    runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
+
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+    testAnnotationProcessor "io.micronaut:micronaut-validation"
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation 'io.micronaut.test:micronaut-test-junit5'
+    testImplementation "org.mockito:mockito-junit-jupiter:2.22.0"
+    testImplementation "io.micronaut:micronaut-inject-java"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 }
 
 test {
@@ -61,8 +81,8 @@ tasks.withType(JavaCompile){
 
 // tag::config[]
 ext {
-    protocVersion="3.5.1"
-    grpcVersion="1.17.1"
+    protocVersion="3.12.0"
+    grpcVersion="1.29.0"
 }
 
 sourceSets {

@@ -1,5 +1,7 @@
 rootProject.name = 'grpc'
 
 include 'grpc-annotation'
+include 'grpc-client-runtime'
+include 'grpc-server-runtime'
 include 'grpc-runtime'
 include 'protobuff-support'
