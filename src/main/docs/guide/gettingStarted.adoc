@@ -1,11 +1,9 @@
-To get started you need first create a Micronaut project. The easiest way to do this is with the CLI.
+To get started you need first create a Micronaut project. The easiest way to do this is with the Micronaut Launch:
 
-With Micronaut 1.1 or above you can use the GRPC profile:
-
-[source,bash]
-----
-$ mn create-app helloworld --profile grpc --lang java --build gradle
-----
+* Go to https://micronaut.io/launch/[Micronaut Launch]
+* Select "gRPC Application" under "Application Type"
+* Choose a Language / Build System etc.
+* Click Generate
 
 TIP: Replace `java` with `kotlin` or `groovy` to change language and the `build` flag with `maven` to use Maven instead.
 
@@ -43,10 +41,12 @@ include::examples/hello-world-java/build.gradle[tags=config]
 
 Finally add the following dependencies to your build:
 
-For grpc servers:
+For gRPC servers:
+
 dependency:micronaut-grpc-server-runtime[version="{version}", groupId="io.micronaut.grpc"]
 
-For GRPC clients:
+For gRPC clients:
+
 dependency:micronaut-grpc-client-runtime[version="{version}", groupId="io.micronaut.grpc"]
 
 NOTE: If you wish to use GRPC standalone without the Micronaut HTTP server you should comment out the `micronaut-http-server-netty` dependency.

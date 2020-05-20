@@ -9,6 +9,11 @@ Micronaut adds the following features to the GRPC experience:
 
 === Release History
 
+==== 2.0.0
+
+* Micronaut 1.3.x minimum version
+* Split client and server modules
+
 ==== 1.1.1
 
 * Upgrade to GRPC `1.26.0`
