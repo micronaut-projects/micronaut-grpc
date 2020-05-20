@@ -9,6 +9,7 @@ import javax.inject.Singleton
 @Suppress("unused")
 class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.GreeterCoroutineImplBase() { // <2>
     override suspend fun sayHello(request: HelloRequest): HelloReply {
+        // <3>
         val message = greetingService.sayHello(request.name)
         val reply = HelloReply.newBuilder().setMessage(message).build()
         return reply
