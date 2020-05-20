@@ -1,0 +1,4 @@
+[ {
+  "name" : "io.micronaut.grpc.annotation.GrpcChannel",
+  "allDeclaredConstructors" : true
+} ]

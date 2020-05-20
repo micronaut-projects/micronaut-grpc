@@ -21,12 +21,24 @@ repositories {
 
 ext {
     micronautVersion = "2.0.0.M3"
+    micronautGrpcVersion = "2.0.0.M3"
+}
+
+configurations {
+    all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            String group = details.requested.group
+            if(group == 'io.micronaut.grpc') {
+                details.useVersion(micronautGrpcVersion)
+            }
+        }
+    }
 }
 
 dependencies {
-    annotationProcessor(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
-    testAnnotationProcessor(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
-    implementation(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))    
+    annotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    testAnnotationProcessor(platform("io.micronaut:micronaut-bom:$micronautVersion"))
+    implementation(platform("io.micronaut:micronaut-bom:$micronautVersion"))    
 
     annotationProcessor("io.micronaut:micronaut-inject-java")
     annotationProcessor("io.micronaut:micronaut-validation")
@@ -35,7 +47,8 @@ dependencies {
     implementation "io.micronaut:micronaut-inject"
     implementation "io.micronaut:micronaut-validation"
     implementation "io.micronaut:micronaut-runtime"
-    implementation "io.micronaut.grpc:micronaut-grpc-runtime:2.0.0.M2"
+    
+    implementation "io.micronaut.grpc:micronaut-grpc-runtime"
 
     implementation "io.micronaut:micronaut-discovery-client"
     runtimeOnly "ch.qos.logback:logback-classic:1.2.3"
