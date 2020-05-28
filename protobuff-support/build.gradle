@@ -5,7 +5,7 @@ plugins {
 }
 
 ext {
-    protobufJavaVersion = "3.12.1"
+    protobufJavaVersion = "3.12.2"
 }
 
 dependencies {
