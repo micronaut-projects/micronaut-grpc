@@ -14,7 +14,7 @@ dependencies {
     implementation "io.grpc:grpc-netty:1.29.0"
     compileOnly "io.micronaut:micronaut-discovery-client:$micronautVersion"
     compileOnly "io.micronaut:micronaut-tracing:$micronautVersion"
-    compileOnly 'io.opentracing.contrib:opentracing-grpc:0.2.2'
+    compileOnly 'io.opentracing.contrib:opentracing-grpc:0.2.3'
 
     testImplementation "io.micronaut:micronaut-discovery-client:$micronautVersion"
     testImplementation 'io.opentracing:opentracing-mock:0.33.0'
