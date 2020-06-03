@@ -3,12 +3,12 @@
 # https://github.com/micronaut-projects/micronaut-project-template/tree/master/.github/workflows
 #
 # and edit them there. Note that it will be sync'ed to all the Micronaut repos
-name: Check Dependencies
+name: Update Dependencies
 on:
   schedule:
-    - cron: '0 12 * * *'
+    - cron: '0 6 * * *'
 jobs:
-  check-dependencies:
+  dependency-updates:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,5 +22,16 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+      - name: Export Gradle Properties
+        uses: micronaut-projects/github-actions/export-gradle-properties@master
       - name: Check Dependencies
-        run: ./gradlew dependencyUpdates
+        run: ./gradlew useLatestVersions
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          commit-message: Update dependencies
+          title: 'Dependency upgrades'
+          body: Upgrades dependencies to their latest versions
+          labels: "type: dependency-upgrade"
+          base: ${{ env.githubBranch }}
