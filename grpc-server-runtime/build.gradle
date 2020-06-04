@@ -14,12 +14,12 @@ dependencies {
 
     compileOnly "io.micronaut:micronaut-discovery-client:$micronautVersion"
     compileOnly "io.micronaut:micronaut-tracing:$micronautVersion"
-    compileOnly 'io.opentracing.contrib:opentracing-grpc:0.2.2'
+    compileOnly 'io.opentracing.contrib:opentracing-grpc:0.2.3'
 
     testImplementation "io.micronaut:micronaut-discovery-client:$micronautVersion"
     testImplementation 'io.opentracing:opentracing-mock:0.33.0'
     testImplementation "io.micronaut:micronaut-tracing:$micronautVersion"
-    testImplementation 'io.opentracing.contrib:opentracing-grpc:0.2.2'
+    testImplementation 'io.opentracing.contrib:opentracing-grpc:0.2.3'
     testImplementation 'io.jaegertracing:jaeger-core:1.2.0'
     testImplementation "io.micronaut:micronaut-inject-groovy:$micronautVersion"
     testImplementation "io.micronaut:micronaut-inject-java:$micronautVersion"
