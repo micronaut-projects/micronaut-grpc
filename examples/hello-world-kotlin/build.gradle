@@ -1,15 +1,12 @@
 plugins {
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
-    id "com.github.johnrengelman.shadow" version "4.0.2"
-    id "org.jetbrains.kotlin.jvm" version "1.2.61"
-    id "org.jetbrains.kotlin.kapt" version "1.2.61"
-    id "org.jetbrains.kotlin.plugin.allopen" version "1.2.61"	
-    id 'com.google.protobuf' version '0.8.5'
+    id "org.jetbrains.kotlin.jvm" version "1.3.72"
+    id "org.jetbrains.kotlin.kapt" version "1.3.72"
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.3.72"
+    id "application"
+    id 'com.google.protobuf' version '0.8.12'
 }
 
-apply plugin:"application"
-
-version "0.1"
+version "0.2"
 group "helloworld"
 
 repositories {
@@ -17,42 +14,41 @@ repositories {
     jcenter()
 }
 
-dependencyManagement {
-    imports {
-        mavenBom 'io.micronaut:micronaut-bom:1.0.4'
-    }
-}
-
-ext {
-    protocVersion="3.5.1"
-    grpcVersion="1.17.1"
+configurations {
+    // for dependencies that are needed for development only
+    developmentOnly
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
-    compile "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
-    compile "io.micronaut:micronaut-runtime"
-    compile "io.micronaut.grpc:micronaut-grpc-runtime:1.0.0.M1"
+    kapt(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
+    kapt("io.micronaut:micronaut-inject-java")
+    kapt("io.micronaut:micronaut-validation")
 
-    kapt "io.micronaut:micronaut-inject-java"
-    kapt "io.micronaut:micronaut-validation"
-    kaptTest "io.micronaut:micronaut-inject-java"
-    runtime "ch.qos.logback:logback-classic:1.2.3"
-    runtime "com.fasterxml.jackson.module:jackson-module-kotlin:2.9.4.1"
+    implementation(enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion"))
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+    implementation("io.micronaut:micronaut-runtime")
+//    implementation("io.micronaut.grpc:micronaut-grpc-runtime")
+    implementation("io.micronaut.grpc:micronaut-grpc-server-runtime:$micronautGrpcVersion")
+    implementation("io.micronaut.grpc:micronaut-grpc-client-runtime:$micronautGrpcVersion")
+    implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
 
-    testCompile "org.junit.jupiter:junit-jupiter-api:5.3.0"
-    testCompile 'io.micronaut.test:micronaut-test-junit5:1.0.2'
-    testCompile "org.mockito:mockito-junit-jupiter:2.22.0"
+    runtimeOnly("ch.qos.logback:logback-classic:1.2.3")
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8")
 
-    testRuntime "org.junit.jupiter:junit-jupiter-engine:5.3.0"
-    testRuntime "org.jetbrains.spek:spek-junit-platform-engine:1.1.5"
+    kaptTest("io.micronaut:micronaut-inject-java")
+
+    testImplementation enforcedPlatform("io.micronaut:micronaut-bom:$micronautVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.0")
+    testImplementation("io.micronaut.test:micronaut-test-junit5")
+    testImplementation("org.mockito:mockito-junit-jupiter:2.22.0")
+
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.3.0")
+    testRuntime("org.jetbrains.spek:spek-junit-platform-engine:1.1.5")
 }
 
-shadowJar {
-    mergeServiceFiles()
-}
-
-run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
+test.classpath += configurations.developmentOnly
 
 mainClassName = "helloworld.Application"
 
@@ -80,10 +76,16 @@ compileTestKotlin {
 	}
 }
 
+tasks.withType(JavaExec) {
+    classpath += configurations.developmentOnly
+    jvmArgs('-XX:TieredStopAtLevel=1', '-Dcom.sun.management.jmxremote')
+}
+
 sourceSets {
     main {
         java {
             srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/grpckt'
             srcDirs 'build/generated/source/proto/main/java'
         }
     }
@@ -93,8 +95,12 @@ protobuf {
     protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+        grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}" }
     }
     generateProtoTasks {
-        all()*.plugins { grpc {} }
+        all()*.plugins {
+            grpc {}
+            grpckt {}
+        }
     }
 }
