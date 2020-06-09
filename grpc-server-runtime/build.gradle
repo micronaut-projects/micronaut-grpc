@@ -9,7 +9,7 @@ dependencies {
     api "io.micronaut:micronaut-inject:$micronautVersion"
     api "io.micronaut:micronaut-runtime:$micronautVersion"
     implementation "io.grpc:grpc-netty:1.29.0"
-    api "io.grpc:grpc-protobuf:1.29.0"
+    api "io.grpc:grpc-protobuf:1.30.0"
     api "io.grpc:grpc-stub:1.29.0"
 
     compileOnly "io.micronaut:micronaut-discovery-client:$micronautVersion"
