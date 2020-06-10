@@ -9,9 +9,9 @@ dependencies {
     api project(":grpc-annotation")
     api "io.micronaut:micronaut-inject:$micronautVersion"
     api "io.micronaut:micronaut-runtime:$micronautVersion"
-    api "io.grpc:grpc-protobuf:1.29.0"
-    api "io.grpc:grpc-stub:1.29.0"
-    implementation "io.grpc:grpc-netty:1.29.0"
+    api "io.grpc:grpc-protobuf:$grpcVersion"
+    api "io.grpc:grpc-stub:$grpcVersion"
+    implementation "io.grpc:grpc-netty:$grpcVersion"
     compileOnly "io.micronaut:micronaut-discovery-client:$micronautVersion"
     compileOnly "io.micronaut:micronaut-tracing:$micronautVersion"
     compileOnly 'io.opentracing.contrib:opentracing-grpc:0.2.3'
@@ -33,7 +33,7 @@ dependencies {
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protocVersion" }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.29.0" }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }

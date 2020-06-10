@@ -4,10 +4,6 @@ plugins {
     id "com.google.protobuf" version "0.8.12"
 }
 
-ext {
-    protobufJavaVersion = "3.12.2"
-}
-
 dependencies {
     annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
     annotationProcessor "io.micronaut:micronaut-validation:$micronautVersion"
