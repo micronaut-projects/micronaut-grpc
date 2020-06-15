@@ -21,6 +21,7 @@ import io.micronaut.http.annotation.Get
 import io.micronaut.protobuf.codec.ProtobufferCodec
 
 @CompileStatic
+@javax.inject.Singleton
 class ProgramaticController {
     public static Example.GeoPoint DUBLIN = Example.GeoPoint.newBuilder()
             .setLat(53.350140D)

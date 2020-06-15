@@ -40,9 +40,11 @@ class GrpcTracingSpec extends Specification {
     @Inject
     Tracer tracer
 
+    MockTracer mockTracer = new MockTracer()
+
     void "test hello world grpc with tracing enabled"() {
         given:
-        MockTracer tracer = tracer
+        MockTracer tracer = mockTracer
         PollingConditions conditions = new PollingConditions(timeout: 3, delay: 0.5)
         testBean.sayHello("Fred") == "Hello Fred"
 
@@ -57,10 +59,10 @@ class GrpcTracingSpec extends Specification {
         }
     }
 
-
+    
     @MockBean
     @Requires(property = "mock.tracer", value = "true")
     Tracer tracer() {
-        return new MockTracer()
+        return mockTracer
     }
 }
