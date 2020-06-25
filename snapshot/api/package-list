@@ -1,8 +1,7 @@
 io.micronaut.grpc.annotation
 io.micronaut.grpc.channels
-io.micronaut.grpc.client.tracing
 io.micronaut.grpc.discovery
 io.micronaut.grpc.server
-io.micronaut.grpc.server.tracing
+io.micronaut.grpc.tracing
 io.micronaut.protobuf.codec
 io.micronaut.protobuf.convert
