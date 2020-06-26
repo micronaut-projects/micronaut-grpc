@@ -11,7 +11,7 @@
 
         gtag('config', 'UA-82213539-2');
     </script>
-    <title>2 Getting Started 2.0.0.M1</title>
+    <title>2 Getting Started 2.0.0</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
     <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
@@ -93,7 +93,7 @@ function addJsClass() {
                 <div class="project">
                     <h1>2 Getting Started</h1>
 
-                    <p><strong>Version:</strong> 2.0.0.M1</p>
+                    <p><strong>Version:</strong> 2.0.0</p>
                 </div>
 
                 
@@ -109,15 +109,23 @@ function addJsClass() {
 
 
 <div class="paragraph">
-<p>To get started you need first create a Micronaut project. The easiest way to do this is with the CLI.</p>
+<p>To get started you need first create a Micronaut project. The easiest way to do this is with the Micronaut Launch:</p>
 </div>
-<div class="paragraph">
-<p>With Micronaut 1.1 or above you can use the GRPC profile:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mn create-app helloworld --profile grpc --lang java --build gradle</code></pre>
-</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Go to <a href="https://micronaut.io/launch/">Micronaut Launch</a></p>
+</li>
+<li>
+<p>Select "gRPC Application" under "Application Type"</p>
+</li>
+<li>
+<p>Choose a Language / Build System etc.</p>
+</li>
+<li>
+<p>Click Generate</p>
+</li>
+</ul>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -154,7 +162,7 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy</code> to cha
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
     ...
-    id 'com.google.protobuf' version '0.8.5'
+    id 'com.google.protobuf' version '0.8.12'
 }</code></pre>
 </div>
 </div>
@@ -164,8 +172,8 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy</code> to cha
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
-    protocVersion="3.5.1"
-    grpcVersion="1.17.1"
+    protocVersion="3.12.2"
+    grpcVersion="1.30.0"
 }
 
 sourceSets {
@@ -192,18 +200,42 @@ protobuf {
 <p>Finally add the following dependencies to your build:</p>
 </div>
 <div class="paragraph">
+<p>For gRPC servers:</p>
+</div>
+<div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-runtime:2.0.0.M1")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-server-runtime:2.0.0")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
-    &lt;artifactId&gt;micronaut-grpc-runtime&lt;/artifactId&gt;
-    &lt;version&gt;2.0.0.M1&lt;/version&gt;
+    &lt;artifactId&gt;micronaut-grpc-server-runtime&lt;/artifactId&gt;
+    &lt;version&gt;2.0.0&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</p>
+</div>
+<div class="paragraph">
+<p>For gRPC clients:</p>
+</div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-client-runtime:2.0.0")</span></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-grpc-client-runtime&lt;/artifactId&gt;
+    &lt;version&gt;2.0.0&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
