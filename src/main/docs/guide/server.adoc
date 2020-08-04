@@ -57,6 +57,55 @@ By default the server will automatically be dependency injected with beans of th
 
 In addition, by default the server will be setup to use Micronaut's I/O executor service.
 
+==== Server Interceptor Ordering
+To produce a consistent and predictable order of execution for server interceptors, it is required
+for the `io.grpc.ServerInterceptor` implementation to do one of the following:
+
+.Implement `io.micronaut.core.order.Ordered` interface
+[source,java]
+----
+@Singleton // <1>
+public class CustomInterceptor implements ServerInterceptor, Ordered { // <2>
+    ...
+
+    @Override
+    public int getOrder() {
+        return 10; // <3>
+    }
+
+}
+----
+<1> Declare the server interceptor as a bean to have it registered automatically
+<2> Implement `Ordered` in addition to `ServerInterceptor`
+<3> Provide the specified order of execution in the server interceptor chain
+
+.Wrap with `io.micronaut.grpc.server.interceptor.OrderedServerInterceptor`
+[source,java]
+----
+@Factory // <1>
+public class ServerInterceptorFactory {
+
+    @Bean // <2>
+    @Singleton
+    public ServerInterceptor customSeverInterceptor() {
+        return new OrderedServerInterceptor(new CustomInterceptor(), 10); // <3>
+    }
+
+}
+----
+<1> Use a `@Factory` to create an instance of `ServerInterceptor` bean
+<2> Register the created sever interceptor as a bean
+<3> Wrap the `CustomInterceptor` with `OrderedServerInterceptor` and provide the `order` of execution
+
+The order which is provided will dictate the order of execution of the interceptors when receiving the request message,
+and then the order will be reversed when sending the response message.
+
+.3 interceptors, with respective orders, `1`, `2`, and `3`:
+[source,txt]
+----
+Request -> 1 -> 2 -> 3 -> business logic -> 3 -> 2 -> 1 -> Response
+----
+
 === Testing the Server
 
 To test the server it is recommended that you use https://github.com/micronaut-projects/micronaut-test[Micronaut Test].

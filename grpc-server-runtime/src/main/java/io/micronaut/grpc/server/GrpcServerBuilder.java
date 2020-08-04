@@ -21,6 +21,7 @@ import io.grpc.ServerInterceptor;
 import io.grpc.ServerTransportFilter;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
+import io.micronaut.core.order.OrderUtil;
 import io.micronaut.core.util.CollectionUtils;
 
 import javax.annotation.Nullable;
@@ -59,6 +60,7 @@ public class GrpcServerBuilder {
         }
 
         if (CollectionUtils.isNotEmpty(interceptors)) {
+            OrderUtil.reverseSort(interceptors);
             for (ServerInterceptor i : interceptors) {
                 serverBuilder.intercept(i);
             }
@@ -72,4 +74,5 @@ public class GrpcServerBuilder {
 
         return serverBuilder;
     }
+
 }
