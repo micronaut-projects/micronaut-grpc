@@ -3,6 +3,7 @@ io.micronaut.grpc.channels
 io.micronaut.grpc.client.tracing
 io.micronaut.grpc.discovery
 io.micronaut.grpc.server
+io.micronaut.grpc.server.interceptor
 io.micronaut.grpc.server.tracing
 io.micronaut.protobuf.codec
 io.micronaut.protobuf.convert
