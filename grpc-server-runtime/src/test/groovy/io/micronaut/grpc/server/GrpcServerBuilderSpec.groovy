@@ -44,11 +44,11 @@ class GrpcServerBuilderSpec extends Specification {
 
         then:
         serverInterceptors.length == 5
-        (serverInterceptors[0] as OrderedServerInterceptor).order == 0
-        (serverInterceptors[1] as OrderedServerInterceptor).order == 1
+        (serverInterceptors[0] as OrderedServerInterceptor).order == 4
+        (serverInterceptors[1] as OrderedServerInterceptor).order == 3
         (serverInterceptors[2] as OrderedServerInterceptor).order == 2
-        (serverInterceptors[3] as OrderedServerInterceptor).order == 3
-        (serverInterceptors[4] as OrderedServerInterceptor).order == 4
+        (serverInterceptors[3] as OrderedServerInterceptor).order == 1
+        (serverInterceptors[4] as OrderedServerInterceptor).order == 0
     }
 
     def "test interceptor order - some implement Ordered"() {
@@ -57,11 +57,11 @@ class GrpcServerBuilderSpec extends Specification {
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
-                new OrderedServerInterceptor(Mock(ServerInterceptor), 4),
-                new NonOrderedServerInterceptor("first"),
                 new OrderedServerInterceptor(Mock(ServerInterceptor), 3),
+                new NonOrderedServerInterceptor("first"),
+                new OrderedServerInterceptor(Mock(ServerInterceptor), 2),
                 new NonOrderedServerInterceptor("second"),
-                new OrderedServerInterceptor(Mock(ServerInterceptor), 2)
+                new OrderedServerInterceptor(Mock(ServerInterceptor), 4)
         ]
 
         when:
@@ -80,11 +80,11 @@ class GrpcServerBuilderSpec extends Specification {
 
         then:
         serverInterceptors.length == 5
-        (serverInterceptors[0] as OrderedServerInterceptor).order == 2
-        (serverInterceptors[1] as OrderedServerInterceptor).order == 3
+        (serverInterceptors[0] as NonOrderedServerInterceptor).name == "first"
+        (serverInterceptors[1] as NonOrderedServerInterceptor).name == "second"
         (serverInterceptors[2] as OrderedServerInterceptor).order == 4
-        (serverInterceptors[3] as NonOrderedServerInterceptor).name == "first"
-        (serverInterceptors[4] as NonOrderedServerInterceptor).name == "second"
+        (serverInterceptors[3] as OrderedServerInterceptor).order == 3
+        (serverInterceptors[4] as OrderedServerInterceptor).order == 2
     }
 
     def "test interceptor order - none implement Ordered"() {

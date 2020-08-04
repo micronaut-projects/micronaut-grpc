@@ -60,7 +60,7 @@ public class GrpcServerBuilder {
         }
 
         if (CollectionUtils.isNotEmpty(interceptors)) {
-            OrderUtil.sort(interceptors);
+            OrderUtil.reverseSort(interceptors);
             for (ServerInterceptor i : interceptors) {
                 serverBuilder.intercept(i);
             }

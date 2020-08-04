@@ -97,6 +97,15 @@ public class ServerInterceptorFactory {
 <2> Register the created sever interceptor as a bean
 <3> Wrap the `CustomInterceptor` with `OrderedServerInterceptor` and provide the `order` of execution
 
+The order which is provided will dictate the order of execution of the interceptors when receiving the request message,
+and then the order will be reversed when sending the response message.
+
+.3 interceptors, with respective orders, `1`, `2`, and `3`:
+[source,txt]
+----
+Request -> 1 -> 2 -> 3 -> business logic -> 3 -> 2 -> 1 -> Response
+----
+
 === Testing the Server
 
 To test the server it is recommended that you use https://github.com/micronaut-projects/micronaut-test[Micronaut Test].
