@@ -22,9 +22,11 @@ import io.grpc.ServerInterceptor;
 import io.micronaut.core.order.Ordered;
 
 /**
- * A {@link ServerInterceptor} implementation which allows ordering and simply passes all cals to a delegate
+ * A {@link ServerInterceptor} implementation which allows ordering and simply passes all
+ * calls to a delegate interceptor.
  *
- * @author Brian Wyka
+ * @author brianwyka
+ * @since 2.0.2
  */
 public class OrderedServerInterceptor implements ServerInterceptor, Ordered {
 
@@ -32,7 +34,7 @@ public class OrderedServerInterceptor implements ServerInterceptor, Ordered {
     private final int order;
 
     /**
-     * Constructs an instance of this interceptor with the provided delegate inteceptor and order
+     * Constructs an instance of this interceptor with the provided delegate interceptor and order.
      *
      * @param delegate the interceptor to delegate to
      * @param order the order number
@@ -43,7 +45,7 @@ public class OrderedServerInterceptor implements ServerInterceptor, Ordered {
     }
 
     /**
-     * Delegates intercetor logic to {@link #delegate}
+     * Delegates interceptor logic to {@link #delegate} interceptor.
      *
      * {@inheritDoc}
      */
@@ -53,7 +55,7 @@ public class OrderedServerInterceptor implements ServerInterceptor, Ordered {
     }
 
     /**
-     * Get the order in which this interceptor should execute in the interceptor chain
+     * Get the order in which this interceptor should execute in the interceptor chain.
      *
      * @return the order
      */
