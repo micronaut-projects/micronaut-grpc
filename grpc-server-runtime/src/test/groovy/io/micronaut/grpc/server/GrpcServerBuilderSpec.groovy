@@ -10,10 +10,10 @@ import io.grpc.ServerInterceptor
 import io.grpc.internal.ServerImpl
 import io.grpc.netty.NettyServerBuilder
 import io.micronaut.core.order.Ordered
+import io.micronaut.grpc.server.interceptor.OrderedServerInterceptor
 import spock.lang.Specification
 
 class GrpcServerBuilderSpec extends Specification {
-
 
     def "test interceptor order - all implement Ordered"() {
         given:
@@ -21,11 +21,11 @@ class GrpcServerBuilderSpec extends Specification {
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
-                new OrderableServerInterceptor(4),
-                new OrderableServerInterceptor(1),
-                new OrderableServerInterceptor(3),
-                new OrderableServerInterceptor(0),
-                new OrderableServerInterceptor(2)
+                new OrderedServerInterceptor(Mock(ServerInterceptor), 4),
+                new OrderedServerInterceptor(Mock(ServerInterceptor), 1),
+                new OrderedServerInterceptor(Mock(ServerInterceptor), 3),
+                new OrderedServerInterceptor(Mock(ServerInterceptor), 0),
+                new OrderedServerInterceptor(Mock(ServerInterceptor), 2)
         ]
 
         when:
@@ -44,11 +44,11 @@ class GrpcServerBuilderSpec extends Specification {
 
         then:
         serverInterceptors.length == 5
-        (serverInterceptors[0] as Ordered).order == 0
-        (serverInterceptors[1] as Ordered).order == 1
-        (serverInterceptors[2] as Ordered).order == 2
-        (serverInterceptors[3] as Ordered).order == 3
-        (serverInterceptors[4] as Ordered).order == 4
+        (serverInterceptors[0] as OrderedServerInterceptor).order == 0
+        (serverInterceptors[1] as OrderedServerInterceptor).order == 1
+        (serverInterceptors[2] as OrderedServerInterceptor).order == 2
+        (serverInterceptors[3] as OrderedServerInterceptor).order == 3
+        (serverInterceptors[4] as OrderedServerInterceptor).order == 4
     }
 
     def "test interceptor order - some implement Ordered"() {
@@ -57,11 +57,11 @@ class GrpcServerBuilderSpec extends Specification {
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
-                new OrderableServerInterceptor(4),
-                new NonOrderableServerInterceptor("first"),
-                new OrderableServerInterceptor(3),
-                new NonOrderableServerInterceptor("second"),
-                new OrderableServerInterceptor(2)
+                new OrderedServerInterceptor(Mock(ServerInterceptor), 4),
+                new NonOrderedServerInterceptor("first"),
+                new OrderedServerInterceptor(Mock(ServerInterceptor), 3),
+                new NonOrderedServerInterceptor("second"),
+                new OrderedServerInterceptor(Mock(ServerInterceptor), 2)
         ]
 
         when:
@@ -80,11 +80,11 @@ class GrpcServerBuilderSpec extends Specification {
 
         then:
         serverInterceptors.length == 5
-        (serverInterceptors[0] as Ordered).order == 2
-        (serverInterceptors[1] as Ordered).order == 3
-        (serverInterceptors[2] as Ordered).order == 4
-        (serverInterceptors[3] as NonOrderableServerInterceptor).name == "first"
-        (serverInterceptors[4] as NonOrderableServerInterceptor).name == "second"
+        (serverInterceptors[0] as OrderedServerInterceptor).order == 2
+        (serverInterceptors[1] as OrderedServerInterceptor).order == 3
+        (serverInterceptors[2] as OrderedServerInterceptor).order == 4
+        (serverInterceptors[3] as NonOrderedServerInterceptor).name == "first"
+        (serverInterceptors[4] as NonOrderedServerInterceptor).name == "second"
     }
 
     def "test interceptor order - none implement Ordered"() {
@@ -93,11 +93,11 @@ class GrpcServerBuilderSpec extends Specification {
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
-                new NonOrderableServerInterceptor("first"),
-                new NonOrderableServerInterceptor("second"),
-                new NonOrderableServerInterceptor("third"),
-                new NonOrderableServerInterceptor("fourth"),
-                new NonOrderableServerInterceptor("fifth")
+                new NonOrderedServerInterceptor("first"),
+                new NonOrderedServerInterceptor("second"),
+                new NonOrderedServerInterceptor("third"),
+                new NonOrderedServerInterceptor("fourth"),
+                new NonOrderedServerInterceptor("fifth")
         ]
 
         when:
@@ -116,55 +116,25 @@ class GrpcServerBuilderSpec extends Specification {
 
         then:
         serverInterceptors.length == 5
-        (serverInterceptors[0] as NonOrderableServerInterceptor).name == "first"
-        (serverInterceptors[1] as NonOrderableServerInterceptor).name == "second"
-        (serverInterceptors[2] as NonOrderableServerInterceptor).name == "third"
-        (serverInterceptors[3] as NonOrderableServerInterceptor).name == "fourth"
-        (serverInterceptors[4] as NonOrderableServerInterceptor).name == "fifth"
+        (serverInterceptors[0] as NonOrderedServerInterceptor).name == "first"
+        (serverInterceptors[1] as NonOrderedServerInterceptor).name == "second"
+        (serverInterceptors[2] as NonOrderedServerInterceptor).name == "third"
+        (serverInterceptors[3] as NonOrderedServerInterceptor).name == "fourth"
+        (serverInterceptors[4] as NonOrderedServerInterceptor).name == "fifth"
     }
 
-    private static class OrderableServerInterceptor implements ServerInterceptor, Ordered {
-
-        private final int order
-
-        OrderableServerInterceptor(final int order) {
-            this.order = order
-        }
-
-        @Override
-        <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(final ServerCall<ReqT, RespT> call, final Metadata headers, final ServerCallHandler<ReqT, RespT> next) {
-            return new ServerCall.Listener<ReqT>() {
-                @Override
-                void onMessage(final ReqT message) {
-                    super.onMessage(message)
-                }
-            }
-        }
-
-        @Override
-        int getOrder() {
-            return order
-        }
-
-    }
-
-    private static class NonOrderableServerInterceptor implements ServerInterceptor {
-
+    private static class NonOrderedServerInterceptor implements ServerInterceptor {
         private final String name
 
-        NonOrderableServerInterceptor(final String name) {
+        private NonOrderedServerInterceptor(final String name) {
             this.name = name
         }
 
         @Override
-        def <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(final ServerCall<ReqT, RespT> call, final Metadata headers, final ServerCallHandler<ReqT, RespT> next) {
-            return new ServerCall.Listener<ReqT>() {
-                @Override
-                void onMessage(final ReqT message) {
-                    super.onMessage(message)
-                }
-            }
+        <T, S> ServerCall.Listener<T> interceptCall(final ServerCall<T, S> call, final Metadata headers, final ServerCallHandler<T, S> next) {
+            new ServerCall.Listener<T>() {}
         }
+
     }
 
 }
