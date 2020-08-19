@@ -17,6 +17,7 @@ package io.micronaut.grpc.server;
 
 import io.micronaut.core.convert.value.ConvertibleValues;
 import io.micronaut.core.util.CollectionUtils;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.discovery.metadata.ServiceInstanceMetadataContributor;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.EmbeddedServerInstance;
@@ -31,6 +32,7 @@ import java.util.Map;
  * Implementation of the {@link EmbeddedServerInstance} interface for GRPC.
  *
  * @author graemerocher
+ * @author Iván López
  * @since 1.0
  */
 class GrpcServerInstance implements EmbeddedServerInstance {
@@ -41,11 +43,31 @@ class GrpcServerInstance implements EmbeddedServerInstance {
     private final EmbeddedServer embeddedServer;
 
     /**
+     * Constructor.
+     *
+     * @param embeddedServer       The embedded server
+     * @param id                   The ID
+     * @param uri                  The URI
+     * @param metadata             The metadata
+     * @param metadataContributors The metadata contributors
+     */
+    @Deprecated
+    GrpcServerInstance(
+            EmbeddedServer embeddedServer,
+            String id,
+            URI uri,
+            @Nullable Map<String, String> metadata,
+            @javax.annotation.Nullable List<ServiceInstanceMetadataContributor> metadataContributors) {
+        this(embeddedServer, id, uri, metadata, metadataContributors, null);
+    }
+
+    /**
      * Default constructor.
-     * @param embeddedServer The embedded server
-     * @param id The ID
-     * @param uri The URI
-     * @param metadata The metadata
+     *
+     * @param embeddedServer       The embedded server
+     * @param id                   The ID
+     * @param uri                  The URI
+     * @param metadata             The metadata
      * @param metadataContributors The metadata contributors
      */
     GrpcServerInstance(
@@ -53,9 +75,10 @@ class GrpcServerInstance implements EmbeddedServerInstance {
             String id,
             URI uri,
             @Nullable Map<String, String> metadata,
-            @javax.annotation.Nullable List<ServiceInstanceMetadataContributor> metadataContributors) {
+            @javax.annotation.Nullable List<ServiceInstanceMetadataContributor> metadataContributors,
+            GrpcServerConfiguration grpcConfiguration) {
         this.embeddedServer = embeddedServer;
-        this.id = id;
+        this.id = calculateServiceId(id, grpcConfiguration);
         this.uri = uri;
         if (metadata == null) {
             metadata = new LinkedHashMap<>(5);
@@ -88,5 +111,13 @@ class GrpcServerInstance implements EmbeddedServerInstance {
     @Override
     public EmbeddedServer getEmbeddedServer() {
         return embeddedServer;
+    }
+
+    private String calculateServiceId(String id, @Nullable GrpcServerConfiguration grpcConfiguration) {
+        if (grpcConfiguration != null && StringUtils.isNotEmpty(grpcConfiguration.getServiceNameSuffix())) {
+            return id + grpcConfiguration.getServiceNameSuffix();
+        } else {
+            return id;
+        }
     }
 }

@@ -26,13 +26,13 @@ import spock.lang.Specification
 class GrpcServerConfigurationSpec extends Specification {
 
     void "test GRPC configuration"() {
-
         given:
         def port = SocketUtils.findAvailableTcpPort()
-        def ctx = ApplicationContext.run(
-                'grpc.server.port': port,
-                'grpc.server.handshake-timeout':'11s'
-        )
+        def ctx = ApplicationContext.run([
+            'grpc.server.port'               : port,
+            'grpc.server.handshake-timeout'  : '11s',
+            'grpc.server.service-name-suffix': '-grpc'
+        ])
 
         GrpcServerConfiguration configuration = ctx.getBean(GrpcServerConfiguration)
         ServerBuilder serverBuilder = configuration.getServerBuilder()
@@ -42,6 +42,7 @@ class GrpcServerConfigurationSpec extends Specification {
         expect:
         serverBuilder != null
         server.getPort() == port
+        configuration.serviceNameSuffix == '-grpc'
 
         cleanup:
         server.shutdown()

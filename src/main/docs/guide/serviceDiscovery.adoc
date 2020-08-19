@@ -37,6 +37,24 @@ consul:
         defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
 ----
 
+When using Service Discovery, Micronaut will register the service in Consul using the name defined in `micronaut.application.name`.
+If the application also uses some HTTP Server (Netty, Tomcat,...), Micronaut will register the application with the same
+name and a different port in Consul. If you don't want that you can configure GRPC to use a suffix name when registering
+the application in Consul:
+
+[source,yaml]
+----
+micronaut:
+    application:
+        name: greeter # <1>
+grpc:
+    server:
+        service-name-suffix: '-grpc' # <2>
+----
+<1> The HTTP port will be registered in Consul with the name `greeter`
+<2> The GRPC port will be registered in Consul with the name `greeter-grpc`
+
+
 ==== Discoverying Services via Consul
 
 To discovery services via Consul and the Micronaut `DiscoveryClient` abstraction enable Consul and GRPC service discovery:

@@ -59,6 +59,7 @@ public class GrpcServerConfiguration {
     private final Environment environment;
     private GrpcSslConfiguration serverConfiguration = new GrpcSslConfiguration();
     private boolean secure = false;
+    private String serviceNameSuffix = "";
 
     /**
      * Default constructor.
@@ -116,6 +117,22 @@ public class GrpcServerConfiguration {
      */
     public int getServerPort() {
         return serverPort;
+    }
+
+    /**
+     * The service name suffix.
+     * @return The service name suffix
+     */
+    public @Nonnull String getServiceNameSuffix() {
+        return serviceNameSuffix;
+    }
+
+    /**
+     * Sets the service name suffix.
+     * @param serviceNameSuffix The service name suffix
+     */
+    public void setServiceNameSuffix(String serviceNameSuffix) {
+        this.serviceNameSuffix = serviceNameSuffix;
     }
 
     /**

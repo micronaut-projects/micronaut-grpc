@@ -58,7 +58,6 @@ class GrpcEmbeddedServerSpec extends Specification {
     }
 
     void "test fires server startup events with application name"() {
-
         when:
         GrpcEmbeddedServer embeddedServer = ApplicationContext.run(GrpcEmbeddedServer, [
                 'micronaut.application.name':'test'
@@ -69,6 +68,7 @@ class GrpcEmbeddedServerSpec extends Specification {
         embeddedServer.isRunning()
         consumer.startup != null
         consumer.serviceReadyEvent != null
+        consumer.serviceReadyEvent.getSource().id == 'test'
         consumer.shutdown == null
         consumer.serviceStoppedEvent == null
 
@@ -83,6 +83,30 @@ class GrpcEmbeddedServerSpec extends Specification {
             embeddedServer.getServer().isTerminated()
         }
 
+    }
+
+    void "test fires server startup events with application name and service name suffix"() {
+        when:
+        GrpcEmbeddedServer embeddedServer = ApplicationContext.run(GrpcEmbeddedServer, [
+            'micronaut.application.name':'test',
+            'grpc.server.service-name-suffix': '-grpc'
+        ])
+        EventConsumer consumer = embeddedServer.getApplicationContext().getBean(EventConsumer)
+
+        then:
+        embeddedServer.isRunning()
+        consumer.serviceReadyEvent.getSource().id == 'test-grpc'
+
+        when:
+        embeddedServer.stop()
+        PollingConditions conditions = new PollingConditions(timeout: 3, delay: 0.5)
+
+        then:
+        consumer.shutdown != null
+        consumer.serviceStoppedEvent != null
+        conditions.eventually {
+            embeddedServer.getServer().isTerminated()
+        }
     }
 
     void "test server does not exist when disabled"() {
