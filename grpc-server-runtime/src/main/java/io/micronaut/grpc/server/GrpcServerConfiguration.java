@@ -128,7 +128,8 @@ public class GrpcServerConfiguration {
     }
 
     /**
-     * Sets the instance id.
+     * Sets the instance id name used for registering the GRPC service in Service Discovery. If this is not set, the
+     * application name will be used.
      * @param instanceId The instance id
      */
     public void setInstanceId(String instanceId) {
