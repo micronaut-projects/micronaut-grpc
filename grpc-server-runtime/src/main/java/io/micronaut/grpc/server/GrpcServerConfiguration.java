@@ -59,7 +59,7 @@ public class GrpcServerConfiguration {
     private final Environment environment;
     private GrpcSslConfiguration serverConfiguration = new GrpcSslConfiguration();
     private boolean secure = false;
-    private String serviceNameSuffix = "";
+    private String instanceId = "";
 
     /**
      * Default constructor.
@@ -120,19 +120,19 @@ public class GrpcServerConfiguration {
     }
 
     /**
-     * The service name suffix.
-     * @return The service name suffix
+     * The instance id.
+     * @return The instance id
      */
-    public @Nonnull String getServiceNameSuffix() {
-        return serviceNameSuffix;
+    public @Nonnull String getInstanceId() {
+        return instanceId;
     }
 
     /**
-     * Sets the service name suffix.
-     * @param serviceNameSuffix The service name suffix
+     * Sets the instance id.
+     * @param instanceId The instance id
      */
-    public void setServiceNameSuffix(String serviceNameSuffix) {
-        this.serviceNameSuffix = serviceNameSuffix;
+    public void setInstanceId(String instanceId) {
+        this.instanceId = instanceId;
     }
 
     /**

@@ -30,8 +30,8 @@ class GrpcServerConfigurationSpec extends Specification {
         def port = SocketUtils.findAvailableTcpPort()
         def ctx = ApplicationContext.run([
             'grpc.server.port'               : port,
-            'grpc.server.handshake-timeout'  : '11s',
-            'grpc.server.service-name-suffix': '-grpc'
+            'grpc.server.handshake-timeout': '11s',
+            'grpc.server.instance-id'      : 'hello-grpc'
         ])
 
         GrpcServerConfiguration configuration = ctx.getBean(GrpcServerConfiguration)
@@ -42,7 +42,7 @@ class GrpcServerConfigurationSpec extends Specification {
         expect:
         serverBuilder != null
         server.getPort() == port
-        configuration.serviceNameSuffix == '-grpc'
+        configuration.instanceId == 'hello-grpc'
 
         cleanup:
         server.shutdown()

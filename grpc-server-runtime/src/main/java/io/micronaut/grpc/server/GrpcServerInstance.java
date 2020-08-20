@@ -57,7 +57,7 @@ class GrpcServerInstance implements EmbeddedServerInstance {
             String id,
             URI uri,
             @Nullable Map<String, String> metadata,
-            @javax.annotation.Nullable List<ServiceInstanceMetadataContributor> metadataContributors) {
+            @Nullable List<ServiceInstanceMetadataContributor> metadataContributors) {
         this(embeddedServer, id, uri, metadata, metadataContributors, null);
     }
 
@@ -75,10 +75,10 @@ class GrpcServerInstance implements EmbeddedServerInstance {
             String id,
             URI uri,
             @Nullable Map<String, String> metadata,
-            @javax.annotation.Nullable List<ServiceInstanceMetadataContributor> metadataContributors,
+            @Nullable List<ServiceInstanceMetadataContributor> metadataContributors,
             GrpcServerConfiguration grpcConfiguration) {
         this.embeddedServer = embeddedServer;
-        this.id = calculateServiceId(id, grpcConfiguration);
+        this.id = calculateInstanceId(id, grpcConfiguration);
         this.uri = uri;
         if (metadata == null) {
             metadata = new LinkedHashMap<>(5);
@@ -113,9 +113,9 @@ class GrpcServerInstance implements EmbeddedServerInstance {
         return embeddedServer;
     }
 
-    private String calculateServiceId(String id, @Nullable GrpcServerConfiguration grpcConfiguration) {
-        if (grpcConfiguration != null && StringUtils.isNotEmpty(grpcConfiguration.getServiceNameSuffix())) {
-            return id + grpcConfiguration.getServiceNameSuffix();
+    private String calculateInstanceId(String id, @Nullable GrpcServerConfiguration grpcConfiguration) {
+        if (grpcConfiguration != null && StringUtils.isNotEmpty(grpcConfiguration.getInstanceId())) {
+            return grpcConfiguration.getInstanceId();
         } else {
             return id;
         }
