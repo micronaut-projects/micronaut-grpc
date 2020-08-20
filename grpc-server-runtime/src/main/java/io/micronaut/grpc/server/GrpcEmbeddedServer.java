@@ -176,7 +176,8 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
                             id,
                             getURI(),
                             metadata,
-                            metadataContributors
+                            metadataContributors,
+                            grpcConfiguration
                     );
                     applicationContext.publishEvent(new ServiceReadyEvent(serviceInstance));
                 });

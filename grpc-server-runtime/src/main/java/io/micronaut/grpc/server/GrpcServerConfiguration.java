@@ -59,6 +59,7 @@ public class GrpcServerConfiguration {
     private final Environment environment;
     private GrpcSslConfiguration serverConfiguration = new GrpcSslConfiguration();
     private boolean secure = false;
+    private String instanceId = "";
 
     /**
      * Default constructor.
@@ -116,6 +117,23 @@ public class GrpcServerConfiguration {
      */
     public int getServerPort() {
         return serverPort;
+    }
+
+    /**
+     * The instance id.
+     * @return The instance id
+     */
+    public @Nonnull String getInstanceId() {
+        return instanceId;
+    }
+
+    /**
+     * Sets the instance id name used for registering the GRPC service in Service Discovery. If this is not set, the
+     * application name will be used.
+     * @param instanceId The instance id
+     */
+    public void setInstanceId(String instanceId) {
+        this.instanceId = instanceId;
     }
 
     /**
