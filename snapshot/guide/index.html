@@ -1109,6 +1109,33 @@ consul:
         defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>When using Service Discovery, Micronaut will register the service in Consul using the name defined in <code>micronaut.application.name</code>.
+If the application also uses an HTTP Server (Netty, Tomcat,&#8230;&#8203;), Micronaut will register the application with the same
+name and a different port in Consul. In case you want to use a different name for the GRPC service in Consul:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">micronaut:
+    application:
+        name: greeter <i class="conum" data-value="1"></i><b>(1)</b>
+grpc:
+    server:
+        instance-id: 'hello-grpc' <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>The HTTP port will be registered in Consul with the name <code>greeter</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The GRPC port will be registered in Consul with the name <code>hello-grpc</code></td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_discoverying_services_via_consul">Discoverying Services via Consul</h4>

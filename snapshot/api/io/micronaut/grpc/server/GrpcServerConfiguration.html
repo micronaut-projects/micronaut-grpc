@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -197,48 +197,60 @@ extends java.lang.Object</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html#getInstanceId--">getInstanceId</a></span>()</code>
+<div class="block">The instance id.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>io.grpc.ServerBuilder&lt;?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html#getServerBuilder--">getServerBuilder</a></span>()</code>
 <div class="block">The server builder.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html#getServerConfiguration--">getServerConfiguration</a></span>()</code>
 <div class="block">The SSL configuration.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>java.util.Optional&lt;java.lang.String&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html#getServerHost--">getServerHost</a></span>()</code>
 <div class="block">The server host.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html#getServerPort--">getServerPort</a></span>()</code>
 <div class="block">The server port.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html#isSecure--">isSecure</a></span>()</code>
 <div class="block">Whether SSL is used.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html#setInstanceId-java.lang.String-">setInstanceId</a></span>(java.lang.String&nbsp;instanceId)</code>
+<div class="block">Sets the instance id name used for registering the GRPC service in Service Discovery.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html#setMaxInboundMessageSize-int-">setMaxInboundMessageSize</a></span>(int&nbsp;bytes)</code>
 <div class="block">Sets the maximum message size allowed to be received on the server.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html#setMaxInboundMetadataSize-int-">setMaxInboundMetadataSize</a></span>(int&nbsp;bytes)</code>
 <div class="block">Sets the maximum size of metadata allowed to be received.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html#setServerConfiguration-io.micronaut.grpc.server.GrpcSslConfiguration-">setServerConfiguration</a></span>(<a href="../../../../io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a>&nbsp;sslConfiguration)</code>
 <div class="block">Sets the SSL configuration.</div>
@@ -435,6 +447,36 @@ public&nbsp;io.grpc.ServerBuilder&lt;?&gt;&nbsp;getServerBuilder()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The server port</dd>
+</dl>
+</li>
+</ul>
+<a name="getInstanceId--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInstanceId</h4>
+<pre>@Nonnull
+public&nbsp;java.lang.String&nbsp;getInstanceId()</pre>
+<div class="block">The instance id.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The instance id</dd>
+</dl>
+</li>
+</ul>
+<a name="setInstanceId-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setInstanceId</h4>
+<pre>public&nbsp;void&nbsp;setInstanceId(java.lang.String&nbsp;instanceId)</pre>
+<div class="block">Sets the instance id name used for registering the GRPC service in Service Discovery. If this is not set, the
+ application name will be used.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>instanceId</code> - The instance id</dd>
 </dl>
 </li>
 </ul>
