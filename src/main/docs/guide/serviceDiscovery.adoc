@@ -48,7 +48,7 @@ micronaut:
         name: greeter # <1>
 grpc:
     server:
-        instance-id: 'service-grpc' # <2>
+        instance-id: 'hello-grpc' # <2>
 ----
 <1> The HTTP port will be registered in Consul with the name `greeter`
 <2> The GRPC port will be registered in Consul with the name `hello-grpc`
