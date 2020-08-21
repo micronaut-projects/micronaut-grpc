@@ -69,6 +69,7 @@ class GrpcServerInstance implements EmbeddedServerInstance {
      * @param uri                  The URI
      * @param metadata             The metadata
      * @param metadataContributors The metadata contributors
+     * @param grpcConfiguration    The GRPC Configuration
      */
     GrpcServerInstance(
             EmbeddedServer embeddedServer,
