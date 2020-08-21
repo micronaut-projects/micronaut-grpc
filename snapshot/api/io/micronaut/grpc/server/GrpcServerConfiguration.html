@@ -115,7 +115,7 @@ extends java.lang.Object</pre>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>1.0</dd>
 <dt><span class="simpleTagLabel">Author:</span></dt>
-<dd>graemerocher</dd>
+<dd>graemerocher, Iván López</dd>
 </dl>
 </li>
 </ul>
@@ -178,6 +178,15 @@ extends java.lang.Object</pre>
                        java.lang.String&nbsp;serverHost,
                        java.lang.Integer&nbsp;serverPort,
                        java.util.concurrent.ExecutorService&nbsp;executorService)</code>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html#GrpcServerConfiguration-io.micronaut.context.env.Environment-java.lang.String-java.lang.Integer-java.util.concurrent.ExecutorService-io.micronaut.core.io.ResourceResolver-">GrpcServerConfiguration</a></span>(io.micronaut.context.env.Environment&nbsp;environment,
+                       java.lang.String&nbsp;serverHost,
+                       java.lang.Integer&nbsp;serverPort,
+                       java.util.concurrent.ExecutorService&nbsp;executorService,
+                       io.micronaut.core.io.ResourceResolver&nbsp;resourceResolver)</code>
 <div class="block">Default constructor.</div>
 </td>
 </tr>
@@ -365,16 +374,43 @@ protected final&nbsp;io.grpc.netty.NettyServerBuilder serverBuilder</pre>
 <a name="GrpcServerConfiguration-io.micronaut.context.env.Environment-java.lang.String-java.lang.Integer-java.util.concurrent.ExecutorService-">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GrpcServerConfiguration</h4>
+<pre>@Deprecated
+public&nbsp;GrpcServerConfiguration(io.micronaut.context.env.Environment&nbsp;environment,
+                                           @Property(name="grpc.server.host") @Nullable
+                                           java.lang.String&nbsp;serverHost,
+                                           @Property(name="grpc.server.port") @Nullable
+                                           java.lang.Integer&nbsp;serverPort,
+                                           @Named(value="io")
+                                           java.util.concurrent.ExecutorService&nbsp;executorService)</pre>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
+<div class="block">Constructor.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>environment</code> - The environment</dd>
+<dd><code>serverHost</code> - The server host</dd>
+<dd><code>serverPort</code> - The server port</dd>
+<dd><code>executorService</code> - The IO executor service</dd>
+</dl>
+</li>
+</ul>
+<a name="GrpcServerConfiguration-io.micronaut.context.env.Environment-java.lang.String-java.lang.Integer-java.util.concurrent.ExecutorService-io.micronaut.core.io.ResourceResolver-">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GrpcServerConfiguration</h4>
-<pre>public&nbsp;GrpcServerConfiguration(io.micronaut.context.env.Environment&nbsp;environment,
-                               @Property(name="grpc.server.host") @Nullable
-                               java.lang.String&nbsp;serverHost,
-                               @Property(name="grpc.server.port") @Nullable
-                               java.lang.Integer&nbsp;serverPort,
-                               @Named(value="io")
-                               java.util.concurrent.ExecutorService&nbsp;executorService)</pre>
+<pre>@Creator
+public&nbsp;GrpcServerConfiguration(io.micronaut.context.env.Environment&nbsp;environment,
+                                        @Property(name="grpc.server.host") @Nullable
+                                        java.lang.String&nbsp;serverHost,
+                                        @Property(name="grpc.server.port") @Nullable
+                                        java.lang.Integer&nbsp;serverPort,
+                                        @Named(value="io")
+                                        java.util.concurrent.ExecutorService&nbsp;executorService,
+                                        io.micronaut.core.io.ResourceResolver&nbsp;resourceResolver)</pre>
 <div class="block">Default constructor.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -382,6 +418,7 @@ protected final&nbsp;io.grpc.netty.NettyServerBuilder serverBuilder</pre>
 <dd><code>serverHost</code> - The server host</dd>
 <dd><code>serverPort</code> - The server port</dd>
 <dd><code>executorService</code> - The IO executor service</dd>
+<dd><code>resourceResolver</code> - The resource resolver</dd>
 </dl>
 </li>
 </ul>

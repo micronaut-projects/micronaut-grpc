@@ -631,9 +631,21 @@ class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.Gr
         keep-alive-time: 3h
         max-inbound-message-size: 1024
         ssl:
-            cert-chain: '/path/to/my.cert'
-            private-key: '/path/to/my.key'</code></pre>
+            cert-chain: 'file://path/to/my.cert' <i class="conum" data-value="1"></i><b>(1)</b>
+            private-key: 'classpath:my.key' <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Load the certificate from <code>/path/to/my.cert</code> file.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Load the private key from the classpath. The file should be in <code>src/main/resources/my.key</code>.</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>By default the GRPC server will be enabled. To disable the GRPC server, set <code>grpc.server.enabled</code> to false.</p>
