@@ -23,7 +23,9 @@ import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Property;
 import io.micronaut.context.env.Environment;
 import io.micronaut.context.exceptions.ConfigurationException;
+import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.convert.format.ReadableBytes;
+import io.micronaut.core.io.ResourceResolver;
 import io.micronaut.core.io.socket.SocketUtils;
 import io.micronaut.scheduling.TaskExecutors;
 
@@ -41,6 +43,7 @@ import java.util.concurrent.ExecutorService;
  * Configuration for the GRPC server.
  *
  * @author graemerocher
+ * @author Iván López
  * @since 1.0
  */
 @ConfigurationProperties(GrpcServerConfiguration.PREFIX)
@@ -56,24 +59,44 @@ public class GrpcServerConfiguration {
     protected final NettyServerBuilder serverBuilder;
     private final int serverPort;
     private final String serverHost;
-    private final Environment environment;
+    private final ResourceResolver resourceResolver;
     private GrpcSslConfiguration serverConfiguration = new GrpcSslConfiguration();
     private boolean secure = false;
     private String instanceId = "";
 
     /**
-     * Default constructor.
-     * @param environment The environment
-     * @param serverHost The server host
-     * @param serverPort The server port
+     * Constructor.
+     *
+     * @param environment     The environment
+     * @param serverHost      The server host
+     * @param serverPort      The server port
      * @param executorService The IO executor service
      */
+    @Deprecated
     public GrpcServerConfiguration(
             Environment environment,
             @Property(name = HOST) @Nullable String serverHost,
             @Property(name = PORT) @Nullable Integer serverPort,
             @Named(TaskExecutors.IO) ExecutorService executorService) {
-        this.environment = environment;
+        this(environment, serverHost, serverPort, executorService, null);
+    }
+
+    /**
+     * Default constructor.
+     *
+     * @param environment      The environment
+     * @param serverHost       The server host
+     * @param serverPort       The server port
+     * @param executorService  The IO executor service
+     * @param resourceResolver The resource resolver
+     */
+    @Creator
+    public GrpcServerConfiguration(
+            Environment environment,
+            @Property(name = HOST) @Nullable String serverHost,
+            @Property(name = PORT) @Nullable Integer serverPort,
+            @Named(TaskExecutors.IO) ExecutorService executorService,
+            ResourceResolver resourceResolver) {
         this.serverPort = serverPort != null ? serverPort :
                 environment.getActiveNames().contains(Environment.TEST) ? SocketUtils.findAvailableTcpPort() : DEFAULT_PORT;
         this.serverHost = serverHost;
@@ -85,6 +108,7 @@ public class GrpcServerConfiguration {
             this.serverBuilder = NettyServerBuilder.forPort(this.serverPort);
         }
         this.serverBuilder.executor(executorService);
+        this.resourceResolver = resourceResolver;
     }
 
     /**
@@ -192,45 +216,45 @@ public class GrpcServerConfiguration {
     public void setServerConfiguration(GrpcSslConfiguration sslConfiguration) {
         if (sslConfiguration != null) {
             this.serverConfiguration = sslConfiguration;
-            final Optional<InputStream> certChain = sslConfiguration.getCertChain()
-                                                                       .flatMap(environment::getResourceAsStream);
-            final Optional<InputStream> privateKey = sslConfiguration.getPrivateKey()
-                                                                       .flatMap(environment::getResourceAsStream);
 
-            final boolean hasCert = certChain.isPresent();
-            final boolean hasPrivateKey = privateKey.isPresent();
-            if (hasCert && hasPrivateKey) {
-                try {
-                    try (InputStream certStream = certChain.get()) {
-                        try (InputStream keyStream = privateKey.get()) {
-                            serverBuilder.useTransportSecurity(
-                                    certStream,
-                                    keyStream
-                            );
+            if (resourceResolver != null) {
+                final Optional<InputStream> certChain = sslConfiguration.getCertChain().flatMap(resourceResolver::getResourceAsStream);
+                final Optional<InputStream> privateKey = sslConfiguration.getPrivateKey().flatMap(resourceResolver::getResourceAsStream);
+
+                final boolean hasCert = certChain.isPresent();
+                final boolean hasPrivateKey = privateKey.isPresent();
+                if (hasCert && hasPrivateKey) {
+                    try {
+                        try (InputStream certStream = certChain.get()) {
+                            try (InputStream keyStream = privateKey.get()) {
+                                serverBuilder.useTransportSecurity(
+                                        certStream,
+                                        keyStream
+                                );
+                            }
                         }
-                    }
-                    this.secure = true;
-                } catch (IOException e) {
-                    throw new ConfigurationException("Unable to configure SSL certificate: " + e.getMessage(), e);
-                }
-            } else {
-                if (hasCert) {
-                    try {
-                        certChain.get().close();
+                        this.secure = true;
                     } catch (IOException e) {
-                        // ignore
+                        throw new ConfigurationException("Unable to configure SSL certificate: " + e.getMessage(), e);
                     }
-                    throw new ConfigurationException("Both 'cert-chain' and 'private-key' properties should be configured");
-                } else if (hasPrivateKey) {
-                    try {
-                        privateKey.get().close();
-                    } catch (IOException e) {
-                        // ignore
+                } else {
+                    if (hasCert) {
+                        try {
+                            certChain.get().close();
+                        } catch (IOException e) {
+                            // ignore
+                        }
+                        throw new ConfigurationException("Both 'cert-chain' and 'private-key' properties should be configured");
+                    } else if (hasPrivateKey) {
+                        try {
+                            privateKey.get().close();
+                        } catch (IOException e) {
+                            // ignore
+                        }
+                        throw new ConfigurationException("Both 'cert-chain' and 'private-key' properties should be configured");
                     }
-                    throw new ConfigurationException("Both 'cert-chain' and 'private-key' properties should be configured");
                 }
             }
-
         }
     }
 

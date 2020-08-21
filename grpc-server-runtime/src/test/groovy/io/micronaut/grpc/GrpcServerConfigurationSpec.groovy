@@ -48,4 +48,27 @@ class GrpcServerConfigurationSpec extends Specification {
         server.shutdown()
         ctx.close()
     }
+
+    void "test GRPC SSL configuration"() {
+        given:
+        def port = SocketUtils.findAvailableTcpPort()
+        def ctx = ApplicationContext.run([
+            'grpc.server.port'             : port,
+            'grpc.server.ssl.cert-chain'   : 'classpath:example.crt',
+            'grpc.server.ssl.private-key'  : 'classpath:example.key',
+        ])
+
+        when:
+        GrpcServerConfiguration configuration = ctx.getBean(GrpcServerConfiguration)
+        ServerBuilder serverBuilder = configuration.getServerBuilder()
+        def server = serverBuilder.build()
+        server.start()
+
+        then:
+        noExceptionThrown()
+
+        cleanup:
+        server.shutdown()
+        ctx.close()
+    }
 }
