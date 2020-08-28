@@ -11,7 +11,7 @@
 
         gtag('config', 'UA-82213539-2');
     </script>
-    <title>3 GRPC Server 2.0.5.BUILD-SNAPSHOT</title>
+    <title>3 GRPC Server 2.0.0.BUILD-SNAPSHOT</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8"/>
     <link rel="stylesheet" href="../css/pdf.css" type="text/css" media="print" title="PDF" charset="utf-8"/>
@@ -93,7 +93,7 @@ function addJsClass() {
                 <div class="project">
                     <h1>3 GRPC Server</h1>
 
-                    <p><strong>Version:</strong> 2.0.5.BUILD-SNAPSHOT</p>
+                    <p><strong>Version:</strong> 2.0.0.BUILD-SNAPSHOT</p>
                 </div>
 
                 
@@ -102,7 +102,7 @@ function addJsClass() {
 <h1 id="server"><a class="anchor" href="#server"></a>3 GRPC Server</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/server.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/1.1.x/src/main/docs/guide/server.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -173,16 +173,17 @@ class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <b class="conum">(1
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">import javax.inject.Singleton
+<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">import io.grpc.stub.StreamObserver
+import javax.inject.Singleton
 
 @Singleton <b class="conum">(1)</b>
-@Suppress("unused")
-class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.GreeterCoroutineImplBase() { <b class="conum">(2)</b>
-    override suspend fun sayHello(request: HelloRequest): HelloReply {
-        <b class="conum">(3)</b>
+class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpc.GreeterImplBase() { <b class="conum">(2)</b>
+    override fun sayHello(request: HelloRequest, responseObserver: StreamObserver&lt;HelloReply&gt;) {
+    	<b class="conum">(3)</b>
         val message = greetingService.sayHello(request.name)
         val reply = HelloReply.newBuilder().setMessage(message).build()
-        return reply
+        responseObserver.onNext(reply)
+        responseObserver.onCompleted()
     }
 }</code></pre>
 </div>
@@ -210,7 +211,7 @@ class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.Gr
 <p>To run the server use the <code>Application</code> class or run <code>./gradlew run</code> for Gradle or <code>./mvnw compile exec:exec</code> for Maven.</p>
 </div>
 <div class="paragraph">
-<p>The server by default runs on port 50051, however you can configure which port the server runs on by setting <code>grpc.server.port</code> to whichever value you wish (a value of <code>${random.port}</code> will use a random port).</p>
+<p>The server by default runs on port 50051, however you can configure which port the server runs on by setting <code>grpc.server.port</code> to whichever value you wish (a value of -1 will use a random port).</p>
 </div>
 </div>
 <div class="sect2">
@@ -230,24 +231,9 @@ class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.Gr
         keep-alive-time: 3h
         max-inbound-message-size: 1024
         ssl:
-            cert-chain: 'file://path/to/my.cert' <i class="conum" data-value="1"></i><b>(1)</b>
-            private-key: 'classpath:my.key' <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+            cert-chain: '/path/to/my.cert'
+            private-key: '/path/to/my.key'</code></pre>
 </div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Load the certificate from <code>/path/to/my.cert</code> file.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Load the private key from the classpath. The file should be in <code>src/main/resources/my.key</code>.</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>By default the GRPC server will be enabled. To disable the GRPC server, set <code>grpc.server.enabled</code> to false.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreationListener</code> for example:</p>
@@ -310,85 +296,6 @@ public class ServerBuilderListener implements BeanCreatedEventListener&lt;Server
 </div>
 <div class="paragraph">
 <p>In addition, by default the server will be setup to use Micronaut&#8217;s I/O executor service.</p>
-</div>
-<div class="sect3">
-<h4 id="_server_interceptor_ordering">Server Interceptor Ordering</h4>
-<div class="paragraph">
-<p>To produce a consistent and predictable order of execution for server interceptors, it is required
-for the <code>io.grpc.ServerInterceptor</code> implementation to do one of the following:</p>
-</div>
-<div class="listingblock">
-<div class="title">Implement <code>io.micronaut.core.order.Ordered</code> interface</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton <i class="conum" data-value="1"></i><b>(1)</b>
-public class CustomInterceptor implements ServerInterceptor, Ordered { <i class="conum" data-value="2"></i><b>(2)</b>
-    ...
-
-    @Override
-    public int getOrder() {
-        return 10; <i class="conum" data-value="3"></i><b>(3)</b>
-    }
-
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Declare the server interceptor as a bean to have it registered automatically</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Implement <code>Ordered</code> in addition to <code>ServerInterceptor</code></td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Provide the specified order of execution in the server interceptor chain</td>
-</tr>
-</table>
-</div>
-<div class="listingblock">
-<div class="title">Wrap with <code>io.micronaut.grpc.server.interceptor.OrderedServerInterceptor</code></div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Factory <i class="conum" data-value="1"></i><b>(1)</b>
-public class ServerInterceptorFactory {
-
-    @Bean <i class="conum" data-value="2"></i><b>(2)</b>
-    @Singleton
-    public ServerInterceptor customSeverInterceptor() {
-        return new OrderedServerInterceptor(new CustomInterceptor(), 10); <i class="conum" data-value="3"></i><b>(3)</b>
-    }
-
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Use a <code>@Factory</code> to create an instance of <code>ServerInterceptor</code> bean</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Register the created sever interceptor as a bean</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Wrap the <code>CustomInterceptor</code> with <code>OrderedServerInterceptor</code> and provide the <code>order</code> of execution</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>The order which is provided will dictate the order of execution of the interceptors when receiving the request message,
-and then the order will be reversed when sending the response message.</p>
-</div>
-<div class="listingblock">
-<div class="title">3 interceptors, with respective orders, <code>1</code>, <code>2</code>, and <code>3</code>:</div>
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-txt hljs" data-lang="txt">Request -&gt; 1 -&gt; 2 -&gt; 3 -&gt; business logic -&gt; 3 -&gt; 2 -&gt; 1 -&gt; Response</code></pre>
-</div>
-</div>
 </div>
 </div>
 <div class="sect2">
