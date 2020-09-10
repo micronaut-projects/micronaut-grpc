@@ -54,14 +54,15 @@ public class ByteBufToProtoMessageConverter implements TypeConverter<ByteBuf, Me
     public Optional<Message> convert(ByteBuf object, Class<Message> targetType, ConversionContext context) {
         return codec
                 .getMessageBuilder(targetType)
-                .flatMap(builder -> rehydrate(object, builder));
+                .flatMap(builder -> rehydrate(object, builder, context));
     }
 
-    private Optional<Message> rehydrate(ByteBuf object, Message.Builder builder) {
+    private Optional<Message> rehydrate(ByteBuf object, Message.Builder builder, ConversionContext context) {
         try {
-            builder.mergeFrom(new ByteBufInputStream(object.copy()), codec.getExtensionRegistry());
+            builder.mergeFrom(new ByteBufInputStream(object.copy(), true), codec.getExtensionRegistry());
             return Optional.of(builder.build());
         } catch (IOException e) {
+            context.reject(e);
             return Optional.empty();
         }
     }
