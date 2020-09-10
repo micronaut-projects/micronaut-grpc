@@ -22,6 +22,7 @@ import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.RxHttpClient
 import io.micronaut.protobuf.codec.ProtobufferCodec
 import io.micronaut.runtime.server.EmbeddedServer
+import io.micronaut.websocket.RxWebSocketClient
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
@@ -35,6 +36,13 @@ abstract class BaseSpec extends Specification {
     @AutoCleanup
     RxHttpClient rxHttpClient = embeddedServer.applicationContext.createBean(
             RxHttpClient,
+            embeddedServer.getURL()
+    )
+
+    @Shared
+    @AutoCleanup
+    RxWebSocketClient rxWebSocketClient = embeddedServer.applicationContext.createBean(
+            RxWebSocketClient,
             embeddedServer.getURL()
     )
 

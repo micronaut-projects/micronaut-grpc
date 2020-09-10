@@ -15,17 +15,19 @@
  */
 package io.micronaut.protobuf.convert;
 
+import java.io.IOException;
+import java.util.Optional;
+
+import javax.inject.Singleton;
+
 import com.google.protobuf.Message;
+
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.convert.ConversionContext;
 import io.micronaut.core.convert.TypeConverter;
 import io.micronaut.protobuf.codec.ProtobufferCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
-
-import javax.inject.Singleton;
-import java.io.IOException;
-import java.util.Optional;
 
 /**
  * Converts Protocol buffer messages from Netty {@link ByteBuf}.
@@ -41,6 +43,7 @@ public class ByteBufToProtoMessageConverter implements TypeConverter<ByteBuf, Me
 
     /**
      * Default constructor.
+     *
      * @param codec The codec
      */
     public ByteBufToProtoMessageConverter(ProtobufferCodec codec) {
@@ -56,10 +59,10 @@ public class ByteBufToProtoMessageConverter implements TypeConverter<ByteBuf, Me
 
     private Optional<Message> rehydrate(ByteBuf object, Message.Builder builder) {
         try {
-            builder.mergeFrom(new ByteBufInputStream(object), codec.getExtensionRegistry());
+            builder.mergeFrom(new ByteBufInputStream(object.copy()), codec.getExtensionRegistry());
             return Optional.of(builder.build());
         } catch (IOException e) {
-            throw new IllegalStateException("Error parsing: " + e.getMessage());
+            return Optional.empty();
         }
     }
 }
