@@ -108,6 +108,30 @@ and then the order will be reversed when sending the response message.
 Request -> 1 -> 2 -> 3 -> business logic -> 3 -> 2 -> 1 -> Response
 ----
 
+=== Health checks
+If the management dependency ("io.micronaut:micronaut-management") is added, then Micronaut’s Health Endpoint can be used to expose the health status of the Grpc server.
+
+For example if grpc is running the /health endpoint will return:
+[source,json]
+----
+{
+  "status": "UP",
+  "details": {
+     "grpc-server": {
+       "name": "your-project-name",
+       "status": "UP",
+       "details": {
+         "host": "localhost",
+         "port": 5050
+       }
+     }
+  },
+ ...
+}
+----
+
+If you wish to disable the grpc server health check while still using the management dependency you can set the property `grpc.server.health.enabled` to false in your application configuration.
+
 === Testing the Server
 
 To test the server it is recommended that you use https://github.com/micronaut-projects/micronaut-test[Micronaut Test].
