@@ -18,6 +18,7 @@ package io.micronaut.grpc.server.health;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.async.publisher.AsyncSingleResultPublisher;
 import io.micronaut.core.util.CollectionUtils;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.grpc.server.GrpcEmbeddedServer;
 import io.micronaut.grpc.server.GrpcServerConfiguration;
 import io.micronaut.health.HealthStatus;
@@ -35,7 +36,7 @@ import javax.inject.Singleton;
  * @since 2.1.0
  */
 @Singleton
-@Requires(property = GrpcServerConfiguration.PREFIX + ".health.enabled", value = "true", defaultValue = "true")
+@Requires(property = GrpcServerConfiguration.PREFIX + ".health.enabled", value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 @Requires(beans = HealthEndpoint.class)
 public class GrpcServerHealthIndicator implements HealthIndicator {
     private static final String ID = "grpc-server";
