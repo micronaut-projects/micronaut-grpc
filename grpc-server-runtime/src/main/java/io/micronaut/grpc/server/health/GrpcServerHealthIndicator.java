@@ -38,34 +38,35 @@ import javax.inject.Singleton;
 @Requires(property = GrpcServerConfiguration.PREFIX + ".health.enabled", value = "true", defaultValue = "true")
 @Requires(beans = HealthEndpoint.class)
 public class GrpcServerHealthIndicator implements HealthIndicator {
-  private static final String ID = "grpc-server";
+    private static final String ID = "grpc-server";
 
-  private final GrpcEmbeddedServer server;
+    private final GrpcEmbeddedServer server;
 
-  /**
-   * Default constructor.
-   * @param server The grpc embedded server
-   */
-  public GrpcServerHealthIndicator(GrpcEmbeddedServer server) {
-    this.server = server;
-  }
+    /**
+     * Default constructor.
+     *
+     * @param server The grpc embedded server
+     */
+    public GrpcServerHealthIndicator(GrpcEmbeddedServer server) {
+        this.server = server;
+    }
 
-  @Override
-  public Publisher<HealthResult> getResult() {
-    return new AsyncSingleResultPublisher<>(this::getHealthResult);
-  }
+    @Override
+    public Publisher<HealthResult> getResult() {
+        return new AsyncSingleResultPublisher<>(this::getHealthResult);
+    }
 
-  /**
-   * Checks if grpc is running and return status UP otherwise return status DOWN.
-   *
-   * @return Result with server address in the details and status UP or DOWN.
-   */
-  private HealthResult getHealthResult() {
-    final HealthStatus healthStatus = server.isRunning() ? HealthStatus.UP : HealthStatus.DOWN;
+    /**
+     * Checks if grpc is running and return status UP otherwise return status DOWN.
+     *
+     * @return Result with server address in the details and status UP or DOWN.
+     */
+    private HealthResult getHealthResult() {
+        final HealthStatus healthStatus = server.isRunning() ? HealthStatus.UP : HealthStatus.DOWN;
 
-    return HealthResult
-        .builder(ID, healthStatus)
-        .details(CollectionUtils.mapOf("host", server.getHost(), "port", server.getPort()))
-        .build();
-  }
+        return HealthResult
+                .builder(ID, healthStatus)
+                .details(CollectionUtils.mapOf("host", server.getHost(), "port", server.getPort()))
+                .build();
+    }
 }
