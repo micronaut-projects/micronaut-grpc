@@ -1,6 +1,6 @@
-This project allows building https://grpc.io[GRPC] servers and clients with Micronaut.
+This project allows building https://grpc.io[gRPC] servers and clients with Micronaut.
 
-Micronaut adds the following features to the GRPC experience:
+Micronaut adds the following features to the gRPC experience:
 
 * Compile Time Dependency Injection (DI) and Aspect Oriented Programming (AOP)
 * Service Discovery and Registrations

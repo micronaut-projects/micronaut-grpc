@@ -1,4 +1,4 @@
-GRPC includes tracing based on OpenCensus, however if you wish to use Micronaut's integration with Jaeger or Zipkin you can do so by adding the following dependencies:
+gRPC includes tracing based on OpenCensus, however if you wish to use Micronaut's integration with Jaeger or Zipkin you can do so by adding the following dependencies:
 
 dependency:micronaut-tracing[scope="compile"]
 

@@ -2,8 +2,8 @@ introduction:
   title: Introduction
 releaseHistory: Release History
 gettingStarted: Getting Started
-server: GRPC Server
-client: GRPC Clients
+server: gRPC Server
+client: gRPC Clients
 serviceDiscovery: Service Discovery
 tracing: Distributed Tracing
 protocolBuffers: Protocol Buffers Support
