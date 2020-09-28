@@ -2,7 +2,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
-    <title>Micronaut GRPC</title>
+    <title>Micronaut gRPC</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="../css/main.css" type="text/css" media="screen, print" title="Style" charset="utf-8" />
     <link rel="stylesheet" href="../css/custom.css" type="text/css" media="screen, print" title="Style" charset="utf-8" />
@@ -49,9 +49,9 @@
                                 
                                 <div class="toc-item" style="margin-left:0"><a href="#gettingStarted"><strong>3</strong><span>Getting Started</span></a></div>
                                 
-                                <div class="toc-item" style="margin-left:0"><a href="#server"><strong>4</strong><span>GRPC Server</span></a></div>
+                                <div class="toc-item" style="margin-left:0"><a href="#server"><strong>4</strong><span>gRPC Server</span></a></div>
                                 
-                                <div class="toc-item" style="margin-left:0"><a href="#client"><strong>5</strong><span>GRPC Clients</span></a></div>
+                                <div class="toc-item" style="margin-left:0"><a href="#client"><strong>5</strong><span>gRPC Clients</span></a></div>
                                 
                                 <div class="toc-item" style="margin-left:0"><a href="#serviceDiscovery"><strong>6</strong><span>Service Discovery</span></a></div>
                                 
@@ -96,9 +96,9 @@
         
         <div class="toc-item" style="margin-left:0px" id="toc-item-gettingStarted"><a href="#gettingStarted"><strong>3</strong><span>Getting Started</span></a></div>
         
-        <div class="toc-item" style="margin-left:0px" id="toc-item-server"><a href="#server"><strong>4</strong><span>GRPC Server</span></a></div>
+        <div class="toc-item" style="margin-left:0px" id="toc-item-server"><a href="#server"><strong>4</strong><span>gRPC Server</span></a></div>
         
-        <div class="toc-item" style="margin-left:0px" id="toc-item-client"><a href="#client"><strong>5</strong><span>GRPC Clients</span></a></div>
+        <div class="toc-item" style="margin-left:0px" id="toc-item-client"><a href="#client"><strong>5</strong><span>gRPC Clients</span></a></div>
         
         <div class="toc-item" style="margin-left:0px" id="toc-item-serviceDiscovery"><a href="#serviceDiscovery"><strong>6</strong><span>Service Discovery</span></a></div>
         
@@ -113,9 +113,9 @@
     
     <div class="docs-content">
     <div class="project">
-        <h1>Micronaut GRPC</h1>
+        <h1>Micronaut gRPC</h1>
         <p></p>
-        <p>Integration between Micronaut and GRPC</p>
+        <p>Integration between Micronaut and gRPC</p>
         <p><strong>Version:</strong> <select style='max-width: 200px' onChange='window.document.location.href=this.options[this.selectedIndex].value;'><option selected='selected' value='https://micronaut-projects.github.io/micronaut-grpc/snapshot/guide/index.html'>SNAPSHOT</option><option value='https://micronaut-projects.github.io/micronaut-grpc/2.0.5/guide/index.html'>2.0.5</option><option value='https://micronaut-projects.github.io/micronaut-grpc/2.0.4/guide/index.html'>2.0.4</option><option value='https://micronaut-projects.github.io/micronaut-grpc/2.0.3/guide/index.html'>2.0.3</option><option value='https://micronaut-projects.github.io/micronaut-grpc/2.0.2/guide/index.html'>2.0.2</option><option value='https://micronaut-projects.github.io/micronaut-grpc/2.0.1/guide/index.html'>2.0.1</option><option value='https://micronaut-projects.github.io/micronaut-grpc/2.0.0/guide/index.html'>2.0.0</option><option value='https://micronaut-projects.github.io/micronaut-grpc/2.0.0.RC1/guide/index.html'>2.0.0.RC1</option><option value='https://micronaut-projects.github.io/micronaut-grpc/2.0.0.M4/guide/index.html'>2.0.0.M4</option><option value='https://micronaut-projects.github.io/micronaut-grpc/2.0.0.M3/guide/index.html'>2.0.0.M3</option><option value='https://micronaut-projects.github.io/micronaut-grpc/2.0.0.M2/guide/index.html'>2.0.0.M2</option><option value='https://micronaut-projects.github.io/micronaut-grpc/2.0.0.M1/guide/index.html'>2.0.0.M1</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.1.1/guide/index.html'>1.1.1</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.1.0/guide/index.html'>1.1.0</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.0.1/guide/index.html'>1.0.1</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.0.0/guide/index.html'>1.0.0</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.0.0.RC1/guide/index.html'>1.0.0.RC1</option><option value='https://micronaut-projects.github.io/micronaut-grpc/1.0.0.M1/guide/index.html'>1.0.0.M1</option></select></p>
     </div>
     
@@ -129,10 +129,10 @@
 
 
 <div class="paragraph">
-<p>This project allows building <a href="https://grpc.io">GRPC</a> servers and clients with Micronaut.</p>
+<p>This project allows building <a href="https://grpc.io">gRPC</a> servers and clients with Micronaut.</p>
 </div>
 <div class="paragraph">
-<p>Micronaut adds the following features to the GRPC experience:</p>
+<p>Micronaut adds the following features to the gRPC experience:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -211,7 +211,7 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy</code> to cha
 <p>See also the <a href="https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples">Examples</a> in the repository that provides examples in Java, Kotlin and Groovy.</p>
 </div>
 <div class="paragraph">
-<p>To manually setup GRPC you can create an application:</p>
+<p>To manually setup gRPC you can create an application:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -235,7 +235,7 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy</code> to cha
 </div>
 </div>
 <div class="paragraph">
-<p>Then configure the GRPC and protobuf plugins:</p>
+<p>Then configure the gRPC and protobuf plugins:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -316,7 +316,7 @@ protobuf {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you wish to use GRPC standalone without the Micronaut HTTP server you should comment out the <code>micronaut-http-server-netty</code> dependency.
+If you wish to use gRPC standalone without the Micronaut HTTP server you should comment out the <code>micronaut-http-server-netty</code> dependency.
 </td>
 </tr>
 </table>
@@ -394,7 +394,7 @@ If you wish to use GRPC standalone without the Micronaut HTTP server you should 
 <div class="sect2">
 <h3 id="_defining_a_protobuf_file">Defining a Protobuf File</h3>
 <div class="paragraph">
-<p>Once you have the build setup you can define a Protobuf file for your GRPC service. For example:</p>
+<p>Once you have the build setup you can define a Protobuf file for your gRPC service. For example:</p>
 </div>
 <div class="listingblock">
 <div class="title">src/main/proto/helloworld.proto</div>
@@ -452,7 +452,7 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 </div>
 </div>
 
-<h1 id="server"><a class="anchor" href="#server"></a>4 GRPC Server</h1>
+<h1 id="server"><a class="anchor" href="#server"></a>4 gRPC Server</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/server.adoc"'>
@@ -462,9 +462,9 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 
 
 <div class="sect2">
-<h3 id="_writing_a_simple_grpc_server">Writing a Simple GRPC Server</h3>
+<h3 id="_writing_a_simple_grpc_server">Writing a Simple gRPC Server</h3>
 <div class="paragraph">
-<p>To implement a GRPC server for the previously defined <code>helloworld.proto</code> definition you first need to generate the Java stubs using Gradle or Maven then create a class that extends from <code>GreeterGrpc.GreeterImplBase</code>.</p>
+<p>To implement a gRPC server for the previously defined <code>helloworld.proto</code> definition you first need to generate the Java stubs using Gradle or Maven then create a class that extends from <code>GreeterGrpc.GreeterImplBase</code>.</p>
 </div>
 <div class="paragraph">
 <p>For example:</p>
@@ -558,7 +558,7 @@ class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.Gr
 </div>
 </div>
 <div class="sect2">
-<h3 id="_running_the_grpc_server">Running the GRPC Server</h3>
+<h3 id="_running_the_grpc_server">Running the gRPC Server</h3>
 <div class="paragraph">
 <p>To run the server use the <code>Application</code> class or run <code>./gradlew run</code> for Gradle or <code>./mvnw compile exec:exec</code> for Maven.</p>
 </div>
@@ -567,15 +567,15 @@ class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.Gr
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configuring_the_grpc_server">Configuring the GRPC Server</h3>
+<h3 id="_configuring_the_grpc_server">Configuring the gRPC Server</h3>
 <div class="paragraph">
-<p>The server can be be configured in a number of different ways. You can use the <code>io.micronaut.grpc.server.GrpcServerConfiguration</code> type to configure any property of GRPC&#8217;s <code>NettyServerBuilder</code> class via <code>application.yml</code>.</p>
+<p>The server can be be configured in a number of different ways. You can use the <code>io.micronaut.grpc.server.GrpcServerConfiguration</code> type to configure any property of gRPC&#8217;s <code>NettyServerBuilder</code> class via <code>application.yml</code>.</p>
 </div>
 <div class="paragraph">
 <p>For example:</p>
 </div>
 <div class="listingblock">
-<div class="title">Configuring the GRPC server</div>
+<div class="title">Configuring the gRPC server</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     server:
@@ -600,7 +600,7 @@ class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.Gr
 </table>
 </div>
 <div class="paragraph">
-<p>By default the GRPC server will be enabled. To disable the GRPC server, set <code>grpc.server.enabled</code> to false.</p>
+<p>By default the gRPC server will be enabled. To disable the gRPC server, set <code>grpc.server.enabled</code> to false.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreationListener</code> for example:</p>
@@ -817,12 +817,12 @@ class Clients {
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The generated GRPC client blocking stub is created.</td>
+<td>The generated gRPC client blocking stub is created.</td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>The above example uses the <code>@GrpcChannel</code> annotation to inject a GRPC <code>ManagedChannel</code> that can communicate with the running server. This channel will be automatically be shutdown when the application shuts down.</p>
+<p>The above example uses the <code>@GrpcChannel</code> annotation to inject a gRPC <code>ManagedChannel</code> that can communicate with the running server. This channel will be automatically be shutdown when the application shuts down.</p>
 </div>
 <div class="paragraph">
 <p>Now that you have a test client, writing the test becomes trivial:</p>
@@ -878,7 +878,7 @@ public class GreetingEndpointTest {
 </div>
 </div>
 
-<h1 id="client"><a class="anchor" href="#client"></a>5 GRPC Clients</h1>
+<h1 id="client"><a class="anchor" href="#client"></a>5 gRPC Clients</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/client.adoc"'>
@@ -888,7 +888,7 @@ public class GreetingEndpointTest {
 
 
 <div class="paragraph">
-<p>Micronaut for GRPC does not create client beans automatically for you. Instead you must expose which client stubs your application needs using a <code>@Factory</code>.</p>
+<p>Micronaut for gRPC does not create client beans automatically for you. Instead you must expose which client stubs your application needs using a <code>@Factory</code>.</p>
 </div>
 <div class="paragraph">
 <p>You can dependency inject a <code>io.grpc.ManagedChannel</code> into the factory. Each injected <code>io.grpc.ManagedChannel</code> will automatically be shutdown when the application shuts down.</p>
@@ -1027,7 +1027,7 @@ GreeterGrpc.GreeterStub reactiveStub(
 <p>The ID <code>greeter</code> is used to reference the configuration for <code>grpc.channels.greeter</code>.</p>
 </div>
 <div class="paragraph">
-<p>Using service IDs in this way is the preferred way to setup GRPC clients, because it works nicely with Service Discovery (see the next section).</p>
+<p>Using service IDs in this way is the preferred way to setup gRPC clients, because it works nicely with Service Discovery (see the next section).</p>
 </div>
 </div>
 
@@ -1041,7 +1041,7 @@ GreeterGrpc.GreeterStub reactiveStub(
 
 
 <div class="paragraph">
-<p>When using <code>@GrpcChannel</code> with a service ID without explicitly configuring the address of the service will trigger GRPC&#8217;s <code>NameResolver</code> and attempt to do service discovery.</p>
+<p>When using <code>@GrpcChannel</code> with a service ID without explicitly configuring the address of the service will trigger gRPC&#8217;s <code>NameResolver</code> and attempt to do service discovery.</p>
 </div>
 <div class="paragraph">
 <p>The default strategy for this is to use DNS based discovery. So for example you can do:</p>
@@ -1066,9 +1066,9 @@ GreeterGrpc.GreeterStub reactiveStub(
 <p>The way in which this is done is the <a href="https://docs.micronaut.io/latest/guide/index.html#serviceDiscoveryConsul">same as a regular Micronaut service</a>.</p>
 </div>
 <div class="sect3">
-<h4 id="_registering_a_grpc_service_with_consul">Registering a GRPC Service with Consul</h4>
+<h4 id="_registering_a_grpc_service_with_consul">Registering a gRPC Service with Consul</h4>
 <div class="paragraph">
-<p>To register a GRPC service with Consul first add the <code>micronaut-discovery-client</code> dependency:</p>
+<p>To register a gRPC service with Consul first add the <code>micronaut-discovery-client</code> dependency:</p>
 </div>
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
@@ -1106,7 +1106,7 @@ consul:
 <div class="paragraph">
 <p>When using Service Discovery, Micronaut will register the service in Consul using the name defined in <code>micronaut.application.name</code>.
 If the application also uses an HTTP Server (Netty, Tomcat,&#8230;&#8203;), Micronaut will register the application with the same
-name and a different port in Consul. In case you want to use a different name for the GRPC service in Consul:</p>
+name and a different port in Consul. In case you want to use a different name for the gRPC service in Consul:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1126,7 +1126,7 @@ grpc:
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>The GRPC port will be registered in Consul with the name <code>hello-grpc</code></td>
+<td>The gRPC port will be registered in Consul with the name <code>hello-grpc</code></td>
 </tr>
 </table>
 </div>
@@ -1134,7 +1134,7 @@ grpc:
 <div class="sect3">
 <h4 id="_discoverying_services_via_consul">Discoverying Services via Consul</h4>
 <div class="paragraph">
-<p>To discovery services via Consul and the Micronaut <code>DiscoveryClient</code> abstraction enable Consul and GRPC service discovery:</p>
+<p>To discovery services via Consul and the Micronaut <code>DiscoveryClient</code> abstraction enable Consul and gRPC service discovery:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1176,7 +1176,7 @@ GreeterGrpc.GreeterStub greeterStub(
 
 
 <div class="paragraph">
-<p>GRPC includes tracing based on OpenCensus, however if you wish to use Micronaut&#8217;s integration with Jaeger or Zipkin you can do so by adding the following dependencies:</p>
+<p>gRPC includes tracing based on OpenCensus, however if you wish to use Micronaut&#8217;s integration with Jaeger or Zipkin you can do so by adding the following dependencies:</p>
 </div>
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
