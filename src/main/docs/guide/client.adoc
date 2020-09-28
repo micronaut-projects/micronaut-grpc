@@ -1,4 +1,4 @@
-Micronaut for GRPC does not create client beans automatically for you. Instead you must expose which client stubs your application needs using a `@Factory`.
+Micronaut for gRPC does not create client beans automatically for you. Instead you must expose which client stubs your application needs using a `@Factory`.
 
 You can dependency inject a `io.grpc.ManagedChannel` into the factory. Each injected `io.grpc.ManagedChannel` will automatically be shutdown when the application shuts down.
 
@@ -84,4 +84,4 @@ GreeterGrpc.GreeterStub reactiveStub(
 
 The ID `greeter` is used to reference the configuration for `grpc.channels.greeter`.
 
-Using service IDs in this way is the preferred way to setup GRPC clients, because it works nicely with Service Discovery (see the next section).
+Using service IDs in this way is the preferred way to setup gRPC clients, because it works nicely with Service Discovery (see the next section).
