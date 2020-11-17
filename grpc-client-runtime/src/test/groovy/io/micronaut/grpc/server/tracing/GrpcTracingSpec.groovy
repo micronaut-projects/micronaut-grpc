@@ -18,7 +18,7 @@ package io.micronaut.grpc.server.tracing
 import io.micronaut.context.annotation.Property
 import io.micronaut.context.annotation.Requires
 import io.micronaut.grpc.HelloWordGrpcSpec
-import io.micronaut.test.annotation.MicronautTest
+import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import io.micronaut.test.annotation.MockBean
 import io.opentracing.Tracer
 import io.opentracing.mock.MockTracer
@@ -59,7 +59,7 @@ class GrpcTracingSpec extends Specification {
         }
     }
 
-    
+
     @MockBean
     @Requires(property = "mock.tracer", value = "true")
     Tracer tracer() {

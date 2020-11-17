@@ -110,7 +110,6 @@ class GrpcEmbeddedServerSpec extends Specification {
     }
 
     void "test server does not exist when disabled"() {
-
         when:
         ApplicationContext.run(GrpcEmbeddedServer, [
                 'grpc.server.enabled': false
@@ -118,7 +117,6 @@ class GrpcEmbeddedServerSpec extends Specification {
 
         then:
         thrown NoSuchBeanException
-
     }
 
     @Singleton

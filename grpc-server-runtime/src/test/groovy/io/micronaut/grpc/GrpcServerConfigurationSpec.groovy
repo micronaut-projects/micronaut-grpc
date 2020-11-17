@@ -19,7 +19,7 @@ import io.grpc.ServerBuilder
 import io.micronaut.context.ApplicationContext
 import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.server.GrpcServerConfiguration
-import io.micronaut.test.annotation.MicronautTest
+import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import spock.lang.Specification
 
 @MicronautTest
