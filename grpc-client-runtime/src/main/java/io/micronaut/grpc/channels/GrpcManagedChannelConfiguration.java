@@ -22,6 +22,7 @@ import io.micronaut.context.env.Environment;
 import io.micronaut.core.naming.Named;
 
 import javax.annotation.Nullable;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;
 import java.util.Optional;
@@ -55,7 +56,13 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
         final Optional<SocketAddress> socketAddress = env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class);
         if (socketAddress.isPresent()) {
             resolveName = false;
-            this.channelBuilder = NettyChannelBuilder.forAddress(socketAddress.get());
+            SocketAddress serverAddress = socketAddress.get();
+            if (serverAddress instanceof InetSocketAddress) {
+                InetSocketAddress isa = (InetSocketAddress) serverAddress;
+                this.channelBuilder = NettyChannelBuilder.forAddress(isa.getHostName(), isa.getPort());
+            } else {
+                this.channelBuilder = NettyChannelBuilder.forAddress(serverAddress);
+            }
         } else {
             final Optional<String> target = env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class);
             if (target.isPresent()) {
