@@ -1,7 +1,7 @@
 plugins {
     id "net.ltgt.apt-eclipse" version "0.21"
     id "net.ltgt.apt-idea" version "0.21"
-    id "com.google.protobuf" version "0.8.13"
+    id "com.google.protobuf" version "0.8.14"
 }
 
 dependencies {
@@ -20,7 +20,7 @@ dependencies {
     testImplementation "io.micronaut:micronaut-http-client:$micronautVersion"
     testImplementation "io.micronaut:micronaut-inject-groovy:$micronautVersion"
     testImplementation "io.micronaut:micronaut-inject-java:$micronautVersion"
-    testImplementation "io.micronaut.test:micronaut-test-spock:2.1.1"
+    testImplementation "io.micronaut.test:micronaut-test-spock:2.2.1"
     testImplementation "com.hubspot.jackson:jackson-datatype-protobuf:0.9.12"
 }
 
