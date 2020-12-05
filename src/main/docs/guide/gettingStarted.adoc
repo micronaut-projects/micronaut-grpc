@@ -39,6 +39,21 @@ Then configure the gRPC and protobuf plugins:
 include::examples/hello-world-java/build.gradle[tags=config]
 ----
 
+Use this configuration for Kotlin projects:
+
+[source,groovy]
+----
+include::examples/hello-world-kotlin/build.gradle[tags=variables]
+
+dependencies {
+...
+include::examples/hello-world-kotlin/build.gradle[tags=dependencies]
+}
+
+include::examples/hello-world-kotlin/build.gradle[tags=config]
+
+----
+
 Finally add the following dependencies to your build:
 
 For gRPC servers:
