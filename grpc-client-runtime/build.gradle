@@ -23,7 +23,7 @@ dependencies {
     testImplementation 'io.jaegertracing:jaeger-core:1.5.0'
     testImplementation "io.micronaut:micronaut-inject-groovy:$micronautVersion"
     testImplementation "io.micronaut:micronaut-inject-java:$micronautVersion"
-    testImplementation 'io.micronaut.test:micronaut-test-spock:2.2.1'
+    testImplementation 'io.micronaut.test:micronaut-test-spock:2.3.0'
     testImplementation project(":grpc-server-runtime")
 }
 
