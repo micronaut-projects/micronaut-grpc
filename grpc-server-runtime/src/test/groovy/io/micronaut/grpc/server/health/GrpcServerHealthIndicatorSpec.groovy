@@ -40,7 +40,7 @@ class GrpcServerHealthIndicatorSpec extends Specification {
         result.details.host == "localhost"
 
         cleanup:
-        server.stop();
+        server.close()
     }
 
     @Unroll
@@ -60,6 +60,29 @@ class GrpcServerHealthIndicatorSpec extends Specification {
 
         where:
         configvalue << [false, "false", "no", ""]
+    }
+
+    void "test grpc health indicator after gRPC-Server is stopped"() {
+
+        given:
+        GrpcEmbeddedServer server = ApplicationContext.run(GrpcEmbeddedServer)
+
+        when:
+        server.stop()
+
+        and:
+        GrpcServerHealthIndicator healthIndicator = server.getApplicationContext().getBean(GrpcServerHealthIndicator)
+        BlockingFirstSubscriber subscriber = new BlockingFirstSubscriber<HealthResult>()
+        healthIndicator.result.subscribe(subscriber)
+        HealthResult result = subscriber.blockingGet()
+
+        then:
+        result.status == HealthStatus.DOWN
+        result.details.port == server.serverConfiguration.serverPort
+        result.details.host == server.host
+
+        cleanup:
+        server.close()
     }
 
 }

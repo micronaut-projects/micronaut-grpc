@@ -17,7 +17,6 @@ package io.micronaut.grpc.server.health;
 
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.async.publisher.AsyncSingleResultPublisher;
-import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.grpc.server.GrpcEmbeddedServer;
 import io.micronaut.grpc.server.GrpcServerConfiguration;
@@ -28,6 +27,9 @@ import io.micronaut.management.health.indicator.HealthResult;
 import org.reactivestreams.Publisher;
 
 import javax.inject.Singleton;
+import java.util.Map;
+
+import static io.micronaut.core.util.CollectionUtils.mapOf;
 
 /**
  * A {@link HealthIndicator} for Grpc server.
@@ -64,10 +66,17 @@ public class GrpcServerHealthIndicator implements HealthIndicator {
      */
     private HealthResult getHealthResult() {
         final HealthStatus healthStatus = server.isRunning() ? HealthStatus.UP : HealthStatus.DOWN;
+        /**
+         * BUGFIX: it avoids to call the server.getPort() method when the gRPC-Server is DOWN because
+         * it throws an unexpected exception that breaks the /health endpoint
+         */
+        final String serverHost = server.getHost();
+        final int serverPort = server.getServerConfiguration().getServerPort(); // don't call the server.getPort() here!
+        final Map details = mapOf("host", serverHost, "port", serverPort);
 
         return HealthResult
                 .builder(ID, healthStatus)
-                .details(CollectionUtils.mapOf("host", server.getHost(), "port", server.getPort()))
+                .details(details)
                 .build();
     }
 }
