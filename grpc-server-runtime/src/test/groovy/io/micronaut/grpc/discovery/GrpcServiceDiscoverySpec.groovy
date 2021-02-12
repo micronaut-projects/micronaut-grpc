@@ -43,7 +43,7 @@ class GrpcServiceDiscoverySpec extends Specification {
 
         and:'then a client is run that declares the service'
         ApplicationContext client = ApplicationContext.run([
-                (GrpcNameResolverFactory.ENABLED): true,
+                (GrpcNameResolverProvider.ENABLED): true,
                 'grpc.channels.greet.plaintext':true,
                 'micronaut.http.services.greet.url': server.URL.toString()
         ])
@@ -67,7 +67,7 @@ class GrpcServiceDiscoverySpec extends Specification {
 
         and:'then a client is run that declares the service'
         ApplicationContext client = ApplicationContext.run([
-                (GrpcNameResolverFactory.ENABLED): true,
+                (GrpcNameResolverProvider.ENABLED): true,
                 'grpc.client.plaintext':true,
                 'my.port':server.getPort()
         ])
