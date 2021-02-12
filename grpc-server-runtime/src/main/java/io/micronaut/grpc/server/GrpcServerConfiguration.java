@@ -39,7 +39,6 @@ import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Configuration for the GRPC server.
@@ -225,7 +224,9 @@ public class GrpcServerConfiguration {
      * Gets the maximum duration application will wait for the server to terminate and release all resources.
      * @return The maximum duration the application will wait for the server to terminate.
      */
-    public Duration getAwaitTermination() { return awaitTermination; }
+    public Duration getAwaitTermination() {
+        return awaitTermination;
+    }
 
     /**
      * Sets the SSL configuration.
