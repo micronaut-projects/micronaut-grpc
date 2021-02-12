@@ -43,7 +43,6 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
 
     @ConfigurationBuilder(prefixes = {"use", ""}, allowZeroArgs = true)
     protected final NettyChannelBuilder channelBuilder;
-    private boolean resolveName = true;
 
     /**
      * Constructors a new managed channel configuration.
@@ -55,10 +54,12 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
         this.name = name;
         final Optional<SocketAddress> socketAddress = env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class);
         if (socketAddress.isPresent()) {
-            resolveName = false;
             SocketAddress serverAddress = socketAddress.get();
             if (serverAddress instanceof InetSocketAddress) {
                 InetSocketAddress isa = (InetSocketAddress) serverAddress;
+                if (isa.isUnresolved()) {
+                    isa = new InetSocketAddress(isa.getHostString(), isa.getPort());
+                }
                 this.channelBuilder = NettyChannelBuilder.forAddress(isa.getHostName(), isa.getPort());
             } else {
                 this.channelBuilder = NettyChannelBuilder.forAddress(serverAddress);
@@ -73,7 +74,6 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
             } else {
                 final URI uri = name.contains("//") ? URI.create(name) : null;
                 if (uri != null && uri.getHost() != null && uri.getPort() > -1) {
-                    resolveName = false;
                     this.channelBuilder = NettyChannelBuilder.forAddress(uri.getHost(), uri.getPort());
                 } else {
                     this.channelBuilder = NettyChannelBuilder.forTarget(name);
@@ -98,10 +98,10 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
     /**
      * Sets the name resolver factor to use.
      * @param factory The factory
+     * @deprecated Method {@link NettyChannelBuilder#nameResolverFactory(NameResolver.Factory)} is deprecated
      */
+    @Deprecated
     public void setNameResolverFactory(@Nullable NameResolver.Factory factory) {
-        if (factory != null && resolveName) {
-            channelBuilder.nameResolverFactory(factory);
-        }
+        // no-op
     }
 }

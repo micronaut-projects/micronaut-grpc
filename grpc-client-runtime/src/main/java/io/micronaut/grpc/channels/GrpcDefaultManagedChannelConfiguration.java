@@ -54,6 +54,7 @@ public class GrpcDefaultManagedChannelConfiguration extends GrpcManagedChannelCo
 
     @Override
     @Inject
+    @Deprecated
     public void setNameResolverFactory(@Nullable NameResolver.Factory factory) {
         super.setNameResolverFactory(factory);
     }

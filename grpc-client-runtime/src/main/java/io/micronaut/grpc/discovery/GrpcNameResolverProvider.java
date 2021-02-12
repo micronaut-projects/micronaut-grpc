@@ -15,22 +15,33 @@
  */
 package io.micronaut.grpc.discovery;
 
+import edu.umd.cs.findbugs.annotations.NonNull;
 import io.grpc.*;
+import io.micronaut.context.LifeCycle;
+import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.naming.NameUtils;
 import io.micronaut.core.util.CollectionUtils;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.discovery.DiscoveryClient;
 import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.ServiceInstanceList;
 import io.micronaut.discovery.exceptions.NoAvailableServiceException;
+import io.micronaut.grpc.channels.GrpcDefaultManagedChannelConfiguration;
 import io.reactivex.Flowable;
 import io.reactivex.disposables.Disposable;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.inject.Singleton;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static io.micronaut.grpc.discovery.GrpcNameResolverProvider.ENABLED;
+
 
 /**
  * Implementation of {@link NameResolverProvider} that allows using Micronaut's {@link DiscoveryClient}
@@ -39,12 +50,17 @@ import java.util.stream.Collectors;
  * @author graemerocher
  * @since 1.0
  */
-public class GrpcNameResolverProvider extends NameResolverProvider {
+@Singleton
+@Requires(beans = DiscoveryClient.class)
+@Requires(property = ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.FALSE)
+public class GrpcNameResolverProvider extends NameResolverProvider implements LifeCycle<GrpcNameResolverProvider> {
+    public static final String ENABLED = GrpcDefaultManagedChannelConfiguration.PREFIX + ".discovery.enabled";
     public static final int PRIORITY = 7;
 
     private static final String SCHEME = "svc";
     private final DiscoveryClient discoveryClient;
     private final List<ServiceInstanceList> serviceInstanceLists;
+    private boolean operational = false;
 
     /**
      * Default constructor.
@@ -71,7 +87,27 @@ public class GrpcNameResolverProvider extends NameResolverProvider {
     @Override
     public NameResolver newNameResolver(URI targetUri, NameResolver.Args args) {
         final String serviceId = targetUri.toString();
-        if (!NameUtils.isHyphenatedLowerCase(serviceId)) {
+        if (serviceId.contains(":")) {
+            return new NameResolver() {
+                @Override
+                public void start(Listener listener) {
+                    final String[] hostAndPort = serviceId.split(":");
+                    final List<EquivalentAddressGroup> equivalentAddressGroups =
+                            Collections.singletonList(new EquivalentAddressGroup(new InetSocketAddress(hostAndPort[0], Integer.parseInt(hostAndPort[1]))));
+                    listener.onAddresses(equivalentAddressGroups, Attributes.EMPTY);
+                }
+
+                @Override
+                public String getServiceAuthority() {
+                    return serviceId;
+                }
+
+                @Override
+                public void shutdown() {
+
+                }
+            };
+        } else if (!NameUtils.isHyphenatedLowerCase(serviceId)) {
             throw new IllegalArgumentException("Invalid service ID [" + serviceId + "]. Service IDs should be kebab-case (lowercase / hyphen separated). For example 'greeting-service'.");
 
         }
@@ -150,5 +186,28 @@ public class GrpcNameResolverProvider extends NameResolverProvider {
     @Override
     public String getDefaultScheme() {
         return SCHEME;
+    }
+
+    @Override
+    public boolean isRunning() {
+        return operational;
+    }
+
+    @NonNull
+    @Override
+    @PostConstruct
+    public GrpcNameResolverProvider start() {
+        NameResolverRegistry.getDefaultRegistry().register(this);
+        operational = true;
+        return this;
+    }
+
+    @NonNull
+    @Override
+    @PreDestroy
+    public GrpcNameResolverProvider stop() {
+        NameResolverRegistry.getDefaultRegistry().deregister(this);
+        operational = false;
+        return this;
     }
 }
