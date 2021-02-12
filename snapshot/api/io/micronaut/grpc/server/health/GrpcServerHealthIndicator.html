@@ -112,7 +112,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>@Singleton
- @Requires(property="grpc.server.health.enabled",value="true",defaultValue="true") @Requires(beans=io.micronaut.management.endpoint.health.HealthEndpoint.class)
+ @Requires(property="grpc.server.health.enabled",value="true",defaultValue="true") @Requires(beans=io.micronaut.management.endpoint.health.HealthEndpoint.class) @Requires(beans=<a href="../../../../../io/micronaut/grpc/server/GrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server">GrpcEmbeddedServer.class</a>)
 public class <span class="typeNameLabel">GrpcServerHealthIndicator</span>
 extends java.lang.Object
 implements io.micronaut.management.health.indicator.HealthIndicator</pre>
