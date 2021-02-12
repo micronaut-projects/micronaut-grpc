@@ -38,8 +38,9 @@ import static io.micronaut.core.util.CollectionUtils.mapOf;
  * @since 2.1.0
  */
 @Singleton
-@Requires(property = GrpcServerConfiguration.PREFIX + ".health.enabled", value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
+@Requires(property = GrpcServerConfiguration.HEALTH_ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 @Requires(beans = HealthEndpoint.class)
+@Requires(beans = GrpcEmbeddedServer.class)
 public class GrpcServerHealthIndicator implements HealthIndicator {
     private static final String ID = "grpc-server";
 

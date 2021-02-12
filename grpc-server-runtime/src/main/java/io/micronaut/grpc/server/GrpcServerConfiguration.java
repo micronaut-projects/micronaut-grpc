@@ -53,6 +53,7 @@ public class GrpcServerConfiguration {
     public static final String PORT = PREFIX + ".port";
     public static final String HOST = PREFIX + ".host";
     public static final String ENABLED = PREFIX + ".enabled";
+    public static final String HEALTH_ENABLED = PREFIX + ".health.enabled";
     public static final int DEFAULT_PORT = 50051;
 
     @ConfigurationBuilder(prefixes = "", excludes = "protocolNegotiator")
