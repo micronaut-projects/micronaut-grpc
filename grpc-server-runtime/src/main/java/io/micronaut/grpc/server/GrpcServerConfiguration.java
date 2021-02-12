@@ -36,8 +36,10 @@ import javax.inject.Named;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Configuration for the GRPC server.
@@ -55,6 +57,7 @@ public class GrpcServerConfiguration {
     public static final String ENABLED = PREFIX + ".enabled";
     public static final String HEALTH_ENABLED = PREFIX + ".health.enabled";
     public static final int DEFAULT_PORT = 50051;
+    public static final Duration DEFAULT_AWAIT_TERMINATION = Duration.ofSeconds(30);
 
     @ConfigurationBuilder(prefixes = "", excludes = "protocolNegotiator")
     protected final NettyServerBuilder serverBuilder;
@@ -64,6 +67,7 @@ public class GrpcServerConfiguration {
     private GrpcSslConfiguration serverConfiguration = new GrpcSslConfiguration();
     private boolean secure = false;
     private String instanceId = "";
+    private Duration awaitTermination = DEFAULT_AWAIT_TERMINATION;
 
     /**
      * Constructor.
@@ -208,6 +212,20 @@ public class GrpcServerConfiguration {
     public @Nonnull GrpcSslConfiguration getServerConfiguration() {
         return serverConfiguration;
     }
+
+    /**
+     * Sets the maximum duration application will wait for the server to terminate and release all resources.
+     * @param awaitTermination The maximum duration the application will wait for the server to terminate.
+     */
+    public void setAwaitTermination(Duration awaitTermination) {
+        this.awaitTermination = awaitTermination;
+    }
+
+    /**
+     * Gets the maximum duration application will wait for the server to terminate and release all resources.
+     * @return The maximum duration the application will wait for the server to terminate.
+     */
+    public Duration getAwaitTermination() { return awaitTermination; }
 
     /**
      * Sets the SSL configuration.

@@ -47,6 +47,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
@@ -199,6 +200,11 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
                 }
             } finally {
                 server.shutdownNow();
+                try {
+                    server.awaitTermination(grpcConfiguration.getAwaitTermination().toMillis(), TimeUnit.MILLISECONDS);
+                } catch (InterruptedException ignored) {
+
+                }
             }
 
         }
