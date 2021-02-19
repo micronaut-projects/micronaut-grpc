@@ -1,6 +1,6 @@
 plugins {
     id "net.ltgt.apt" version "0.21"
-    id 'com.google.protobuf' version '0.8.14'
+    id 'com.google.protobuf' version '0.8.15'
 }
 dependencies {
 	annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
