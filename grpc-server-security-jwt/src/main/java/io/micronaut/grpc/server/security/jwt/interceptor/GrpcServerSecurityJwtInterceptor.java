@@ -22,7 +22,6 @@ import io.grpc.ServerCall;
 import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
 import io.grpc.Status;
-import io.grpc.StatusRuntimeException;
 import io.micronaut.core.order.Ordered;
 import io.micronaut.grpc.server.security.jwt.GrpcServerSecurityJwtConfiguration;
 import io.micronaut.security.token.jwt.validator.JwtValidator;
@@ -33,7 +32,7 @@ import java.util.Optional;
 
 
 /**
- * gRPC Server Security JWT Interceptor
+ * gRPC Server Security JWT Interceptor.
  *
  * @since 2.4.0
  * @author Brian Wyka
@@ -60,14 +59,14 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
 
     /**
      * Intercept the call to validate the JSON web token.  If the token is not present in the metadata, or
-     * if the token is not valid, this method will deny the request with a {@link StatusRuntimeException}.
+     * if the token is not valid, this method will deny the request with a {@link io.grpc.StatusRuntimeException}.
      *
      * @param call the server call
      * @param metadata the metadata
      * @param next the next processor in the interceptor chain
      * @param <T> the type of the server request
      * @param <S> the type of the server response
-     * @throws StatusRuntimeException if token not present or invalid
+     * @throws io.grpc.StatusRuntimeException if token not present or invalid
      */
     @Override
     public <T, S> ServerCall.Listener<T> interceptCall(final ServerCall<T, S> call, final Metadata metadata, final ServerCallHandler<T, S> next) {

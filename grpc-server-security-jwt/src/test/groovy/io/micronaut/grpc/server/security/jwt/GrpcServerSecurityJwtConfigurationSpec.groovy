@@ -15,7 +15,7 @@ class GrpcServerSecurityJwtConfigurationSpec extends Specification {
     @Inject
     GrpcServerSecurityJwtConfiguration config
 
-    def "GRPC server security JWT configuration defaults override"() {
+    def "GRPC server security JWT configuration defaults"() {
         expect:
         config.enabled
         config.metadataKeyName == "AUTH"

@@ -25,7 +25,8 @@ import io.micronaut.grpc.server.GrpcServerConfiguration;
 import javax.validation.constraints.NotBlank;
 
 /**
- * gRPC Security JWT configuration
+ * gRPC Security JWT configuration.
+ *
  *
  * @since 2.4.0
  * @author Brian Wyka
