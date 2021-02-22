@@ -1,0 +1,20 @@
+
+dependencies {
+
+    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
+
+    api project(":grpc-server-runtime")
+    api "io.micronaut:micronaut-inject:$micronautVersion"
+    api "io.micronaut:micronaut-runtime:$micronautVersion"
+    api "com.nimbusds:nimbus-jose-jwt:9.4.2"
+
+    implementation("io.micronaut.security:micronaut-security-jwt:$micronautSecurityVersion") {
+        exclude group: 'io.micronaut', module: 'micronaut-http'
+        exclude group: 'io.micronaut', module: 'micronaut-http-server'
+    }
+
+    testImplementation "io.micronaut:micronaut-inject-groovy:$micronautVersion"
+    testImplementation "io.micronaut:micronaut-inject-java:$micronautVersion"
+    testImplementation 'io.micronaut.test:micronaut-test-spock:1.2.0'
+
+}
