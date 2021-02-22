@@ -1,6 +1,6 @@
-=== Writing a Simple GRPC Server
+=== Writing a Simple gRPC Server
 
-To implement a GRPC server for the previously defined `helloworld.proto` definition you first need to generate the Java stubs using Gradle or Maven then create a class that extends from `GreeterGrpc.GreeterImplBase`.
+To implement a gRPC server for the previously defined `helloworld.proto` definition you first need to generate the Java stubs using Gradle or Maven then create a class that extends from `GreeterGrpc.GreeterImplBase`.
 
 For example:
 
@@ -11,20 +11,20 @@ snippet::helloworld.GreetingEndpoint[tags="imports,clazz", project-base="example
 <2> You can dependency inject other beans into the implementation. In this case `GreetingService` is dependency injected.
 <3> The `StreamObserver` is used to send a response to the client.
 
-=== Running the GRPC Server
+=== Running the gRPC Server
 
 To run the server use the `Application` class or run `./gradlew run` for Gradle or `./mvnw compile exec:exec` for Maven.
 
 
 The server by default runs on port 50051, however you can configure which port the server runs on by setting `grpc.server.port` to whichever value you wish (a value of `${random.port}` will use a random port).
 
-=== Configuring the GRPC Server
+=== Configuring the gRPC Server
 
-The server can be be configured in a number of different ways. You can use the `io.micronaut.grpc.server.GrpcServerConfiguration` type to configure any property of GRPC's `NettyServerBuilder` class via `application.yml`.
+The server can be be configured in a number of different ways. You can use the `io.micronaut.grpc.server.GrpcServerConfiguration` type to configure any property of gRPC's `NettyServerBuilder` class via `application.yml`.
 
 For example:
 
-.Configuring the GRPC server
+.Configuring the gRPC server
 [source,yaml]
 ----
 grpc:
@@ -33,11 +33,13 @@ grpc:
         keep-alive-time: 3h
         max-inbound-message-size: 1024
         ssl:
-            cert-chain: '/path/to/my.cert'
-            private-key: '/path/to/my.key'
+            cert-chain: 'file://path/to/my.cert' # <1>
+            private-key: 'classpath:my.key' # <2>
 ----
+<1> Load the certificate from `/path/to/my.cert` file.
+<2> Load the private key from the classpath. The file should be in `src/main/resources/my.key`.
 
-By default the GRPC server will be enabled. To disable the GRPC server, set `grpc.server.enabled` to false.
+By default the gRPC server will be enabled. To disable the gRPC server, set `grpc.server.enabled` to false.
 
 Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
 
@@ -106,6 +108,30 @@ and then the order will be reversed when sending the response message.
 Request -> 1 -> 2 -> 3 -> business logic -> 3 -> 2 -> 1 -> Response
 ----
 
+=== Health checks
+If the management dependency (`io.micronaut:micronaut-management`) is added, then Micronaut’s Health Endpoint can be used to expose the health status of the gRPC server.
+
+For example, if gRPC is running then the `/health` endpoint will return:
+[source,json]
+----
+{
+  "status": "UP",
+  "details": {
+     "grpc-server": {
+       "name": "your-project-name",
+       "status": "UP",
+       "details": {
+         "host": "localhost",
+         "port": 5050
+       }
+     }
+  },
+ ...
+}
+----
+
+If you wish to disable the gRPC server health check while still using the management dependency you can set the property `grpc.server.health.enabled` to `false` in your application configuration.
+
 === Testing the Server
 
 To test the server it is recommended that you use https://github.com/micronaut-projects/micronaut-test[Micronaut Test].
@@ -122,9 +148,9 @@ include::examples/hello-world-java/src/test/java/helloworld/GreetingEndpointTest
 ----
 
 <1> A `ManagedChannel` is injected that can communicate with the server.
-<2> The generated GRPC client blocking stub is created.
+<2> The generated gRPC client blocking stub is created.
 
-The above example uses the `@GrpcChannel` annotation to inject a GRPC `ManagedChannel` that can communicate with the running server. This channel will be automatically be shutdown when the application shuts down.
+The above example uses the `@GrpcChannel` annotation to inject a gRPC `ManagedChannel` that can communicate with the running server. This channel will be automatically be shutdown when the application shuts down.
 
 Now that you have a test client, writing the test becomes trivial:
 

@@ -9,7 +9,7 @@ TIP: Replace `java` with `kotlin` or `groovy` to change language and the `build`
 
 See also the https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples[Examples] in the repository that provides examples in Java, Kotlin and Groovy.
 
-To manually setup GRPC you can create an application:
+To manually setup gRPC you can create an application:
 
 [source,bash]
 ----
@@ -32,11 +32,26 @@ include::examples/hello-world-java/build.gradle[tags=plugin]
 
 ----
 
-Then configure the GRPC and protobuf plugins:
+Then configure the gRPC and protobuf plugins:
 
 [source,groovy]
 ----
 include::examples/hello-world-java/build.gradle[tags=config]
+----
+
+Use this configuration for Kotlin projects:
+
+[source,groovy]
+----
+include::examples/hello-world-kotlin/build.gradle[tags=variables]
+
+dependencies {
+...
+include::examples/hello-world-kotlin/build.gradle[tags=dependencies]
+}
+
+include::examples/hello-world-kotlin/build.gradle[tags=config]
+
 ----
 
 Finally add the following dependencies to your build:
@@ -49,7 +64,7 @@ For gRPC clients:
 
 dependency:micronaut-grpc-client-runtime[version="{version}", groupId="io.micronaut.grpc"]
 
-NOTE: If you wish to use GRPC standalone without the Micronaut HTTP server you should comment out the `micronaut-http-server-netty` dependency.
+NOTE: If you wish to use gRPC standalone without the Micronaut HTTP server you should comment out the `micronaut-http-server-netty` dependency.
 
 You can then run:
 
@@ -83,7 +98,7 @@ To generate the Java sources from protobuf definitions in `src/main/proto`.
 
 === Defining a Protobuf File
 
-Once you have the build setup you can define a Protobuf file for your GRPC service. For example:
+Once you have the build setup you can define a Protobuf file for your gRPC service. For example:
 
 .src/main/proto/helloworld.proto
 [source,protobuf]

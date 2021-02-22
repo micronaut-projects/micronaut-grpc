@@ -20,6 +20,7 @@ import io.micronaut.context.exceptions.NoSuchBeanException
 import io.micronaut.discovery.event.ServiceReadyEvent
 import io.micronaut.discovery.event.ServiceStoppedEvent
 import io.micronaut.grpc.server.GrpcEmbeddedServer
+import io.micronaut.grpc.server.health.GrpcServerHealthIndicator
 import io.micronaut.runtime.event.annotation.EventListener
 import io.micronaut.runtime.server.event.ServerShutdownEvent
 import io.micronaut.runtime.server.event.ServerStartupEvent
@@ -58,7 +59,6 @@ class GrpcEmbeddedServerSpec extends Specification {
     }
 
     void "test fires server startup events with application name"() {
-
         when:
         GrpcEmbeddedServer embeddedServer = ApplicationContext.run(GrpcEmbeddedServer, [
                 'micronaut.application.name':'test'
@@ -69,6 +69,7 @@ class GrpcEmbeddedServerSpec extends Specification {
         embeddedServer.isRunning()
         consumer.startup != null
         consumer.serviceReadyEvent != null
+        consumer.serviceReadyEvent.getSource().id == 'test'
         consumer.shutdown == null
         consumer.serviceStoppedEvent == null
 
@@ -85,15 +86,40 @@ class GrpcEmbeddedServerSpec extends Specification {
 
     }
 
+    void "test fires server startup events with application name and instance id"() {
+        when:
+        GrpcEmbeddedServer embeddedServer = ApplicationContext.run(GrpcEmbeddedServer, [
+            'micronaut.application.name': 'test',
+            'grpc.server.instance-id'   : 'test-grpc'
+        ])
+        EventConsumer consumer = embeddedServer.getApplicationContext().getBean(EventConsumer)
+
+        then:
+        embeddedServer.isRunning()
+        consumer.serviceReadyEvent.getSource().id == 'test-grpc'
+
+        when:
+        embeddedServer.stop()
+        PollingConditions conditions = new PollingConditions(timeout: 3, delay: 0.5)
+
+        then:
+        consumer.shutdown != null
+        consumer.serviceStoppedEvent != null
+        conditions.eventually {
+            embeddedServer.getServer().isTerminated()
+        }
+    }
+
     void "test server does not exist when disabled"() {
 
         when:
-        ApplicationContext.run(GrpcEmbeddedServer, [
+        def context = ApplicationContext.run([
                 'grpc.server.enabled': false
         ])
 
         then:
-        thrown NoSuchBeanException
+        !context.containsBean(GrpcEmbeddedServer)
+        !context.containsBean(GrpcServerHealthIndicator)
 
     }
 

@@ -1,35 +1,9 @@
-This project allows building https://grpc.io[GRPC] servers and clients with Micronaut.
+This project allows building https://grpc.io[gRPC] servers and clients with Micronaut.
 
-Micronaut adds the following features to the GRPC experience:
+Micronaut adds the following features to the gRPC experience:
 
 * Compile Time Dependency Injection (DI) and Aspect Oriented Programming (AOP)
 * Service Discovery and Registrations
 * Distributed Tracing
 * Cloud Native Configuration
 
-=== Release History
-
-==== 2.0.0
-
-* Micronaut 1.3.x minimum version
-* Split client and server modules
-
-==== 1.1.1
-
-* Upgrade to GRPC `1.26.0`
-
-==== 1.1.0
-
-* Upgrade to GRPC `1.25.0`
-* Upgrade to Protobuf `3.10.1`
-* Upgrade to Open Tracing GRPC `0.2.1`
-
-==== 1.0.0.RC1
-
-* Upgrade to GRPC `1.19.0`
-* Upgrade to Protobuf `3.7.0`
-* Upgrade to Open Tracing GRPC `0.0.14`
-
-==== 1.0.0.M1
-
-* Initial Release
