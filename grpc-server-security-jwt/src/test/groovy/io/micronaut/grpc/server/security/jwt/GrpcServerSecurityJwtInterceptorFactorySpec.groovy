@@ -1,6 +1,7 @@
 package io.micronaut.grpc.server.security.jwt
 
 import io.grpc.ServerInterceptor
+import io.grpc.Status
 import io.micronaut.context.annotation.Property
 import io.micronaut.grpc.server.security.jwt.interceptor.GrpcServerSecurityJwtInterceptor
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
@@ -32,10 +33,17 @@ class GrpcServerSecurityJwtInterceptorFactorySpec extends Specification {
             boolean isEnabled() {
                 return true
             }
-
             @Override
-            int getOrder() {
+            int getInterceptorOrder() {
                 return 0
+            }
+            @Override
+            Status.Code getMissingTokenStatus() {
+                return Status.UNAUTHENTICATED.code
+            }
+            @Override
+            Status.Code getFailedValidationTokenStatus() {
+                return Status.PERMISSION_DENIED.code
             }
             @Override
             String getMetadataKeyName() {
@@ -50,7 +58,7 @@ class GrpcServerSecurityJwtInterceptorFactorySpec extends Specification {
         then:
         serverInterceptor
         serverInterceptor instanceof GrpcServerSecurityJwtInterceptor
-        ((GrpcServerSecurityJwtInterceptor) serverInterceptor).order == config.order
+        ((GrpcServerSecurityJwtInterceptor) serverInterceptor).order == config.interceptorOrder
     }
 
 }

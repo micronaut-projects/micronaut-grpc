@@ -3,6 +3,7 @@ introduction:
 releaseHistory: Release History
 gettingStarted: Getting Started
 server: gRPC Server
+serverSecurity: gRPC Server Security
 client: gRPC Clients
 serviceDiscovery: Service Discovery
 tracing: Distributed Tracing

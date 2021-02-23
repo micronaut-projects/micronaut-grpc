@@ -41,9 +41,9 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
 
     private static final Logger LOG = LoggerFactory.getLogger(GrpcServerSecurityJwtInterceptor.class);
 
+    private final GrpcServerSecurityJwtConfiguration config;
     private final Metadata.Key<String> jwtMetadataKey;
     private final JwtValidator jwtValidator;
-    private final int order;
 
     /**
      * Create the interceptor based on the configuration.
@@ -52,9 +52,9 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
      * @param validator the JWT validator
      */
     public GrpcServerSecurityJwtInterceptor(final GrpcServerSecurityJwtConfiguration config, final JwtValidator validator) {
+        this.config = config;
         jwtMetadataKey = Metadata.Key.of(config.getMetadataKeyName(), Metadata.ASCII_STRING_MARSHALLER);
         jwtValidator = validator;
-        order = config.getOrder();
     }
 
     /**
@@ -73,7 +73,7 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
         if (!metadata.containsKey(jwtMetadataKey)) {
             final String message = String.format("%s key missing in gRPC metadata", jwtMetadataKey.name());
             LOG.error(message);
-            throw Status.UNAUTHENTICATED.withDescription(message).asRuntimeException();
+            throw Status.fromCode(config.getMissingTokenStatus()).withDescription(message).asRuntimeException();
         }
         final ServerCall.Listener<T> listener = next.startCall(call, metadata);
         final String jwt = metadata.get(jwtMetadataKey);
@@ -84,7 +84,7 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
         if (!jwtOptional.isPresent()) {
             final String message = "JWT validation failed";
             LOG.error(message);
-            throw Status.PERMISSION_DENIED.withDescription(message).asRuntimeException();
+            throw Status.fromCode(config.getFailedValidationTokenStatus()).withDescription(message).asRuntimeException();
         }
         return new ForwardingServerCallListener.SimpleForwardingServerCallListener<T>(listener) { };
     }
@@ -105,7 +105,7 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
      */
     @Override
     public int getOrder() {
-        return order;
+        return config.getInterceptorOrder();
     }
 
 }

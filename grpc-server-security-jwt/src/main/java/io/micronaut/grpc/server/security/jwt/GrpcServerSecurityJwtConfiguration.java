@@ -15,6 +15,7 @@
  */
 package io.micronaut.grpc.server.security.jwt;
 
+import io.grpc.Status;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.bind.annotation.Bindable;
@@ -54,7 +55,23 @@ public interface GrpcServerSecurityJwtConfiguration extends Toggleable {
      * @return the order
      */
     @Bindable(defaultValue = "" + Ordered.HIGHEST_PRECEDENCE)
-    int getOrder();
+    int getInterceptorOrder();
+
+    /**
+     * The {@link Status} returned by the interceptor when JWT is missing from metadata.
+     *
+     * @return the status
+     */
+    @Bindable(defaultValue = "UNAUTHENTICATED")
+    Status.Code getMissingTokenStatus();
+
+    /**
+     * The {@link Status} returned by the interceptor when JWT validation fails.
+     *
+     * @return the status
+     */
+    @Bindable(defaultValue = "PERMISSION_DENIED")
+    Status.Code getFailedValidationTokenStatus();
 
     /**
      * The name of the metadata key which holds the JWT.  Defaults

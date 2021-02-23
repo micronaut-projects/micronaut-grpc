@@ -1,0 +1,52 @@
+=== gRPC Server Security Implementations
+Currently, only `JWT` is supported for server-side security.
+
+==== gRPC Server Security JWT
+JWT security is accomplished by an implementation of `io.grpc.ServerInterceptor`.
+
+If you are already using `io.micronaut.security:micronaut-security-jwt`, then configuration will be quite simple:
+
+===== Configuration
+
+.Enable JWT Validation
+[source,yaml]
+----
+grpc.server.security.jwt:
+    enabled: true # <1>
+----
+<1> By default, this is disabled
+
+If you are not already using `io.micronaut.security:micronaut-security-jwt`, then you will also need to prepare
+that configuration as well.  Please read these https://micronaut-projects.github.io/micronaut-security/latest/guide/#jwt[docs] or this
+https://guides.micronaut.io/micronaut-security-jwt/guide/index.html[guide].
+
+The default configuration has the interceptor ordered with `@Ordered.HIGHEST_PRECEDENCE` and with
+a metadata key name of `JWT`.  See
+
+.Customizing JWT interceptor
+[source,yaml]
+----
+grpc.server.security.jwt:
+    metadata-key-name: AUTHORIZATION # <1>
+    interceptor-order: 100 # <2>
+----
+<1> Use `AUTHORIZATION` as the metadata key name which holds the JSON web token for validation
+<2> Set the interceptor order to `100` to control where it will be executed in the server interceptor chain
+
+===== Interceptor Behavior
+The server interceptor will throw `io.grpc.StatusRuntimeException` when there is any issue with validating the `JWT`.
+
+1. **JWT is missing from metadata** - `io.grpc.Status.UNAUTHENTICATED`
+2. **JWT provided but is invalid** - `io.grpc.Status.PERMISSION_DENIED`
+
+This can be changed by overriding the status configuration as demonstrated below:
+
+.Customizing gRPC Statuses
+[source,yaml]
+----
+grpc.server.security.jwt:
+    missing-token-status: NOT_FOUND # <1>
+    failed-validation-token-status: UNAUTHENTICATED # <2>
+----
+<1> Return `io.grpc.Status.NOT_FOUND` when JWT is missing from metadata
+<2> Return `io.grpc.Status.UNAUTHENTICATED` when JWT is provided but is invalid
