@@ -38,12 +38,12 @@ import java.util.Collection;
 public interface GrpcServerSecurityJwtConfiguration extends Toggleable {
 
     /**
-     * The configuration prefix
+     * The configuration prefix.
      */
     String PREFIX = GrpcServerConfiguration.PREFIX + ".security.jwt";
 
     /**
-     * The default name for the JWT metadata key
+     * The default name for the JWT metadata key.
      */
     String DEFAULT_METADATA_KEY_NAME = "JWT";
 
