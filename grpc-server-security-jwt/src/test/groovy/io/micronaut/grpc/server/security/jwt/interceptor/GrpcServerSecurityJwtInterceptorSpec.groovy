@@ -63,13 +63,11 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         String jwt = "invalid-token"
         metadata.put(Metadata.Key.of(GrpcServerSecurityJwtConfiguration.DEFAULT_METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
         ServerCallHandler<?, ?> mockServerCallHandler = Mock()
-        ServerCall.Listener<?> mockServerCallListener = Mock()
 
         when:
         interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
 
         then:
-        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> mockServerCallListener
         0 * _
 
         and:
@@ -85,13 +83,11 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         String jwt = jwtTokenGenerator.generateToken([:]).get()
         metadata.put(Metadata.Key.of(GrpcServerSecurityJwtConfiguration.DEFAULT_METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
         ServerCallHandler<?, ?> mockServerCallHandler = Mock()
-        ServerCall.Listener<?> mockServerCallListener = Mock()
 
         when:
         interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
 
         then:
-        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> mockServerCallListener
         0 * _
 
         and:
@@ -109,14 +105,12 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         String jwt = jwtTokenGenerator.generateToken(userDetails, 1).get()
         metadata.put(Metadata.Key.of(GrpcServerSecurityJwtConfiguration.DEFAULT_METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
         ServerCallHandler<?, ?> mockServerCallHandler = Mock()
-        ServerCall.Listener<?> mockServerCallListener = Mock()
 
         when:
         sleep((expiration * 1000) + 500) // Allow for token to expire
         interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
 
         then:
-        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> mockServerCallListener
         0 * _
 
         and:
@@ -133,13 +127,12 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         String jwt = jwtTokenGenerator.generateToken(userDetails, 60).get()
         metadata.put(Metadata.Key.of(GrpcServerSecurityJwtConfiguration.DEFAULT_METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
         ServerCallHandler<?, ?> mockServerCallHandler = Mock()
-        ServerCall.Listener<?> mockServerCallListener = Mock()
 
         when:
         ServerCall.Listener<?> serverCallListener = interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
 
         then:
-        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> mockServerCallListener
+        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> Mock( ServerCall.Listener)
         0 * _
 
         and:

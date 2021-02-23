@@ -3,6 +3,7 @@ package io.micronaut.grpc.server.security.jwt.interceptor
 
 import io.grpc.ForwardingServerCallListener
 import io.grpc.Metadata
+import io.grpc.MethodDescriptor
 import io.grpc.ServerCall
 import io.grpc.ServerCallHandler
 import io.grpc.Status
@@ -29,7 +30,15 @@ import javax.inject.Inject
 class GrpcServerSecurityJwtInterceptorOverrideSpec extends Specification {
 
     static final String METADATA_KEY_NAME = "AUTH"
+    static final String INTERCEPT_FULL_METHOD_NAME = "example.Hello/GetWorld"
     static final String ORDER = "10"
+
+    private final MethodDescriptor<?, ?> methodDescriptor = MethodDescriptor.newBuilder()
+            .setType(MethodDescriptor.MethodType.UNARY)
+            .setFullMethodName(INTERCEPT_FULL_METHOD_NAME)
+            .setRequestMarshaller(Mock(MethodDescriptor.Marshaller))
+            .setResponseMarshaller(Mock(MethodDescriptor.Marshaller))
+            .build()
 
     @Inject
     private JwtTokenGenerator jwtTokenGenerator
@@ -43,6 +52,27 @@ class GrpcServerSecurityJwtInterceptorOverrideSpec extends Specification {
         interceptor.metadataKey == Metadata.Key.of(METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER)
     }
 
+    @Property(name = "grpc.server.security.jwt.intercept-method-patterns", value = "example.Foo/.*")
+    def "test interceptCall - intercept pattern not matched"() {
+        given:
+        ServerCall<?, ?> mockServerCall = Mock()
+        Metadata metadata = new Metadata()
+        ServerCallHandler<?, ?> mockServerCallHandler = Mock()
+
+        when:
+        ServerCall.Listener<?> serverCallListener = interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
+
+        then:
+        1 * mockServerCall.getMethodDescriptor() >> methodDescriptor
+        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> Mock(ServerCall.Listener)
+        0 * _
+
+        and:
+        serverCallListener
+        serverCallListener instanceof ForwardingServerCallListener.SimpleForwardingServerCallListener
+    }
+
+    @Property(name = "grpc.server.security.jwt.intercept-method-patterns", value = "example.Hello/.*")
     def "test interceptCall - missing JWT metadata key"() {
         given:
         ServerCall<?, ?> mockServerCall = Mock()
@@ -53,6 +83,7 @@ class GrpcServerSecurityJwtInterceptorOverrideSpec extends Specification {
         interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
 
         then:
+        1 * mockServerCall.getMethodDescriptor() >> methodDescriptor
         0 * _
 
         and:
@@ -61,6 +92,7 @@ class GrpcServerSecurityJwtInterceptorOverrideSpec extends Specification {
         statusRuntimeException.status.description == "${METADATA_KEY_NAME.toLowerCase()} key missing in gRPC metadata"
     }
 
+    @Property(name = "grpc.server.security.jwt.intercept-method-patterns", value = "example.Hello.*")
     def "test interceptCall - invalid JWT"() {
         given:
         ServerCall<?, ?> mockServerCall = Mock()
@@ -68,13 +100,12 @@ class GrpcServerSecurityJwtInterceptorOverrideSpec extends Specification {
         String jwt = "invalid-token"
         metadata.put(Metadata.Key.of(METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
         ServerCallHandler<?, ?> mockServerCallHandler = Mock()
-        ServerCall.Listener<?> mockServerCallListener = Mock()
 
         when:
         interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
 
         then:
-        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> mockServerCallListener
+        1 * mockServerCall.getMethodDescriptor() >> methodDescriptor
         0 * _
 
         and:
@@ -83,6 +114,7 @@ class GrpcServerSecurityJwtInterceptorOverrideSpec extends Specification {
         statusRuntimeException.status.description == "JWT validation failed"
     }
 
+    @Property(name = "grpc.server.security.jwt.intercept-method-patterns", value = "example.Hello/.*")
     def "test interceptCall - invalid claims JWT"() {
         given:
         ServerCall<?, ?> mockServerCall = Mock()
@@ -90,13 +122,12 @@ class GrpcServerSecurityJwtInterceptorOverrideSpec extends Specification {
         String jwt = jwtTokenGenerator.generateToken([:]).get()
         metadata.put(Metadata.Key.of(METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
         ServerCallHandler<?, ?> mockServerCallHandler = Mock()
-        ServerCall.Listener<?> mockServerCallListener = Mock()
 
         when:
         interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
 
         then:
-        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> mockServerCallListener
+        1 * mockServerCall.getMethodDescriptor() >> methodDescriptor
         0 * _
 
         and:
@@ -105,6 +136,7 @@ class GrpcServerSecurityJwtInterceptorOverrideSpec extends Specification {
         statusRuntimeException.status.description == "JWT validation failed"
     }
 
+    @Property(name = "grpc.server.security.jwt.intercept-method-patterns", value = "example.Hello/Get.*")
     def "test interceptCall - expired JWT"() {
         given:
         ServerCall<?, ?> mockServerCall = Mock()
@@ -114,14 +146,13 @@ class GrpcServerSecurityJwtInterceptorOverrideSpec extends Specification {
         String jwt = jwtTokenGenerator.generateToken(userDetails, 1).get()
         metadata.put(Metadata.Key.of(METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
         ServerCallHandler<?, ?> mockServerCallHandler = Mock()
-        ServerCall.Listener<?> mockServerCallListener = Mock()
 
         when:
         sleep((expiration * 1000) + 500) // Allow for token to expire
         interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
 
         then:
-        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> mockServerCallListener
+        1 * mockServerCall.getMethodDescriptor() >> methodDescriptor
         0 * _
 
         and:
@@ -130,6 +161,7 @@ class GrpcServerSecurityJwtInterceptorOverrideSpec extends Specification {
         statusRuntimeException.status.description == "JWT validation failed"
     }
 
+    @Property(name = "grpc.server.security.jwt.intercept-method-patterns", value = "example.Hello/GetWorld")
     def "test interceptCall - valid JWT"() {
         given:
         ServerCall<?, ?> mockServerCall = Mock()
@@ -138,13 +170,13 @@ class GrpcServerSecurityJwtInterceptorOverrideSpec extends Specification {
         String jwt = jwtTokenGenerator.generateToken(userDetails, 60).get()
         metadata.put(Metadata.Key.of(METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
         ServerCallHandler<?, ?> mockServerCallHandler = Mock()
-        ServerCall.Listener<?> mockServerCallListener = Mock()
 
         when:
         ServerCall.Listener<?> serverCallListener = interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
 
         then:
-        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> mockServerCallListener
+        1 * mockServerCall.getMethodDescriptor() >> methodDescriptor
+        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> Mock(ServerCall.Listener)
         0 * _
 
         and:

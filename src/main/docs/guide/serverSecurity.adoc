@@ -20,8 +20,11 @@ If you are not already using `io.micronaut.security:micronaut-security-jwt`, the
 that configuration as well.  Please read these https://micronaut-projects.github.io/micronaut-security/latest/guide/#jwt[docs] or this
 https://guides.micronaut.io/micronaut-security-jwt/guide/index.html[guide].
 
+===== Interceptor
 The default configuration has the interceptor ordered with `@Ordered.HIGHEST_PRECEDENCE` and with
-a metadata key name of `JWT`.  See
+a metadata key name of `JWT`.
+
+This can be changed by overriding the interceptor configuration as demonstrated below:
 
 .Customizing JWT interceptor
 [source,yaml]
@@ -32,6 +35,22 @@ grpc.server.security.jwt:
 ----
 <1> Use `AUTHORIZATION` as the metadata key name which holds the JSON web token for validation
 <2> Set the interceptor order to `100` to control where it will be executed in the server interceptor chain
+
+===== Interceptor Patterns
+By default, all gRPC services and methods will be intercepted.
+
+This can be changed by overriding the patterns configuration as demonstrated below:
+
+.Customizing Method Pattern Filters
+[source,yaml]
+----
+grpc.server.security.jwt:
+    intercept-method-patterns:
+        - app.ServiceName/MethodName # <1>
+        - app.OtherServiceName/.* # <2>
+----
+<1> Matches an exact fully qualified gRPC Service Method Name - see https://grpc.github.io/grpc-java/javadoc/io/grpc/MethodDescriptor.html#getFullMethodName--[gRPC Javadocs].
+<2> Matches on a regular expression of the fully qualified gRPC service method name
 
 ===== Interceptor Behavior
 The server interceptor will throw `io.grpc.StatusRuntimeException` when there is any issue with validating the `JWT`.

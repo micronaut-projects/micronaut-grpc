@@ -1,7 +1,9 @@
 package io.micronaut.grpc.server.security.jwt
 
+import io.grpc.ServerInterceptor
 import io.grpc.Status
 import io.micronaut.context.annotation.Property
+import io.micronaut.grpc.server.security.jwt.interceptor.GrpcServerSecurityJwtInterceptor
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import spock.lang.Specification
 
@@ -12,11 +14,20 @@ import javax.inject.Inject
 @Property(name = "grpc.server.security.jwt.metadata-key-name", value = "AUTH")
 @Property(name = "grpc.server.security.jwt.missing-token-status", value = "NOT_FOUND")
 @Property(name = "grpc.server.security.jwt.failed-validation-token-status", value = "ABORTED")
+@Property(name = "grpc.server.security.jwt.intercept-method-patterns", value = "example.Hello/.*,example.Foo/getBar")
 @Property(name = "grpc.server.security.jwt.interceptor-order", value = "100")
 class GrpcServerSecurityJwtConfigurationOverrideSpec extends Specification {
 
     @Inject
+    List<ServerInterceptor> serverInterceptors
+
+    @Inject
     GrpcServerSecurityJwtConfiguration config
+
+    def "server interceptor bean present"() {
+        expect:
+        serverInterceptors.find { it instanceof GrpcServerSecurityJwtInterceptor }
+    }
 
     def "GRPC server security JWT configuration defaults override"() {
         expect:
@@ -24,6 +35,7 @@ class GrpcServerSecurityJwtConfigurationOverrideSpec extends Specification {
         config.metadataKeyName == "AUTH"
         config.missingTokenStatus == Status.NOT_FOUND.code
         config.failedValidationTokenStatus == Status.ABORTED.code
+        config.interceptMethodPatterns == ["example.Hello/.*", "example.Foo/getBar"]
         config.interceptorOrder == 100
     }
 

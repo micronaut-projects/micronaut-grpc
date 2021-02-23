@@ -15,6 +15,7 @@
  */
 package io.micronaut.grpc.server.security.jwt;
 
+import edu.umd.cs.findbugs.annotations.Nullable;
 import io.grpc.Status;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Requires;
@@ -24,10 +25,10 @@ import io.micronaut.core.util.Toggleable;
 import io.micronaut.grpc.server.GrpcServerConfiguration;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Collection;
 
 /**
  * gRPC Security JWT configuration.
- *
  *
  * @since 2.4.0
  * @author Brian Wyka
@@ -36,8 +37,15 @@ import javax.validation.constraints.NotBlank;
 @Requires(property = GrpcServerSecurityJwtConfiguration.PREFIX + ".enabled", value = "true", defaultValue = "false")
 public interface GrpcServerSecurityJwtConfiguration extends Toggleable {
 
-    String DEFAULT_METADATA_KEY_NAME = "JWT";
+    /**
+     * The configuration prefix
+     */
     String PREFIX = GrpcServerConfiguration.PREFIX + ".security.jwt";
+
+    /**
+     * The default name for the JWT metadata key
+     */
+    String DEFAULT_METADATA_KEY_NAME = "JWT";
 
     /**
      * Whether or not JWT server interceptor is enabled.  Defaults to {@code false} if not configured.
@@ -58,7 +66,19 @@ public interface GrpcServerSecurityJwtConfiguration extends Toggleable {
     int getInterceptorOrder();
 
     /**
+     * Get the list of fully qualified RPC method patterns which should be intercepted and interrogated for a valid JWT.
+     * If no values are provided, by default, all methods will be intercepted.
+     *
+     * @see io.grpc.MethodDescriptor#getFullMethodName()
+     *
+     * @return the intercept method names.
+     */
+    @Nullable
+    Collection<String> getInterceptMethodPatterns();
+
+    /**
      * The {@link Status} returned by the interceptor when JWT is missing from metadata.
+     * The default value is {@link Status.Code#UNAUTHENTICATED}
      *
      * @return the status
      */
@@ -66,7 +86,8 @@ public interface GrpcServerSecurityJwtConfiguration extends Toggleable {
     Status.Code getMissingTokenStatus();
 
     /**
-     * The {@link Status} returned by the interceptor when JWT validation fails.
+     * The {@link Status} returned by the interceptor when JWT validation fails. The
+     * default value is {@link Status.Code#PERMISSION_DENIED}
      *
      * @return the status
      */

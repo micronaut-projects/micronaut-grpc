@@ -23,6 +23,7 @@ import io.grpc.ServerCallHandler;
 import io.grpc.ServerInterceptor;
 import io.grpc.Status;
 import io.micronaut.core.order.Ordered;
+import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.grpc.server.security.jwt.GrpcServerSecurityJwtConfiguration;
 import io.micronaut.security.token.jwt.validator.JwtValidator;
 import org.slf4j.Logger;
@@ -70,12 +71,20 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
      */
     @Override
     public <T, S> ServerCall.Listener<T> interceptCall(final ServerCall<T, S> call, final Metadata metadata, final ServerCallHandler<T, S> next) {
+        final boolean validateAll = CollectionUtils.isEmpty(config.getInterceptMethodPatterns());
+        final boolean validateServiceMethod = validateAll || config.getInterceptMethodPatterns()
+                .stream()
+                .anyMatch(interceptMethodPattern -> call.getMethodDescriptor().getFullMethodName().matches(interceptMethodPattern));
+        if (!validateServiceMethod) {
+            // Forward to the next server interceptor without validation
+            LOG.debug("JWT validation is skipped due to 'intercept-method-patterns' configuration");
+            return new ForwardingServerCallListener.SimpleForwardingServerCallListener<T>(next.startCall(call, metadata)) { };
+        }
         if (!metadata.containsKey(jwtMetadataKey)) {
             final String message = String.format("%s key missing in gRPC metadata", jwtMetadataKey.name());
             LOG.error(message);
             throw Status.fromCode(config.getMissingTokenStatus()).withDescription(message).asRuntimeException();
         }
-        final ServerCall.Listener<T> listener = next.startCall(call, metadata);
         final String jwt = metadata.get(jwtMetadataKey);
         if (LOG.isDebugEnabled()) {
             LOG.debug("JWT: {}", jwt);
@@ -86,7 +95,7 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
             LOG.error(message);
             throw Status.fromCode(config.getFailedValidationTokenStatus()).withDescription(message).asRuntimeException();
         }
-        return new ForwardingServerCallListener.SimpleForwardingServerCallListener<T>(listener) { };
+        return new ForwardingServerCallListener.SimpleForwardingServerCallListener<T>(next.startCall(call, metadata)) { };
     }
 
     /**

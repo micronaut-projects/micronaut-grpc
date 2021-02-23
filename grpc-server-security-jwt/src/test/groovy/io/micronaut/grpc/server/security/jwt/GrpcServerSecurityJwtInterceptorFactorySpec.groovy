@@ -38,6 +38,10 @@ class GrpcServerSecurityJwtInterceptorFactorySpec extends Specification {
                 return 0
             }
             @Override
+            Collection<String> getInterceptMethodPatterns() {
+                return null
+            }
+            @Override
             Status.Code getMissingTokenStatus() {
                 return Status.UNAUTHENTICATED.code
             }
