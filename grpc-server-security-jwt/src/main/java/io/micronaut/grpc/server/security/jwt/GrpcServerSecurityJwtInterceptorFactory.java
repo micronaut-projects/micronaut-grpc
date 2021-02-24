@@ -47,6 +47,7 @@ public class GrpcServerSecurityJwtInterceptorFactory {
      * @param signatureConfigurations the signature configurations
      * @param encryptionConfigurations the encryption configurations
      * @param genericJwtClaimsValidators the generic JWT claims validators
+     * @param securityConfiguration the security configuration
      * @param rolesFinder the roles finder for comparing roles with required roles
      * @return the server interceptor bean
      */

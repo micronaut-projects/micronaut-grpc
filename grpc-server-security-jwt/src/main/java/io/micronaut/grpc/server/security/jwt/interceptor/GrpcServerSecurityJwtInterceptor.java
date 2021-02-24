@@ -58,7 +58,6 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
     private final boolean rejectRolesNotFound;
     private final RolesFinder rolesFinder;
 
-
     /**
      * Create the interceptor based on the configuration.
      *
@@ -164,8 +163,6 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
 
     /**
      * Get the required access for the server call.
-     *
-     * TODO: Is there any way we can get access to values from @Secured annotation here ??
      *
      * @param config the configuration
      * @param serverCall the server call
