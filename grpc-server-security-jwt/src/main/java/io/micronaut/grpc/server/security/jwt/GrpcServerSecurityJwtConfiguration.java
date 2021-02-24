@@ -21,8 +21,13 @@ import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.bind.annotation.Bindable;
 import io.micronaut.core.order.Ordered;
+import io.micronaut.core.util.StringUtils;
 import io.micronaut.core.util.Toggleable;
 import io.micronaut.grpc.server.GrpcServerConfiguration;
+import io.micronaut.security.config.InterceptUrlMapPattern;
+import io.micronaut.security.config.SecurityConfigurationProperties;
+import io.micronaut.security.token.config.TokenConfigurationProperties;
+import io.micronaut.security.token.jwt.config.JwtConfigurationProperties;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
@@ -34,27 +39,21 @@ import java.util.Collection;
  * @author Brian Wyka
  */
 @ConfigurationProperties(GrpcServerSecurityJwtConfiguration.PREFIX)
-@Requires(property = GrpcServerSecurityJwtConfiguration.PREFIX + ".enabled", value = "true", defaultValue = "false")
+@Requires(property = SecurityConfigurationProperties.PREFIX + ".enabled", notEquals = StringUtils.FALSE)
+@Requires(property = TokenConfigurationProperties.PREFIX + ".enabled", notEquals = StringUtils.FALSE)
+@Requires(property = JwtConfigurationProperties.PREFIX + ".enabled", notEquals = StringUtils.FALSE)
+@Requires(property = GrpcServerSecurityJwtConfiguration.PREFIX + ".enabled", notEquals = StringUtils.FALSE)
 public interface GrpcServerSecurityJwtConfiguration extends Toggleable {
 
     /**
      * The configuration prefix.
      */
-    String PREFIX = GrpcServerConfiguration.PREFIX + ".security.jwt";
+    String PREFIX = GrpcServerConfiguration.PREFIX + ".security.token.jwt";
 
     /**
      * The default name for the JWT metadata key.
      */
     String DEFAULT_METADATA_KEY_NAME = "JWT";
-
-    /**
-     * Whether or not JWT server interceptor is enabled.  Defaults to {@code false} if not configured.
-     *
-     * @return true if enabled, false otherwise
-     */
-    @Override
-    @Bindable(defaultValue = "false")
-    boolean isEnabled();
 
     /**
      * The order to be applied to the server interceptor in the interceptor chain.  Defaults
@@ -74,7 +73,7 @@ public interface GrpcServerSecurityJwtConfiguration extends Toggleable {
      * @return the intercept method names.
      */
     @Nullable
-    Collection<String> getInterceptMethodPatterns();
+    Collection<InterceptUrlMapPattern> getInterceptMethodPatterns();
 
     /**
      * The {@link Status} returned by the interceptor when JWT is missing from metadata.

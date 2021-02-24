@@ -10,12 +10,13 @@ import spock.lang.Specification
 import javax.inject.Inject
 
 @MicronautTest
-@Property(name = "grpc.server.security.jwt.enabled", value = "true")
-@Property(name = "grpc.server.security.jwt.metadata-key-name", value = "AUTH")
-@Property(name = "grpc.server.security.jwt.missing-token-status", value = "NOT_FOUND")
-@Property(name = "grpc.server.security.jwt.failed-validation-token-status", value = "ABORTED")
-@Property(name = "grpc.server.security.jwt.intercept-method-patterns", value = "example.Hello/.*,example.Foo/getBar")
-@Property(name = "grpc.server.security.jwt.interceptor-order", value = "100")
+@Property(name = "micronaut.security.enabled", value = "true")
+@Property(name = "micronaut.security.token.enabled", value = "true")
+@Property(name = "grpc.server.security.token.jwt.enabled", value = "true")
+@Property(name = "grpc.server.security.token.jwt.metadata-key-name", value = "AUTH")
+@Property(name = "grpc.server.security.token.jwt.missing-token-status", value = "NOT_FOUND")
+@Property(name = "grpc.server.security.token.jwt.failed-validation-token-status", value = "ABORTED")
+@Property(name = "grpc.server.security.token.jwt.interceptor-order", value = "100")
 class GrpcServerSecurityJwtConfigurationOverrideSpec extends Specification {
 
     @Inject
@@ -35,7 +36,6 @@ class GrpcServerSecurityJwtConfigurationOverrideSpec extends Specification {
         config.metadataKeyName == "AUTH"
         config.missingTokenStatus == Status.NOT_FOUND.code
         config.failedValidationTokenStatus == Status.ABORTED.code
-        config.interceptMethodPatterns == ["example.Hello/.*", "example.Foo/getBar"]
         config.interceptorOrder == 100
     }
 

@@ -3,36 +3,136 @@ package io.micronaut.grpc.server.security.jwt
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.exceptions.NoSuchBeanException
 import io.micronaut.grpc.server.security.jwt.interceptor.GrpcServerSecurityJwtInterceptor
-import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import spock.lang.Specification
 
-import javax.inject.Inject
-
-
-@MicronautTest
 class GrpcServerSecurityJwtConfigurationDisabledSpec extends Specification {
 
-    @Inject
-    private ApplicationContext applicationContext
+    def "beans are not loaded when security not enabled"() {
+        given:
+        def config = [
+                "micronaut.security.enabled": false,
+                "micronaut.security.token.enabled": true,
+                "micronaut.security.token.jwt.enabled": true,
+                "grpc.server.security.token.jwt.enabled": true
+        ]
+        def context = ApplicationContext.run(config)
 
-    def "beans are not loaded"() {
         when:
-        applicationContext.getBean(GrpcServerSecurityJwtConfiguration)
+        context.getBean(GrpcServerSecurityJwtConfiguration)
 
         then:
         thrown(NoSuchBeanException)
 
         when:
-        applicationContext.getBean(GrpcServerSecurityJwtInterceptorFactory)
+        context.getBean(GrpcServerSecurityJwtInterceptorFactory)
 
         then:
         thrown(NoSuchBeanException)
 
         when:
-        applicationContext.getBean(GrpcServerSecurityJwtInterceptor)
+        context.getBean(GrpcServerSecurityJwtInterceptor)
 
         then:
         thrown(NoSuchBeanException)
+
+        cleanup:
+        context.close()
+    }
+
+    def "beans are not loaded when security token not enabled"() {
+        given:
+        def config = [
+                "micronaut.security.enabled": true,
+                "micronaut.security.token.enabled": false,
+                "micronaut.security.token.jwt.enabled": true,
+                "grpc.server.security.token.jwt.enabled": true
+        ]
+        def context = ApplicationContext.run(config)
+
+        when:
+        context.getBean(GrpcServerSecurityJwtConfiguration)
+
+        then:
+        thrown(NoSuchBeanException)
+
+        when:
+        context.getBean(GrpcServerSecurityJwtInterceptorFactory)
+
+        then:
+        thrown(NoSuchBeanException)
+
+        when:
+        context.getBean(GrpcServerSecurityJwtInterceptor)
+
+        then:
+        thrown(NoSuchBeanException)
+
+        cleanup:
+        context.close()
+    }
+
+    def "beans are not loaded when security token jwt not enabled"() {
+        given:
+        def config = [
+                "micronaut.security.enabled": true,
+                "micronaut.security.token.enabled": true,
+                "micronaut.security.token.jwt.enabled": false,
+                "grpc.server.security.token.jwt.enabled": true
+        ]
+        def context = ApplicationContext.run(config)
+
+        when:
+        context.getBean(GrpcServerSecurityJwtConfiguration)
+
+        then:
+        thrown(NoSuchBeanException)
+
+        when:
+        context.getBean(GrpcServerSecurityJwtInterceptorFactory)
+
+        then:
+        thrown(NoSuchBeanException)
+
+        when:
+        context.getBean(GrpcServerSecurityJwtInterceptor)
+
+        then:
+        thrown(NoSuchBeanException)
+
+        cleanup:
+        context.close()
+    }
+
+    def "beans are not loaded when grpc security jwt not enabled"() {
+        given:
+        def config = [
+                "micronaut.security.enabled": true,
+                "micronaut.security.token.enabled": true,
+                "micronaut.security.token.jwt.enabled": true,
+                "grpc.server.security.token.jwt.enabled": false
+        ]
+        def context = ApplicationContext.run(config)
+
+        when:
+        context.getBean(GrpcServerSecurityJwtConfiguration)
+
+        then:
+        thrown(NoSuchBeanException)
+
+        when:
+        context.getBean(GrpcServerSecurityJwtInterceptorFactory)
+
+        then:
+        thrown(NoSuchBeanException)
+
+        when:
+        context.getBean(GrpcServerSecurityJwtInterceptor)
+
+        then:
+        thrown(NoSuchBeanException)
+
+        cleanup:
+        context.close()
     }
 
 }

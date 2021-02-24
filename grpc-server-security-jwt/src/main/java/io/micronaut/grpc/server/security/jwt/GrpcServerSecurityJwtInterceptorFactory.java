@@ -20,6 +20,8 @@ import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.grpc.server.security.jwt.interceptor.GrpcServerSecurityJwtInterceptor;
+import io.micronaut.security.config.SecurityConfiguration;
+import io.micronaut.security.token.RolesFinder;
 import io.micronaut.security.token.jwt.encryption.EncryptionConfiguration;
 import io.micronaut.security.token.jwt.signature.SignatureConfiguration;
 import io.micronaut.security.token.jwt.validator.GenericJwtClaimsValidator;
@@ -45,6 +47,7 @@ public class GrpcServerSecurityJwtInterceptorFactory {
      * @param signatureConfigurations the signature configurations
      * @param encryptionConfigurations the encryption configurations
      * @param genericJwtClaimsValidators the generic JWT claims validators
+     * @param rolesFinder the roles finder for comparing roles with required roles
      * @return the server interceptor bean
      */
     @Bean
@@ -52,13 +55,16 @@ public class GrpcServerSecurityJwtInterceptorFactory {
     public ServerInterceptor serverInterceptor(final GrpcServerSecurityJwtConfiguration grpcServerSecurityJwtConfiguration,
                                                final Collection<SignatureConfiguration> signatureConfigurations,
                                                final Collection<EncryptionConfiguration> encryptionConfigurations,
-                                               final Collection<GenericJwtClaimsValidator> genericJwtClaimsValidators) {
+                                               final Collection<GenericJwtClaimsValidator> genericJwtClaimsValidators,
+                                               final SecurityConfiguration securityConfiguration,
+                                               final RolesFinder rolesFinder) {
         final JwtValidator jwtValidator = JwtValidator.builder()
                 .withSignatures(signatureConfigurations)
                 .withEncryptions(encryptionConfigurations)
                 .withClaimValidators(genericJwtClaimsValidators)
                 .build();
-        return new GrpcServerSecurityJwtInterceptor(grpcServerSecurityJwtConfiguration, jwtValidator);
+        final boolean rejectRolesNotFound = securityConfiguration.isRejectNotFound();
+        return new GrpcServerSecurityJwtInterceptor(grpcServerSecurityJwtConfiguration, jwtValidator, rolesFinder, rejectRolesNotFound);
     }
 
 }

@@ -1,143 +1,489 @@
 package io.micronaut.grpc.server.security.jwt.interceptor
 
-
-import io.grpc.ForwardingServerCallListener
+import io.grpc.Channel
 import io.grpc.Metadata
-import io.grpc.ServerCall
-import io.grpc.ServerCallHandler
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
-import io.micronaut.context.annotation.Property
-import io.micronaut.core.order.Ordered
-import io.micronaut.grpc.server.security.jwt.GrpcServerSecurityJwtConfiguration
+import io.grpc.examples.helloworld.GreeterGrpc
+import io.grpc.examples.helloworld.HelloReply
+import io.grpc.examples.helloworld.HelloRequest
+import io.grpc.stub.MetadataUtils
+import io.grpc.stub.StreamObserver
+import io.micronaut.context.ApplicationContext
+import io.micronaut.context.annotation.Factory
+import io.micronaut.context.annotation.Requires
+import io.micronaut.context.env.Environment
+import io.micronaut.grpc.annotation.GrpcChannel
+import io.micronaut.grpc.server.GrpcEmbeddedServer
+import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.security.authentication.UserDetails
 import io.micronaut.security.token.jwt.generator.JwtTokenGenerator
-import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import javax.inject.Inject
+import javax.inject.Singleton
 
-@MicronautTest
-@Property(name = "grpc.server.security.jwt.enabled", value = "true")
-@Property(name = "micronaut.security.token.enabled", value = "true")
-@Property(name = "micronaut.security.token.jwt.enabled", value = "true")
-@Property(name = "micronaut.security.token.jwt.signatures.secret.generator.secret", value = "SeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3t")
-@Property(name = "micronaut.security.token.jwt.signatures.secret.generator.base64", value = "true")
-@Property(name = "micronaut.security.token.jwt.signatures.secret.generator.jws-algorithm", value = "HS512")
 class GrpcServerSecurityJwtInterceptorSpec extends Specification {
 
-    @Inject
-    private JwtTokenGenerator jwtTokenGenerator
+    private static final REQUIRED_ENV = "greeter-hello-world-jwt"
+    private static final Map defaultConfigurations = [
+            "grpc.server.security.token.jwt.enabled": true,
+            "micronaut.security.enabled": true,
+            "micronaut.security.token.enabled": true,
+            "micronaut.security.token.jwt.enabled": true,
+            "micronaut.security.token.jwt.signatures.secret.generator.secret": "SeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3t",
+            "micronaut.security.token.jwt.signatures.secret.generator.base64": false,
+            "micronaut.security.token.jwt.signatures.secret.generator.jws-algorithm": "HS512"
+    ]
 
-    @Inject
-    private GrpcServerSecurityJwtInterceptor interceptor
-
-    def "test interceptor configured correctly"() {
-        expect:
-        interceptor.order == Ordered.HIGHEST_PRECEDENCE
-        interceptor.metadataKey == Metadata.Key.of(GrpcServerSecurityJwtConfiguration.DEFAULT_METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER)
-    }
-
-    def "test interceptCall - missing JWT metadata key"() {
+    def "test order configuration respected"() {
         given:
-        ServerCall<?, ?> mockServerCall = Mock()
-        Metadata metadata = new Metadata()
-        ServerCallHandler<?, ?> mockServerCallHandler = Mock()
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.interceptor-order", 100)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
 
         when:
-        interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
+        def interceptor = context.getBean(GrpcServerSecurityJwtInterceptor)
 
         then:
-        0 * _
+        interceptor.order == 100
 
-        and:
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+    }
+
+    @Unroll
+    def "test valid JWT works when required role = isAuthenticated() - pattern matches"(String pattern) {
+        given:
+        List interceptMethodPatterns = [
+                [pattern: pattern, access: ["isAuthenticated()"]]
+        ]
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+
+        when:
+        def testBean = context.getBean(TestBean)
+
+        then:
+        testBean.sayHelloWithJwt("Brian") == "Hello Brian"
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+
+        where:
+        pattern << ["helloworld.Greeter/SayHello", "helloworld.Greeter/.*", "helloworld.*"]
+    }
+
+    def "test valid JWT works when required role = isAuthenticated() and custom metadata key name"() {
+        given:
+        List interceptMethodPatterns = [
+                [pattern: ".*", access: ["isAuthenticated()"]]
+        ]
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.metadata-key-name", "AUTH")
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+
+        when:
+        def testBean = context.getBean(TestBean)
+
+        then:
+        testBean.sayHelloWithCustomJwt("AUTH", "Brian") == "Hello Brian"
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+    }
+
+    def "test valid JWT works when ROLE_HELLO required"() {
+        given:
+        List interceptMethodPatterns = [
+                [pattern: ".*", access: ["ROLE_HELLO"]]
+        ]
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+
+        when:
+        def testBean = context.getBean(TestBean)
+
+        then:
+        testBean.sayHelloWithJwt("Brian", ["ROLE_HELLO"]) == "Hello Brian"
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+    }
+
+    def "test valid JWT works with no roles configured and reject-not-found = false"() {
+        given:
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("micronaut.security.reject-not-found", false)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+
+        when:
+        def testBean = context.getBean(TestBean)
+
+        then:
+        testBean.sayHelloWithJwt("Brian", ["ROLE_HELLO"]) == "Hello Brian"
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+    }
+
+    @Unroll
+    def "test valid JWT works with no roles found matching pattern and reject-not-found = false"(String pattern) {
+        given:
+        List interceptMethodPatterns = [
+                [pattern: pattern, access: ["ROLE_HELLO"]]
+        ]
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.reject-not-found", false)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+
+        when:
+        def testBean = context.getBean(TestBean)
+
+        then:
+        testBean.sayHelloWithJwt("Brian", ["ROLE_HELLO"]) == "Hello Brian"
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+
+        where:
+        pattern << ["helloworld.Greeter/SayGoodbye", "helloworld.Greeter/Talk.*", "helloearth.*"]
+    }
+
+    def "test valid JWT works with no matching roles configured and reject-not-found = false"() {
+        given:
+        List interceptMethodPatterns = [
+                [pattern: "example.Foo/get.*", access: ["ROLE_HELLO"]]
+        ]
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.reject-not-found", false)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+
+        when:
+        def testBean = context.getBean(TestBean)
+
+        then:
+        testBean.sayHelloWithJwt("Brian") == "Hello Brian"
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+    }
+
+    def "test valid JWT denied when required roles = denyAll()"() {
+        given:
+        List interceptMethodPatterns = [
+                [pattern: ".*", access: ["ROLE_HELLO", "denyAll()"]]
+        ]
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+        def testBean = context.getBean(TestBean)
+
+        when:
+        testBean.sayHelloWithJwt("Brian", ["ROLE_HELLO"])
+
+        then:
+        StatusRuntimeException statusRuntimeException = thrown(StatusRuntimeException)
+        statusRuntimeException.status.code == Status.Code.PERMISSION_DENIED
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+    }
+
+    def "test valid JWT denied when missing required role = ROLE_HELLO"() {
+        given:
+        List interceptMethodPatterns = [
+                [pattern: ".*", access: ["ROLE_HELLO"]]
+        ]
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+        def testBean = context.getBean(TestBean)
+
+        when:
+        testBean.sayHelloWithJwt("Brian", ["ROLE_OTHER"]) == "Hello Brian"
+
+        then:
+        StatusRuntimeException statusRuntimeException = thrown(StatusRuntimeException)
+        statusRuntimeException.status.code == Status.Code.PERMISSION_DENIED
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+    }
+
+    def "test valid JWT denied when required roles = denyAll() - custom status"() {
+        given:
+        List interceptMethodPatterns = [
+                [pattern: ".*", access: ["ROLE_HELLO", "denyAll()"]]
+        ]
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.failed-validation-token-status", "ABORTED")
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+        def testBean = context.getBean(TestBean)
+
+        when:
+        testBean.sayHelloWithJwt("Brian", ["ROLE_HELLO"])
+
+        then:
+        StatusRuntimeException statusRuntimeException = thrown(StatusRuntimeException)
+        statusRuntimeException.status.code == Status.Code.ABORTED
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+    }
+
+    def "test valid JWT denied when no roles configured"() {
+        given:
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+        def testBean = context.getBean(TestBean)
+
+        when:
+        testBean.sayHelloWithJwt("Brian", ["ROLE_HELLO"])
+
+        then:
+        StatusRuntimeException statusRuntimeException = thrown(StatusRuntimeException)
+        statusRuntimeException.status.code == Status.Code.PERMISSION_DENIED
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+    }
+
+    def "test valid JWT denied when no subject / claims present"() {
+        given:
+        List interceptMethodPatterns = [
+                [pattern: ".*", access: ["ROLE_HELLO", "isAuthenticated()"]]
+        ]
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+        def testBean = context.getBean(TestBean)
+
+        when:
+        testBean.sayHelloWithJwtNoSubject("Brian")
+
+        then:
+        StatusRuntimeException statusRuntimeException = thrown(StatusRuntimeException)
+        statusRuntimeException.status.code == Status.Code.PERMISSION_DENIED
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+    }
+
+    def "test missing JWT works when role = isAnonymous()"() {
+        given:
+        List interceptMethodPatterns = [
+                [pattern: ".*", access: ["isAnonymous()"]]
+        ];
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+
+        when:
+        def testBean = context.getBean(TestBean)
+
+        then:
+        testBean.sayHelloWithoutJwt("Brian") == "Hello Brian"
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+    }
+
+    @Unroll
+    def "test missing JWT denied when role = #role"(String role) {
+        given:
+        List interceptMethodPatterns = [
+                [pattern: ".*", access: [role]]
+        ];
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+        def testBean = context.getBean(TestBean)
+
+        when:
+        testBean.sayHelloWithoutJwt("Brian")
+
+        then:
         StatusRuntimeException statusRuntimeException = thrown(StatusRuntimeException)
         statusRuntimeException.status.code == Status.UNAUTHENTICATED.code
-        statusRuntimeException.status.description == "${GrpcServerSecurityJwtConfiguration.DEFAULT_METADATA_KEY_NAME.toLowerCase()} key missing in gRPC metadata"
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+
+        where:
+        role << ["isAuthenticated()", "ROLE_HELLO"]
     }
 
-    def "test interceptCall - invalid JWT"() {
+    @Unroll
+    def "test missing JWT denied when role = #role - custom status"(String role) {
         given:
-        ServerCall<?, ?> mockServerCall = Mock()
-        Metadata metadata = new Metadata()
-        String jwt = "invalid-token"
-        metadata.put(Metadata.Key.of(GrpcServerSecurityJwtConfiguration.DEFAULT_METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
-        ServerCallHandler<?, ?> mockServerCallHandler = Mock()
+        List interceptMethodPatterns = [
+                [pattern: ".*", access: [role]]
+        ];
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        config.put("grpc.server.security.token.jwt.missing-token-status", "NOT_FOUND")
+        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+        def testBean = context.getBean(TestBean)
 
         when:
-        interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
+        testBean.sayHelloWithoutJwt("Brian")
 
         then:
-        0 * _
-
-        and:
         StatusRuntimeException statusRuntimeException = thrown(StatusRuntimeException)
-        statusRuntimeException.status.code == Status.PERMISSION_DENIED.code
-        statusRuntimeException.status.description == "JWT validation failed"
+        statusRuntimeException.status.code == Status.NOT_FOUND.code
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
+
+        where:
+        role << ["isAuthenticated()", "ROLE_HELLO"]
     }
 
-    def "test interceptCall - invalid claims JWT"() {
+    def "test invalid JWT denied"() {
         given:
-        ServerCall<?, ?> mockServerCall = Mock()
-        Metadata metadata = new Metadata()
-        String jwt = jwtTokenGenerator.generateToken([:]).get()
-        metadata.put(Metadata.Key.of(GrpcServerSecurityJwtConfiguration.DEFAULT_METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
-        ServerCallHandler<?, ?> mockServerCallHandler = Mock()
+        Map<String, Object> config = new HashMap<>(defaultConfigurations)
+        def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
+        def embeddedServer = context.getBean(GrpcEmbeddedServer)
+        embeddedServer.start()
+        def testBean = context.getBean(TestBean)
 
         when:
-        interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
+        testBean.sayHelloWithNonParseableJwt("Brian")
 
         then:
-        0 * _
-
-        and:
         StatusRuntimeException statusRuntimeException = thrown(StatusRuntimeException)
-        statusRuntimeException.status.code == Status.PERMISSION_DENIED.code
-        statusRuntimeException.status.description == "JWT validation failed"
+        statusRuntimeException.status.code == Status.Code.PERMISSION_DENIED
+
+        cleanup:
+        embeddedServer.close()
+        context.stop()
     }
 
-    def "test interceptCall - expired JWT"() {
-        given:
-        ServerCall<?, ?> mockServerCall = Mock()
-        Metadata metadata = new Metadata()
-        UserDetails userDetails = new UserDetails("micronaut", [])
-        int expiration = 1
-        String jwt = jwtTokenGenerator.generateToken(userDetails, 1).get()
-        metadata.put(Metadata.Key.of(GrpcServerSecurityJwtConfiguration.DEFAULT_METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
-        ServerCallHandler<?, ?> mockServerCallHandler = Mock()
+    @Factory
+    @Requires(env = REQUIRED_ENV)
+    static class Clients {
 
-        when:
-        sleep((expiration * 1000) + 500) // Allow for token to expire
-        interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
+        @Singleton
+        GreeterGrpc.GreeterBlockingStub blockingStub(@GrpcChannel(GrpcServerChannel.NAME) Channel channel) {
+            GreeterGrpc.newBlockingStub(channel)
+        }
 
-        then:
-        0 * _
-
-        and:
-        StatusRuntimeException statusRuntimeException = thrown(StatusRuntimeException)
-        statusRuntimeException.status.code == Status.PERMISSION_DENIED.code
-        statusRuntimeException.status.description == "JWT validation failed"
     }
 
-    def "test interceptCall - valid JWT"() {
-        given:
-        ServerCall<?, ?> mockServerCall = Mock()
-        Metadata metadata = new Metadata()
-        UserDetails userDetails = new UserDetails("micronaut", ["admin"])
-        String jwt = jwtTokenGenerator.generateToken(userDetails, 60).get()
-        metadata.put(Metadata.Key.of(GrpcServerSecurityJwtConfiguration.DEFAULT_METADATA_KEY_NAME, Metadata.ASCII_STRING_MARSHALLER), jwt)
-        ServerCallHandler<?, ?> mockServerCallHandler = Mock()
+    @Singleton
+    @Requires(env = REQUIRED_ENV)
+    static class TestBean {
 
-        when:
-        ServerCall.Listener<?> serverCallListener = interceptor.interceptCall(mockServerCall, metadata, mockServerCallHandler)
+        @Inject
+        JwtTokenGenerator jwtTokenGenerator
 
-        then:
-        1 * mockServerCallHandler.startCall(mockServerCall, metadata) >> Mock( ServerCall.Listener)
-        0 * _
+        @Inject
+        GreeterGrpc.GreeterBlockingStub blockingStub
 
-        and:
-        serverCallListener
-        serverCallListener instanceof ForwardingServerCallListener.SimpleForwardingServerCallListener
+        String sayHelloWithJwt(String message, final List<String> roles = []) {
+            UserDetails userDetails = new UserDetails("micronaut", roles)
+            String jwt = jwtTokenGenerator.generateToken(userDetails, 60).get()
+            Metadata metadata = new Metadata()
+            metadata.put(Metadata.Key.of("JWT", Metadata.ASCII_STRING_MARSHALLER), jwt)
+            HelloRequest helloRequest = HelloRequest.newBuilder().setName(message).build()
+            MetadataUtils.attachHeaders(blockingStub, metadata).sayHello(helloRequest).message
+        }
+
+        String sayHelloWithCustomJwt(String metadataKeyName, String message, final List<String> roles = []) {
+            UserDetails userDetails = new UserDetails("micronaut", roles)
+            String jwt = jwtTokenGenerator.generateToken(userDetails, 60).get()
+            Metadata metadata = new Metadata()
+            metadata.put(Metadata.Key.of(metadataKeyName, Metadata.ASCII_STRING_MARSHALLER), jwt)
+            HelloRequest helloRequest = HelloRequest.newBuilder().setName(message).build()
+            MetadataUtils.attachHeaders(blockingStub, metadata).sayHello(helloRequest).message
+        }
+
+        String sayHelloWithJwtNoSubject(String message) {
+            String jwt = jwtTokenGenerator.generateToken([:]).get()
+            Metadata metadata = new Metadata()
+            metadata.put(Metadata.Key.of("JWT", Metadata.ASCII_STRING_MARSHALLER), jwt)
+            HelloRequest helloRequest = HelloRequest.newBuilder().setName(message).build()
+            MetadataUtils.attachHeaders(blockingStub, metadata).sayHello(helloRequest).message
+        }
+
+        String sayHelloWithNonParseableJwt(String message) {
+            Metadata metadata = new Metadata()
+            metadata.put(Metadata.Key.of("JWT", Metadata.ASCII_STRING_MARSHALLER), "invalid-jwt-which-cannot-be-parsed")
+            HelloRequest helloRequest = HelloRequest.newBuilder().setName(message).build()
+            MetadataUtils.attachHeaders(blockingStub, metadata).sayHello(helloRequest).message
+        }
+
+        String sayHelloWithoutJwt(String message) {
+            HelloRequest helloRequest = HelloRequest.newBuilder().setName(message).build()
+            blockingStub.sayHello(helloRequest).message
+        }
+
+    }
+
+    @Singleton
+    @Requires(env = REQUIRED_ENV)
+    static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
+
+        @Override
+        void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
+            HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + request.getName()).build();
+            responseObserver.onNext(reply)
+            responseObserver.onCompleted()
+        }
+
     }
 
 }

@@ -12,8 +12,10 @@ import spock.lang.Specification
 import javax.inject.Inject
 
 @MicronautTest
-@Property(name = "grpc.server.security.jwt.enabled", value = "true")
-class GrpcServerSecurityJwtConfigurationSpec extends Specification {
+@Property(name = "micronaut.security.enabled", value = "true")
+@Property(name = "micronaut.security.token.enabled", value = "true")
+@Property(name = "grpc.server.security.token.jwt.enabled", value = "true")
+class GrpcServerSecurityJwtConfigurationEnabledSpec extends Specification {
 
     @Inject
     List<ServerInterceptor> serverInterceptors

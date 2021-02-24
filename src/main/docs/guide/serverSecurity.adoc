@@ -4,17 +4,17 @@ Currently, only `JWT` is supported for server-side security.
 ==== gRPC Server Security JWT
 JWT security is accomplished by an implementation of `io.grpc.ServerInterceptor`.
 
-If you are already using `io.micronaut.security:micronaut-security-jwt`, then configuration will be quite simple:
+If you are already using `io.micronaut.security:micronaut-security-jwt`, then no additional configuration will be required for a basic implemntation.
 
 ===== Configuration
 
-.Enable JWT Validation
+.Disabling JWT Validation
 [source,yaml]
 ----
-grpc.server.security.jwt:
-    enabled: true # <1>
+grpc.server.security.token.jwt:
+    enabled: false # <1>
 ----
-<1> By default, this is disabled
+<1> By default, this is enabled
 
 If you are not already using `io.micronaut.security:micronaut-security-jwt`, then you will also need to prepare
 that configuration as well.  Please read these https://micronaut-projects.github.io/micronaut-security/latest/guide/#jwt[docs] or this
@@ -29,7 +29,7 @@ This can be changed by overriding the interceptor configuration as demonstrated 
 .Customizing JWT interceptor
 [source,yaml]
 ----
-grpc.server.security.jwt:
+grpc.server.security.token.jwt:
     metadata-key-name: AUTHORIZATION # <1>
     interceptor-order: 100 # <2>
 ----
@@ -44,10 +44,14 @@ This can be changed by overriding the patterns configuration as demonstrated bel
 .Customizing Method Pattern Filters
 [source,yaml]
 ----
-grpc.server.security.jwt:
+grpc.server.security.token.jwt:
     intercept-method-patterns:
-        - app.ServiceName/MethodName # <1>
-        - app.OtherServiceName/.* # <2>
+        - pattern: app.ServiceName/MethodName # <1>
+          access:
+              - isAuthenticated()
+        - pattern: app.OtherServiceName/.* # <2>
+          access:
+              - ROLE_OTHER
 ----
 <1> Matches an exact fully qualified gRPC Service Method Name - see https://grpc.github.io/grpc-java/javadoc/io/grpc/MethodDescriptor.html#getFullMethodName--[gRPC Javadocs].
 <2> Matches on a regular expression of the fully qualified gRPC service method name
@@ -63,7 +67,7 @@ This can be changed by overriding the status configuration as demonstrated below
 .Customizing gRPC Statuses
 [source,yaml]
 ----
-grpc.server.security.jwt:
+grpc.server.security.token.jwt:
     missing-token-status: NOT_FOUND # <1>
     failed-validation-token-status: UNAUTHENTICATED # <2>
 ----
