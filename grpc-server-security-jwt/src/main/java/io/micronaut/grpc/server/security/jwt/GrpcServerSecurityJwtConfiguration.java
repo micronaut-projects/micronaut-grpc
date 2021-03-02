@@ -25,9 +25,6 @@ import io.micronaut.core.util.StringUtils;
 import io.micronaut.core.util.Toggleable;
 import io.micronaut.grpc.server.GrpcServerConfiguration;
 import io.micronaut.security.config.InterceptUrlMapPattern;
-import io.micronaut.security.config.SecurityConfigurationProperties;
-import io.micronaut.security.token.config.TokenConfigurationProperties;
-import io.micronaut.security.token.jwt.config.JwtConfigurationProperties;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
@@ -39,9 +36,8 @@ import java.util.Collection;
  * @author Brian Wyka
  */
 @ConfigurationProperties(GrpcServerSecurityJwtConfiguration.PREFIX)
-@Requires(property = SecurityConfigurationProperties.PREFIX + ".enabled", notEquals = StringUtils.FALSE)
-@Requires(property = TokenConfigurationProperties.PREFIX + ".enabled", notEquals = StringUtils.FALSE)
-@Requires(property = JwtConfigurationProperties.PREFIX + ".enabled", notEquals = StringUtils.FALSE)
+@Requires(configuration = "io.micronaut.security")
+@Requires(configuration = "io.micronaut.security.token.jwt")
 @Requires(property = GrpcServerSecurityJwtConfiguration.PREFIX + ".enabled", notEquals = StringUtils.FALSE)
 public interface GrpcServerSecurityJwtConfiguration extends Toggleable {
 

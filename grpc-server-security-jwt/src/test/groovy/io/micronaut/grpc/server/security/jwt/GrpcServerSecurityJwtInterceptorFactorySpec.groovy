@@ -9,11 +9,7 @@ import spock.lang.Specification
 import javax.inject.Inject
 
 @MicronautTest
-@Property(name = "micronaut.security.enabled", value = "true")
-@Property(name = "micronaut.security.token.enabled", value = "true")
 @Property(name = "grpc.server.security.token.jwt.enabled", value = "true")
-@Property(name = "micronaut.security.token.enabled", value = "true")
-@Property(name = "micronaut.security.token.jwt.enabled", value = "true")
 @Property(name = "micronaut.security.token.jwt.signatures.secret.generator.secret", value = "SeCr3t")
 @Property(name = "micronaut.security.token.jwt.signatures.secret.generator.base64", value = "false")
 @Property(name = "micronaut.security.token.jwt.signatures.secret.generator.jws-algorithm", value = "HS512")
