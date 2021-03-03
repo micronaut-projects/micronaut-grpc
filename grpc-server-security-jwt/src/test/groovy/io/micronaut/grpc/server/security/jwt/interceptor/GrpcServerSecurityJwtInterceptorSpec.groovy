@@ -61,7 +61,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
                 [pattern: pattern, access: ["isAuthenticated()"]]
         ]
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
         embeddedServer.start()
@@ -87,7 +87,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         ]
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
         config.put("grpc.server.security.token.jwt.metadata-key-name", "AUTH")
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
         embeddedServer.start()
@@ -109,7 +109,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
                 [pattern: ".*", access: ["ROLE_HELLO"]]
         ]
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
         embeddedServer.start()
@@ -151,7 +151,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
                 [pattern: pattern, access: ["ROLE_HELLO"]]
         ]
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         config.put("micronaut.security.reject-not-found", false)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
@@ -177,7 +177,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
                 [pattern: "example.Foo/get.*", access: ["ROLE_HELLO"]]
         ]
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         config.put("micronaut.security.reject-not-found", false)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
@@ -200,7 +200,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
                 [pattern: ".*", access: ["ROLE_HELLO", "denyAll()"]]
         ]
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
         embeddedServer.start()
@@ -224,7 +224,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
                 [pattern: ".*", access: ["ROLE_HELLO"]]
         ]
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
         embeddedServer.start()
@@ -249,7 +249,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         ]
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
         config.put("grpc.server.security.token.jwt.failed-validation-token-status", "ABORTED")
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
         embeddedServer.start()
@@ -293,7 +293,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
                 [pattern: ".*", access: ["ROLE_HELLO", "isAuthenticated()"]]
         ]
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
         embeddedServer.start()
@@ -317,7 +317,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
                 [pattern: ".*", access: ["isAnonymous()"]]
         ];
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
         embeddedServer.start()
@@ -340,7 +340,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
                 [pattern: ".*", access: [role]]
         ];
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
         embeddedServer.start()
@@ -369,7 +369,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         ];
         Map<String, Object> config = new HashMap<>(defaultConfigurations)
         config.put("grpc.server.security.token.jwt.missing-token-status", "NOT_FOUND")
-        config.put("grpc.server.security.token.jwt.intercept-method-patterns", interceptMethodPatterns)
+        config.put("micronaut.security.intercept-url-map", interceptMethodPatterns)
         def context = ApplicationContext.run(config, REQUIRED_ENV, Environment.TEST)
         def embeddedServer = context.getBean(GrpcEmbeddedServer)
         embeddedServer.start()

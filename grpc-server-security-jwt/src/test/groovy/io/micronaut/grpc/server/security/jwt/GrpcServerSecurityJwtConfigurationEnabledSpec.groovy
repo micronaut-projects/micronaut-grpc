@@ -32,7 +32,6 @@ class GrpcServerSecurityJwtConfigurationEnabledSpec extends Specification {
         config.metadataKeyName == "JWT"
         config.missingTokenStatus == Status.UNAUTHENTICATED.code
         config.failedValidationTokenStatus == Status.PERMISSION_DENIED.code
-        !config.interceptMethodPatterns
         config.interceptorOrder == Ordered.HIGHEST_PRECEDENCE
     }
 

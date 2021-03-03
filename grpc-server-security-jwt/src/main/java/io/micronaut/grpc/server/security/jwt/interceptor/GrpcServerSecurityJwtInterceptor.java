@@ -27,6 +27,7 @@ import io.micronaut.core.order.Ordered;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.grpc.server.security.jwt.GrpcServerSecurityJwtConfiguration;
 import io.micronaut.security.config.InterceptUrlMapPattern;
+import io.micronaut.security.config.SecurityConfiguration;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.security.token.RolesFinder;
 import io.micronaut.security.token.jwt.generator.claims.JwtClaimsSetAdapter;
@@ -55,6 +56,7 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
     private final GrpcServerSecurityJwtConfiguration config;
     private final Metadata.Key<String> jwtMetadataKey;
     private final JwtValidator jwtValidator;
+    private final List<InterceptUrlMapPattern> interceptMethodPatterns; // httpMethod is not used in this context
     private final boolean rejectRolesNotFound;
     private final RolesFinder rolesFinder;
 
@@ -64,16 +66,17 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
      * @param config the gRPC Security JWT configuration
      * @param jwtValidator the JWT validator
      * @param rolesFinder the roles finder
-     * @param rejectRolesNotFound whether or not to reject request if no roles found
+     * @param securityConfiguration the security configuration
      */
     public GrpcServerSecurityJwtInterceptor(final GrpcServerSecurityJwtConfiguration config,
                                             final JwtValidator jwtValidator,
                                             final RolesFinder rolesFinder,
-                                            final boolean rejectRolesNotFound) {
+                                            final SecurityConfiguration securityConfiguration) {
         this.config = config;
         this.jwtMetadataKey = Metadata.Key.of(config.getMetadataKeyName(), Metadata.ASCII_STRING_MARSHALLER);
         this.jwtValidator = jwtValidator;
-        this.rejectRolesNotFound = rejectRolesNotFound;
+        this.interceptMethodPatterns = securityConfiguration.getInterceptUrlMap();
+        this.rejectRolesNotFound = securityConfiguration.isRejectNotFound();
         this.rolesFinder = rolesFinder;
     }
 
@@ -90,8 +93,8 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
      */
     @Override
     public <T, S> ServerCall.Listener<T> interceptCall(final ServerCall<T, S> call, final Metadata metadata, final ServerCallHandler<T, S> next) {
-        final List<String> requiredAccesses = getRequiredAccesses(config, call);
-        if (CollectionUtils.isEmpty(config.getInterceptMethodPatterns()) && !rejectRolesNotFound) {
+        final List<String> requiredAccesses = getRequiredAccesses(call);
+        if (CollectionUtils.isEmpty(interceptMethodPatterns) && !rejectRolesNotFound) {
             LOG.debug("JWT validation is skipped due to 'intercept-method-patterns' configuration being empty");
             return forward(call, metadata, next);
         } else if (requiredAccesses.isEmpty() && rejectRolesNotFound) {
@@ -164,18 +167,16 @@ public class GrpcServerSecurityJwtInterceptor implements ServerInterceptor, Orde
     /**
      * Get the required access for the server call.
      *
-     * @param config the configuration
      * @param serverCall the server call
      * @param <T> the request type
      * @param <S> the response type
      * @return the required access
      */
-    private static<T, S> List<String> getRequiredAccesses(final GrpcServerSecurityJwtConfiguration config, final ServerCall<T, S> serverCall) {
-        if (CollectionUtils.isEmpty(config.getInterceptMethodPatterns())) {
+    private <T, S> List<String> getRequiredAccesses(final ServerCall<T, S> serverCall) {
+        if (CollectionUtils.isEmpty(interceptMethodPatterns)) {
             return Collections.emptyList();
         }
-        return config.getInterceptMethodPatterns()
-                .stream()
+        return interceptMethodPatterns.stream()
                 .filter(interceptMethodPattern -> serverCall.getMethodDescriptor().getFullMethodName().matches(interceptMethodPattern.getPattern()))
                 .map(InterceptUrlMapPattern::getAccess)
                 .flatMap(Collection::stream)

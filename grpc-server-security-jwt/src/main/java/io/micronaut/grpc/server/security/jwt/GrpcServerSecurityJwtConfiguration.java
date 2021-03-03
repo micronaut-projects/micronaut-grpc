@@ -61,17 +61,6 @@ public interface GrpcServerSecurityJwtConfiguration extends Toggleable {
     int getInterceptorOrder();
 
     /**
-     * Get the list of fully qualified RPC method patterns which should be intercepted and interrogated for a valid JWT.
-     * If no values are provided, by default, all methods will be intercepted.
-     *
-     * @see io.grpc.MethodDescriptor#getFullMethodName()
-     *
-     * @return the intercept method names.
-     */
-    @Nullable
-    Collection<InterceptUrlMapPattern> getInterceptMethodPatterns();
-
-    /**
      * The {@link Status} returned by the interceptor when JWT is missing from metadata.
      * The default value is {@link Status.Code#UNAUTHENTICATED}
      *

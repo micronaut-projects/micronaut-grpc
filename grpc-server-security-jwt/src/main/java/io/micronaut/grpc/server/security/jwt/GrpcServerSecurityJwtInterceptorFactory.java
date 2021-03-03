@@ -64,8 +64,7 @@ public class GrpcServerSecurityJwtInterceptorFactory {
                 .withEncryptions(encryptionConfigurations)
                 .withClaimValidators(genericJwtClaimsValidators)
                 .build();
-        final boolean rejectRolesNotFound = securityConfiguration.isRejectNotFound();
-        return new GrpcServerSecurityJwtInterceptor(grpcServerSecurityJwtConfiguration, jwtValidator, rolesFinder, rejectRolesNotFound);
+        return new GrpcServerSecurityJwtInterceptor(grpcServerSecurityJwtConfiguration, jwtValidator, rolesFinder, securityConfiguration);
     }
 
 }

@@ -39,13 +39,13 @@ grpc.server.security.token.jwt:
 ===== Interceptor Patterns
 By default, all gRPC services and methods will be intercepted.
 
-This can be changed by overriding the patterns configuration as demonstrated below:
+This can be changed by overriding the `intercept-url-map` configuration as demonstrated below:
 
 .Customizing Method Pattern Filters
 [source,yaml]
 ----
-grpc.server.security.token.jwt:
-    intercept-method-patterns:
+micronaut.security:
+    intercept-url-map:
         - pattern: app.ServiceName/MethodName # <1>
           access:
               - isAuthenticated()
@@ -55,6 +55,9 @@ grpc.server.security.token.jwt:
 ----
 <1> Matches an exact fully qualified gRPC Service Method Name - see https://grpc.github.io/grpc-java/javadoc/io/grpc/MethodDescriptor.html#getFullMethodName--[gRPC Javadocs].
 <2> Matches on a regular expression of the fully qualified gRPC service method name
+
+NOTE: This configuration can be shared with `URL` filtering on HTTP requests as well.  For more information on this configuration,
+please see https://micronaut-projects.github.io/micronaut-security/latest/guide/#interceptUrlMap[Micronaut Security documentation].
 
 ===== Interceptor Behavior
 The server interceptor will throw `io.grpc.StatusRuntimeException` when there is any issue with validating the `JWT`.
