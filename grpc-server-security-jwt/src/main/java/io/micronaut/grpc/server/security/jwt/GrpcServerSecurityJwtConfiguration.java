@@ -15,7 +15,6 @@
  */
 package io.micronaut.grpc.server.security.jwt;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import io.grpc.Status;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Requires;
@@ -24,10 +23,8 @@ import io.micronaut.core.order.Ordered;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.core.util.Toggleable;
 import io.micronaut.grpc.server.GrpcServerConfiguration;
-import io.micronaut.security.config.InterceptUrlMapPattern;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Collection;
 
 /**
  * gRPC Security JWT configuration.
