@@ -28,7 +28,6 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
 
     private static final REQUIRED_ENV = "greeter-hello-world-jwt"
     private static final Map defaultConfigurations = [
-            "micronaut.security.token.roles-name": true,
             "grpc.server.security.token.jwt.enabled": true,
             "micronaut.security.token.jwt.signatures.secret.generator.secret": "SeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3tSeCr3t",
             "micronaut.security.token.jwt.signatures.secret.generator.base64": false,

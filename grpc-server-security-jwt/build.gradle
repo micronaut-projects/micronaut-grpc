@@ -10,6 +10,7 @@ dependencies {
     testAnnotationProcessor "io.micronaut.security:micronaut-security-annotations:$micronautSecurityVersion"
 
     api project(":grpc-server-runtime")
+    api project(":grpc-server-security")
     api "io.micronaut:micronaut-inject:$micronautVersion"
     api "io.micronaut:micronaut-runtime:$micronautVersion"
     api "com.nimbusds:nimbus-jose-jwt:9.4.2"
