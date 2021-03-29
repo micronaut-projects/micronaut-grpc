@@ -52,7 +52,7 @@ sourceSets {
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protocVersion" }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.35.0" }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.36.1" }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
