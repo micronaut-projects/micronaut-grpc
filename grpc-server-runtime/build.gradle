@@ -12,12 +12,12 @@ dependencies {
     api "io.grpc:grpc-protobuf:$grpcVersion"
     api "io.grpc:grpc-stub:$grpcVersion"
 
-    compileOnly "io.micronaut.discovery:micronaut-discovery-client:2.2.4"
+    compileOnly "io.micronaut.discovery:micronaut-discovery-client:$micronautDiscoveryClientVersion"
     compileOnly "io.micronaut:micronaut-tracing:$micronautVersion"
     compileOnly "io.micronaut:micronaut-management"
     compileOnly 'io.opentracing.contrib:opentracing-grpc:0.2.3'
 
-    testImplementation "io.micronaut.discovery:micronaut-discovery-client:2.2.4"
+    testImplementation "io.micronaut.discovery:micronaut-discovery-client:$micronautDiscoveryClientVersion"
     testImplementation 'io.opentracing:opentracing-mock:0.33.0'
     testImplementation "io.micronaut:micronaut-tracing:$micronautVersion"
     testImplementation 'io.opentracing.contrib:opentracing-grpc:0.2.3'
