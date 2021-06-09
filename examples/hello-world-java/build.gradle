@@ -1,7 +1,5 @@
 plugins {
     id "com.github.johnrengelman.shadow" version "5.2.0"
-    id "net.ltgt.apt-eclipse" version "0.18"
-    id "net.ltgt.apt-idea" version "0.18"
 //   tag::plugin[]
     id 'com.google.protobuf' version '0.8.14'
 //   end::plugin[]
