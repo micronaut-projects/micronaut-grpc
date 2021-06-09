@@ -21,10 +21,10 @@ import io.grpc.ServerInterceptor;
 import io.grpc.ServerTransportFilter;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.order.OrderUtil;
 import io.micronaut.core.util.CollectionUtils;
 
-import javax.annotation.Nullable;
 import javax.inject.Singleton;
 import java.util.List;
 

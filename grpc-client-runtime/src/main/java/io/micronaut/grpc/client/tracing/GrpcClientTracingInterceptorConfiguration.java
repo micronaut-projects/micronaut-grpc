@@ -17,12 +17,14 @@ package io.micronaut.grpc.client.tracing;
 
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.annotation.ConfigurationProperties;
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.grpc.channels.GrpcDefaultManagedChannelConfiguration;
 import io.opentracing.Tracer;
-import io.opentracing.contrib.grpc.*;
+import io.opentracing.contrib.grpc.ClientCloseDecorator;
+import io.opentracing.contrib.grpc.ClientSpanDecorator;
+import io.opentracing.contrib.grpc.TracingClientInterceptor;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 /**
@@ -51,7 +53,7 @@ public class GrpcClientTracingInterceptorConfiguration {
     /**
      * @return The {@link TracingClientInterceptor.Builder}
      */
-    public @Nonnull TracingClientInterceptor.Builder getBuilder() {
+    public @NonNull TracingClientInterceptor.Builder getBuilder() {
         return builder;
     }
 
