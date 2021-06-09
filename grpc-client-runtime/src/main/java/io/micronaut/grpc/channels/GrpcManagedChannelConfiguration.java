@@ -19,9 +19,9 @@ import io.grpc.NameResolver;
 import io.grpc.netty.NettyChannelBuilder;
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.env.Environment;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.naming.Named;
 
-import javax.annotation.Nullable;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;

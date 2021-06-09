@@ -12,19 +12,19 @@ dependencies {
     api "io.grpc:grpc-protobuf:$grpcVersion"
     api "io.grpc:grpc-stub:$grpcVersion"
 
-    compileOnly "io.micronaut.discovery:micronaut-discovery-client:2.3.0"
+    compileOnly "io.micronaut.discovery:micronaut-discovery-client:$discoveryClientVersion"
     compileOnly "io.micronaut:micronaut-tracing:$micronautVersion"
     compileOnly "io.micronaut:micronaut-management"
     compileOnly 'io.opentracing.contrib:opentracing-grpc:0.2.3'
 
-    testImplementation "io.micronaut.discovery:micronaut-discovery-client:2.2.4"
+    testImplementation "io.micronaut.discovery:micronaut-discovery-client:$discoveryClientVersion"
     testImplementation 'io.opentracing:opentracing-mock:0.33.0'
     testImplementation "io.micronaut:micronaut-tracing:$micronautVersion"
     testImplementation 'io.opentracing.contrib:opentracing-grpc:0.2.3'
     testImplementation 'io.jaegertracing:jaeger-core:1.6.0'
     testImplementation "io.micronaut:micronaut-inject-groovy:$micronautVersion"
     testImplementation "io.micronaut:micronaut-inject-java:$micronautVersion"
-    testImplementation 'io.micronaut.test:micronaut-test-spock:2.3.3'
+    testImplementation "io.micronaut.test:micronaut-test-spock:$micronautTestVersion"
     testImplementation "io.micronaut:micronaut-management"
     testImplementation project(":grpc-client-runtime")
 

@@ -3,7 +3,7 @@ plugins {
     id 'com.google.protobuf' version '0.8.16'
 }
 dependencies {
-	annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
+    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
     annotationProcessor "io.micronaut.docs:micronaut-docs-asciidoc-config-props:$micronautDocsVersion"    
     compileOnly "io.micronaut:micronaut-inject-java:$micronautVersion"
     api project(":grpc-annotation")
@@ -12,18 +12,18 @@ dependencies {
     api "io.grpc:grpc-protobuf:$grpcVersion"
     api "io.grpc:grpc-stub:$grpcVersion"
     implementation "io.grpc:grpc-netty:$grpcVersion"
-    compileOnly "io.micronaut.discovery:micronaut-discovery-client:2.3.0"
+    compileOnly "io.micronaut.discovery:micronaut-discovery-client:$discoveryClientVersion"
     compileOnly "io.micronaut:micronaut-tracing:$micronautVersion"
     compileOnly 'io.opentracing.contrib:opentracing-grpc:0.2.3'
 
-    testImplementation "io.micronaut.discovery:micronaut-discovery-client:2.2.4"
+    testImplementation "io.micronaut.discovery:micronaut-discovery-client:$discoveryClientVersion"
     testImplementation 'io.opentracing:opentracing-mock:0.33.0'
     testImplementation "io.micronaut:micronaut-tracing:$micronautVersion"
     testImplementation 'io.opentracing.contrib:opentracing-grpc:0.2.3'
     testImplementation 'io.jaegertracing:jaeger-core:1.6.0'
     testImplementation "io.micronaut:micronaut-inject-groovy:$micronautVersion"
     testImplementation "io.micronaut:micronaut-inject-java:$micronautVersion"
-    testImplementation 'io.micronaut.test:micronaut-test-spock:2.3.3'
+    testImplementation "io.micronaut.test:micronaut-test-spock:$micronautTestVersion"
     testImplementation project(":grpc-server-runtime")
 }
 

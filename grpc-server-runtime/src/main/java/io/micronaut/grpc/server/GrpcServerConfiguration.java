@@ -24,13 +24,13 @@ import io.micronaut.context.annotation.Property;
 import io.micronaut.context.env.Environment;
 import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Creator;
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.convert.format.ReadableBytes;
 import io.micronaut.core.io.ResourceResolver;
 import io.micronaut.core.io.socket.SocketUtils;
 import io.micronaut.scheduling.TaskExecutors;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.IOException;
@@ -127,7 +127,7 @@ public class GrpcServerConfiguration {
      * The server builder.
      * @return The {@link ServerBuilder}
      */
-    public @Nonnull ServerBuilder<?> getServerBuilder() {
+    public @NonNull ServerBuilder<?> getServerBuilder() {
         return serverBuilder;
     }
 
@@ -151,7 +151,7 @@ public class GrpcServerConfiguration {
      * The instance id.
      * @return The instance id
      */
-    public @Nonnull String getInstanceId() {
+    public @NonNull String getInstanceId() {
         return instanceId;
     }
 
@@ -208,7 +208,7 @@ public class GrpcServerConfiguration {
      * The SSL configuration.
      * @return The SSL configuration
      */
-    public @Nonnull GrpcSslConfiguration getServerConfiguration() {
+    public @NonNull GrpcSslConfiguration getServerConfiguration() {
         return serverConfiguration;
     }
 

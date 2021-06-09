@@ -15,10 +15,10 @@
  */
 package io.micronaut.grpc.discovery;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import io.grpc.*;
 import io.micronaut.context.LifeCycle;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.naming.NameUtils;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.core.util.StringUtils;

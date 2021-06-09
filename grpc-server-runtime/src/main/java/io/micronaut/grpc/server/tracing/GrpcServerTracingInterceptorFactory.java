@@ -19,8 +19,8 @@ import io.grpc.ServerInterceptor;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.core.annotation.NonNull;
 
-import javax.annotation.Nonnull;
 import javax.inject.Singleton;
 
 /**
@@ -40,7 +40,7 @@ public class GrpcServerTracingInterceptorFactory {
     @Requires(beans = GrpcServerTracingInterceptorConfiguration.class)
     @Singleton
     @Bean
-    protected @Nonnull ServerInterceptor serverTracingInterceptor(@Nonnull GrpcServerTracingInterceptorConfiguration configuration) {
+    protected @NonNull ServerInterceptor serverTracingInterceptor(@NonNull GrpcServerTracingInterceptorConfiguration configuration) {
         return configuration.getBuilder().build();
     }
 }

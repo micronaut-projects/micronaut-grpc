@@ -17,14 +17,14 @@ package io.micronaut.grpc.server.tracing;
 
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.annotation.ConfigurationProperties;
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.grpc.server.GrpcServerConfiguration;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.grpc.ServerCloseDecorator;
 import io.opentracing.contrib.grpc.ServerSpanDecorator;
 import io.opentracing.contrib.grpc.TracingServerInterceptor;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 
 /**
@@ -53,7 +53,7 @@ public class GrpcServerTracingInterceptorConfiguration {
     /**
      * @return The {@link TracingServerInterceptor.Builder}
      */
-    public @Nonnull TracingServerInterceptor.Builder getBuilder() {
+    public @NonNull TracingServerInterceptor.Builder getBuilder() {
         return builder;
     }
 
