@@ -15,14 +15,11 @@
  */
 package io.micronaut.grpc.channels;
 
-import io.grpc.NameResolver;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.context.env.Environment;
-import io.micronaut.core.annotation.Nullable;
 import io.micronaut.scheduling.TaskExecutors;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.concurrent.ExecutorService;
 
@@ -50,12 +47,5 @@ public class GrpcDefaultManagedChannelConfiguration extends GrpcManagedChannelCo
             Environment env,
             @Named(TaskExecutors.IO) ExecutorService executorService) {
         super(name, env, executorService);
-    }
-
-    @Override
-    @Inject
-    @Deprecated
-    public void setNameResolverFactory(@Nullable NameResolver.Factory factory) {
-        super.setNameResolverFactory(factory);
     }
 }

@@ -15,13 +15,28 @@
  */
 package io.micronaut.grpc.channels;
 
+import io.grpc.Channel;
 import io.grpc.ManagedChannel;
 import io.grpc.netty.NettyChannelBuilder;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
-import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.annotation.Primary;
+import io.micronaut.context.exceptions.ConfigurationException;
+import io.micronaut.core.type.Argument;
+import io.micronaut.core.util.StringUtils;
+import io.micronaut.grpc.annotation.GrpcChannel;
+import io.micronaut.inject.ArgumentInjectionPoint;
+import io.micronaut.inject.FieldInjectionPoint;
+import io.micronaut.inject.InjectionPoint;
+import io.micronaut.inject.qualifiers.Qualifiers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.PreDestroy;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Factory bean for creating {@link ManagedChannel} instances.
@@ -30,8 +45,9 @@ import io.micronaut.context.annotation.Primary;
  * @since 1.0
  */
 @Factory
-public class GrpcManagedChannelFactory {
-
+public class GrpcManagedChannelFactory implements AutoCloseable {
+    private static final Logger LOG = LoggerFactory.getLogger(GrpcManagedChannelFactory.class);
+    private final Map<ChannelKey, ManagedChannel> channels = new ConcurrentHashMap<>();
     private final ApplicationContext beanContext;
 
     /**
@@ -44,13 +60,82 @@ public class GrpcManagedChannelFactory {
 
     /**
      * Builds a managed channel for the given target.
-     * @param target The target
+     * @param injectionPoint The injection point
      * @return The channel
      */
     @Bean
     @Primary
-    protected ManagedChannel managedChannel(@Parameter String target) {
-        final NettyChannelBuilder nettyChannelBuilder = beanContext.createBean(NettyChannelBuilder.class, target);
-        return nettyChannelBuilder.build();
+    protected ManagedChannel managedChannel(InjectionPoint<Channel> injectionPoint) {
+        Argument<?> argument;
+        if (injectionPoint instanceof FieldInjectionPoint) {
+            argument = ((FieldInjectionPoint<?, ?>) injectionPoint).asArgument();
+        } else if (injectionPoint instanceof ArgumentInjectionPoint) {
+            argument = ((ArgumentInjectionPoint<?, ?>) injectionPoint).getArgument();
+        } else {
+            throw new ConfigurationException("Cannot directly create channels use @Inject or constructor injection instead");
+        }
+
+        String target = argument.getAnnotationMetadata().stringValue(GrpcChannel.class).orElse(null);
+        if (StringUtils.isEmpty(target)) {
+            throw new ConfigurationException("No value specified to @GrpcChannel annotation: " + injectionPoint);
+        }
+
+        if ("grpc-server".equalsIgnoreCase(target)) {
+            return beanContext.getBean(ManagedChannel.class, Qualifiers.byName("grpc-server"));
+        }
+
+
+        return channels.computeIfAbsent(new ChannelKey(argument, target), channelKey -> {
+            final NettyChannelBuilder nettyChannelBuilder = beanContext.createBean(NettyChannelBuilder.class, target);
+            return nettyChannelBuilder.build();
+        });
+    }
+
+    @Override
+    @PreDestroy
+    public void close() {
+        for (ManagedChannel channel : channels.values()) {
+            if (!channel.isShutdown()) {
+                try {
+                    channel.shutdown();
+                } catch (Exception e) {
+                    if (LOG.isWarnEnabled()) {
+                        LOG.warn("Error shutting down GRPC channel: " + e.getMessage(), e);
+                    }
+                }
+            }
+        }
+        channels.clear();
+    }
+
+    /**
+     * Client key.
+     */
+    private static final class ChannelKey {
+        final Argument<?> identifier;
+        final String value;
+
+        public ChannelKey(Argument<?> identifier, String value) {
+            this.identifier = identifier;
+            this.value = value;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            ChannelKey clientKey = (ChannelKey) o;
+            return Objects.equals(identifier, clientKey.identifier) &&
+                    Objects.equals(value, clientKey.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(identifier, value);
+        }
     }
 }
