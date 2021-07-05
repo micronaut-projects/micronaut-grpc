@@ -18,7 +18,7 @@ package io.micronaut.protobuf.convert;
 import java.io.IOException;
 import java.util.Optional;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.google.protobuf.Message;
 

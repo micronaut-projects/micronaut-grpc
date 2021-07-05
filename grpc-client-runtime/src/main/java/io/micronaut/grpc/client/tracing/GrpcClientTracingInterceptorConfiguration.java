@@ -25,7 +25,7 @@ import io.opentracing.contrib.grpc.ClientCloseDecorator;
 import io.opentracing.contrib.grpc.ClientSpanDecorator;
 import io.opentracing.contrib.grpc.TracingClientInterceptor;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  * Adds a {@link TracingClientInterceptor} when OpenTracing for GRPC is on the classpath

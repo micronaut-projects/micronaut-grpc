@@ -26,7 +26,7 @@ import io.micronaut.management.health.indicator.HealthIndicator;
 import io.micronaut.management.health.indicator.HealthResult;
 import org.reactivestreams.Publisher;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.Map;
 
 import static io.micronaut.core.util.CollectionUtils.mapOf;

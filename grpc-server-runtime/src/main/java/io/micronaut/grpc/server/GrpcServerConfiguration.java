@@ -31,8 +31,8 @@ import io.micronaut.core.io.ResourceResolver;
 import io.micronaut.core.io.socket.SocketUtils;
 import io.micronaut.scheduling.TaskExecutors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;

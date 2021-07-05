@@ -1,7 +1,7 @@
 package helloworld
 
 // tag::imports[]
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 // end::imports[]
 
 // tag::clazz[]

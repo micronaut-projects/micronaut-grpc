@@ -19,8 +19,8 @@ import groovy.transform.CompileStatic
 import io.micronaut.context.ExecutionHandleLocator
 import io.micronaut.web.router.DefaultRouteBuilder
 
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 @CompileStatic
 @Singleton

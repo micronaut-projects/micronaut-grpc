@@ -19,10 +19,15 @@ subprojects { Project subproject ->
 
     apply plugin: "io.micronaut.build.internal.dependency-updates"
     apply plugin: "io.micronaut.build.internal.publishing"
-    
+
+
+    dependencies {
+        implementation 'jakarta.inject:jakarta.inject-api:2.0.0'
+    }
+
     tasks.withType(Test) {
         useJUnitPlatform()
-    }        
+    }
 
     dependencyUpdates.enabled = false
 }

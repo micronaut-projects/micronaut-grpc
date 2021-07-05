@@ -15,11 +15,9 @@
  */
 package io.micronaut.grpc.channels;
 
-import io.grpc.NameResolver;
 import io.grpc.netty.NettyChannelBuilder;
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.env.Environment;
-import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.naming.Named;
 
 import java.net.InetSocketAddress;
@@ -93,15 +91,5 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
      */
     public NettyChannelBuilder getChannelBuilder() {
         return channelBuilder;
-    }
-
-    /**
-     * Sets the name resolver factor to use.
-     * @param factory The factory
-     * @deprecated Method {@link NettyChannelBuilder#nameResolverFactory(NameResolver.Factory)} is deprecated
-     */
-    @Deprecated
-    public void setNameResolverFactory(@Nullable NameResolver.Factory factory) {
-        // no-op
     }
 }

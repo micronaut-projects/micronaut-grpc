@@ -16,9 +16,14 @@
 package io.micronaut.grpc.discovery;
 
 import io.grpc.*;
+import io.micronaut.context.BeanProvider;
 import io.micronaut.context.LifeCycle;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.context.event.BeanCreatedEvent;
+import io.micronaut.context.event.BeanCreatedEventListener;
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.naming.NameUtils;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.core.util.StringUtils;
@@ -32,7 +37,7 @@ import io.reactivex.disposables.Disposable;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;
@@ -209,5 +214,28 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
         NameResolverRegistry.getDefaultRegistry().deregister(this);
         operational = false;
         return this;
+    }
+
+    /**
+     * Ensures name resolver is registered.
+     */
+    @Singleton
+    @Internal
+    static final class ManagedChannelBuilderListener implements BeanCreatedEventListener<ManagedChannelBuilder<?>> {
+        private BeanProvider<GrpcNameResolverProvider> beanProvider;
+
+        ManagedChannelBuilderListener(@Nullable BeanProvider<GrpcNameResolverProvider> beanProvider) {
+            this.beanProvider = beanProvider;
+        }
+
+        @Override
+        public ManagedChannelBuilder<?> onCreated(BeanCreatedEvent<ManagedChannelBuilder<?>> event) {
+            if (beanProvider != null) {
+                // init
+                beanProvider.get();
+                beanProvider = null;
+            }
+            return event.getBean();
+        }
     }
 }

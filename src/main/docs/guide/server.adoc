@@ -7,7 +7,7 @@ For example:
 snippet::helloworld.GreetingEndpoint[tags="imports,clazz", project-base="examples/hello-world", source="main"]
 
 
-<1> The class extends from `GreeterGrpc.GreeterImplBase` and is annotated with `javax.inject.Singleton`
+<1> The class extends from `GreeterGrpc.GreeterImplBase` and is annotated with `jakarta.inject.Singleton`
 <2> You can dependency inject other beans into the implementation. In this case `GreetingService` is dependency injected.
 <3> The `StreamObserver` is used to send a response to the client.
 

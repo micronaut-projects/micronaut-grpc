@@ -24,8 +24,8 @@ import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.scheduling.TaskExecutors;
 
-import javax.inject.Named;
-import javax.inject.Singleton;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -54,7 +54,7 @@ public class GrpcServerChannel {
     @Bean(preDestroy = "shutdown")
     protected ManagedChannel serverChannel(
             GrpcEmbeddedServer server,
-            @javax.inject.Named(TaskExecutors.IO) ExecutorService executorService,
+            @jakarta.inject.Named(TaskExecutors.IO) ExecutorService executorService,
             List<ClientInterceptor> clientInterceptors) {
         final ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forAddress(
                 server.getHost(),

@@ -31,7 +31,7 @@ import io.micronaut.test.annotation.MicronautTest
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 class GrpcServiceDiscoverySpec extends Specification {
 

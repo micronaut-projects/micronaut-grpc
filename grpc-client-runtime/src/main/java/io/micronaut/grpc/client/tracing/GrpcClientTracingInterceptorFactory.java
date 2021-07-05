@@ -21,7 +21,7 @@ import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.annotation.NonNull;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * Factory that builds the Tracing interceptors.

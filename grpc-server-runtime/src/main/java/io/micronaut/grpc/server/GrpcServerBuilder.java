@@ -25,7 +25,7 @@ import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.order.OrderUtil;
 import io.micronaut.core.util.CollectionUtils;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.List;
 
 /**
