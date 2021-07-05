@@ -45,7 +45,7 @@ public class GrpcChannelBuilderFactory {
      */
     public GrpcChannelBuilderFactory(
             ApplicationContext beanContext,
-            @javax.inject.Named(TaskExecutors.IO) ExecutorService executorService) {
+            @jakarta.inject.Named(TaskExecutors.IO) ExecutorService executorService) {
         this.beanContext = beanContext;
         this.executorService = executorService;
     }

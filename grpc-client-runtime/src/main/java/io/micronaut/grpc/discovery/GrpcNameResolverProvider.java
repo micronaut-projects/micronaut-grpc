@@ -37,7 +37,7 @@ import io.reactivex.disposables.Disposable;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;

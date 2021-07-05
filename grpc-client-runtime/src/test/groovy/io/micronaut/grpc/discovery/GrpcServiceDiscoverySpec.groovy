@@ -27,7 +27,7 @@ import io.micronaut.runtime.server.EmbeddedServer
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 
 class GrpcServiceDiscoverySpec extends Specification {
 

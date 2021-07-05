@@ -2,7 +2,7 @@ package helloworld;
 
 // tag::imports[]
 import io.grpc.stub.StreamObserver;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 // end::imports[]
 
 // tag::clazz[]

@@ -7,8 +7,8 @@ import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.test.annotation.MicronautTest
 import spock.lang.Specification
 
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 @MicronautTest
 class GreetingEndpointSpec extends Specification {

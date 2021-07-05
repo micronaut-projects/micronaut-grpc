@@ -25,7 +25,7 @@ import io.opentracing.mock.MockTracer
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 @MicronautTest
 @Property(name = 'mock.tracer', value = 'true')

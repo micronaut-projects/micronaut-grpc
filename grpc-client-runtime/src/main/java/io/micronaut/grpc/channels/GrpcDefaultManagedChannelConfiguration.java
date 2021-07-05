@@ -20,7 +20,7 @@ import io.micronaut.context.annotation.Primary;
 import io.micronaut.context.env.Environment;
 import io.micronaut.scheduling.TaskExecutors;
 
-import javax.inject.Named;
+import jakarta.inject.Named;
 import java.util.concurrent.ExecutorService;
 
 /**
