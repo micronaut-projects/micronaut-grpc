@@ -121,6 +121,10 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
 
     @Override
     public int getPort() {
+        // support eager init      
+        if (!isRunning()) {
+            start();
+        }
         return server.getPort();
     }
 

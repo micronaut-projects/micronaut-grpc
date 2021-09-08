@@ -16,7 +16,6 @@
 package io.micronaut.grpc.annotation;
 
 import io.micronaut.context.annotation.AliasFor;
-import jakarta.inject.Qualifier;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

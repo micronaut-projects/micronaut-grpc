@@ -73,6 +73,9 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
                 final URI uri = name.contains("//") ? URI.create(name) : null;
                 if (uri != null && uri.getHost() != null && uri.getPort() > -1) {
                     this.channelBuilder = NettyChannelBuilder.forAddress(uri.getHost(), uri.getPort());
+                    if ("http".equalsIgnoreCase(uri.getScheme())) {
+                        this.channelBuilder.usePlaintext();
+                    }
                 } else {
                     this.channelBuilder = NettyChannelBuilder.forTarget(name);
                 }
