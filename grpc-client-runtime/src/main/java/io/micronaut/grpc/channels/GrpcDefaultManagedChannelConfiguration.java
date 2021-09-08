@@ -15,12 +15,7 @@
  */
 package io.micronaut.grpc.channels;
 
-import io.micronaut.context.annotation.ConfigurationProperties;
-import io.micronaut.context.annotation.Primary;
 import io.micronaut.context.env.Environment;
-import io.micronaut.scheduling.TaskExecutors;
-
-import jakarta.inject.Named;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -29,9 +24,7 @@ import java.util.concurrent.ExecutorService;
  * @author graemerocher
  * @since 1.0
  */
-@Named(GrpcDefaultManagedChannelConfiguration.NAME)
-@ConfigurationProperties(GrpcDefaultManagedChannelConfiguration.PREFIX)
-@Primary
+
 public class GrpcDefaultManagedChannelConfiguration extends GrpcManagedChannelConfiguration {
     public static final String NAME = "default";
     public static final String PREFIX = "grpc.client";
@@ -44,8 +37,8 @@ public class GrpcDefaultManagedChannelConfiguration extends GrpcManagedChannelCo
      */
     public GrpcDefaultManagedChannelConfiguration(
             String name,
-            Environment env,
-            @Named(TaskExecutors.IO) ExecutorService executorService) {
+            Environment env, 
+            ExecutorService executorService) {
         super(name, env, executorService);
     }
 }

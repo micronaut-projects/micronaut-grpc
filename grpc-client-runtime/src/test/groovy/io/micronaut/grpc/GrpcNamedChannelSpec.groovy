@@ -43,6 +43,32 @@ class GrpcNamedChannelSpec extends Specification {
         embeddedServer.close()
     }
 
+    @Retry
+    void "test named client - eager init"() {
+        given:
+        def port = SocketUtils.findAvailableTcpPort()
+        EmbeddedServer embeddedServer = ApplicationContext
+            .builder()
+            .eagerInitSingletons(true)
+            .properties([
+                'my.port': SocketUtils.findAvailableTcpPort(),
+                'grpc.server.port': port,
+                'grpc.channels.greeter.address':"localhost:$port",
+                'grpc.channels.greeter.plaintext':true
+            ])
+            .run(EmbeddedServer)
+        def context = embeddedServer.getApplicationContext()
+        def testBean = context.getBean(TestBean)
+        def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
+        def channel = testBean.blockingStub.channel
+        expect:
+        channel != null
+
+        testBean.sayHello("Fred") == "Hello 2 Fred"
+        config.name == 'greeter'
+        embeddedServer.close()
+    }
+
     @Singleton
     static class TestBean {
         @Inject
