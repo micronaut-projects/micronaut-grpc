@@ -27,7 +27,7 @@ dependencies {
     testImplementation "io.micronaut:micronaut-management"
     testImplementation project(":grpc-client-runtime")
 
-    testRuntimeOnly "io.netty:netty-tcnative:2.0.40.Final"
+    testRuntimeOnly "io.netty:netty-tcnative:2.0.42.Final"
     testRuntimeOnly "io.netty:netty-tcnative-boringssl-static:2.0.40.Final"
 }
 
