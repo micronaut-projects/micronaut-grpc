@@ -28,7 +28,7 @@ dependencies {
     testImplementation project(":grpc-client-runtime")
 
     testRuntimeOnly "io.netty:netty-tcnative:2.0.40.Final"
-    testRuntimeOnly "io.netty:netty-tcnative-boringssl-static:2.0.40.Final"
+    testRuntimeOnly "io.netty:netty-tcnative-boringssl-static:2.0.43.Final"
 }
 
 // compileJava.options.fork=true
