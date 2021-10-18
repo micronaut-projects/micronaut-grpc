@@ -23,11 +23,10 @@ import io.grpc.stub.StreamObserver
 import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
-import io.micronaut.test.annotation.MicronautTest
-import spock.lang.Specification
-
+import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import spock.lang.Specification
 
 @MicronautTest
 class HelloWordGrpcSpec extends Specification {
@@ -59,7 +58,7 @@ class HelloWordGrpcSpec extends Specification {
 
         boolean intercepted = false
         @Override
-        def <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
+        <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
             intercepted = true
             return next.startCall(call, headers)
         }

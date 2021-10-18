@@ -16,7 +16,6 @@
 package io.micronaut.grpc
 
 import io.micronaut.context.ApplicationContext
-import io.micronaut.context.exceptions.NoSuchBeanException
 import io.micronaut.discovery.event.ServiceReadyEvent
 import io.micronaut.discovery.event.ServiceStoppedEvent
 import io.micronaut.grpc.server.GrpcEmbeddedServer
@@ -24,10 +23,9 @@ import io.micronaut.grpc.server.health.GrpcServerHealthIndicator
 import io.micronaut.runtime.event.annotation.EventListener
 import io.micronaut.runtime.server.event.ServerShutdownEvent
 import io.micronaut.runtime.server.event.ServerStartupEvent
+import jakarta.inject.Singleton
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
-
-import jakarta.inject.Singleton
 
 class GrpcEmbeddedServerSpec extends Specification {
 

@@ -30,10 +30,10 @@ import io.micronaut.inject.ArgumentInjectionPoint;
 import io.micronaut.inject.FieldInjectionPoint;
 import io.micronaut.inject.InjectionPoint;
 import io.micronaut.inject.qualifiers.Qualifiers;
+import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PreDestroy;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;

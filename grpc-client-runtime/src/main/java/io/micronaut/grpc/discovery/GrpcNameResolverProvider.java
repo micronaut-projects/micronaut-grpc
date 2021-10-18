@@ -15,7 +15,13 @@
  */
 package io.micronaut.grpc.discovery;
 
-import io.grpc.*;
+import io.grpc.Attributes;
+import io.grpc.EquivalentAddressGroup;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.NameResolver;
+import io.grpc.NameResolverProvider;
+import io.grpc.NameResolverRegistry;
+import io.grpc.Status;
 import io.micronaut.context.BeanProvider;
 import io.micronaut.context.LifeCycle;
 import io.micronaut.context.annotation.Requires;
@@ -32,12 +38,12 @@ import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.ServiceInstanceList;
 import io.micronaut.discovery.exceptions.NoAvailableServiceException;
 import io.micronaut.grpc.channels.GrpcDefaultManagedChannelConfiguration;
-import io.reactivex.Flowable;
-import io.reactivex.disposables.Disposable;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.inject.Singleton;
+import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
+
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;
@@ -137,7 +143,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
                     }
                 }
 
-                this.disposable = Flowable.fromPublisher(discoveryClient.getInstances(serviceId)).subscribe(
+                this.disposable = Flux.from(discoveryClient.getInstances(serviceId)).subscribe(
                         (instances) -> {
                             if (CollectionUtils.isNotEmpty(instances)) {
                                 final List<EquivalentAddressGroup> servers = toAddresses(instances);
