@@ -22,7 +22,7 @@ subprojects { Project subproject ->
 
 
     dependencies {
-        implementation 'jakarta.inject:jakarta.inject-api:2.0.0'
+        implementation 'jakarta.inject:jakarta.inject-api:2.0.1'
     }
 
     tasks.withType(Test) {
