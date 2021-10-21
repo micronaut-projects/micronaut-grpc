@@ -46,7 +46,7 @@ jobs:
       - name: Build with Gradle
         run: |
           # Awful hack for kapt and JDK 16. See https://youtrack.jetbrains.com/issue/KT-45545
-          if [ ${{ matrix.java }} == 16 ]; then export GRADLE_OPTS="-Dorg.gradle.jvmargs=--illegal-access=permit"; fi
+          if [ ${{ matrix.java }} == 16 ]; then export GRADLE_OPTS="--add-opens jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED --add-opens jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED"; fi
           ./gradlew dependencyUpdates check --no-daemon --parallel --continue
         env:
            TESTCONTAINERS_RYUK_DISABLED: true
