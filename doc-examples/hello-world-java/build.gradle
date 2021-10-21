@@ -45,13 +45,6 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 }
 
-run.jvmArgs('-noverify', '-XX:TieredStopAtLevel=1')
-
-tasks.withType(JavaCompile){
-    options.encoding = "UTF-8"
-    options.compilerArgs.add('-parameters')
-}
-
 // tag::config[]
 
 sourceSets {
