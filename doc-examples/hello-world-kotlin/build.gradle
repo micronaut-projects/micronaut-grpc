@@ -19,18 +19,19 @@ micronaut {
     version micronautVersion
     testRuntime "junit5"
     enableNativeImage false
+    processing {
+        incremental(true)
+        annotations("helloworld.*")
+    }
 }
 
 dependencies {
-    kapt("io.micronaut:micronaut-inject-java")
     kapt("io.micronaut:micronaut-validation")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinxCoroutinesVersion}")
-    implementation("io.micronaut:micronaut-runtime")
     implementation("io.micronaut.grpc:micronaut-grpc-server-runtime")
-    implementation("io.micronaut.grpc:micronaut-grpc-client-runtime")
 
     // tag::dependencies[]
     implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
@@ -40,13 +41,6 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
 
-    kaptTest("io.micronaut:micronaut-inject-java")
-
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation("io.micronaut.test:micronaut-test-junit5")
-    testImplementation("org.mockito:mockito-junit-jupiter")
-
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
     testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:1.1.5")
 }
 
@@ -74,11 +68,6 @@ if (JavaVersion.current() >= JavaVersion.VERSION_16) {
         ]
     }
 }
-
-tasks.withType(JavaExec) {
-    jvmArgs('-XX:TieredStopAtLevel=1')
-}
-
 
 // tag::config[]
 

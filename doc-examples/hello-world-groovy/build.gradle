@@ -19,24 +19,21 @@ micronaut {
     version micronautVersion
     testRuntime "spock"
     enableNativeImage false
+    processing {
+        incremental(true)
+        annotations("helloworld.*")
+    }
 }
 
 dependencies {
 
+    compileOnly "io.grpc:grpc-stub:$grpcVersion"
+
     implementation "io.micronaut:micronaut-validation"
     implementation "io.micronaut.grpc:micronaut-grpc-server-runtime"
-    implementation "io.micronaut.grpc:micronaut-grpc-client-runtime"
     implementation "io.micronaut.discovery:micronaut-discovery-client"
 
-    compileOnly "io.grpc:grpc-stub:$grpcVersion"
-    compileOnly "io.micronaut:micronaut-inject-groovy"
     runtimeOnly "ch.qos.logback:logback-classic"
-
-    testImplementation "io.micronaut:micronaut-inject-groovy"
-    testImplementation "io.micronaut.test:micronaut-test-spock"
-    testImplementation("org.spockframework:spock-core") {
-        exclude group: "org.codehaus.groovy", module: "groovy-all"
-    }
 }
 
 tasks.withType(GroovyCompile) {
