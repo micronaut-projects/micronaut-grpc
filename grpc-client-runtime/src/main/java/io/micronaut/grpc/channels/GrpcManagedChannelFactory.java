@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Factory bean for creating {@link ManagedChannel} instances.
@@ -97,10 +98,10 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
         for (ManagedChannel channel : channels.values()) {
             if (!channel.isShutdown()) {
                 try {
-                    channel.shutdown();
+                    channel.shutdown().awaitTermination(1, TimeUnit.SECONDS);
                 } catch (Exception e) {
                     if (LOG.isWarnEnabled()) {
-                        LOG.warn("Error shutting down GRPC channel: " + e.getMessage(), e);
+                        LOG.warn("Error shutting down GRPC channel: {}", e.getMessage(), e);
                     }
                 }
             }
