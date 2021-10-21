@@ -54,7 +54,7 @@ public class GrpcServerChannel {
     @Bean(preDestroy = "shutdown")
     protected ManagedChannel serverChannel(
             GrpcEmbeddedServer server,
-            @jakarta.inject.Named(TaskExecutors.IO) ExecutorService executorService,
+            @Named(TaskExecutors.IO) ExecutorService executorService,
             List<ClientInterceptor> clientInterceptors) {
         final ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forAddress(
                 server.getHost(),
