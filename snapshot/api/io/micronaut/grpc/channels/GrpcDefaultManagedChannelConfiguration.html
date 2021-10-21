@@ -110,7 +110,8 @@
 </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">GrpcDefaultManagedChannelConfiguration</span>
+<pre>@ConfigurationProperties(value="grpc.client")
+public class <span class="typeNameLabel">GrpcDefaultManagedChannelConfiguration</span>
 extends <a href="../../../../io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></pre>
 <div class="block">Default configuration for all GRPC clients.</div>
 <dl>
@@ -167,7 +168,13 @@ extends <a href="../../../../io/micronaut/grpc/channels/GrpcManagedChannelConfig
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/channels/GrpcDefaultManagedChannelConfiguration.html#GrpcDefaultManagedChannelConfiguration-java.lang.String-io.micronaut.context.env.Environment-java.util.concurrent.ExecutorService-">GrpcDefaultManagedChannelConfiguration</a></span>(java.lang.String&nbsp;name,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/channels/GrpcDefaultManagedChannelConfiguration.html#GrpcDefaultManagedChannelConfiguration-io.micronaut.context.env.Environment-java.util.concurrent.ExecutorService-">GrpcDefaultManagedChannelConfiguration</a></span>(io.micronaut.context.env.Environment&nbsp;env,
+                                      java.util.concurrent.ExecutorService&nbsp;executorService)</code>
+<div class="block">Default constructor.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/channels/GrpcDefaultManagedChannelConfiguration.html#GrpcDefaultManagedChannelConfiguration-java.lang.String-io.micronaut.context.env.Environment-java.util.concurrent.ExecutorService-">GrpcDefaultManagedChannelConfiguration</a></span>(java.lang.String&nbsp;target,
                                       io.micronaut.context.env.Environment&nbsp;env,
                                       java.util.concurrent.ExecutorService&nbsp;executorService)</code>
 <div class="block">Default constructor.</div>
@@ -244,19 +251,35 @@ extends <a href="../../../../io/micronaut/grpc/channels/GrpcManagedChannelConfig
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a name="GrpcDefaultManagedChannelConfiguration-io.micronaut.context.env.Environment-java.util.concurrent.ExecutorService-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GrpcDefaultManagedChannelConfiguration</h4>
+<pre>public&nbsp;GrpcDefaultManagedChannelConfiguration(io.micronaut.context.env.Environment&nbsp;env,
+                                              java.util.concurrent.ExecutorService&nbsp;executorService)</pre>
+<div class="block">Default constructor.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>env</code> - The environment</dd>
+<dd><code>executorService</code> - The executor service</dd>
+</dl>
+</li>
+</ul>
 <a name="GrpcDefaultManagedChannelConfiguration-java.lang.String-io.micronaut.context.env.Environment-java.util.concurrent.ExecutorService-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GrpcDefaultManagedChannelConfiguration</h4>
-<pre>public&nbsp;GrpcDefaultManagedChannelConfiguration(java.lang.String&nbsp;name,
+<pre>public&nbsp;GrpcDefaultManagedChannelConfiguration(java.lang.String&nbsp;target,
                                               io.micronaut.context.env.Environment&nbsp;env,
                                               java.util.concurrent.ExecutorService&nbsp;executorService)</pre>
 <div class="block">Default constructor.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>name</code> - The name</dd>
+<dd><code>target</code> - The target</dd>
 <dd><code>env</code> - The environment</dd>
 <dd><code>executorService</code> - The executor service</dd>
 </dl>
