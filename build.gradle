@@ -27,7 +27,10 @@ subprojects { Project subproject ->
         testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
     }
 
+    dependencyUpdates.enabled = false
 }
 
 apply plugin: "io.micronaut.build.internal.docs"
 apply plugin: "io.micronaut.build.internal.dependency-updates"
+
+dependencyUpdates.enabled = false
