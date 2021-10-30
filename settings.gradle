@@ -1,7 +1,7 @@
 pluginManagement {
     plugins {
-        id 'io.micronaut.application' version "${micronautGradlePluginVersion}"
-        id 'io.micronaut.library' version "${micronautGradlePluginVersion}"
+        id "io.micronaut.application" version "${micronautGradlePluginVersion}"
+        id "io.micronaut.library" version "${micronautGradlePluginVersion}"
         id "com.google.protobuf" version "${protobufGradleVersion}"
     }
     repositories {
