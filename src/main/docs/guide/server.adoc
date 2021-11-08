@@ -144,7 +144,7 @@ You can then define a blocking stub bean in `src/test/java`. For example:
 .Defining Test Clients
 [source,java]
 ----
-include::examples/hello-world-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=clients]
+include::doc-examples/hello-world-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=clients]
 ----
 
 <1> A `ManagedChannel` is injected that can communicate with the server.
