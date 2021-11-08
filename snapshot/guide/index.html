@@ -122,7 +122,7 @@
 <h1 id="introduction"><a class="anchor" href="#introduction"></a>1 Introduction</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/3.0.x/src/main/docs/guide/introduction.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/introduction.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -154,7 +154,7 @@
 <h1 id="releaseHistory"><a class="anchor" href="#releaseHistory"></a>2 Release History</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/3.0.x/src/main/docs/guide/releaseHistory.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/releaseHistory.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -170,7 +170,7 @@
 <h1 id="gettingStarted"><a class="anchor" href="#gettingStarted"></a>3 Getting Started</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/3.0.x/src/main/docs/guide/gettingStarted.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/gettingStarted.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -208,7 +208,14 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy</code> to cha
 </table>
 </div>
 <div class="paragraph">
-<p>See also the <a href="https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples">Examples</a> in the repository that provides examples in Java, Kotlin and Groovy.</p>
+<p>Or alternatively you can create a project with <code>curl</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl --location --request GET 'https://launch.micronaut.io/create/grpc/demo?lang=JAVA&amp;build=GRADLE' --output demo.zip
+unzip demo.zip -d demo
+cd demo</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>To manually setup gRPC you can create an application:</p>
@@ -230,19 +237,40 @@ Replace <code>java</code> with <code>kotlin</code> or <code>groovy</code> to cha
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
     ...
-    id 'com.google.protobuf' version '0.8.14'
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then configure the gRPC and protobuf plugins:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
-    protocVersion="3.12.2"
-    grpcVersion="1.30.0"
+    id 'com.google.protobuf'
+    id 'io.micronaut.application'
 }
+
+repositories {
+    mavenCentral()
+}
+
+mainClassName = "helloworld.Application"
+micronaut {
+    version micronautVersion
+    testRuntime "junit5"
+    enableNativeImage false
+    processing {
+        incremental(true)
+        annotations("helloworld.*")
+    }
+}
+
+dependencies {
+
+    annotationProcessor "io.micronaut:micronaut-validation"
+
+    compileOnly "io.grpc:grpc-stub:$grpcVersion"
+
+    implementation "io.micronaut:micronaut-validation"
+    implementation "io.micronaut.grpc:micronaut-grpc-server-runtime"
+    implementation "io.micronaut.discovery:micronaut-discovery-client"
+
+    runtimeOnly "ch.qos.logback:logback-classic"
+
+    testAnnotationProcessor "io.micronaut:micronaut-validation"
+}
+
 
 sourceSets {
     main {
@@ -254,9 +282,35 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    protoc { artifact = "com.google.protobuf:protoc:$protobufJavaVersion" }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then configure the gRPC and protobuf plugins:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:$protobufJavaVersion" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
@@ -269,15 +323,10 @@ protobuf {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
-    protocVersion="3.12.2"
-    grpcVersion="1.29.0"
-    grpcKotlinVersion="0.1.2"
-}
-
-dependencies {
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">dependencies {
 ...
     implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
+    compileOnly("io.grpc:grpc-stub:$grpcVersion")
 }
 
 
@@ -292,10 +341,10 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:${protocVersion}" }
+    protoc { artifact = "com.google.protobuf:protoc:${protobufJavaVersion}" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
-        grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}" }
+        grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk7@jar" }
     }
     generateProtoTasks {
         all()*.plugins {
@@ -316,7 +365,7 @@ protobuf {
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-server-runtime:3.0.4-SNAPSHOT")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-server-runtime:3.1.0-SNAPSHOT")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -324,7 +373,7 @@ protobuf {
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-grpc-server-runtime&lt;/artifactId&gt;
-    &lt;version&gt;3.0.4-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;3.1.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -337,7 +386,7 @@ protobuf {
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-client-runtime:3.0.4-SNAPSHOT")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-client-runtime:3.1.0-SNAPSHOT")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -345,7 +394,7 @@ protobuf {
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-grpc-client-runtime&lt;/artifactId&gt;
-    &lt;version&gt;3.0.4-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;3.1.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -391,33 +440,30 @@ If you wish to use gRPC standalone without the Micronaut HTTP server you should 
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plugin&gt;
-  &lt;groupId&gt;com.github.os72&lt;/groupId&gt;
-  &lt;artifactId&gt;protoc-jar-maven-plugin&lt;/artifactId&gt;
-  &lt;version&gt;3.6.0.2&lt;/version&gt;
-  &lt;executions&gt;
-    &lt;execution&gt;
-      &lt;phase&gt;generate-sources&lt;/phase&gt;
-      &lt;goals&gt;
-        &lt;goal&gt;run&lt;/goal&gt;
-      &lt;/goals&gt;
-      &lt;configuration&gt;
-          &lt;addProtoSources&gt;all&lt;/addProtoSources&gt;
-          &lt;includeMavenTypes&gt;direct&lt;/includeMavenTypes&gt;
-          &lt;inputDirectories&gt;
-            &lt;include&gt;src/main/proto&lt;/include&gt;
-          &lt;/inputDirectories&gt;
-          &lt;outputTargets&gt;
-              &lt;outputTarget&gt;
-                      &lt;type&gt;java&lt;/type&gt;
-              &lt;/outputTarget&gt;
-              &lt;outputTarget&gt;
-                      &lt;type&gt;grpc-java&lt;/type&gt;
-                      &lt;pluginArtifact&gt;io.grpc:protoc-gen-grpc-java:1.17.1&lt;/pluginArtifact&gt;
-              &lt;/outputTarget&gt;
-          &lt;/outputTargets&gt;
-        &lt;/configuration&gt;
-    &lt;/execution&gt;
-  &lt;/executions&gt;
+    &lt;groupId&gt;org.xolstice.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;protobuf-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;0.6.1&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;protocArtifact&gt;com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}&lt;/protocArtifact&gt;
+        &lt;pluginId&gt;grpc-java&lt;/pluginId&gt;
+        &lt;pluginArtifact&gt;io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}&lt;/pluginArtifact&gt;
+    &lt;/configuration&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;id&gt;compile&lt;/id&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;compile&lt;/goal&gt;
+                &lt;goal&gt;compile-custom&lt;/goal&gt;
+            &lt;/goals&gt;
+        &lt;/execution&gt;
+        &lt;execution&gt;
+            &lt;id&gt;test-compile&lt;/id&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;test-compile&lt;/goal&gt;
+                &lt;goal&gt;test-compile-custom&lt;/goal&gt;
+            &lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
 &lt;/plugin&gt;</code></pre>
 </div>
 </div>
@@ -497,7 +543,7 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 <h1 id="server"><a class="anchor" href="#server"></a>4 gRPC Server</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/3.0.x/src/main/docs/guide/server.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/server.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -510,77 +556,6 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 </div>
 <div class="paragraph">
 <p>For example:</p>
-</div>
-<div class="listingblock multi-language-sample">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">import io.grpc.stub.StreamObserver;
-import jakarta.inject.Singleton;
-
-@Singleton
-public class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <b class="conum">(1)</b>
-
-    private final GreetingService greetingService;
-
-    <b class="conum">(2)</b>
-    public GreetingEndpoint(GreetingService greetingService) {
-        this.greetingService = greetingService;
-    }
-
-    @Override
-    public void sayHello(HelloRequest request, StreamObserver&lt;HelloReply&gt; responseObserver) {
-        <b class="conum">(3)</b>
-        final String message = greetingService.sayHello(request.getName());
-        HelloReply reply = HelloReply.newBuilder().setMessage(message).build();
-        responseObserver.onNext(reply);
-        responseObserver.onCompleted();
-    }
-}</code></pre>
-</div>
-</div>
-<div class="listingblock multi-language-sample">
-<div class="content">
-<pre class="highlight"><code class="language-groovy" data-lang="groovy">import groovy.transform.CompileStatic
-import io.grpc.stub.StreamObserver
-import jakarta.inject.Singleton
-
-@CompileStatic
-@Singleton
-class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { <b class="conum">(1)</b>
-
-    final GreetingService greetingService
-
-    <b class="conum">(2)</b>
-    GreetingEndpoint(GreetingService greetingService) {
-        this.greetingService = greetingService
-    }
-
-    @Override
-    void sayHello(HelloRequest request, StreamObserver&lt;HelloReply&gt; responseObserver) {
-        <b class="conum">(3)</b>
-        HelloReply.newBuilder().with {
-            message = greetingService.sayHello(request.name)
-            responseObserver.onNext(build())
-            responseObserver.onCompleted()
-        }
-    }
-}</code></pre>
-</div>
-</div>
-<div class="listingblock multi-language-sample">
-<div class="content">
-<pre class="highlight"><code class="language-kotlin" data-lang="kotlin">import jakarta.inject.Singleton
-
-@Singleton <b class="conum">(1)</b>
-@Suppress("unused")
-class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.GreeterCoroutineImplBase() { <b class="conum">(2)</b>
-    override suspend fun sayHello(request: HelloRequest): HelloReply {
-        <b class="conum">(3)</b>
-        val message = greetingService.sayHello(request.name)
-        val reply = HelloReply.newBuilder().setMessage(message).build()
-        return reply
-    }
-}</code></pre>
-</div>
 </div>
 <div class="colist arabic">
 <table>
@@ -869,39 +844,6 @@ class Clients {
 <div class="paragraph">
 <p>Now that you have a test client, writing the test becomes trivial:</p>
 </div>
-<div class="listingblock multi-language-sample">
-<div class="content">
-<pre class="highlight"><code class="language-java" data-lang="java">import io.grpc.ManagedChannel;
-import io.micronaut.context.annotation.*;
-import io.micronaut.grpc.annotation.GrpcChannel;
-import io.micronaut.grpc.server.GrpcServerChannel;
-import io.micronaut.test.annotation.MicronautTest;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
-
-import jakarta.inject.Inject;
-
-@MicronautTest <b class="conum">(1)</b>
-public class GreetingEndpointTest {
-
-    @Inject
-    GreeterGrpc.GreeterBlockingStub blockingStub; <b class="conum">(2)</b>
-
-    @Test
-    void testHelloWorld() {
-        final HelloRequest request = HelloRequest.newBuilder() <b class="conum">(3)</b>
-                                                 .setName("Fred")
-                                                 .build();
-        assertEquals(
-                "Hello Fred",
-                blockingStub.sayHello(request)
-                            .getMessage()
-        );
-    }
-
-}</code></pre>
-</div>
-</div>
 <div class="colist arabic">
 <table>
 <tr>
@@ -923,7 +865,7 @@ public class GreetingEndpointTest {
 <h1 id="client"><a class="anchor" href="#client"></a>5 gRPC Clients</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/3.0.x/src/main/docs/guide/client.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/client.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1076,7 +1018,7 @@ GreeterGrpc.GreeterStub reactiveStub(
 <h1 id="serviceDiscovery"><a class="anchor" href="#serviceDiscovery"></a>6 Service Discovery</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/3.0.x/src/main/docs/guide/serviceDiscovery.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/serviceDiscovery.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1211,7 +1153,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <h1 id="tracing"><a class="anchor" href="#tracing"></a>7 Distributed Tracing</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/3.0.x/src/main/docs/guide/tracing.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/tracing.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1263,7 +1205,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <h1 id="protocolBuffers"><a class="anchor" href="#protocolBuffers"></a>8 Protocol Buffers Support</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/3.0.x/src/main/docs/guide/protocolBuffers.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/protocolBuffers.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1279,7 +1221,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-support:3.0.4-SNAPSHOT")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-support:3.1.0-SNAPSHOT")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1287,7 +1229,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-protobuff-support&lt;/artifactId&gt;
-    &lt;version&gt;3.0.4-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;3.1.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
@@ -1300,7 +1242,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <h1 id="repository"><a class="anchor" href="#repository"></a>9 Repository</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/3.0.x/src/main/docs/guide/repository.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/master/src/main/docs/guide/repository.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
