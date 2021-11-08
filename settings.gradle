@@ -10,6 +10,10 @@ pluginManagement {
     }
 }
 
+
+plugins {
+    id 'io.micronaut.build.shared.settings' version '4.2.3'
+}
 rootProject.name = 'grpc'
 
 include 'grpc-annotation'
