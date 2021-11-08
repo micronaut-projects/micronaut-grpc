@@ -1,3 +1,15 @@
+pluginManagement {
+    plugins {
+        id "io.micronaut.application" version "${micronautGradlePluginVersion}"
+        id "io.micronaut.library" version "${micronautGradlePluginVersion}"
+        id "com.google.protobuf" version "${protobufGradleVersion}"
+    }
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
 rootProject.name = 'grpc'
 
 include 'grpc-annotation'
@@ -5,3 +17,8 @@ include 'grpc-client-runtime'
 include 'grpc-server-runtime'
 include 'grpc-runtime'
 include 'protobuff-support'
+
+// documentation samples
+include 'doc-examples:hello-world-groovy'
+include 'doc-examples:hello-world-java'
+include 'doc-examples:hello-world-kotlin'

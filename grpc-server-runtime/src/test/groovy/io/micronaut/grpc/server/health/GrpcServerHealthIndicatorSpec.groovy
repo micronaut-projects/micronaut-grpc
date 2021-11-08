@@ -6,7 +6,7 @@ import io.micronaut.core.util.CollectionUtils
 import io.micronaut.grpc.server.GrpcEmbeddedServer
 import io.micronaut.health.HealthStatus
 import io.micronaut.management.health.indicator.HealthResult
-import io.reactivex.internal.subscribers.BlockingFirstSubscriber
+import reactor.core.publisher.Mono
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -19,9 +19,7 @@ class GrpcServerHealthIndicatorSpec extends Specification {
 
         when:
         GrpcServerHealthIndicator healthIndicator = server.getApplicationContext().getBean(GrpcServerHealthIndicator)
-        BlockingFirstSubscriber subscriber = new BlockingFirstSubscriber<HealthResult>()
-        healthIndicator.result.subscribe(subscriber)
-        HealthResult result = subscriber.blockingGet()
+        HealthResult result = Mono.from(healthIndicator.result).block()
 
         then:
         result.status == HealthStatus.UP
@@ -61,9 +59,7 @@ class GrpcServerHealthIndicatorSpec extends Specification {
 
         and:
         GrpcServerHealthIndicator healthIndicator = server.getApplicationContext().getBean(GrpcServerHealthIndicator)
-        BlockingFirstSubscriber subscriber = new BlockingFirstSubscriber<HealthResult>()
-        healthIndicator.result.subscribe(subscriber)
-        HealthResult result = subscriber.blockingGet()
+        HealthResult result = Mono.from(healthIndicator.result).block()
 
         then:
         result.status == HealthStatus.DOWN

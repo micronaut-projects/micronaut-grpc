@@ -18,14 +18,13 @@ package io.micronaut.grpc.server.tracing
 import io.micronaut.context.annotation.Property
 import io.micronaut.context.annotation.Requires
 import io.micronaut.grpc.HelloWordGrpcSpec
-import io.micronaut.test.annotation.MicronautTest
 import io.micronaut.test.annotation.MockBean
+import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import io.opentracing.Tracer
 import io.opentracing.mock.MockTracer
+import jakarta.inject.Inject
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
-
-import jakarta.inject.Inject
 
 @MicronautTest
 @Property(name = 'mock.tracer', value = 'true')
@@ -59,7 +58,6 @@ class GrpcTracingSpec extends Specification {
         }
     }
 
-    
     @MockBean
     @Requires(property = "mock.tracer", value = "true")
     Tracer tracer() {

@@ -27,11 +27,10 @@ import io.micronaut.context.annotation.Secondary
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.inject.qualifiers.Qualifiers
 import io.micronaut.runtime.server.EmbeddedServer
+import jakarta.inject.Singleton
 import jakarta.inject.Named
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
-
-import jakarta.inject.Singleton
 
 class GrpcServiceDiscoverySpec extends Specification {
 

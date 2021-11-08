@@ -19,7 +19,7 @@ import io.grpc.ServerBuilder
 import io.micronaut.context.ApplicationContext
 import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.server.GrpcServerConfiguration
-import io.micronaut.test.annotation.MicronautTest
+import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import spock.lang.Specification
 
 @MicronautTest
@@ -29,9 +29,9 @@ class GrpcServerConfigurationSpec extends Specification {
         given:
         def port = SocketUtils.findAvailableTcpPort()
         def ctx = ApplicationContext.run([
-            'grpc.server.port'               : port,
-            'grpc.server.handshake-timeout': '11s',
-            'grpc.server.instance-id'      : 'hello-grpc'
+                'grpc.server.port'             : port,
+                'grpc.server.handshake-timeout': '11s',
+                'grpc.server.instance-id'      : 'hello-grpc'
         ])
 
         GrpcServerConfiguration configuration = ctx.getBean(GrpcServerConfiguration)
@@ -45,7 +45,7 @@ class GrpcServerConfigurationSpec extends Specification {
         configuration.instanceId == 'hello-grpc'
 
         cleanup:
-        server.shutdown()
+        server.shutdown().awaitTermination();
         ctx.close()
     }
 
@@ -53,9 +53,9 @@ class GrpcServerConfigurationSpec extends Specification {
         given:
         def port = SocketUtils.findAvailableTcpPort()
         def ctx = ApplicationContext.run([
-            'grpc.server.port'             : port,
-            'grpc.server.ssl.cert-chain'   : 'classpath:example.crt',
-            'grpc.server.ssl.private-key'  : 'classpath:example.key',
+                'grpc.server.port'           : port,
+                'grpc.server.ssl.cert-chain' : 'classpath:example.crt',
+                'grpc.server.ssl.private-key': 'classpath:example.key',
         ])
 
         when:
@@ -68,7 +68,7 @@ class GrpcServerConfigurationSpec extends Specification {
         noExceptionThrown()
 
         cleanup:
-        server.shutdown()
+        server.shutdown().awaitTermination()
         ctx.close()
     }
 }

@@ -1,0 +1,80 @@
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.6.0-RC2"
+    id "org.jetbrains.kotlin.kapt" version "1.6.0-RC2"
+    id "org.jetbrains.kotlin.plugin.allopen" version "1.6.0-RC2"
+    id "io.micronaut.application" version "2.0.8"
+    id "com.google.protobuf" version "0.8.17"
+}
+
+ext {
+    grpcKotlinVersion = "1.2.0"
+}
+
+repositories {
+    mavenCentral()
+}
+
+mainClassName = "helloworld.Application"
+micronaut {
+    version micronautVersion
+    testRuntime "junit5"
+    enableNativeImage false
+    processing {
+        incremental(true)
+        annotations("helloworld.*")
+    }
+}
+
+dependencies {
+    kapt("io.micronaut:micronaut-validation")
+
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinxCoroutinesVersion}")
+    implementation("io.micronaut.grpc:micronaut-grpc-server-runtime")
+
+    // tag::dependencies[]
+    implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
+    compileOnly("io.grpc:grpc-stub:$grpcVersion")
+    // end::dependencies[]
+
+    runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
+
+    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:1.1.5")
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+    kotlinOptions {
+        jvmTarget = "1.8"
+        javaParameters = true
+    }
+}
+
+// tag::config[]
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/grpckt'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:${protobufJavaVersion}" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+        grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk7@jar" }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+            grpckt {}
+        }
+    }
+}
+
+// end::config[]

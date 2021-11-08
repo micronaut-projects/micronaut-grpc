@@ -30,13 +30,14 @@ import io.micronaut.inject.ArgumentInjectionPoint;
 import io.micronaut.inject.FieldInjectionPoint;
 import io.micronaut.inject.InjectionPoint;
 import io.micronaut.inject.qualifiers.Qualifiers;
+import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PreDestroy;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Factory bean for creating {@link ManagedChannel} instances.
@@ -97,10 +98,10 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
         for (ManagedChannel channel : channels.values()) {
             if (!channel.isShutdown()) {
                 try {
-                    channel.shutdown();
+                    channel.shutdown().awaitTermination(1, TimeUnit.SECONDS);
                 } catch (Exception e) {
                     if (LOG.isWarnEnabled()) {
-                        LOG.warn("Error shutting down GRPC channel: " + e.getMessage(), e);
+                        LOG.warn("Error shutting down GRPC channel: {}", e.getMessage(), e);
                     }
                 }
             }
