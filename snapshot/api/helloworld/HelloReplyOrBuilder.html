@@ -17,6 +17,12 @@
     catch(err) {
     }
 //-->
+var methods = {"i0":6,"i1":6};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 </script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -69,13 +75,13 @@
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.java.lang.Object">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.top">
@@ -85,28 +91,24 @@
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">helloworld</div>
-<h2 title="Class HelloReplyOrBuilder" class="title">Class HelloReplyOrBuilder</h2>
+<h2 title="Interface HelloReplyOrBuilder" class="title">Interface HelloReplyOrBuilder</h2>
 </div>
 <div class="contentContainer">
-<ul class="inheritance">
-<li>java.lang.Object</li>
-<li>
-<ul class="inheritance">
-<li>helloworld.HelloReplyOrBuilder</li>
-</ul>
-</li>
-</ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Superinterfaces:</dt>
+<dd>com.google.protobuf.MessageLiteOrBuilder, com.google.protobuf.MessageOrBuilder</dd>
+</dl>
+<dl>
+<dt>All Known Implementing Classes:</dt>
+<dd><a href="../helloworld/HelloReply.html" title="class in helloworld">HelloReply</a>, <a href="../helloworld/HelloReply.Builder.html" title="class in helloworld">HelloReply.Builder</a></dd>
+</dl>
 <hr>
 <br>
-<pre>public static class <span class="typeNameLabel">HelloReplyOrBuilder</span>
-extends java.lang.Object</pre>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../serialized-form.html#helloworld.HelloReplyOrBuilder">Serialized Form</a></dd>
-</dl>
+<pre>public interface <span class="typeNameLabel">HelloReplyOrBuilder</span>
+extends com.google.protobuf.MessageOrBuilder</pre>
 </li>
 </ul>
 </div>
@@ -119,12 +121,80 @@ extends java.lang.Object</pre>
 <!--   -->
 </a>
 <h3>Method Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../helloworld/HelloReplyOrBuilder.html#getMessage--">getMessage</a></span>()</code>
+<div class="block"><code>string message = 1;</code></div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../helloworld/HelloReplyOrBuilder.html#getMessageBytes--">getMessageBytes</a></span>()</code>
+<div class="block"><code>string message = 1;</code></div>
+</td>
+</tr>
+</table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
+<li class="blockList"><a name="methods.inherited.from.class.com.google.protobuf.MessageOrBuilder">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;java.lang.Object</h3>
-<code>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</code></li>
+<h3>Methods inherited from interface&nbsp;com.google.protobuf.MessageOrBuilder</h3>
+<code>findInitializationErrors, getAllFields, getDefaultInstanceForType, getDescriptorForType, getField, getInitializationErrorString, getOneofFieldDescriptor, getRepeatedField, getRepeatedFieldCount, getUnknownFields, hasField, hasOneof</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.com.google.protobuf.MessageLiteOrBuilder">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;com.google.protobuf.MessageLiteOrBuilder</h3>
+<code>isInitialized</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="getMessage--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMessage</h4>
+<pre>java.lang.String&nbsp;getMessage()</pre>
+<div class="block"><code>string message = 1;</code></div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The message.</dd>
+</dl>
+</li>
+</ul>
+<a name="getMessageBytes--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getMessageBytes</h4>
+<pre>com.google.protobuf.ByteString&nbsp;getMessageBytes()</pre>
+<div class="block"><code>string message = 1;</code></div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The bytes for message.</dd>
+</dl>
+</li>
 </ul>
 </li>
 </ul>
@@ -181,13 +251,13 @@ extends java.lang.Object</pre>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.java.lang.Object">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.bottom">
