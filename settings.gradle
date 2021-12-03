@@ -1,7 +1,6 @@
 pluginManagement {
     plugins {
         id "io.micronaut.application" version "${micronautGradlePluginVersion}"
-        id "io.micronaut.library" version "${micronautGradlePluginVersion}"
         id "com.google.protobuf" version "${protobufGradleVersion}"
     }
     repositories {
@@ -10,11 +9,11 @@ pluginManagement {
     }
 }
 
-
 plugins {
-    id 'io.micronaut.build.shared.settings' version '4.2.6'
+    id 'io.micronaut.build.shared.settings' version '5.0.2'
 }
-rootProject.name = 'grpc'
+
+rootProject.name = 'grpc-parent'
 
 include 'grpc-annotation'
 include 'grpc-client-runtime'

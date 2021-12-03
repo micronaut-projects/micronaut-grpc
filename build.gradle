@@ -1,36 +1,4 @@
-buildscript {
-    repositories {
-        gradlePluginPortal()
-        mavenCentral()
-    }
-    dependencies {
-        classpath "io.micronaut.build.internal:micronaut-gradle-plugins:4.2.6"
-    }
+plugins {
+    id "io.micronaut.build.internal.docs"
+    id "io.micronaut.build.internal.dependency-updates"
 }
-
-subprojects { Project subproject ->
-    group "io.micronaut.grpc"
-
-    apply plugin: "io.micronaut.build.internal.common"
-
-    if (subproject.parent.name == "doc-examples" || subproject.name == "doc-examples") {
-        project.gradle.startParameter.excludedTaskNames.addAll(['checkstyleMain', 'checkstyleNohttp'])
-        return
-    }
-
-    apply plugin: "io.micronaut.build.internal.dependency-updates"
-    apply plugin: "io.micronaut.build.internal.publishing"
-
-    dependencies {
-        implementation platform("io.micronaut:micronaut-bom:$micronautVersion")
-        annotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
-        testAnnotationProcessor platform("io.micronaut:micronaut-bom:$micronautVersion")
-    }
-
-    dependencyUpdates.enabled = false
-}
-
-apply plugin: "io.micronaut.build.internal.docs"
-apply plugin: "io.micronaut.build.internal.dependency-updates"
-
-dependencyUpdates.enabled = false
