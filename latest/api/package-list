@@ -4,6 +4,7 @@ io.micronaut.grpc.channels
 io.micronaut.grpc.client.tracing
 io.micronaut.grpc.discovery
 io.micronaut.grpc.server
+io.micronaut.grpc.server.graalvm
 io.micronaut.grpc.server.health
 io.micronaut.grpc.server.interceptor
 io.micronaut.grpc.server.tracing
