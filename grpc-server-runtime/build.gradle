@@ -19,6 +19,7 @@ dependencies {
     compileOnly "io.micronaut:micronaut-tracing"
     compileOnly "io.micronaut:micronaut-management"
     compileOnly "io.opentracing.contrib:opentracing-grpc:0.2.3"
+    compileOnly "org.graalvm.nativeimage:svm"
 
     testImplementation "io.micronaut.discovery:micronaut-discovery-client"
     testImplementation "io.opentracing:opentracing-mock:0.33.0"
