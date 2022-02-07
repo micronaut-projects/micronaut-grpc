@@ -13,7 +13,7 @@ See the [Snapshot Documentation](https://micronaut-projects.github.io/micronaut-
 
 ## Examples
 
-Examples for Java, Kotlin and Groovy can be found in the [examples](https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples) directory.
+Examples for Java, Kotlin and Groovy can be found in the [examples](https://github.com/micronaut-projects/micronaut-grpc/tree/master/doc-examples) directory.
 
 ## Snapshots and Releases
 
