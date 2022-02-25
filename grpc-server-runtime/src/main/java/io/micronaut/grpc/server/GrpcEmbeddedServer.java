@@ -203,7 +203,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
                     applicationContext.publishEvent(new ServiceStoppedEvent(serviceInstance));
                 }
             } finally {
-                server.shutdownNow();
+                server.shutdown();
                 try {
                     server.awaitTermination(grpcConfiguration.getAwaitTermination().toMillis(), TimeUnit.MILLISECONDS);
                 } catch (InterruptedException ignored) {
