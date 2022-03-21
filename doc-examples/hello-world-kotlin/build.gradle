@@ -39,7 +39,7 @@ dependencies {
     // end::dependencies[]
 
     runtimeOnly("ch.qos.logback:logback-classic")
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.0")
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2")
 
     testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:1.1.5")
 }
