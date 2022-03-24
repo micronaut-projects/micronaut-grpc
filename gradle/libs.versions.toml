@@ -1,0 +1,51 @@
+[versions]
+managed-protobuf = '3.17.2'
+managed-grpc = '1.39.0'
+
+opentracing-grpc = '0.2.3'
+opentracing-mock = '0.33.0'
+jaeger-core = '1.8.0'
+
+jackson-datatype-protobuf = '0.9.12'
+
+[libraries]
+managed-grpc-protobuf = { module = 'io.grpc:grpc-protobuf', version.ref = 'managed-grpc' }
+managed-grpc-stub = { module = 'io.grpc:grpc-stub', version.ref = 'managed-grpc' }
+managed-protobuf-java = { module = 'com.google.protobuf:protobuf-java', version.ref = 'managed-protobuf' }
+managed-protobuf-java-util = { module = 'com.google.protobuf:protobuf-java-util', version.ref = 'managed-protobuf' }
+
+protoc = { module = 'com.google.protobuf:protoc', version.ref = 'managed-protobuf' }
+protoc-grpc = { module = 'io.grpc:protoc-gen-grpc-java', version.ref = 'managed-grpc' }
+
+grpc-netty = { module = 'io.grpc:grpc-netty', version.ref = 'managed-grpc' }
+
+# micronaut-cache = { module = 'io.micronaut.cache:micronaut-cache-core' }
+# micronaut-graal = { module = 'io.micronaut:micronaut-graal' }
+# micronaut-http-client = { module = 'io.micronaut:micronaut-http-client' }
+# micronaut-http-server-netty = { module = 'io.micronaut:micronaut-http-server-netty' }
+micronaut-inject-java = { module = 'io.micronaut:micronaut-inject-java' }
+micronaut-discovery-client = { module = 'io.micronaut.discovery:micronaut-discovery-client' }
+
+micronaut-management = { module = 'io.micronaut:micronaut-management' }
+micronaut-http = { module = 'io.micronaut:micronaut-http' }
+micronaut-http-netty = { module = 'io.micronaut:micronaut-http-netty' }
+micronaut-http-server-netty = { module = 'io.micronaut:micronaut-http-server-netty' }
+
+# micronaut-micrometer = { module = 'io.micronaut.micrometer:micronaut-micrometer-core' }
+# micronaut-micrometer-statsd = { module = 'io.micronaut.micrometer:micronaut-micrometer-registry-statsd' }
+micronaut-reactor-http-client = { module = 'io.micronaut.reactor:micronaut-reactor-http-client' }
+micronaut-validation = { module = 'io.micronaut:micronaut-validation' }
+micronaut-tracing = { module = 'io.micronaut:micronaut-tracing' }
+
+graal = { module = "org.graalvm.nativeimage:svm" }
+projectreactor = { module = 'io.projectreactor:reactor-core' }
+
+opentracing-grpc = { module = 'io.opentracing.contrib:opentracing-grpc', version.ref = 'opentracing-grpc' }
+opentracing-mock = { module = 'io.opentracing:opentracing-mock', version.ref = 'opentracing-mock' }
+jaeger-core = { module = 'io.jaegertracing:jaeger-core', version.ref = 'jaeger-core' }
+
+jackson-datatype-protobuf = { module = 'com.hubspot.jackson:jackson-datatype-protobuf', version.ref = 'jackson-datatype-protobuf' }
+netty-tcnative = { module = 'io.netty:netty-tcnative' }
+netty-tcnative-boringssl-static = { module = 'io.netty:netty-tcnative-boringssl-static' }
+
+logback-classic = { module = 'ch.qos.logback:logback-classic'}

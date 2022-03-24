@@ -4,25 +4,19 @@ plugins {
 }
 
 dependencies {
-    annotationProcessor "io.micronaut:micronaut-inject-java"
-    annotationProcessor "io.micronaut:micronaut-validation"
+    annotationProcessor libs.micronaut.validation
 
-    api "io.micronaut:micronaut-inject"
-    api "io.micronaut:micronaut-http"
-    api "io.micronaut:micronaut-http-netty"
+    api libs.micronaut.http
+    api libs.micronaut.http.netty
     //protobuf
-    api "com.google.protobuf:protobuf-java:$protobufJavaVersion"
-    api "com.google.protobuf:protobuf-java-util:$protobufJavaVersion"
-    implementation "jakarta.inject:jakarta.inject-api"
+    api libs.managed.protobuf.java
+    api libs.managed.protobuf.java.util
 
-    testImplementation "io.micronaut:micronaut-http-server-netty"
-    testImplementation "io.micronaut:micronaut-inject-groovy"
-    testImplementation "io.micronaut:micronaut-inject-java"
-    testImplementation "io.micronaut.reactor:micronaut-reactor-http-client"
-    testImplementation "io.micronaut.test:micronaut-test-spock"
-    testImplementation "com.hubspot.jackson:jackson-datatype-protobuf:0.9.12"
+    testImplementation libs.micronaut.http.server.netty
+    testImplementation libs.micronaut.reactor.http.client
+    testImplementation libs.jackson.datatype.protobuf
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:$protobufJavaVersion" }
+    protoc { artifact = libs.protoc.asProvider().get() }
 }

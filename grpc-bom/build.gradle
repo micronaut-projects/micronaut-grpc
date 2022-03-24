@@ -1,12 +1,3 @@
 plugins {
     id "io.micronaut.build.internal.bom"
 }
-
-dependencies {
-    constraints {
-        api "io.grpc:grpc-protobuf:$grpcVersion"
-        api "io.grpc:grpc-stub:$grpcVersion"
-        api "com.google.protobuf:protobuf-java:$protobufJavaVersion"
-        api "com.google.protobuf:protobuf-java-util:$protobufJavaVersion"
-    }
-}
