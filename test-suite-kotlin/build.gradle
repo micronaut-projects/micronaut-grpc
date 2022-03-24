@@ -33,7 +33,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinxCoroutinesVersion}")
-    implementation("io.micronaut.grpc:micronaut-grpc-server-runtime")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation(project(':grpc-server-runtime'))
 
     // tag::dependencies[]
     implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
