@@ -40,6 +40,8 @@ class GrpcNamedChannelSpec extends Specification {
 
         testBean.sayHello("Fred") == "Hello 2 Fred"
         config.name == 'greeter'
+
+        cleanup:
         embeddedServer.close()
     }
 
@@ -61,11 +63,14 @@ class GrpcNamedChannelSpec extends Specification {
         def testBean = context.getBean(TestBean)
         def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
         def channel = testBean.blockingStub.channel
+
         expect:
         channel != null
 
         testBean.sayHello("Fred") == "Hello 2 Fred"
         config.name == 'greeter'
+
+        cleanup:
         embeddedServer.close()
     }
 
