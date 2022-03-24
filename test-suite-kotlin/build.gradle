@@ -6,9 +6,11 @@ plugins {
     id "com.google.protobuf"
 }
 
+// tag::variables[]
 ext {
     grpcKotlinVersion = "1.2.0"
 }
+// end::variables[]
 
 repositories {
     mavenCentral()
