@@ -97,7 +97,12 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
 
     @Override
     public NameResolver newNameResolver(URI targetUri, NameResolver.Args args) {
-        final String serviceId = targetUri.toString();
+        // If the targetUri comes in prefixed with just our scheme
+        //  - Extract the path for discovery
+        //  - Otherwise, use the targetUri as before
+        final String serviceId = SCHEME.equals(targetUri.getScheme()) && targetUri.getHost() == null ?
+                targetUri.getPath().substring(1) :
+                targetUri.toString();
         if (serviceId.contains(":")) {
             return new NameResolver() {
                 @Override

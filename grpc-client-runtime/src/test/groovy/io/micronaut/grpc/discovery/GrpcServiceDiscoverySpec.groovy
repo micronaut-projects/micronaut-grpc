@@ -1,18 +1,3 @@
-/*
- * Copyright 2017-2019 original authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package io.micronaut.grpc.discovery
 
 import io.grpc.Channel
@@ -52,7 +37,6 @@ class GrpcServiceDiscoverySpec extends Specification {
         then:
         stub.sayHello(HelloRequest.newBuilder().setName("test").build()).get().message == 'Hello test'
 
-
         cleanup:
         client.stop()
         server.stop()
@@ -71,10 +55,13 @@ class GrpcServiceDiscoverySpec extends Specification {
                 'my.port':server.getPort()
         ])
 
+        and:
+        def name = "Tim"
+
         GreeterGrpc.GreeterStub stub = client.getBean(GreeterGrpc.GreeterStub)
         PollingConditions conditions = new PollingConditions(timeout: 3, delay: 0.5)
         HelloReply reply
-        stub.sayHello(HelloRequest.newBuilder().setName("test").build(), new StreamObserver<HelloReply>() {
+        stub.sayHello(HelloRequest.newBuilder().setName(name).build(), new StreamObserver<HelloReply>() {
             @Override
             void onNext(HelloReply value) {
                 reply = value
@@ -92,9 +79,8 @@ class GrpcServiceDiscoverySpec extends Specification {
         })
         then:
         conditions.eventually {
-            reply != null
+            reply.message == "Hello $name"
         }
-
 
         cleanup:
         client.stop()
@@ -113,10 +99,13 @@ class GrpcServiceDiscoverySpec extends Specification {
                 'my.port':server.getPort()
         ])
 
+        and:
+        def name = "Tim"
+
         GreeterGrpc.GreeterStub stub = client.getBean(GreeterGrpc.GreeterStub)
         PollingConditions conditions = new PollingConditions(timeout: 3, delay: 0.5)
         HelloReply reply
-        stub.sayHello(HelloRequest.newBuilder().setName("test").build(), new StreamObserver<HelloReply>() {
+        stub.sayHello(HelloRequest.newBuilder().setName(name).build(), new StreamObserver<HelloReply>() {
             @Override
             void onNext(HelloReply value) {
                 reply = value
@@ -124,24 +113,22 @@ class GrpcServiceDiscoverySpec extends Specification {
 
             @Override
             void onError(Throwable t) {
-
             }
 
             @Override
             void onCompleted() {
-
             }
         })
         then:
         conditions.eventually {
-            reply != null
+            reply.message == "Hello $name"
         }
 
 
         when:
         stub = client.getBean(GreeterGrpc.GreeterStub, Qualifiers.byName("other"))
         reply = null;
-        stub.sayHello(HelloRequest.newBuilder().setName("test").build(), new StreamObserver<HelloReply>() {
+        stub.sayHello(HelloRequest.newBuilder().setName(name).build(), new StreamObserver<HelloReply>() {
             @Override
             void onNext(HelloReply value) {
                 reply = value
@@ -149,17 +136,15 @@ class GrpcServiceDiscoverySpec extends Specification {
 
             @Override
             void onError(Throwable t) {
-
             }
 
             @Override
             void onCompleted() {
-
             }
         })
         then:
         conditions.eventually {
-            reply != null
+            reply.message == "Hello $name"
         }
 
         cleanup:
