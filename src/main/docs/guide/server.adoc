@@ -4,7 +4,7 @@ To implement a gRPC server for the previously defined `helloworld.proto` definit
 
 For example:
 
-snippet::helloworld.GreetingEndpoint[tags="imports,clazz", project-base="test-suite", source="main"]
+snippet::helloworld.GreetingEndpoint[tags="imports,clazz", source="main"]
 
 <1> The class extends from `GreeterGrpc.GreeterImplBase` and is annotated with `jakarta.inject.Singleton`
 <2> You can dependency inject other beans into the implementation. In this case `GreetingService` is dependency injected.
@@ -153,7 +153,7 @@ The above example uses the `@GrpcChannel` annotation to inject a gRPC `ManagedCh
 
 Now that you have a test client, writing the test becomes trivial:
 
-snippet::helloworld.GreetingEndpointTest[tags="imports,test", project-base="test-suite"]
+snippet::helloworld.GreetingEndpointTest[tags="imports,test"]
 
 <1> The test is annotated with `@MicronautTest`
 <2> The client stub is injected into the test
