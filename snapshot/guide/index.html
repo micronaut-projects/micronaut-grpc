@@ -238,58 +238,6 @@ cd demo</code></pre>
 <pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
     ...
     id 'com.google.protobuf'
-    id 'io.micronaut.application'
-}
-
-repositories {
-    mavenCentral()
-}
-
-mainClassName = "helloworld.Application"
-micronaut {
-    version micronautVersion
-    testRuntime "junit5"
-    enableNativeImage false
-    processing {
-        incremental(true)
-        annotations("helloworld.*")
-    }
-}
-
-dependencies {
-
-    annotationProcessor "io.micronaut:micronaut-validation"
-
-    compileOnly "io.grpc:grpc-stub:$grpcVersion"
-
-    implementation "io.micronaut:micronaut-validation"
-    implementation "io.micronaut.grpc:micronaut-grpc-server-runtime"
-    implementation "io.micronaut.discovery:micronaut-discovery-client"
-
-    runtimeOnly "ch.qos.logback:logback-classic"
-
-    testAnnotationProcessor "io.micronaut:micronaut-validation"
-}
-
-
-sourceSets {
-    main {
-        java {
-            srcDirs 'build/generated/source/proto/main/grpc'
-            srcDirs 'build/generated/source/proto/main/java'
-        }
-    }
-}
-
-protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:$protobufJavaVersion" }
-    plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
-    }
-    generateProtoTasks {
-        all()*.plugins { grpc {} }
-    }
-}
 }</code></pre>
 </div>
 </div>
@@ -323,7 +271,11 @@ protobuf {
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">dependencies {
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
+    grpcKotlinVersion = "1.2.0"
+}
+
+dependencies {
 ...
     implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
     compileOnly("io.grpc:grpc-stub:$grpcVersion")
@@ -365,7 +317,7 @@ protobuf {
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-server-runtime:3.1.4-SNAPSHOT")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-server-runtime:3.2.0-SNAPSHOT")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -373,7 +325,7 @@ protobuf {
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-grpc-server-runtime&lt;/artifactId&gt;
-    &lt;version&gt;3.1.4-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;3.2.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div></p>
@@ -385,7 +337,7 @@ protobuf {
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-client-runtime:3.1.4-SNAPSHOT")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-client-runtime:3.2.0-SNAPSHOT")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -393,7 +345,7 @@ protobuf {
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-grpc-client-runtime&lt;/artifactId&gt;
-    &lt;version&gt;3.1.4-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;3.2.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div></p>
@@ -554,6 +506,51 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 </div>
 <div class="paragraph">
 <p>For example:</p>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">import groovy.transform.CompileStatic
+import io.grpc.stub.StreamObserver
+import jakarta.inject.Singleton
+
+@CompileStatic
+@Singleton
+class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { // <b class="conum">(1)</b>
+
+    final GreetingService greetingService
+
+    // <b class="conum">(2)</b>
+    GreetingEndpoint(GreetingService greetingService) {
+        this.greetingService = greetingService
+    }
+
+    @Override
+    void sayHello(HelloRequest request, StreamObserver&lt;HelloReply&gt; responseObserver) {
+        // <b class="conum">(3)</b>
+        HelloReply.newBuilder().with {
+            message = greetingService.sayHello(request.name)
+            responseObserver.onNext(build())
+            responseObserver.onCompleted()
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import jakarta.inject.Singleton
+
+@Singleton // <b class="conum">(1)</b>
+@Suppress("unused")
+class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.GreeterCoroutineImplBase() { // <b class="conum">(2)</b>
+    override suspend fun sayHello(request: HelloRequest): HelloReply {
+        // <b class="conum">(3)</b>
+        val message = greetingService.sayHello(request.name)
+        val reply = HelloReply.newBuilder().setMessage(message).build()
+        return reply
+    }
+}</code></pre>
+</div>
 </div>
 <div class="colist arabic">
 <table>
@@ -1216,7 +1213,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-support:3.1.4-SNAPSHOT")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-support:3.2.0-SNAPSHOT")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1224,7 +1221,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-protobuff-support&lt;/artifactId&gt;
-    &lt;version&gt;3.1.4-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;3.2.0-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div></p>
