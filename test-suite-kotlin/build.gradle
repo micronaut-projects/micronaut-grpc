@@ -8,7 +8,7 @@ plugins {
 
 // tag::variables[]
 ext {
-    grpcKotlinVersion = "1.2.0"
+    grpcKotlinVersion = "1.2.1"
 }
 // end::variables[]
 
