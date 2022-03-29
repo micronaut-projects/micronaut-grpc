@@ -98,11 +98,12 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
     @Override
     public NameResolver newNameResolver(URI targetUri, NameResolver.Args args) {
         final String serviceId = targetUri.toString();
-        if (serviceId.contains(":")) {
+        final String resolvedServiceId = serviceId.startsWith("svc:///") ? serviceId.substring(7) : serviceId;
+        if (resolvedServiceId.contains(":")) {
             return new NameResolver() {
                 @Override
                 public void start(Listener listener) {
-                    final String[] hostAndPort = serviceId.split(":");
+                    final String[] hostAndPort = resolvedServiceId.split(":");
                     final List<EquivalentAddressGroup> equivalentAddressGroups =
                             Collections.singletonList(new EquivalentAddressGroup(new InetSocketAddress(hostAndPort[0], Integer.parseInt(hostAndPort[1]))));
                     listener.onAddresses(equivalentAddressGroups, Attributes.EMPTY);
@@ -110,7 +111,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
 
                 @Override
                 public String getServiceAuthority() {
-                    return serviceId;
+                    return resolvedServiceId;
                 }
 
                 @Override
@@ -118,8 +119,10 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
 
                 }
             };
-        } else if (!NameUtils.isHyphenatedLowerCase(serviceId)) {
-            throw new IllegalArgumentException("Invalid service ID [" + serviceId + "]. Service IDs should be kebab-case (lowercase / hyphen separated). For example 'greeting-service'.");
+        }
+
+        if (!NameUtils.isHyphenatedLowerCase(resolvedServiceId)) {
+            throw new IllegalArgumentException("Invalid service ID [" + resolvedServiceId + "]. Service IDs should be kebab-case (lowercase / hyphen separated). For example 'greeting-service'.");
 
         }
         return new NameResolver() {
@@ -128,13 +131,13 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
 
             @Override
             public String getServiceAuthority() {
-                return "//" + serviceId;
+                return "//" + resolvedServiceId;
             }
 
             @Override
             public void refresh() {
                 for (ServiceInstanceList serviceInstanceList : serviceInstanceLists) {
-                    if (serviceInstanceList.getID().equals(serviceId)) {
+                    if (serviceInstanceList.getID().equals(resolvedServiceId)) {
                         listener.onAddresses(
                                 toAddresses(serviceInstanceList.getInstances()),
                                 Attributes.EMPTY
@@ -143,7 +146,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
                     }
                 }
 
-                this.disposable = Flux.from(discoveryClient.getInstances(serviceId)).subscribe(
+                this.disposable = Flux.from(discoveryClient.getInstances(resolvedServiceId)).subscribe(
                         (instances) -> {
                             if (CollectionUtils.isNotEmpty(instances)) {
                                 final List<EquivalentAddressGroup> servers = toAddresses(instances);
