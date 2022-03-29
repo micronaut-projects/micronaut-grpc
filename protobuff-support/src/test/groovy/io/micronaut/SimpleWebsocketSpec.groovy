@@ -19,5 +19,8 @@ class SimpleWebsocketSpec extends BaseSpec {
             conditions.eventually {
                 sampleWebsocketClient.replies.contains(message)
             }
+
+        cleanup:
+        sampleWebsocketClient.close()
     }
 }

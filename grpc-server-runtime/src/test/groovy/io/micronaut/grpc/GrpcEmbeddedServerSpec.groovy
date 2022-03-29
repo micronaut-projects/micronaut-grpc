@@ -30,7 +30,6 @@ import spock.util.concurrent.PollingConditions
 class GrpcEmbeddedServerSpec extends Specification {
 
     void "test fires server startup events - no application name"() {
-
         when:
         GrpcEmbeddedServer embeddedServer = ApplicationContext.run(GrpcEmbeddedServer)
         EventConsumer consumer = embeddedServer.getApplicationContext().getBean(EventConsumer)
@@ -52,8 +51,6 @@ class GrpcEmbeddedServerSpec extends Specification {
         conditions.eventually {
             embeddedServer.getServer().isTerminated()
         }
-
-
     }
 
     void "test fires server startup events with application name"() {
@@ -109,7 +106,6 @@ class GrpcEmbeddedServerSpec extends Specification {
     }
 
     void "test server does not exist when disabled"() {
-
         when:
         def context = ApplicationContext.run([
                 'grpc.server.enabled': false
@@ -118,7 +114,6 @@ class GrpcEmbeddedServerSpec extends Specification {
         then:
         !context.containsBean(GrpcEmbeddedServer)
         !context.containsBean(GrpcServerHealthIndicator)
-
     }
 
     @Singleton

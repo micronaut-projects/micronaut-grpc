@@ -1,6 +1,8 @@
 plugins {
-    id 'groovy'
+    id 'java'
+    // tag::plugin[]
     id 'com.google.protobuf'
+    // end::plugin[]
     id 'io.micronaut.application'
 }
 
@@ -11,7 +13,7 @@ repositories {
 mainClassName = "helloworld.Application"
 micronaut {
     version micronautVersion
-    testRuntime "spock"
+    testRuntime "junit5"
     enableNativeImage false
     processing {
         incremental(true)
@@ -21,26 +23,25 @@ micronaut {
 
 dependencies {
 
+    annotationProcessor "io.micronaut:micronaut-validation"
+
     compileOnly "io.grpc:grpc-stub:$grpcVersion"
 
     implementation "io.micronaut:micronaut-validation"
-    implementation "io.micronaut.grpc:micronaut-grpc-server-runtime"
+    implementation("io.micronaut:micronaut-runtime")
+    implementation(project(':grpc-server-runtime'))
     implementation "io.micronaut.discovery:micronaut-discovery-client"
 
     runtimeOnly "ch.qos.logback:logback-classic"
+
+    testAnnotationProcessor "io.micronaut:micronaut-validation"
 }
 
-tasks.withType(GroovyCompile) {
-    groovyOptions.forkOptions.jvmArgs.add('-Dgroovy.parameters=true')
-}
-
-tasks.withType(org.gradle.jvm.tasks.Jar) {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
+// tag::config[]
 
 sourceSets {
     main {
-        groovy {
+        java {
             srcDirs 'build/generated/source/proto/main/grpc'
             srcDirs 'build/generated/source/proto/main/java'
         }
@@ -56,3 +57,4 @@ protobuf {
         all()*.plugins { grpc {} }
     }
 }
+// end::config[]

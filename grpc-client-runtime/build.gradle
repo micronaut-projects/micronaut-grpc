@@ -4,32 +4,23 @@ plugins {
 }
 
 dependencies {
-    annotationProcessor "io.micronaut:micronaut-inject-java"
-    annotationProcessor "io.micronaut.docs:micronaut-docs-asciidoc-config-props:$micronautDocsVersion"
     api project(":grpc-annotation")
-    api "io.micronaut:micronaut-inject"
-    api "io.micronaut:micronaut-runtime"
-    api "io.grpc:grpc-protobuf:$grpcVersion"
-    api "io.grpc:grpc-stub:$grpcVersion"
+    api libs.managed.grpc.protobuf
+    api libs.managed.grpc.stub
 
-    implementation "io.grpc:grpc-netty:$grpcVersion"
-    implementation "io.projectreactor:reactor-core"
-    implementation "jakarta.inject:jakarta.inject-api"
+    implementation libs.grpc.netty
+    implementation libs.projectreactor
 
-    compileOnly "io.micronaut:micronaut-inject-java"
-    compileOnly "io.micronaut.discovery:micronaut-discovery-client"
-    compileOnly "io.micronaut:micronaut-tracing"
-    compileOnly "io.opentracing.contrib:opentracing-grpc:0.2.3"
+    compileOnly libs.micronaut.discovery.client
+    compileOnly libs.micronaut.tracing
+    compileOnly libs.opentracing.grpc
 
-    testImplementation "io.micronaut.discovery:micronaut-discovery-client"
-    testImplementation "io.opentracing:opentracing-mock:0.33.0"
-    testImplementation "io.micronaut:micronaut-tracing"
-    testImplementation "io.opentracing.contrib:opentracing-grpc:0.2.3"
-    testImplementation "io.jaegertracing:jaeger-core:1.8.0"
-    testImplementation "io.micronaut:micronaut-inject-groovy"
-    testImplementation "io.micronaut:micronaut-inject-java"
-    testImplementation "io.micronaut.test:micronaut-test-spock"
     testImplementation project(":grpc-server-runtime")
+    testImplementation libs.micronaut.discovery.client
+    testImplementation libs.opentracing.mock
+    testImplementation libs.micronaut.tracing
+    testImplementation libs.opentracing.grpc
+    testImplementation libs.jaeger.core
 }
 
 // compileJava.options.fork=true
@@ -45,9 +36,9 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:$protobufJavaVersion" }
+    protoc { artifact = libs.protoc.asProvider().get() }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
+        grpc { artifact = libs.protoc.grpc.get() }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }

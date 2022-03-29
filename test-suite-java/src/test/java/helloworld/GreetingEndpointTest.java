@@ -28,7 +28,7 @@ import jakarta.inject.Inject;
 
 // tag::test[]
 @MicronautTest // <1>
-public class GreetingEndpointTest {
+class GreetingEndpointTest {
 
     @Inject
     GreeterGrpc.GreeterBlockingStub blockingStub; // <2>

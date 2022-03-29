@@ -34,7 +34,7 @@ To configure Gradle, first apply the `com.google.protobuf` plugin:
 ----
 plugins {
     ...
-include::doc-examples/hello-world-java/build.gradle[tags=plugin]
+include::test-suite-java/build.gradle[tags=plugin]
 }
 
 ----
@@ -43,21 +43,21 @@ Then configure the gRPC and protobuf plugins:
 
 [source,groovy]
 ----
-include::doc-examples/hello-world-java/build.gradle[tags=config]
+include::test-suite-java/build.gradle[tags=config]
 ----
 
 Use this configuration for Kotlin projects:
 
 [source,groovy]
 ----
-include::doc-examples/hello-world-kotlin/build.gradle[tags=variables]
+include::test-suite-kotlin/build.gradle[tags=variables]
 
 dependencies {
 ...
-include::doc-examples/hello-world-kotlin/build.gradle[tags=dependencies]
+include::test-suite-kotlin/build.gradle[tags=dependencies]
 }
 
-include::doc-examples/hello-world-kotlin/build.gradle[tags=config]
+include::test-suite-kotlin/build.gradle[tags=config]
 
 ----
 
@@ -93,7 +93,7 @@ Then configure the Protobuf plugin appropriately:
 
 [source,xml]
 ----
-include::doc-examples/hello-world-java/pom.xml[tags=plugin, indent=0]
+include::test-suite-java/pom.xml[tags=plugin, indent=0]
 ----
 
 You can then run:
@@ -110,7 +110,7 @@ Once you have the build setup you can define a Protobuf file for your gRPC servi
 .src/main/proto/helloworld.proto
 [source,protobuf]
 ----
-include::doc-examples/hello-world-java/src/main/proto/helloworld.proto[]
+include::test-suite-java/src/main/proto/helloworld.proto[]
 ----
 
 TIP: With the Micronaut 1.1 or above CLI you can generate a service with `mn create-grpc-service helloworld` which will create the `proto` file and class that implements the stub.

@@ -49,6 +49,9 @@ class GrpcServerBuilderSpec extends Specification {
         (serverInterceptors[2] as OrderedServerInterceptor).order == 2
         (serverInterceptors[3] as OrderedServerInterceptor).order == 1
         (serverInterceptors[4] as OrderedServerInterceptor).order == 0
+
+        cleanup:
+        server.shutdown().awaitTermination()
     }
 
     def "test interceptor order - some implement Ordered"() {
@@ -85,6 +88,9 @@ class GrpcServerBuilderSpec extends Specification {
         (serverInterceptors[2] as OrderedServerInterceptor).order == 4
         (serverInterceptors[3] as OrderedServerInterceptor).order == 3
         (serverInterceptors[4] as OrderedServerInterceptor).order == 2
+
+        cleanup:
+        server.shutdown().awaitTermination()
     }
 
     def "test interceptor order - none implement Ordered"() {
@@ -121,6 +127,9 @@ class GrpcServerBuilderSpec extends Specification {
         (serverInterceptors[2] as NonOrderedServerInterceptor).name == "third"
         (serverInterceptors[3] as NonOrderedServerInterceptor).name == "fourth"
         (serverInterceptors[4] as NonOrderedServerInterceptor).name == "fifth"
+
+        cleanup:
+        server.shutdown().awaitTermination()
     }
 
     private static class NonOrderedServerInterceptor implements ServerInterceptor {
