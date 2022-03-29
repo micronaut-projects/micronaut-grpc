@@ -16,6 +16,7 @@ managed-protobuf-java-util = { module = 'com.google.protobuf:protobuf-java-util'
 micronaut-discovery-client = { module = 'io.micronaut.discovery:micronaut-discovery-client' }
 micronaut-http = { module = 'io.micronaut:micronaut-http' }
 micronaut-http-netty = { module = 'io.micronaut:micronaut-http-netty' }
+micronaut-buffer-netty = { module = 'io.micronaut:micronaut-buffer-netty' }
 micronaut-http-server-netty = { module = 'io.micronaut:micronaut-http-server-netty' }
 micronaut-inject-java = { module = 'io.micronaut:micronaut-inject-java' }
 micronaut-management = { module = 'io.micronaut:micronaut-management' }
