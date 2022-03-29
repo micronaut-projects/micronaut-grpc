@@ -9,7 +9,7 @@ dependencies {
     api libs.managed.grpc.stub
 
     implementation libs.grpc.netty
-
+    implementation libs.micronaut.buffer.netty
     compileOnly libs.micronaut.discovery.client
     compileOnly libs.micronaut.tracing
     compileOnly libs.micronaut.management

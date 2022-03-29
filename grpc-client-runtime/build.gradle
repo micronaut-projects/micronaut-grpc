@@ -10,7 +10,7 @@ dependencies {
 
     implementation libs.grpc.netty
     implementation libs.projectreactor
-
+    implementation libs.micronaut.buffer.netty
     compileOnly libs.micronaut.discovery.client
     compileOnly libs.micronaut.tracing
     compileOnly libs.opentracing.grpc
