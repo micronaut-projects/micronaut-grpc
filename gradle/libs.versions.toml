@@ -21,6 +21,7 @@ micronaut-http-server-netty = { module = 'io.micronaut:micronaut-http-server-net
 micronaut-inject-java = { module = 'io.micronaut:micronaut-inject-java' }
 micronaut-management = { module = 'io.micronaut:micronaut-management' }
 micronaut-reactor-http-client = { module = 'io.micronaut.reactor:micronaut-reactor-http-client' }
+micronaut-runtime = { module = 'io.micronaut:micronaut-runtime' }
 micronaut-tracing = { module = 'io.micronaut:micronaut-tracing' }
 micronaut-validation = { module = 'io.micronaut:micronaut-validation' }
 
