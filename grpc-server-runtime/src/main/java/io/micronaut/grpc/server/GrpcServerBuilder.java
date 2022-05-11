@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 original authors
+ * Copyright 2017-2022 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,17 @@ import io.grpc.BindableService;
 import io.grpc.ServerBuilder;
 import io.grpc.ServerInterceptor;
 import io.grpc.ServerTransportFilter;
+import io.grpc.protobuf.services.HealthStatusManager;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.order.OrderUtil;
 import io.micronaut.core.util.CollectionUtils;
-
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 /**
@@ -36,6 +40,30 @@ import java.util.List;
  */
 @Factory
 public class GrpcServerBuilder {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GrpcServerBuilder.class);
+    @Nullable
+    protected final HealthStatusManager healthStatusManager;
+
+    /**
+     * Constructs the {@link ServerBuilder} instance.
+     *
+     * @deprecated Use {@link #GrpcServerBuilder(HealthStatusManager)} instead.
+     */
+    @Deprecated
+    public GrpcServerBuilder() {
+        this(null);
+    }
+
+    /**
+     * Constructs the {@link ServerBuilder} instance.
+     *
+     * @param healthStatusManager if enabled, inject a GRPC health status manager.
+     */
+    @Inject
+    public GrpcServerBuilder(@Nullable HealthStatusManager healthStatusManager) {
+        this.healthStatusManager = healthStatusManager;
+    }
 
     /**
      * The server builder instance.
@@ -53,6 +81,12 @@ public class GrpcServerBuilder {
                                              @Nullable List<ServerInterceptor> interceptors,
                                              @Nullable List<ServerTransportFilter> serverTransportFilters) {
         final ServerBuilder<?> serverBuilder = configuration.getServerBuilder();
+        if (healthStatusManager != null) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Adding health status manager {}", healthStatusManager);
+            }
+            serverBuilder.addService(healthStatusManager.getHealthService());
+        }
         if (CollectionUtils.isNotEmpty(serviceList)) {
             for (BindableService serviceBean : serviceList) {
                 serverBuilder.addService(serviceBean);
@@ -74,5 +108,4 @@ public class GrpcServerBuilder {
 
         return serverBuilder;
     }
-
 }
