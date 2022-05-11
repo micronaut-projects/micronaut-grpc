@@ -48,6 +48,10 @@ class GrpcServerHealthSpec extends Specification {
         def exception = thrown(StatusRuntimeException)
         exception.status.code == Status.Code.UNIMPLEMENTED
 
+        and: 'The health beans are not registered'
+        !server.applicationContext.findBean(HealthStatusManagerContainer).present
+        !server.applicationContext.findBean(HealthStatusManager).present
+
         cleanup:
         server.close()
     }

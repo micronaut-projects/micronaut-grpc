@@ -109,10 +109,13 @@ Request -> 1 -> 2 -> 3 -> business logic -> 3 -> 2 -> 1 -> Response
 
 === Health checks
 
-==== Grpc Health checks
+==== gRPC Health checks
 
-The https://github.com/grpc/grpc/blob/master/doc/health-checking.md[gRPC health check protocol] is enabled by default.
-To disable it, apply the following configuration:
+To enable https://github.com/grpc/grpc/blob/master/doc/health-checking.md[gRPC health checks], add the following dependency to your build:
+
+dependency:grpc-services[groupId="io.grpc"]
+
+The health check will be enabled by default, but you can disable it with the following configuration:
 
 .Disabling the gRPC health check.
 [source,yaml]

@@ -25,6 +25,7 @@ import io.micronaut.context.annotation.Factory;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.order.OrderUtil;
 import io.micronaut.core.util.CollectionUtils;
+import io.micronaut.grpc.server.health.HealthStatusManagerContainer;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
@@ -43,12 +44,12 @@ public class GrpcServerBuilder {
 
     private static final Logger LOG = LoggerFactory.getLogger(GrpcServerBuilder.class);
     @Nullable
-    protected final HealthStatusManager healthStatusManager;
+    private final HealthStatusManagerContainer healthStatusManagerContainer;
 
     /**
      * Constructs the {@link ServerBuilder} instance.
      *
-     * @deprecated Use {@link #GrpcServerBuilder(HealthStatusManager)} instead.
+     * @deprecated Use {@link #GrpcServerBuilder(HealthStatusManagerContainer)} instead.
      */
     @Deprecated
     public GrpcServerBuilder() {
@@ -58,11 +59,11 @@ public class GrpcServerBuilder {
     /**
      * Constructs the {@link ServerBuilder} instance.
      *
-     * @param healthStatusManager if enabled, inject a GRPC health status manager.
+     * @param healthStatusManagerContainer if enabled, inject a GRPC health status manager.
      */
     @Inject
-    public GrpcServerBuilder(@Nullable HealthStatusManager healthStatusManager) {
-        this.healthStatusManager = healthStatusManager;
+    public GrpcServerBuilder(@Nullable HealthStatusManagerContainer healthStatusManagerContainer) {
+        this.healthStatusManagerContainer = healthStatusManagerContainer;
     }
 
     /**
@@ -81,7 +82,8 @@ public class GrpcServerBuilder {
                                              @Nullable List<ServerInterceptor> interceptors,
                                              @Nullable List<ServerTransportFilter> serverTransportFilters) {
         final ServerBuilder<?> serverBuilder = configuration.getServerBuilder();
-        if (healthStatusManager != null) {
+        if (healthStatusManagerContainer != null) {
+            HealthStatusManager healthStatusManager = healthStatusManagerContainer.getHealthStatusManager();
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Adding health status manager {}", healthStatusManager);
             }
