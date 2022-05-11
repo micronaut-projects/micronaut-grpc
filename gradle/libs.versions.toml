@@ -10,6 +10,7 @@ opentracing-mock = '0.33.0'
 [libraries]
 managed-grpc-protobuf = { module = 'io.grpc:grpc-protobuf', version.ref = 'managed-grpc' }
 managed-grpc-stub = { module = 'io.grpc:grpc-stub', version.ref = 'managed-grpc' }
+managed-grpc-services = { module = 'io.grpc:grpc-services', version.ref = 'managed-grpc' }
 managed-protobuf-java = { module = 'com.google.protobuf:protobuf-java', version.ref = 'managed-protobuf' }
 managed-protobuf-java-util = { module = 'com.google.protobuf:protobuf-java-util', version.ref = 'managed-protobuf' }
 

@@ -55,6 +55,7 @@ public class GrpcServerConfiguration {
     public static final String HOST = PREFIX + ".host";
     public static final String ENABLED = PREFIX + ".enabled";
     public static final String HEALTH_ENABLED = PREFIX + ".health.enabled";
+    public static final String HEALTH_ENABLED_GRPC = PREFIX + ".health.enabled-grpc";
     public static final int DEFAULT_PORT = 50051;
     public static final Duration DEFAULT_AWAIT_TERMINATION = Duration.ofSeconds(30);
 
