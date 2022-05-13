@@ -230,63 +230,9 @@
 </tbody>
 </table>
 <div style="page-break-after: always;"></div>
-<a id="io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration" href="#io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration">&#128279;</a>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Configuration Properties for <a href="../api/io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorConfiguration.html">GrpcClientTracingInterceptorConfiguration</a></caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Property</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.tracer</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.Tracer</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.operation-name</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.OperationNameConstructor</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.traced-attributes</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.TracingClientInterceptor$ClientRequestAttribute</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.active-span-source</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ActiveSpanSource</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.active-span-context-source</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ActiveSpanContextSource</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.client-span-decorator</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ClientSpanDecorator</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.client-close-decorator</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ClientCloseDecorator</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-</tbody>
-</table>
-<div style="page-break-after: always;"></div>
 <a id="io.micronaut.grpc.channels.GrpcDefaultManagedChannelConfiguration" href="#io.micronaut.grpc.channels.GrpcDefaultManagedChannelConfiguration">&#128279;</a>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Configuration Properties for <a href="../api/io/micronaut/grpc/channels/GrpcDefaultManagedChannelConfiguration.html">GrpcDefaultManagedChannelConfiguration</a></caption>
+<caption class="title">Table 2. Configuration Properties for <a href="../api/io/micronaut/grpc/channels/GrpcDefaultManagedChannelConfiguration.html">GrpcDefaultManagedChannelConfiguration</a></caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -458,6 +404,60 @@
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.default-service-config</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.util.Map</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<a id="io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration" href="#io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration">&#128279;</a>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Configuration Properties for <a href="../api/io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorConfiguration.html">GrpcClientTracingInterceptorConfiguration</a></caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.tracer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.Tracer</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.operation-name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.OperationNameConstructor</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.traced-attributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.TracingClientInterceptor$ClientRequestAttribute</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.active-span-source</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ActiveSpanSource</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.active-span-context-source</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ActiveSpanContextSource</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.client-span-decorator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ClientSpanDecorator</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.tracing.client-close-decorator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.opentracing.contrib.grpc.ClientCloseDecorator</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
