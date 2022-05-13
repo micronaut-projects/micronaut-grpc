@@ -28,7 +28,7 @@ import jakarta.inject.Singleton;
  */
 @Singleton
 @Requires(classes = HealthStatusManager.class)
-@Requires(property = GrpcServerConfiguration.HEALTH_ENABLED_GRPC, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
+@Requires(property = GrpcServerConfiguration.HEALTH_ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 public class HealthStatusManagerContainer {
 
     private final HealthStatusManager healthStatusManager;

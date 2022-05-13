@@ -39,7 +39,7 @@ class GrpcServerHealthSpec extends Specification {
 
     void "disabling the health check results in an UNIMPLEMENTED exception"() {
         given:
-        GrpcEmbeddedServer server = createServer('grpc.server.health.grpc.enabled': 'false')
+        GrpcEmbeddedServer server = createServer('grpc.server.health.enabled': 'false')
 
         when:
         server.applicationContext.getBean(TestBean).check()

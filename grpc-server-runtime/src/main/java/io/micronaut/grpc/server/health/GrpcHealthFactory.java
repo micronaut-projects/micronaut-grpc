@@ -34,7 +34,7 @@ public class GrpcHealthFactory {
      * @return The Singleton{@link HealthStatusManager} bean.
      */
     @Singleton
-    @Requires(property = GrpcServerConfiguration.HEALTH_ENABLED_GRPC, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
+    @Requires(property = GrpcServerConfiguration.HEALTH_ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
     @Requires(classes = HealthStatusManager.class)
     public HealthStatusManager healthStatusManager() {
         return new HealthStatusManager();
