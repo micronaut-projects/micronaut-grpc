@@ -1,5 +1,6 @@
 [versions]
-managed-grpc = '1.45.0'
+
+managed-grpc = '1.46.0'
 managed-protobuf = '3.20.1'
 
 jackson-datatype-protobuf = '0.9.12'
