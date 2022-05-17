@@ -135,7 +135,16 @@ extends java.lang.Object</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerBuilder.html#GrpcServerBuilder--">GrpcServerBuilder</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerBuilder.html#GrpcServerBuilder--">GrpcServerBuilder</a></span>()</code>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;
+<div class="block"><span class="deprecationComment">Use <a href="../../../../io/micronaut/grpc/server/GrpcServerBuilder.html#GrpcServerBuilder-io.micronaut.grpc.server.health.HealthStatusManagerContainer-"><code>GrpcServerBuilder(HealthStatusManagerContainer)</code></a> instead.</span></div>
+</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerBuilder.html#GrpcServerBuilder-io.micronaut.grpc.server.health.HealthStatusManagerContainer-">GrpcServerBuilder</a></span>(<a href="../../../../io/micronaut/grpc/server/health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a>&nbsp;healthStatusManagerContainer)</code>
+<div class="block">Constructs the <code>ServerBuilder</code> instance.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -186,10 +195,29 @@ extends java.lang.Object</pre>
 <a name="GrpcServerBuilder--">
 <!--   -->
 </a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GrpcServerBuilder</h4>
+<pre>@Deprecated
+public&nbsp;GrpcServerBuilder()</pre>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;<span class="deprecationComment">Use <a href="../../../../io/micronaut/grpc/server/GrpcServerBuilder.html#GrpcServerBuilder-io.micronaut.grpc.server.health.HealthStatusManagerContainer-"><code>GrpcServerBuilder(HealthStatusManagerContainer)</code></a> instead.</span></div>
+<div class="block">Constructs the <code>ServerBuilder</code> instance.</div>
+</li>
+</ul>
+<a name="GrpcServerBuilder-io.micronaut.grpc.server.health.HealthStatusManagerContainer-">
+<!--   -->
+</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GrpcServerBuilder</h4>
-<pre>public&nbsp;GrpcServerBuilder()</pre>
+<pre>@Inject
+public&nbsp;GrpcServerBuilder(@Nullable
+                                 <a href="../../../../io/micronaut/grpc/server/health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a>&nbsp;healthStatusManagerContainer)</pre>
+<div class="block">Constructs the <code>ServerBuilder</code> instance.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>healthStatusManagerContainer</code> - if enabled, inject a GRPC health status manager.</dd>
+</dl>
 </li>
 </ul>
 </li>

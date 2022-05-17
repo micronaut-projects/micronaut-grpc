@@ -172,6 +172,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#getExtensionRegistry--">getExtensionRegistry()</a></span> - Method in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html#getHealthStatusManager--">getHealthStatusManager()</a></span> - Method in class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html#getHost--">getHost()</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server">GrpcEmbeddedServer</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#getInstanceId--">getInstanceId()</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
@@ -265,6 +267,10 @@
 <dd>
 <div class="block">Implementation of the <code>EmbeddedServer</code> interface for GRPC.</div>
 </dd>
+<dt><a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" title="class in io.micronaut.grpc.server.health"><span class="typeNameLink">GrpcHealthFactory</span></a> - Class in <a href="io/micronaut/grpc/server/health/package-summary.html">io.micronaut.grpc.server.health</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html#GrpcHealthFactory--">GrpcHealthFactory()</a></span> - Constructor for class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" title="class in io.micronaut.grpc.server.health">GrpcHealthFactory</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels"><span class="typeNameLink">GrpcManagedChannelConfiguration</span></a> - Class in <a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a></dt>
 <dd>
 <div class="block">A managed channel configuration.</div>
@@ -303,7 +309,15 @@
 <div class="block">Constructs the <code>ServerBuilder</code> instance.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerBuilder.html#GrpcServerBuilder--">GrpcServerBuilder()</a></span> - Constructor for class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerBuilder.html" title="class in io.micronaut.grpc.server">GrpcServerBuilder</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="block"><span class="deprecationComment">Use <a href="io/micronaut/grpc/server/GrpcServerBuilder.html#GrpcServerBuilder-io.micronaut.grpc.server.health.HealthStatusManagerContainer-"><code>GrpcServerBuilder(HealthStatusManagerContainer)</code></a> instead.</span></div>
+</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerBuilder.html#GrpcServerBuilder-io.micronaut.grpc.server.health.HealthStatusManagerContainer-">GrpcServerBuilder(HealthStatusManagerContainer)</a></span> - Constructor for class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerBuilder.html" title="class in io.micronaut.grpc.server">GrpcServerBuilder</a></dt>
+<dd>
+<div class="block">Constructs the <code>ServerBuilder</code> instance.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcServerChannel.html" title="class in io.micronaut.grpc.server"><span class="typeNameLink">GrpcServerChannel</span></a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
 <dd>
 <div class="block">A factory that returns a <code>ManagedChannel</code> allowing communication with the embedded server.</div>
@@ -362,6 +376,16 @@
 <h2 class="title">H</h2>
 <dl>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#HEALTH_ENABLED">HEALTH_ENABLED</a></span> - Static variable in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html#healthStatusManager--">healthStatusManager()</a></span> - Method in class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" title="class in io.micronaut.grpc.server.health">GrpcHealthFactory</a></dt>
+<dd>
+<div class="block">Creates a <code>HealthStatusManager</code> bean if GRPC health is enabled.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health"><span class="typeNameLink">HealthStatusManagerContainer</span></a> - Class in <a href="io/micronaut/grpc/server/health/package-summary.html">io.micronaut.grpc.server.health</a></dt>
+<dd>
+<div class="block">A container for the <code>HealthStatusManager</code>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html#HealthStatusManagerContainer-io.grpc.protobuf.services.HealthStatusManager-">HealthStatusManagerContainer(HealthStatusManager)</a></span> - Constructor for class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#HOST">HOST</a></span> - Static variable in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
 <dd>&nbsp;</dd>
