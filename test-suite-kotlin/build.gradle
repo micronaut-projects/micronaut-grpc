@@ -36,6 +36,8 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
     implementation(project(':grpc-server-runtime'))
 
+    implementation "io.grpc:grpc-services"
+
     // tag::dependencies[]
     implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
     compileOnly("io.grpc:grpc-stub:$grpcVersion")

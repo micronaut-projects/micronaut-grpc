@@ -27,6 +27,7 @@ dependencies {
     implementation("io.micronaut:micronaut-runtime")
     implementation(project(':grpc-server-runtime'))
     implementation "io.micronaut.discovery:micronaut-discovery-client"
+    implementation "io.grpc:grpc-services"
 
     runtimeOnly "ch.qos.logback:logback-classic"
 }
