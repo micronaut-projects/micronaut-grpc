@@ -9,6 +9,7 @@ dependencies {
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
+    compileOnly libs.managed.grpc.services
     implementation libs.grpc.netty
     implementation libs.micronaut.buffer.netty
     compileOnly libs.micronaut.discovery.client
@@ -17,6 +18,7 @@ dependencies {
     compileOnly libs.opentracing.grpc
     compileOnly libs.graal
 
+    testImplementation libs.managed.grpc.services
     testImplementation libs.micronaut.discovery.client
     testImplementation libs.opentracing.mock
     testImplementation libs.micronaut.tracing
@@ -29,9 +31,6 @@ dependencies {
     testRuntimeOnly libs.netty.tcnative
     testRuntimeOnly libs.netty.tcnative.boringssl.static
 }
-
-// compileJava.options.fork=true
-// compileJava.options.forkOptions.jvmArgs = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005']
 
 sourceSets {
     test {

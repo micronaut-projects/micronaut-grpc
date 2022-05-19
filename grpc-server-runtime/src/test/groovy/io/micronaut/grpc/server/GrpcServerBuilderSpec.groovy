@@ -17,7 +17,7 @@ class GrpcServerBuilderSpec extends Specification {
 
     def "test interceptor order - all implement Ordered"() {
         given:
-        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder()
+        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null)
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
@@ -56,7 +56,7 @@ class GrpcServerBuilderSpec extends Specification {
 
     def "test interceptor order - some implement Ordered"() {
         given:
-        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder()
+        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null)
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
@@ -95,7 +95,7 @@ class GrpcServerBuilderSpec extends Specification {
 
     def "test interceptor order - none implement Ordered"() {
         given:
-        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder()
+        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null)
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
