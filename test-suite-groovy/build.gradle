@@ -58,3 +58,7 @@ protobuf {
         all()*.plugins { grpc {} }
     }
 }
+
+testNativeImage {
+    enabled(false)
+}
