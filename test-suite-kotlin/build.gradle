@@ -51,7 +51,7 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2")
 
-    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:1.1.5")
+    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:1.2.1")
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
