@@ -59,6 +59,8 @@ protobuf {
     }
 }
 
-tasks.named("nativeCompile").configure {
-    enabled = false
+afterEvaluate { project ->
+    tasks.named("testNativeImage").configure {
+        enabled = false
+    }
 }
