@@ -1,7 +1,7 @@
 plugins {
     id 'groovy'
     id 'com.google.protobuf'
-    id 'io.micronaut.application'
+    id "io.micronaut.minimal.application" version "3.4.0"
 }
 
 repositories {
@@ -56,11 +56,5 @@ protobuf {
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
-    }
-}
-
-afterEvaluate { project ->
-    tasks.named("testNativeImage").configure {
-        enabled = false
     }
 }
