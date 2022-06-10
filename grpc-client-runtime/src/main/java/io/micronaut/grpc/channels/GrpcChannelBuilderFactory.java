@@ -24,6 +24,7 @@ import io.micronaut.inject.qualifiers.Qualifiers;
 import io.micronaut.scheduling.TaskExecutors;
 import jakarta.inject.Named;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -72,6 +73,7 @@ public class GrpcChannelBuilderFactory {
         );
         final NettyChannelBuilder channelBuilder = config.getChannelBuilder();
         if (CollectionUtils.isNotEmpty(interceptors)) {
+            Collections.reverse(interceptors);
             channelBuilder.intercept(interceptors);
         }
         return channelBuilder;
