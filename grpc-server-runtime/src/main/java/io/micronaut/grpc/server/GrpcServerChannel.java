@@ -26,6 +26,8 @@ import io.micronaut.scheduling.TaskExecutors;
 
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -64,6 +66,7 @@ public class GrpcServerChannel {
             builder.usePlaintext();
         }
         if (CollectionUtils.isNotEmpty(clientInterceptors)) {
+            Collections.reverse(clientInterceptors);
             builder.intercept(clientInterceptors);
         }
         return builder.build();
