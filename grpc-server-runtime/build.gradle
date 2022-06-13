@@ -51,3 +51,10 @@ protobuf {
         all()*.plugins { grpc {} }
     }
 }
+
+micronautBuild {
+    binaryCompatibility {
+        enabled = true
+        acceptedRegressionsFile = file("config/accepted-api-changes.json")
+    }
+}

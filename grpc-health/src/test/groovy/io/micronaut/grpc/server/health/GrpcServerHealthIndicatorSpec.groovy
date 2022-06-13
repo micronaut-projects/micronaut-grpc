@@ -1,9 +1,10 @@
-package io.micronaut.grpc.health
+package io.micronaut.grpc.server.health
 
 import io.micronaut.context.ApplicationContext
 import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.core.util.CollectionUtils
 import io.micronaut.grpc.server.GrpcEmbeddedServer
+import io.micronaut.grpc.server.health.GrpcServerHealthIndicator
 import io.micronaut.health.HealthStatus
 import io.micronaut.management.health.indicator.HealthResult
 import reactor.core.publisher.Mono

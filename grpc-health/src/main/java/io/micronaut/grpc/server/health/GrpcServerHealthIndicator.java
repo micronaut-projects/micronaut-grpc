@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.grpc.health;
+package io.micronaut.grpc.server.health;
 
 import static io.micronaut.core.util.CollectionUtils.mapOf;
 import static java.util.Objects.nonNull;

@@ -19,7 +19,7 @@ import io.micronaut.context.ApplicationContext
 import io.micronaut.discovery.event.ServiceReadyEvent
 import io.micronaut.discovery.event.ServiceStoppedEvent
 import io.micronaut.grpc.server.GrpcEmbeddedServer
-import io.micronaut.grpc.health.GrpcServerHealthIndicator
+import io.micronaut.grpc.server.health.GrpcServerHealthIndicator
 import io.micronaut.runtime.event.annotation.EventListener
 import io.micronaut.runtime.server.event.ServerShutdownEvent
 import io.micronaut.runtime.server.event.ServerStartupEvent

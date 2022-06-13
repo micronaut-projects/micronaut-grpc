@@ -1,4 +1,4 @@
-package io.micronaut.grpc.health
+package io.micronaut.grpc.server.health
 
 import io.grpc.Channel
 import io.grpc.Status
@@ -15,6 +15,7 @@ import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcEmbeddedServer
 import io.micronaut.grpc.server.GrpcServerChannel
+import io.micronaut.grpc.server.health.HealthStatusManagerContainer
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import spock.lang.Specification

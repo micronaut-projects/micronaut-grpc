@@ -1,0 +1,167 @@
+[
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Class io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Field $ANNOTATION_METADATA",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference.getBeanDefinitionType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference.getBeanType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference.load()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Constructor io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Class io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Field $ANNOTATION_METADATA",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference.getBeanDefinitionType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference.getBeanType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference.load()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Constructor io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Class io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Field $ANNOTATION_METADATA",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference.getBeanDefinitionType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference.getBeanType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference.load()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Constructor io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Class io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Field $ANNOTATION_METADATA",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference.getBeanDefinitionType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference.getBeanType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Method io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference.load()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Constructor io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.GrpcHealthFactory",
+    "member": "Class io.micronaut.grpc.server.health.GrpcHealthFactory",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.GrpcHealthFactory",
+    "member": "Method io.micronaut.grpc.server.health.GrpcHealthFactory.healthStatusManager()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.GrpcHealthFactory",
+    "member": "Constructor io.micronaut.grpc.server.health.GrpcHealthFactory()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.GrpcServerHealthIndicator",
+    "member": "Class io.micronaut.grpc.server.health.GrpcServerHealthIndicator",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.GrpcServerHealthIndicator",
+    "member": "Method io.micronaut.grpc.server.health.GrpcServerHealthIndicator.getResult()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.GrpcServerHealthIndicator",
+    "member": "Constructor io.micronaut.grpc.server.health.GrpcServerHealthIndicator(io.micronaut.grpc.server.GrpcEmbeddedServer)",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.HealthStatusManagerContainer",
+    "member": "Class io.micronaut.grpc.server.health.HealthStatusManagerContainer",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.HealthStatusManagerContainer",
+    "member": "Method io.micronaut.grpc.server.health.HealthStatusManagerContainer.getHealthStatusManager()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.HealthStatusManagerContainer",
+    "member": "Constructor io.micronaut.grpc.server.health.HealthStatusManagerContainer(io.grpc.protobuf.services.HealthStatusManager)",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  }
+]
