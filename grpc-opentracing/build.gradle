@@ -5,36 +5,23 @@ plugins {
 
 dependencies {
     api project(":grpc-annotation")
-    api project(":grpc-health")
-    api project(":grpc-opentracing")
     api libs.micronaut.runtime
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
     compileOnly libs.managed.grpc.services
-    implementation libs.grpc.netty
-    implementation libs.micronaut.buffer.netty
-    compileOnly libs.micronaut.discovery.client
+    compileOnly libs.micronaut.tracing
     compileOnly libs.micronaut.management
-    compileOnly libs.graal
+    compileOnly libs.opentracing.grpc
 
+    testImplementation project(":grpc-server-runtime")
     testImplementation libs.managed.grpc.services
-    testImplementation libs.micronaut.discovery.client
+    testImplementation libs.opentracing.mock
+    testImplementation libs.micronaut.tracing
+    testImplementation libs.opentracing.grpc
+    testImplementation libs.jaeger.core
     testImplementation libs.micronaut.reactor.http.client
     testImplementation libs.micronaut.management
-    testImplementation project(":grpc-client-runtime")
-
-    testRuntimeOnly libs.netty.tcnative
-    testRuntimeOnly libs.netty.tcnative.boringssl.static
-}
-
-sourceSets {
-    test {
-        java {
-            srcDirs 'build/generated/source/proto/test/grpc'
-            srcDirs 'build/generated/source/proto/test/java'
-        }
-    }
 }
 
 protobuf {
@@ -49,7 +36,6 @@ protobuf {
 
 micronautBuild {
     binaryCompatibility {
-        enabled = true
-        acceptedRegressionsFile = file("config/accepted-api-changes.json")
+        enabled = false
     }
 }
