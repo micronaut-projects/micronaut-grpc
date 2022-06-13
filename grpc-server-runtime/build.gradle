@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     api project(":grpc-annotation")
+    api project(":grpc-health")
     api libs.micronaut.runtime
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub

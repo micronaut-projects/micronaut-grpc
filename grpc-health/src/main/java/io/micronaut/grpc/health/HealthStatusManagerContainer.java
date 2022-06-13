@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.grpc.server.health;
+package io.micronaut.grpc.health;
 
 import io.grpc.protobuf.services.HealthStatusManager;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.util.StringUtils;
-import io.micronaut.grpc.server.GrpcServerConfiguration;
 import jakarta.inject.Singleton;
 
 /**
@@ -28,7 +27,7 @@ import jakarta.inject.Singleton;
  */
 @Singleton
 @Requires(classes = HealthStatusManager.class)
-@Requires(property = GrpcServerConfiguration.HEALTH_ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
+@Requires(property = GrpcHealthFactory.HEALTH_ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 public class HealthStatusManagerContainer {
 
     private final HealthStatusManager healthStatusManager;

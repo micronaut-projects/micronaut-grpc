@@ -38,6 +38,7 @@ import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.event.ServerShutdownEvent;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
 
+import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -60,6 +61,7 @@ import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
  */
 @Singleton
 @Secondary
+@Named("grpc")
 @Requires(classes = ServerBuilder.class)
 @Requires(property = GrpcServerConfiguration.ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 public class GrpcEmbeddedServer implements EmbeddedServer {

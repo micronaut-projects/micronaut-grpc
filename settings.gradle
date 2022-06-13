@@ -26,3 +26,5 @@ include 'protobuff-support'
 include 'test-suite-java'
 include 'test-suite-groovy'
 include 'test-suite-kotlin'
+include 'grpc-health'
+

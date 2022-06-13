@@ -1,4 +1,4 @@
-package io.micronaut.grpc.server.health
+package io.micronaut.grpc.health
 
 import io.grpc.Channel
 import io.grpc.Status

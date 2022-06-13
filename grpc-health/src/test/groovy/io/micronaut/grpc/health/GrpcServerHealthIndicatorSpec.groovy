@@ -1,4 +1,4 @@
-package io.micronaut.grpc.server.health
+package io.micronaut.grpc.health
 
 import io.micronaut.context.ApplicationContext
 import io.micronaut.core.io.socket.SocketUtils
@@ -63,7 +63,7 @@ class GrpcServerHealthIndicatorSpec extends Specification {
 
         then:
         result.status == HealthStatus.DOWN
-        result.details.port == server.serverConfiguration.serverPort
+        result.details.port == "N/A"
         result.details.host == server.host
 
         cleanup:

@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.grpc.server.health;
+package io.micronaut.grpc.health;
 
 import io.grpc.protobuf.services.HealthStatusManager;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.util.StringUtils;
-import io.micronaut.grpc.server.GrpcServerConfiguration;
 import jakarta.inject.Singleton;
 
 /**
  * @since 3.3.0
  */
 @Factory
+@Requires(classes = HealthStatusManager.class)
+@Requires(property = GrpcHealthFactory.HEALTH_ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 public class GrpcHealthFactory {
+    public static final String HEALTH_ENABLED = "grpc.server.health.enabled";
 
     /**
      * Creates a {@link HealthStatusManager} bean if GRPC health is enabled.
@@ -34,9 +36,8 @@ public class GrpcHealthFactory {
      * @return The Singleton{@link HealthStatusManager} bean.
      */
     @Singleton
-    @Requires(property = GrpcServerConfiguration.HEALTH_ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
-    @Requires(classes = HealthStatusManager.class)
     public HealthStatusManager healthStatusManager() {
         return new HealthStatusManager();
     }
+
 }
