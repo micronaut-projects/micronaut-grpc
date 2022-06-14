@@ -15,6 +15,17 @@
  */
 package io.micronaut.grpc.server;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.micronaut.context.ApplicationContext;
@@ -24,6 +35,7 @@ import io.micronaut.context.event.ApplicationEventPublisher;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
+import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
 import io.micronaut.core.util.ArgumentUtils;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.discovery.ServiceInstance;
@@ -37,21 +49,8 @@ import io.micronaut.runtime.exceptions.ApplicationStartupException;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.event.ServerShutdownEvent;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
-
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
 
 /**
  * Implementation of the {@link EmbeddedServer} interface for GRPC.
@@ -61,7 +60,7 @@ import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
  */
 @Singleton
 @Secondary
-@Named("grpc")
+@Named(GrpcServerConfiguration.PREFIX)
 @Requires(classes = ServerBuilder.class)
 @Requires(property = GrpcServerConfiguration.ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 public class GrpcEmbeddedServer implements EmbeddedServer {

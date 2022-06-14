@@ -32,7 +32,7 @@ class GrpcServerHealthIndicatorSpec extends Specification {
     }
 
     @Unroll
-    void "test grpc health indicator - Disabled"() {
+    void "test grpc health indicator - Disabled #configvalue"() {
         given:
         GrpcEmbeddedServer server = ApplicationContext.run(GrpcEmbeddedServer, CollectionUtils.mapOf(
                 "grpc.server.health.enabled", configvalue))

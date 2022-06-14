@@ -9,6 +9,8 @@ dependencies {
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
+    // change these to "api" dependencies when this module
+    // is removed as a dependency of "grpc-server-runtime"
     compileOnly libs.managed.grpc.services
     compileOnly libs.micronaut.tracing
     compileOnly libs.micronaut.management
