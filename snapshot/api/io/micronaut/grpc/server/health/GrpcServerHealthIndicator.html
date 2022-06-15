@@ -112,7 +112,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>@Singleton
- @Requires(property="grpc.server.health.enabled",value="true",defaultValue="true") @Requires(beans=io.micronaut.management.endpoint.health.HealthEndpoint.class) @Requires(beans=<a href="../../../../../io/micronaut/grpc/server/GrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server">GrpcEmbeddedServer.class</a>)
+ @Requires(property="grpc.server.health.enabled",value="true",defaultValue="true") @Requires(beans=io.micronaut.management.endpoint.health.HealthEndpoint.class) @Requires(beans=io.micronaut.runtime.server.EmbeddedServer.class)
 public class <span class="typeNameLabel">GrpcServerHealthIndicator</span>
 extends java.lang.Object
 implements io.micronaut.management.health.indicator.HealthIndicator</pre>
@@ -156,7 +156,7 @@ implements io.micronaut.management.health.indicator.HealthIndicator</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../io/micronaut/grpc/server/health/GrpcServerHealthIndicator.html#GrpcServerHealthIndicator-io.micronaut.grpc.server.GrpcEmbeddedServer-">GrpcServerHealthIndicator</a></span>(<a href="../../../../../io/micronaut/grpc/server/GrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server">GrpcEmbeddedServer</a>&nbsp;server)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../io/micronaut/grpc/server/health/GrpcServerHealthIndicator.html#GrpcServerHealthIndicator-io.micronaut.runtime.server.EmbeddedServer-">GrpcServerHealthIndicator</a></span>(io.micronaut.runtime.server.EmbeddedServer&nbsp;server)</code>
 <div class="block">Default constructor.</div>
 </td>
 </tr>
@@ -208,13 +208,14 @@ implements io.micronaut.management.health.indicator.HealthIndicator</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GrpcServerHealthIndicator-io.micronaut.grpc.server.GrpcEmbeddedServer-">
+<a name="GrpcServerHealthIndicator-io.micronaut.runtime.server.EmbeddedServer-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GrpcServerHealthIndicator</h4>
-<pre>public&nbsp;GrpcServerHealthIndicator(<a href="../../../../../io/micronaut/grpc/server/GrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server">GrpcEmbeddedServer</a>&nbsp;server)</pre>
+<pre>public&nbsp;GrpcServerHealthIndicator(@Named(value="grpc.server")
+                                 io.micronaut.runtime.server.EmbeddedServer&nbsp;server)</pre>
 <div class="block">Default constructor.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
