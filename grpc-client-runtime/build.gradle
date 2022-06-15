@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     api project(":grpc-annotation")
+    api project(":grpc-opentracing")
     api libs.micronaut.runtime
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
@@ -13,15 +14,10 @@ dependencies {
     implementation libs.projectreactor
     implementation libs.micronaut.buffer.netty
     compileOnly libs.micronaut.discovery.client
-    compileOnly libs.micronaut.tracing
-    compileOnly libs.opentracing.grpc
 
     testImplementation project(":grpc-server-runtime")
     testImplementation libs.micronaut.discovery.client
     testImplementation libs.opentracing.mock
-    testImplementation libs.micronaut.tracing
-    testImplementation libs.opentracing.grpc
-    testImplementation libs.jaeger.core
 }
 
 // compileJava.options.fork=true

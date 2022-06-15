@@ -19,12 +19,10 @@ import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
-import io.micronaut.grpc.channels.GrpcDefaultManagedChannelConfiguration;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.grpc.ClientCloseDecorator;
 import io.opentracing.contrib.grpc.ClientSpanDecorator;
 import io.opentracing.contrib.grpc.TracingClientInterceptor;
-
 import jakarta.inject.Inject;
 
 /**
@@ -37,7 +35,7 @@ import jakarta.inject.Inject;
 @ConfigurationProperties(GrpcClientTracingInterceptorConfiguration.PREFIX)
 public class GrpcClientTracingInterceptorConfiguration {
 
-    public static final String PREFIX = GrpcDefaultManagedChannelConfiguration.PREFIX + ".tracing";
+    public static final String PREFIX = "grpc.client.tracing";
 
     @ConfigurationBuilder(prefixes = "with", allowZeroArgs = true)
     protected final TracingClientInterceptor.Builder builder;

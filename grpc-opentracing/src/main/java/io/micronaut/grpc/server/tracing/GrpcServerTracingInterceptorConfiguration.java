@@ -19,12 +19,10 @@ import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
-import io.micronaut.grpc.server.GrpcServerConfiguration;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.grpc.ServerCloseDecorator;
 import io.opentracing.contrib.grpc.ServerSpanDecorator;
 import io.opentracing.contrib.grpc.TracingServerInterceptor;
-
 import jakarta.inject.Inject;
 
 /**
@@ -37,7 +35,7 @@ import jakarta.inject.Inject;
 @ConfigurationProperties(GrpcServerTracingInterceptorConfiguration.PREFIX)
 public class GrpcServerTracingInterceptorConfiguration {
 
-    public static final String PREFIX = GrpcServerConfiguration.PREFIX + ".tracing";
+    public static final String PREFIX = "grpc.server.tracing";
 
     @ConfigurationBuilder(prefixes = "with", allowZeroArgs = true)
     protected final TracingServerInterceptor.Builder builder;

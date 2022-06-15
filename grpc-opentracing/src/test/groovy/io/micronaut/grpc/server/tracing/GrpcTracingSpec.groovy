@@ -15,14 +15,26 @@
  */
 package io.micronaut.grpc.server.tracing
 
+import io.grpc.Channel
+import io.grpc.Metadata
+import io.grpc.ServerCall
+import io.grpc.ServerCallHandler
+import io.grpc.ServerInterceptor
+import io.grpc.examples.helloworld.GreeterGrpc
+import io.grpc.examples.helloworld.HelloReply
+import io.grpc.examples.helloworld.HelloRequest
+import io.grpc.stub.StreamObserver
+import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Property
 import io.micronaut.context.annotation.Requires
-import io.micronaut.grpc.HelloWordGrpcSpec
+import io.micronaut.grpc.annotation.GrpcChannel
+import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.test.annotation.MockBean
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import io.opentracing.Tracer
 import io.opentracing.mock.MockTracer
 import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
@@ -31,10 +43,10 @@ import spock.util.concurrent.PollingConditions
 class GrpcTracingSpec extends Specification {
 
     @Inject
-    HelloWordGrpcSpec.TestBean testBean
+    TestBean testBean
 
     @Inject
-    HelloWordGrpcSpec.MyInterceptor myInterceptor
+    TracingInterceptor myInterceptor
 
     @Inject
     Tracer tracer
@@ -58,9 +70,50 @@ class GrpcTracingSpec extends Specification {
         }
     }
 
+    @Singleton
+    static class TracingInterceptor implements ServerInterceptor {
+
+        boolean intercepted = false
+        @Override
+        <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
+            intercepted = true
+            return next.startCall(call, headers)
+        }
+    }
+
     @MockBean
     @Requires(property = "mock.tracer", value = "true")
     Tracer tracer() {
         return mockTracer
+    }
+
+    @Factory
+    static class Clients {
+        @Singleton
+        GreeterGrpc.GreeterBlockingStub blockingStub(@GrpcChannel(GrpcServerChannel.NAME) Channel channel) {
+            GreeterGrpc.newBlockingStub(channel)
+        }
+    }
+
+    @Singleton
+    static class TestBean {
+        @Inject
+        GreeterGrpc.GreeterBlockingStub blockingStub
+
+        String sayHello(String message) {
+            blockingStub.sayHello(
+                    HelloRequest.newBuilder().setName(message).build()
+            ).message
+        }
+    }
+
+    @Singleton
+    static class GreeterService extends GreeterGrpc.GreeterImplBase {
+        @Override
+        void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
+            HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + request.getName()).build()
+            responseObserver.onNext(reply)
+            responseObserver.onCompleted()
+        }
     }
 }

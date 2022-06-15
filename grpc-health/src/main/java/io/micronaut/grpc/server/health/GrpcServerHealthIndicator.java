@@ -15,21 +15,21 @@
  */
 package io.micronaut.grpc.server.health;
 
+import java.util.Map;
+
+import org.reactivestreams.Publisher;
+
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.async.publisher.AsyncSingleResultPublisher;
+import static io.micronaut.core.util.CollectionUtils.mapOf;
 import io.micronaut.core.util.StringUtils;
-import io.micronaut.grpc.server.GrpcEmbeddedServer;
-import io.micronaut.grpc.server.GrpcServerConfiguration;
 import io.micronaut.health.HealthStatus;
 import io.micronaut.management.endpoint.health.HealthEndpoint;
 import io.micronaut.management.health.indicator.HealthIndicator;
 import io.micronaut.management.health.indicator.HealthResult;
-import org.reactivestreams.Publisher;
-
+import io.micronaut.runtime.server.EmbeddedServer;
+import jakarta.inject.Named;
 import jakarta.inject.Singleton;
-import java.util.Map;
-
-import static io.micronaut.core.util.CollectionUtils.mapOf;
 
 /**
  * A {@link HealthIndicator} for Grpc server.
@@ -38,20 +38,20 @@ import static io.micronaut.core.util.CollectionUtils.mapOf;
  * @since 2.1.0
  */
 @Singleton
-@Requires(property = GrpcServerConfiguration.HEALTH_ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
+@Requires(property = GrpcHealthFactory.HEALTH_ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 @Requires(beans = HealthEndpoint.class)
-@Requires(beans = GrpcEmbeddedServer.class)
+@Requires(beans = EmbeddedServer.class)
 public class GrpcServerHealthIndicator implements HealthIndicator {
     private static final String ID = "grpc-server";
 
-    private final GrpcEmbeddedServer server;
+    private final EmbeddedServer server;
 
     /**
      * Default constructor.
      *
      * @param server The grpc embedded server
      */
-    public GrpcServerHealthIndicator(GrpcEmbeddedServer server) {
+    public GrpcServerHealthIndicator(@Named("grpc.server") EmbeddedServer server) {
         this.server = server;
     }
 
@@ -67,17 +67,27 @@ public class GrpcServerHealthIndicator implements HealthIndicator {
      */
     private HealthResult getHealthResult() {
         final HealthStatus healthStatus = server.isRunning() ? HealthStatus.UP : HealthStatus.DOWN;
-        /**
-         * BUGFIX: it avoids to call the server.getPort() method when the gRPC-Server is DOWN because
-         * it throws an unexpected exception that breaks the /health endpoint
-         */
         final String serverHost = server.getHost();
-        final int serverPort = server.getServerConfiguration().getServerPort(); // don't call the server.getPort() here!
-        final Map details = mapOf("host", serverHost, "port", serverPort);
-
-        return HealthResult
-                .builder(ID, healthStatus)
-                .details(details)
-                .build();
+        try {
+            
+            int serverPort = server.getPort();        
+            final Map<?, ?> details = mapOf("host", serverHost, "port", serverPort);
+    
+            return HealthResult
+                    .builder(ID, healthStatus)
+                    .details(details)
+                    .build();
+        } catch (IllegalStateException e) {
+            /**
+            * BUGFIX: it avoids to call the server.getPort() method when the gRPC-Server is DOWN because
+            * it throws an unexpected exception that breaks the /health endpoint
+            */
+                    
+            final Map<?, ?> details = mapOf("host", serverHost, "port", "N/A");   
+            return HealthResult
+                    .builder(ID, healthStatus)
+                    .details(details)
+                    .build();
+        }
     }
 }

@@ -1,0 +1,37 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+    id 'com.google.protobuf'
+}
+
+dependencies {
+    api project(":grpc-annotation")
+    api libs.micronaut.runtime
+    api libs.managed.grpc.protobuf
+    api libs.managed.grpc.stub
+
+    // change these to "api" dependencies when this module
+    // is removed as a dependency of "grpc-server-runtime"
+    compileOnly libs.managed.grpc.services
+    compileOnly libs.micronaut.management
+
+    testImplementation libs.managed.grpc.services
+    testImplementation libs.micronaut.management
+    testImplementation libs.micronaut.reactor.http.client
+    testImplementation project(":grpc-server-runtime")
+}
+
+protobuf {
+    protoc { artifact = libs.protoc.asProvider().get() }
+    plugins {
+        grpc { artifact = libs.protoc.grpc.get() }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+
+micronautBuild {
+    binaryCompatibility {
+        enabled = false
+    }
+}
