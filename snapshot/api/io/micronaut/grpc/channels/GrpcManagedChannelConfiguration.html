@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -148,6 +148,14 @@ implements io.micronaut.core.naming.Named</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#channelBuilder">channelBuilder</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#CONNECT_ON_STARTUP">CONNECT_ON_STARTUP</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static java.lang.String</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#CONNECTION_TIMEOUT">CONNECTION_TIMEOUT</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#name">name</a></span></code>&nbsp;</td>
 </tr>
@@ -204,8 +212,16 @@ implements io.micronaut.core.naming.Named</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#getChannelBuilder--">getChannelBuilder</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>java.time.Duration</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#getConnectionTimeout--">getConnectionTimeout</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>java.lang.String</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#getName--">getName</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#isConnectOnStartup--">isConnectOnStartup</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -265,6 +281,32 @@ implements io.micronaut.core.naming.Named</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../constant-values.html#io.micronaut.grpc.channels.GrpcManagedChannelConfiguration.SETTING_URL">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a name="CONNECT_ON_STARTUP">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>CONNECT_ON_STARTUP</h4>
+<pre>public static final&nbsp;java.lang.String CONNECT_ON_STARTUP</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../constant-values.html#io.micronaut.grpc.channels.GrpcManagedChannelConfiguration.CONNECT_ON_STARTUP">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a name="CONNECTION_TIMEOUT">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>CONNECTION_TIMEOUT</h4>
+<pre>public static final&nbsp;java.lang.String CONNECTION_TIMEOUT</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../constant-values.html#io.micronaut.grpc.channels.GrpcManagedChannelConfiguration.CONNECTION_TIMEOUT">Constant Field Values</a></dd>
 </dl>
 </li>
 </ul>
@@ -332,6 +374,38 @@ protected final&nbsp;io.grpc.netty.NettyChannelBuilder channelBuilder</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getName</code>&nbsp;in interface&nbsp;<code>io.micronaut.core.naming.Named</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>name of the channel</dd>
+</dl>
+</li>
+</ul>
+<a name="isConnectOnStartup--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isConnectOnStartup</h4>
+<pre>public&nbsp;boolean&nbsp;isConnectOnStartup()</pre>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if connect on startup is set for channel</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>3.4.0</dd>
+</dl>
+</li>
+</ul>
+<a name="getConnectionTimeout--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getConnectionTimeout</h4>
+<pre>public&nbsp;java.time.Duration&nbsp;getConnectionTimeout()</pre>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>connection timeout for the channel</dd>
+<dt><span class="simpleTagLabel">Since:</span></dt>
+<dd>3.4.0</dd>
 </dl>
 </li>
 </ul>
