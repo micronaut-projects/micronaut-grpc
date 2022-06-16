@@ -106,6 +106,7 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
 
     /**
      * @return true if connect on startup is set for channel
+     * @since 3.4.0
      */
     public boolean isConnectOnStartup() {
         return connectOnStartup;
@@ -113,6 +114,7 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
 
     /**
      * @return connection timeout for the channel
+     * @since 3.4.0
      */
     public Duration getConnectionTimeout() {
         return connectionTimeout;
