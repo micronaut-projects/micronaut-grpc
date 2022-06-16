@@ -208,7 +208,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
                 try {
                     server.awaitTermination(grpcConfiguration.getAwaitTermination().toMillis(), TimeUnit.MILLISECONDS);
                 } catch (InterruptedException ignored) {
-
+                    Thread.currentThread().interrupt();
                 }
             }
 

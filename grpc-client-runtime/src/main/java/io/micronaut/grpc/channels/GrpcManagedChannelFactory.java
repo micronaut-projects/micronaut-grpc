@@ -18,7 +18,6 @@ package io.micronaut.grpc.channels;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -114,6 +113,7 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
         try {
             return readyLatch.await(timeout.getSeconds(), TimeUnit.SECONDS);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return false;
         }
     }
@@ -135,6 +135,7 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
                 try {
                     channel.shutdown().awaitTermination(1, TimeUnit.SECONDS);
                 } catch (Exception e) {
+                    Thread.currentThread().interrupt();
                     if (LOG.isWarnEnabled()) {
                         LOG.warn("Error shutting down GRPC channel: {}", e.getMessage(), e);
                     }
