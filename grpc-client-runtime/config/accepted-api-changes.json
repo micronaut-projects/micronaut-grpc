@@ -1,0 +1,162 @@
+[
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Class io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Field $ANNOTATION_METADATA",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Method io.micronaut.grpc.client.tracing.$BeanConfiguration.getAnnotationMetadata()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Constructor io.micronaut.grpc.client.tracing.$BeanConfiguration()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Class io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Field $ANNOTATION_METADATA",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Method io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference.getBeanDefinitionType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Method io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference.getBeanType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Method io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference.load()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Constructor io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Class io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Field $ANNOTATION_METADATA",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Method io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference.getBeanDefinitionType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Method io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference.getBeanType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Method io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference.load()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Constructor io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Class io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Field $ANNOTATION_METADATA",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Method io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference.getBeanDefinitionType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Method io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference.getBeanType()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Method io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference.load()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Constructor io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration",
+    "member": "Class io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration",
+    "member": "Field PREFIX",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration",
+    "member": "Field builder",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration",
+    "member": "Method io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration.getBuilder()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration",
+    "member": "Method io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration.setClientCloseDecorator(io.opentracing.contrib.grpc.ClientCloseDecorator)",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration",
+    "member": "Method io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration.setClientSpanDecorator(io.opentracing.contrib.grpc.ClientSpanDecorator)",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration",
+    "member": "Constructor io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration(io.opentracing.Tracer)",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorFactory",
+    "member": "Class io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorFactory",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorFactory",
+    "member": "Method io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorFactory.clientTracingInterceptor(io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorConfiguration)",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorFactory",
+    "member": "Constructor io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorFactory()",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  }
+]
