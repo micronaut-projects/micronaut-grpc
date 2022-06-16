@@ -7,19 +7,18 @@ import io.grpc.examples.helloworld.HelloRequest
 import io.grpc.stub.StreamObserver
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.annotation.Factory
+import io.micronaut.context.exceptions.BeanInstantiationException
 import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.channels.GrpcManagedChannelConfiguration
 import io.micronaut.inject.qualifiers.Qualifiers
 import io.micronaut.runtime.server.EmbeddedServer
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import spock.lang.Retry
 import spock.lang.Specification
 
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
-
 class GrpcNamedChannelSpec extends Specification {
-
 
     // retry because on Cloud CI you may have a race condition regarding port availability and binding
     @Retry
@@ -35,6 +34,57 @@ class GrpcNamedChannelSpec extends Specification {
         def testBean = context.getBean(TestBean)
         def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
         def channel = testBean.blockingStub.channel
+        expect:
+        channel != null
+
+        testBean.sayHello("Fred") == "Hello 2 Fred"
+        config.name == 'greeter'
+
+        cleanup:
+        embeddedServer.close()
+    }
+
+    void "test named client times out with connect-on-startup"() {
+        given:
+        def port = SocketUtils.findAvailableTcpPort()
+        EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, [
+                'grpc.server.port': port,
+                'grpc.channels.greeter.address':"localhost:${SocketUtils.findAvailableTcpPort()}",
+                'grpc.channels.greeter.plaintext':true,
+                'grpc.channels.greeter.connect-on-startup': true,
+                'grpc.channels.greeter.connection-timeout': 10
+        ])
+        def context = embeddedServer.getApplicationContext()
+
+        when:
+        context.getBean(TestBean)
+
+        then:
+        def ex = thrown(BeanInstantiationException)
+        def cause = ex.getCause()
+        cause.getClass() == IllegalStateException
+        cause.message == "Unable to connect to the channel: greeter"
+
+        cleanup:
+        embeddedServer.close()
+    }
+
+    @Retry
+    void "test named client successfully with connect-on-startup"() {
+        given:
+        def port = SocketUtils.findAvailableTcpPort()
+        EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, [
+                'grpc.server.port': port,
+                'grpc.channels.greeter.address':"localhost:$port",
+                'grpc.channels.greeter.plaintext':true,
+                'grpc.channels.greeter.connect-on-startup': true,
+                'grpc.channels.greeter.connection-timeout': 5
+        ])
+        def context = embeddedServer.getApplicationContext()
+        def testBean = context.getBean(TestBean)
+        def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
+        def channel = testBean.blockingStub.channel
+
         expect:
         channel != null
 
@@ -93,6 +143,7 @@ class GrpcNamedChannelSpec extends Specification {
         Greeter2Grpc.Greeter2BlockingStub blockingStub(@GrpcChannel("greeter") Channel channel) {
             Greeter2Grpc.newBlockingStub(channel)
         }
+
     }
 
     @Singleton
