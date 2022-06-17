@@ -8,11 +8,18 @@ opentracing-grpc = '0.2.3'
 opentracing-mock = '0.33.0'
 
 [libraries]
+
+boms-grpc = {module = "io.grpc:grpc-bom", version.ref = "managed-grpc"}
 managed-grpc-protobuf = { module = 'io.grpc:grpc-protobuf', version.ref = 'managed-grpc' }
 managed-grpc-stub = { module = 'io.grpc:grpc-stub', version.ref = 'managed-grpc' }
 managed-grpc-services = { module = 'io.grpc:grpc-services', version.ref = 'managed-grpc' }
+
+managed-protoc = { module = 'com.google.protobuf:protoc', version.ref = 'managed-protobuf' }
 managed-protobuf-java = { module = 'com.google.protobuf:protobuf-java', version.ref = 'managed-protobuf' }
+managed-protobuf-javalite = { module = 'com.google.protobuf:protobuf-javalite', version.ref = 'managed-protobuf' }
 managed-protobuf-java-util = { module = 'com.google.protobuf:protobuf-java-util', version.ref = 'managed-protobuf' }
+managed-protobuf-kotlin = { module = 'com.google.protobuf:protobuf-kotlin', version.ref = 'managed-protobuf' }
+managed-protobuf-kotlin-lite = { module = 'com.google.protobuf:protobuf-kotlin-lite', version.ref = 'managed-protobuf' }
 
 micronaut-discovery-client = { module = 'io.micronaut.discovery:micronaut-discovery-client' }
 micronaut-http = { module = 'io.micronaut:micronaut-http' }

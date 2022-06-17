@@ -24,6 +24,7 @@ import io.grpc.stub.StreamObserver
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.annotation.Secondary
+import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.inject.qualifiers.Qualifiers
 import io.micronaut.runtime.server.EmbeddedServer
@@ -35,9 +36,13 @@ import spock.util.concurrent.PollingConditions
 class GrpcServiceDiscoverySpec extends Specification {
 
     void "test GRPC named service discovery"() {
+
+        def port = SocketUtils.findAvailableTcpPort()
+
         when:"A service is run"
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet'
+                'micronaut.application.name':'greet',
+                'grpc.server.port': port
         ])
 
         and:'then a client is run that declares the service'
@@ -59,9 +64,13 @@ class GrpcServiceDiscoverySpec extends Specification {
     }
 
     void "test GRPC channel explicit URI"() {
+
+        def port = SocketUtils.findAvailableTcpPort()
+
         when:"A service is run"
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet'
+                'micronaut.application.name':'greet',
+                'grpc.server.port': port
         ])
 
         and:'then a client is run that declares the service'
@@ -102,9 +111,13 @@ class GrpcServiceDiscoverySpec extends Specification {
     }
 
     void "test GRPC channel explicit URI - no DNS"() {
+
+        def port = SocketUtils.findAvailableTcpPort()
+
         when:"A service is run"
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet'
+                'micronaut.application.name':'greet',
+                'grpc.server.port': port
         ])
 
         and:'then a client is run that declares the service'

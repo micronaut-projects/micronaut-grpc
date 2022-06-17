@@ -23,6 +23,7 @@ import io.grpc.examples.helloworld.HelloRequest
 import io.grpc.stub.StreamObserver
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.annotation.Factory
+import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.runtime.server.EmbeddedServer
 import jakarta.inject.Singleton
@@ -33,8 +34,10 @@ class GrpcServiceDiscoverySpec extends Specification {
 
     void "test GRPC named service discovery"() {
         when:"A service is run"
+        def port = SocketUtils.findAvailableTcpPort()
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet'
+                'micronaut.application.name':'greet',
+                'grpc.server.port': port
         ])
 
         and:'then a client is run that declares the service'
@@ -57,8 +60,10 @@ class GrpcServiceDiscoverySpec extends Specification {
 
     void "test GRPC channel explicit URI"() {
         when:"A service is run"
+        def port = SocketUtils.findAvailableTcpPort()
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet'
+                'micronaut.application.name':'greet',
+                'grpc.server.port': port
         ])
 
         and:'then a client is run that declares the service'

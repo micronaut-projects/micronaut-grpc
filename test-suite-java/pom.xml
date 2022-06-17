@@ -11,9 +11,9 @@
 
     <properties>
         <packaging>jar</packaging>
-        <micronaut.version>3.5.4</micronaut.version>
+        <micronaut.version>3.6.0</micronaut.version>
         <grpc.version>1.48.1</grpc.version>
-        <protoc.version>3.21.4</protoc.version>
+        <protoc.version>3.21.5</protoc.version>
         <guava.version>31.1-jre</guava.version>
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -59,9 +59,12 @@
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>
+            <artifactId>grpc-services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
             <artifactId>grpc-stub</artifactId>
             <scope>provided</scope>
-            <version>${grpc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
@@ -77,11 +80,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
