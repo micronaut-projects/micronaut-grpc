@@ -49,16 +49,6 @@ public class GrpcServerBuilder {
     /**
      * Constructs the {@link ServerBuilder} instance.
      *
-     * @deprecated Use {@link #GrpcServerBuilder(HealthStatusManagerContainer)} instead.
-     */
-    @Deprecated
-    public GrpcServerBuilder() {
-        this(null);
-    }
-
-    /**
-     * Constructs the {@link ServerBuilder} instance.
-     *
      * @param healthStatusManagerContainer if enabled, inject a GRPC health status manager.
      */
     @Inject
