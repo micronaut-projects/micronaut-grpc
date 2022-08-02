@@ -1,6 +1,6 @@
 [versions]
 managed-grpc = '1.47.0'
-managed-protobuf = '3.21.1'
+managed-protobuf = '3.21.4'
 
 jackson-datatype-protobuf = '0.9.12'
 jaeger-core = '1.8.0'
