@@ -100,10 +100,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcManagedChannelFactory.html#close--">close()</a></span> - Method in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelFactory.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelFactory</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#CONNECT_ON_STARTUP">CONNECT_ON_STARTUP</a></span> - Static variable in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#CONNECTION_TIMEOUT">CONNECTION_TIMEOUT</a></span> - Static variable in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/protobuf/convert/ByteBufToProtoMessageConverter.html#convert-io.netty.buffer.ByteBuf-java.lang.Class-io.micronaut.core.convert.ConversionContext-">convert(ByteBuf, Class&lt;Message&gt;, ConversionContext)</a></span> - Method in class io.micronaut.protobuf.convert.<a href="io/micronaut/protobuf/convert/ByteBufToProtoMessageConverter.html" title="class in io.micronaut.protobuf.convert">ByteBufToProtoMessageConverter</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/protobuf/convert/ProtoMessageToByteBufConverter.html#convert-com.google.protobuf.Message-java.lang.Class-io.micronaut.core.convert.ConversionContext-">convert(Message, Class&lt;ByteBuf&gt;, ConversionContext)</a></span> - Method in class io.micronaut.protobuf.convert.<a href="io/micronaut/protobuf/convert/ProtoMessageToByteBufConverter.html" title="class in io.micronaut.protobuf.convert">ProtoMessageToByteBufConverter</a></dt>
@@ -171,8 +167,6 @@
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html#getCertChain--">getCertChain()</a></span> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#getChannelBuilder--">getChannelBuilder()</a></span> - Method in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#getConnectionTimeout--">getConnectionTimeout()</a></span> - Method in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#getDefaultScheme--">getDefaultScheme()</a></span> - Method in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
@@ -346,7 +340,7 @@
 <dd>
 <div class="block">A <code>HealthIndicator</code> for Grpc server.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/health/GrpcServerHealthIndicator.html#GrpcServerHealthIndicator-io.micronaut.runtime.server.EmbeddedServer-">GrpcServerHealthIndicator(EmbeddedServer)</a></span> - Constructor for class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcServerHealthIndicator.html" title="class in io.micronaut.grpc.server.health">GrpcServerHealthIndicator</a></dt>
+<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/health/GrpcServerHealthIndicator.html#GrpcServerHealthIndicator-io.micronaut.grpc.server.GrpcEmbeddedServer-">GrpcServerHealthIndicator(GrpcEmbeddedServer)</a></span> - Constructor for class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcServerHealthIndicator.html" title="class in io.micronaut.grpc.server.health">GrpcServerHealthIndicator</a></dt>
 <dd>
 <div class="block">Default constructor.</div>
 </dd>
@@ -382,10 +376,6 @@
 <h2 class="title">H</h2>
 <dl>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#HEALTH_ENABLED">HEALTH_ENABLED</a></span> - Static variable in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
-<dd>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
-</dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html#HEALTH_ENABLED">HEALTH_ENABLED</a></span> - Static variable in class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" title="class in io.micronaut.grpc.server.health">GrpcHealthFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html#healthStatusManager--">healthStatusManager()</a></span> - Method in class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" title="class in io.micronaut.grpc.server.health">GrpcHealthFactory</a></dt>
 <dd>
@@ -448,8 +438,6 @@
 <dt><a href="io/micronaut/protobuf/convert/package-summary.html">io.micronaut.protobuf.convert</a> - package io.micronaut.protobuf.convert</dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#isAvailable--">isAvailable()</a></span> - Method in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#isConnectOnStartup--">isConnectOnStartup()</a></span> - Method in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#isRunning--">isRunning()</a></span> - Method in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
