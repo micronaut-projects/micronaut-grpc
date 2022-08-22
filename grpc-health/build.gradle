@@ -3,11 +3,6 @@ plugins {
     id 'com.google.protobuf'
 }
 
-repositories {
-    mavenCentral()
-    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
-}
-
 dependencies {
     api project(":grpc-annotation")
     api libs.micronaut.runtime

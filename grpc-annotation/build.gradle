@@ -1,8 +1,3 @@
 plugins {
     id 'io.micronaut.build.internal.grpc-module'
 }
-
-repositories {
-    mavenCentral()
-    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
-}
