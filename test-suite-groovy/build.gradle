@@ -2,13 +2,8 @@ plugins {
     id 'groovy'
     id 'com.google.protobuf'
     id "io.micronaut.minimal.application" version "3.5.1"
+    id "io.micronaut.build.internal.grpc-tests"
 }
-
-repositories {
-    mavenCentral()
-    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
-}
-
 
 mainClassName = "helloworld.Application"
 micronaut {

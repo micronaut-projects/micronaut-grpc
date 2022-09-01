@@ -4,13 +4,8 @@ plugins {
     id 'com.google.protobuf'
     // end::plugin[]
     id 'io.micronaut.application'
+    id "io.micronaut.build.internal.grpc-tests"
 }
-
-repositories {
-    mavenCentral()
-    maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
-}
-
 
 mainClassName = "helloworld.Application"
 micronaut {
