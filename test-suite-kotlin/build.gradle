@@ -49,7 +49,7 @@ dependencies {
     // end::dependencies[]
 
     runtimeOnly("ch.qos.logback:logback-classic")
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.4")
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
