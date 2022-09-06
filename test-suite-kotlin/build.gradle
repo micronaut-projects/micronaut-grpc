@@ -4,6 +4,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.allopen" version "$kotlinVersion"
     id "io.micronaut.application"
     id "com.google.protobuf"
+    id "io.micronaut.build.internal.grpc-tests"
 }
 
 // tag::variables[]
@@ -11,10 +12,6 @@ ext {
     grpcKotlinVersion = "1.2.1"
 }
 // end::variables[]
-
-repositories {
-    mavenCentral()
-}
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8

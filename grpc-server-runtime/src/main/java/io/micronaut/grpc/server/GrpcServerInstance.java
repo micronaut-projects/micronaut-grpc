@@ -43,25 +43,6 @@ class GrpcServerInstance implements EmbeddedServerInstance {
     private final EmbeddedServer embeddedServer;
 
     /**
-     * Constructor.
-     *
-     * @param embeddedServer       The embedded server
-     * @param id                   The ID
-     * @param uri                  The URI
-     * @param metadata             The metadata
-     * @param metadataContributors The metadata contributors
-     */
-    @Deprecated
-    GrpcServerInstance(
-            EmbeddedServer embeddedServer,
-            String id,
-            URI uri,
-            @Nullable Map<String, String> metadata,
-            @Nullable List<ServiceInstanceMetadataContributor> metadataContributors) {
-        this(embeddedServer, id, uri, metadata, metadataContributors, null);
-    }
-
-    /**
      * Default constructor.
      *
      * @param embeddedServer       The embedded server
