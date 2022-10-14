@@ -1,22 +1,24 @@
 plugins {
     id 'io.micronaut.build.internal.grpc-module'
-    id 'com.google.protobuf'
+    alias libs.plugins.protobuf
 }
 
 dependencies {
-    annotationProcessor libs.micronaut.validation
 
-    api libs.micronaut.http
-    api libs.micronaut.http.netty
+    annotationProcessor mn.micronaut.validation
+
+    api platform(libs.boms.protobuf)
+    api mn.micronaut.http
+    api mn.micronaut.http.netty
     //protobuf
     api libs.managed.protobuf.java
     api libs.managed.protobuf.java.util
 
-    testImplementation libs.micronaut.http.server.netty
-    testImplementation libs.micronaut.reactor.http.client
+    testImplementation mn.micronaut.http.server.netty
+    testImplementation mn.micronaut.reactor.http.client
     testImplementation libs.jackson.datatype.protobuf
 }
 
 protobuf {
-    protoc { artifact = libs.protoc.asProvider().get() }
+    protoc { artifact = libs.managed.protoc.asProvider().get() }
 }

@@ -1,13 +1,19 @@
 plugins {
     id 'java'
     // tag::plugin[]
-    id 'com.google.protobuf'
+    id "com.google.protobuf" version "$protobufGradleVersion"
     // end::plugin[]
-    id 'io.micronaut.application'
+    id "io.micronaut.application" version "$micronautGradlePluginVersion"
 }
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
 }
 
 mainClassName = "helloworld.Application"
@@ -26,6 +32,7 @@ dependencies {
     annotationProcessor "io.micronaut:micronaut-validation"
 
     compileOnly "io.grpc:grpc-stub:$grpcVersion"
+    compileOnly "javax.annotation:javax.annotation-api"
 
     implementation "io.micronaut:micronaut-validation"
     implementation("io.micronaut:micronaut-runtime")
@@ -36,6 +43,8 @@ dependencies {
     runtimeOnly "ch.qos.logback:logback-classic"
 
     testAnnotationProcessor "io.micronaut:micronaut-validation"
+
+    testCompileOnly "javax.annotation:javax.annotation-api"
 }
 
 // tag::config[]

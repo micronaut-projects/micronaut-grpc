@@ -1,22 +1,26 @@
 plugins {
     id 'io.micronaut.build.internal.grpc-module'
-    id 'com.google.protobuf'
+    alias libs.plugins.protobuf
 }
 
 dependencies {
-    api project(":grpc-annotation")
-    api project(":grpc-opentracing")
-    api libs.micronaut.runtime
+
+    api platform(libs.boms.grpc)
+    api projects.grpcAnnotation
+    api projects.grpcOpentracing
+    api mn.micronaut.runtime
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
     implementation libs.grpc.netty
-    implementation libs.projectreactor
-    implementation libs.micronaut.buffer.netty
-    compileOnly libs.micronaut.discovery.client
+    implementation mn.reactor
+    implementation mn.micronaut.buffer.netty
+    compileOnly mn.micronaut.discovery
 
-    testImplementation project(":grpc-server-runtime")
-    testImplementation libs.micronaut.discovery.client
+    testCompileOnly mn.javax.annotation.api
+
+    testImplementation projects.grpcServerRuntime
+    testImplementation mn.micronaut.discovery
     testImplementation libs.opentracing.mock
 }
 
@@ -33,9 +37,9 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = libs.protoc.asProvider().get() }
+    protoc { artifact = libs.managed.protoc.asProvider().get() }
     plugins {
-        grpc { artifact = libs.protoc.grpc.get() }
+        grpc { artifact = libs.managed.protoc.grpc.get() }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
@@ -44,7 +48,6 @@ protobuf {
 
 micronautBuild {
     binaryCompatibility {
-        enabled = true
         acceptedRegressionsFile = file("config/accepted-api-changes.json")
     }
 }

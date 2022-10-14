@@ -1,28 +1,33 @@
 plugins {
     id 'io.micronaut.build.internal.grpc-module'
-    id 'com.google.protobuf'
+    alias libs.plugins.protobuf
 }
 
 dependencies {
-    api project(":grpc-annotation")
-    api project(":grpc-health")
-    api project(":grpc-opentracing")
-    api libs.micronaut.runtime
+
+    api platform(libs.boms.grpc)
+    api projects.grpcAnnotation
+    api projects.grpcHealth
+    api projects.grpcOpentracing
+    api mn.micronaut.runtime
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
     compileOnly libs.managed.grpc.services
+    compileOnly mn.micronaut.discovery
+    compileOnly mn.micronaut.management
+    compileOnly mn.graal
+
     implementation libs.grpc.netty
-    implementation libs.micronaut.buffer.netty
-    compileOnly libs.micronaut.discovery.client
-    compileOnly libs.micronaut.management
-    compileOnly libs.graal
+    implementation mn.micronaut.buffer.netty
+
+    testCompileOnly mn.javax.annotation.api
 
     testImplementation libs.managed.grpc.services
-    testImplementation libs.micronaut.discovery.client
-    testImplementation libs.micronaut.reactor.http.client
-    testImplementation libs.micronaut.management
-    testImplementation project(":grpc-client-runtime")
+    testImplementation mn.micronaut.discovery
+    testImplementation mn.micronaut.reactor.http.client
+    testImplementation mn.micronaut.management
+    testImplementation projects.grpcClientRuntime
 
     testRuntimeOnly libs.netty.tcnative
     testRuntimeOnly libs.netty.tcnative.boringssl.static
@@ -38,9 +43,9 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = libs.protoc.asProvider().get() }
+    protoc { artifact = libs.managed.protoc.asProvider().get() }
     plugins {
-        grpc { artifact = libs.protoc.grpc.get() }
+        grpc { artifact = libs.managed.protoc.grpc.get() }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
@@ -49,7 +54,6 @@ protobuf {
 
 micronautBuild {
     binaryCompatibility {
-        enabled = true
         acceptedRegressionsFile = file("config/accepted-api-changes.json")
     }
 }

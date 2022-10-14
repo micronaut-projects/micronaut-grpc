@@ -11,11 +11,11 @@
 
     <properties>
         <packaging>jar</packaging>
-        <micronaut.version>3.6.0</micronaut.version>
-        <grpc.version>1.48.1</grpc.version>
-        <protoc.version>3.21.5</protoc.version>
+        <micronaut.version>3.7.2</micronaut.version>
+        <grpc.version>1.50.2</grpc.version>
+        <protoc.version>3.21.8</protoc.version>
         <guava.version>31.1-jre</guava.version>
-        <jdk.version>1.8</jdk.version>
+        <jdk.version>17</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <exec.mainClass>helloworld.Application</exec.mainClass>
     </properties>
@@ -98,7 +98,7 @@
             <plugin>
                 <groupId>io.micronaut.build</groupId>
                 <artifactId>micronaut-maven-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.4.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -1,11 +1,17 @@
 plugins {
     id 'groovy'
-    id 'com.google.protobuf'
+    id "com.google.protobuf" version "$protobufGradleVersion"
     id "io.micronaut.minimal.application" version "$micronautGradlePluginVersion"
 }
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
 }
 
 mainClassName = "helloworld.Application"
@@ -22,6 +28,7 @@ micronaut {
 dependencies {
 
     compileOnly "io.grpc:grpc-stub:$grpcVersion"
+    compileOnly "javax.annotation:javax.annotation-api"
 
     implementation "io.micronaut:micronaut-validation"
     implementation("io.micronaut:micronaut-runtime")
@@ -30,6 +37,12 @@ dependencies {
     implementation "io.grpc:grpc-services"
 
     runtimeOnly "ch.qos.logback:logback-classic"
+
+    testCompileOnly "javax.annotation:javax.annotation-api"
+
+    testImplementation "org.apache.groovy:groovy"
+
+    testRuntimeOnly "ch.qos.logback:logback-classic"
 }
 
 tasks.withType(GroovyCompile) {
