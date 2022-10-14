@@ -19,6 +19,8 @@ dependencies {
     compileOnly libs.opentracing.grpc
     compileOnly mn.javax.annotation.api
 
+    testCompileOnly mn.javax.annotation.api
+
     testImplementation projects.grpcServerRuntime
     testImplementation libs.managed.grpc.services
     testImplementation libs.opentracing.mock
@@ -44,3 +46,4 @@ micronautBuild {
         enabled = false
     }
 }
+

@@ -17,6 +17,8 @@ dependencies {
     implementation mn.micronaut.buffer.netty
     compileOnly mn.micronaut.discovery
 
+    testCompileOnly mn.javax.annotation.api
+
     testImplementation projects.grpcServerRuntime
     testImplementation mn.micronaut.discovery
     testImplementation libs.opentracing.mock
@@ -49,3 +51,4 @@ micronautBuild {
         acceptedRegressionsFile = file("config/accepted-api-changes.json")
     }
 }
+

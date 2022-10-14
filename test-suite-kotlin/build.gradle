@@ -23,8 +23,8 @@ repositories {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 mainClassName = "helloworld.Application"
@@ -52,15 +52,18 @@ dependencies {
     // tag::dependencies[]
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     compileOnly("io.grpc:grpc-stub:$grpcVersion")
+    compileOnly "javax.annotation:javax.annotation-api"
     // end::dependencies[]
 
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+    testCompileOnly "javax.annotation:javax.annotation-api"
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
         javaParameters = true
     }
 }

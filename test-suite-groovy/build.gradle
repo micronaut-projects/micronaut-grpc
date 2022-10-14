@@ -27,6 +27,7 @@ micronaut {
 
 dependencies {
     compileOnly "io.grpc:grpc-stub:$grpcVersion"
+    compileOnly "javax.annotation:javax.annotation-api"
 
     implementation "io.micronaut:micronaut-validation"
     implementation("io.micronaut:micronaut-runtime")
@@ -35,6 +36,12 @@ dependencies {
     implementation "io.grpc:grpc-services"
 
     runtimeOnly "ch.qos.logback:logback-classic"
+
+    testCompileOnly "javax.annotation:javax.annotation-api"
+
+    testImplementation "org.apache.groovy:groovy"
+
+    testRuntimeOnly "ch.qos.logback:logback-classic"
 }
 
 tasks.withType(GroovyCompile) {

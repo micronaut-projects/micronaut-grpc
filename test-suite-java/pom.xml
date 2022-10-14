@@ -15,7 +15,7 @@
         <grpc.version>1.50.2</grpc.version>
         <protoc.version>3.21.9</protoc.version>
         <guava.version>31.1-jre</guava.version>
-        <jdk.version>1.8</jdk.version>
+        <jdk.version>17</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <exec.mainClass>helloworld.Application</exec.mainClass>
     </properties>
