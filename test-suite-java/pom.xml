@@ -11,9 +11,9 @@
 
     <properties>
         <packaging>jar</packaging>
-        <micronaut.version>3.6.0</micronaut.version>
-        <grpc.version>1.48.1</grpc.version>
-        <protoc.version>3.21.5</protoc.version>
+        <micronaut.version>3.7.1</micronaut.version>
+        <grpc.version>1.50.0</grpc.version>
+        <protoc.version>3.21.7</protoc.version>
         <guava.version>31.1-jre</guava.version>
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -98,7 +98,7 @@
             <plugin>
                 <groupId>io.micronaut.build</groupId>
                 <artifactId>micronaut-maven-plugin</artifactId>
-                <version>3.3.1</version>
+                <version>3.4.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

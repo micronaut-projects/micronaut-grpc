@@ -1,9 +1,9 @@
 plugins {
     id 'java'
     // tag::plugin[]
-    id 'com.google.protobuf'
+    id "com.google.protobuf" version "$protobufGradleVersion"
     // end::plugin[]
-    id 'io.micronaut.application'
+    id "io.micronaut.application" version "$micronautGradlePluginVersion"
 }
 
 repositories {

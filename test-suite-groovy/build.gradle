@@ -1,6 +1,6 @@
 plugins {
     id 'groovy'
-    id 'com.google.protobuf'
+    id "com.google.protobuf" version "$protobufGradleVersion"
     id "io.micronaut.minimal.application" version "$micronautGradlePluginVersion"
 }
 

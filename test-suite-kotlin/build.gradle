@@ -2,8 +2,8 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "$kotlinVersion"
     id "org.jetbrains.kotlin.kapt" version "$kotlinVersion"
     id "org.jetbrains.kotlin.plugin.allopen" version "$kotlinVersion"
-    id "io.micronaut.application"
-    id "com.google.protobuf"
+    id "io.micronaut.application" version "$micronautGradlePluginVersion"
+    id "com.google.protobuf" version "$protobufGradleVersion"
 }
 
 // tag::variables[]
@@ -17,8 +17,8 @@ repositories {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 mainClassName = "helloworld.Application"
@@ -49,12 +49,12 @@ dependencies {
     // end::dependencies[]
 
     runtimeOnly("ch.qos.logback:logback-classic")
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
         javaParameters = true
     }
 }
