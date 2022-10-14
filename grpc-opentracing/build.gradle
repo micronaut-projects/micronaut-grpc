@@ -1,9 +1,11 @@
 plugins {
     id 'io.micronaut.build.internal.grpc-module'
-    id 'com.google.protobuf'
+    alias libs.plugins.protobuf
 }
 
 dependencies {
+
+    api platform(libs.boms.grpc)
     api project(":grpc-annotation")
     api libs.micronaut.runtime
     api libs.managed.grpc.protobuf
@@ -15,6 +17,9 @@ dependencies {
     compileOnly libs.micronaut.tracing
     compileOnly libs.micronaut.management
     compileOnly libs.opentracing.grpc
+    compileOnly libs.javax.annotation.api
+
+    testCompileOnly libs.javax.annotation.api
 
     testImplementation project(":grpc-server-runtime")
     testImplementation libs.managed.grpc.services
