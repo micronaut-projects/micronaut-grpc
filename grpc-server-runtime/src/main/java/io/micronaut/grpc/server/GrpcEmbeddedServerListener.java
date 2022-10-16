@@ -21,13 +21,15 @@ import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
-import jakarta.annotation.PreDestroy;
-import jakarta.inject.Singleton;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.annotation.PreDestroy;
+import jakarta.inject.Singleton;
+
 /**
- * Application event listener that will startup the {@link GrpcEmbeddedServer} as a secondary server
+ * Application event listener that will start up the {@link GrpcEmbeddedServer} as a secondary server
  * on a different port allowing Micronaut's HTTP server and GRPC to run side by side.
  *
  * @author graemerocher
@@ -37,6 +39,7 @@ import org.slf4j.LoggerFactory;
 @Singleton
 @Requires(beans = GrpcEmbeddedServer.class)
 class GrpcEmbeddedServerListener implements ApplicationEventListener<ServerStartupEvent>, AutoCloseable {
+
     private static final Logger LOG = LoggerFactory.getLogger(GrpcEmbeddedServerListener.class);
 
     private final BeanContext beanContext;
@@ -44,6 +47,7 @@ class GrpcEmbeddedServerListener implements ApplicationEventListener<ServerStart
 
     /**
      * Default constructor.
+     *
      * @param beanContext The bean context
      */
     GrpcEmbeddedServerListener(BeanContext beanContext) {
@@ -54,7 +58,7 @@ class GrpcEmbeddedServerListener implements ApplicationEventListener<ServerStart
     public void onApplicationEvent(ServerStartupEvent event) {
         final EmbeddedServer server = event.getSource();
         if (!(server instanceof GrpcEmbeddedServer)) {
-            this.grpcServer = beanContext.getBean(GrpcEmbeddedServer.class);
+            grpcServer = beanContext.getBean(GrpcEmbeddedServer.class);
             grpcServer.start();
             if (LOG.isInfoEnabled()) {
                 LOG.info("GRPC started on port {}", grpcServer.getPort());

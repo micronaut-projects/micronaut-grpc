@@ -18,16 +18,16 @@ package io.micronaut.protobuf.convert;
 import java.io.IOException;
 import java.util.Optional;
 
-import jakarta.inject.Singleton;
-
-import com.google.protobuf.Message;
-
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.convert.ConversionContext;
 import io.micronaut.core.convert.TypeConverter;
 import io.micronaut.protobuf.codec.ProtobufferCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
+
+import jakarta.inject.Singleton;
+
+import com.google.protobuf.Message;
 
 /**
  * Converts Protocol buffer messages from Netty {@link ByteBuf}.
@@ -53,8 +53,8 @@ public class ByteBufToProtoMessageConverter implements TypeConverter<ByteBuf, Me
     @Override
     public Optional<Message> convert(ByteBuf object, Class<Message> targetType, ConversionContext context) {
         return codec
-                .getMessageBuilder(targetType)
-                .flatMap(builder -> rehydrate(object, builder, context));
+            .getMessageBuilder(targetType)
+            .flatMap(builder -> rehydrate(object, builder, context));
     }
 
     private Optional<Message> rehydrate(ByteBuf object, Message.Builder builder, ConversionContext context) {

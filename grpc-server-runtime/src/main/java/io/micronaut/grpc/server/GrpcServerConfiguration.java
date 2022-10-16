@@ -15,7 +15,13 @@
  */
 package io.micronaut.grpc.server;
 
-import com.google.common.base.Preconditions;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetSocketAddress;
+import java.time.Duration;
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+
 import io.grpc.ServerBuilder;
 import io.grpc.netty.NettyServerBuilder;
 import io.micronaut.context.annotation.ConfigurationBuilder;
@@ -33,12 +39,8 @@ import io.micronaut.scheduling.TaskExecutors;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetSocketAddress;
-import java.time.Duration;
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Configuration for the GRPC server.
@@ -65,59 +67,60 @@ public class GrpcServerConfiguration {
     private final String serverHost;
     private final ResourceResolver resourceResolver;
     private GrpcSslConfiguration serverConfiguration = new GrpcSslConfiguration();
-    private boolean secure = false;
+    private boolean secure;
     private String instanceId = "";
     private Duration awaitTermination = DEFAULT_AWAIT_TERMINATION;
 
     /**
      * Constructor.
      *
-     * @param environment     The environment
-     * @param serverHost      The server host
-     * @param serverPort      The server port
+     * @param environment The environment
+     * @param serverHost The server host
+     * @param serverPort The server port
      * @param executorService The IO executor service
      */
     @Deprecated
     public GrpcServerConfiguration(
-            Environment environment,
-            @Property(name = HOST) @Nullable String serverHost,
-            @Property(name = PORT) @Nullable Integer serverPort,
-            @Named(TaskExecutors.IO) ExecutorService executorService) {
+        Environment environment,
+        @Property(name = HOST) @Nullable String serverHost,
+        @Property(name = PORT) @Nullable Integer serverPort,
+        @Named(TaskExecutors.IO) ExecutorService executorService) {
         this(environment, serverHost, serverPort, executorService, null);
     }
 
     /**
      * Default constructor.
      *
-     * @param environment      The environment
-     * @param serverHost       The server host
-     * @param serverPort       The server port
-     * @param executorService  The IO executor service
+     * @param environment The environment
+     * @param serverHost The server host
+     * @param serverPort The server port
+     * @param executorService The IO executor service
      * @param resourceResolver The resource resolver
      */
     @Creator
     public GrpcServerConfiguration(
-            Environment environment,
-            @Property(name = HOST) @Nullable String serverHost,
-            @Property(name = PORT) @Nullable Integer serverPort,
-            @Named(TaskExecutors.IO) ExecutorService executorService,
-            ResourceResolver resourceResolver) {
+        Environment environment,
+        @Property(name = HOST) @Nullable String serverHost,
+        @Property(name = PORT) @Nullable Integer serverPort,
+        @Named(TaskExecutors.IO) ExecutorService executorService,
+        ResourceResolver resourceResolver) {
         this.serverPort = serverPort != null ? serverPort :
-                environment.getActiveNames().contains(Environment.TEST) ? SocketUtils.findAvailableTcpPort() : DEFAULT_PORT;
+            environment.getActiveNames().contains(Environment.TEST) ? SocketUtils.findAvailableTcpPort() : DEFAULT_PORT;
         this.serverHost = serverHost;
         if (serverHost != null) {
-            this.serverBuilder = NettyServerBuilder.forAddress(
-                    new InetSocketAddress(serverHost, this.serverPort)
+            serverBuilder = NettyServerBuilder.forAddress(
+                new InetSocketAddress(serverHost, this.serverPort)
             );
         } else {
-            this.serverBuilder = NettyServerBuilder.forPort(this.serverPort);
+            serverBuilder = NettyServerBuilder.forPort(this.serverPort);
         }
-        this.serverBuilder.executor(executorService);
+        serverBuilder.executor(executorService);
         this.resourceResolver = resourceResolver;
     }
 
     /**
      * Whether SSL is used.
+     *
      * @return True if SSL is used
      */
     public boolean isSecure() {
@@ -126,6 +129,7 @@ public class GrpcServerConfiguration {
 
     /**
      * The server builder.
+     *
      * @return The {@link ServerBuilder}
      */
     public @NonNull ServerBuilder<?> getServerBuilder() {
@@ -134,14 +138,16 @@ public class GrpcServerConfiguration {
 
     /**
      * The server host.
+     *
      * @return The server host
      */
     public Optional<String> getServerHost() {
-        return Optional.ofNullable(this.serverHost);
+        return Optional.ofNullable(serverHost);
     }
 
     /**
      * The server port.
+     *
      * @return The server port
      */
     public int getServerPort() {
@@ -150,6 +156,7 @@ public class GrpcServerConfiguration {
 
     /**
      * The instance id.
+     *
      * @return The instance id
      */
     public @NonNull String getInstanceId() {
@@ -159,6 +166,7 @@ public class GrpcServerConfiguration {
     /**
      * Sets the instance id name used for registering the GRPC service in Service Discovery. If this is not set, the
      * application name will be used.
+     *
      * @param instanceId The instance id
      */
     public void setInstanceId(String instanceId) {
@@ -175,6 +183,7 @@ public class GrpcServerConfiguration {
      * the only known transport to not enforce this is {@code InProcessServer}.
      *
      * @param bytes the maximum number of bytes a single message can be.
+     *
      * @throws IllegalArgumentException if bytes is negative.
      * @throws UnsupportedOperationException if unsupported.
      * @since 1.13.0
@@ -197,6 +206,7 @@ public class GrpcServerConfiguration {
      * plus 32 bytes of overhead per entry.
      *
      * @param bytes the maximum size of received metadata
+     *
      * @throws IllegalArgumentException if bytes is non-positive
      * @since 1.17.0
      */
@@ -207,6 +217,7 @@ public class GrpcServerConfiguration {
 
     /**
      * The SSL configuration.
+     *
      * @return The SSL configuration
      */
     public @NonNull GrpcSslConfiguration getServerConfiguration() {
@@ -215,6 +226,7 @@ public class GrpcServerConfiguration {
 
     /**
      * Sets the maximum duration application will wait for the server to terminate and release all resources.
+     *
      * @param awaitTermination The maximum duration the application will wait for the server to terminate.
      */
     public void setAwaitTermination(Duration awaitTermination) {
@@ -223,6 +235,7 @@ public class GrpcServerConfiguration {
 
     /**
      * Gets the maximum duration application will wait for the server to terminate and release all resources.
+     *
      * @return The maximum duration the application will wait for the server to terminate.
      */
     public Duration getAwaitTermination() {
@@ -231,12 +244,13 @@ public class GrpcServerConfiguration {
 
     /**
      * Sets the SSL configuration.
+     *
      * @param sslConfiguration The server configuration
      */
     @Inject
     public void setServerConfiguration(GrpcSslConfiguration sslConfiguration) {
         if (sslConfiguration != null) {
-            this.serverConfiguration = sslConfiguration;
+            serverConfiguration = sslConfiguration;
 
             if (resourceResolver != null) {
                 final Optional<InputStream> certChain = sslConfiguration.getCertChain().flatMap(resourceResolver::getResourceAsStream);
@@ -249,12 +263,12 @@ public class GrpcServerConfiguration {
                         try (InputStream certStream = certChain.get()) {
                             try (InputStream keyStream = privateKey.get()) {
                                 serverBuilder.useTransportSecurity(
-                                        certStream,
-                                        keyStream
+                                    certStream,
+                                    keyStream
                                 );
                             }
                         }
-                        this.secure = true;
+                        secure = true;
                     } catch (IOException e) {
                         throw new ConfigurationException("Unable to configure SSL certificate: " + e.getMessage(), e);
                     }

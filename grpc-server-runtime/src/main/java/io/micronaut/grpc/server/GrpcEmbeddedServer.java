@@ -35,7 +35,6 @@ import io.micronaut.context.event.ApplicationEventPublisher;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
-import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
 import io.micronaut.core.util.ArgumentUtils;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.discovery.ServiceInstance;
@@ -44,13 +43,17 @@ import io.micronaut.discovery.cloud.ComputeInstanceMetadataResolver;
 import io.micronaut.discovery.event.ServiceReadyEvent;
 import io.micronaut.discovery.event.ServiceStoppedEvent;
 import io.micronaut.discovery.metadata.ServiceInstanceMetadataContributor;
+import io.micronaut.http.HttpRequest;
 import io.micronaut.runtime.ApplicationConfiguration;
 import io.micronaut.runtime.exceptions.ApplicationStartupException;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.event.ServerShutdownEvent;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
+
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
+
+import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
 
 /**
  * Implementation of the {@link EmbeddedServer} interface for GRPC.
@@ -77,6 +80,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
 
     /**
      * Default constructor.
+     *
      * @param applicationContext The application context
      * @param applicationConfiguration The application configuration
      * @param grpcServerConfiguration The GRPC server configuration
@@ -87,13 +91,13 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
      */
     @Internal
     GrpcEmbeddedServer(
-            @NonNull ApplicationContext applicationContext,
-            @NonNull ApplicationConfiguration applicationConfiguration,
-            @NonNull GrpcServerConfiguration grpcServerConfiguration,
-            @NonNull ServerBuilder<?> serverBuilder,
-            @NonNull ApplicationEventPublisher eventPublisher,
-            @Nullable ComputeInstanceMetadataResolver computeInstanceMetadataResolver,
-            @Nullable List<ServiceInstanceMetadataContributor> metadataContributors) {
+        @NonNull ApplicationContext applicationContext,
+        @NonNull ApplicationConfiguration applicationConfiguration,
+        @NonNull GrpcServerConfiguration grpcServerConfiguration,
+        @NonNull ServerBuilder<?> serverBuilder,
+        @NonNull ApplicationEventPublisher eventPublisher,
+        @Nullable ComputeInstanceMetadataResolver computeInstanceMetadataResolver,
+        @Nullable List<ServiceInstanceMetadataContributor> metadataContributors) {
         ArgumentUtils.requireNonNull("applicationContext", applicationContext);
         ArgumentUtils.requireNonNull("applicationConfiguration", applicationConfiguration);
         ArgumentUtils.requireNonNull("grpcServerConfiguration", grpcServerConfiguration);
@@ -122,7 +126,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
 
     @Override
     public int getPort() {
-        // support eager init      
+        // support eager init
         if (!isRunning()) {
             start();
         }
@@ -136,7 +140,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
 
     @Override
     public String getScheme() {
-        return grpcConfiguration.isSecure() ? "https" : "http";
+        return grpcConfiguration.isSecure() ? HttpRequest.SCHEME_HTTPS : HttpRequest.SCHEME_HTTP;
     }
 
     @Override
@@ -170,7 +174,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
                     Map<String, String> metadata = new LinkedHashMap<>();
                     if (computeInstanceMetadataResolver != null) {
                         final Optional<ComputeInstanceMetadata> cim = computeInstanceMetadataResolver.resolve(
-                                applicationContext.getEnvironment()
+                            applicationContext.getEnvironment()
                         );
 
                         cim.ifPresent(computeInstanceMetadata -> metadata.putAll(computeInstanceMetadata.getMetadata()));
@@ -178,12 +182,12 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
                     }
 
                     this.serviceInstance = new GrpcServerInstance(
-                            this,
-                            id,
-                            getURI(),
-                            metadata,
-                            metadataContributors,
-                            grpcConfiguration
+                        this,
+                        id,
+                        getURI(),
+                        metadata,
+                        metadataContributors,
+                        grpcConfiguration
                     );
                     applicationContext.publishEvent(new ServiceReadyEvent(serviceInstance));
                 });

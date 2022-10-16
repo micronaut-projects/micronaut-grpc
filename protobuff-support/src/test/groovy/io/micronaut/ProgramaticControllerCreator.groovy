@@ -18,7 +18,6 @@ package io.micronaut
 import groovy.transform.CompileStatic
 import io.micronaut.context.ExecutionHandleLocator
 import io.micronaut.web.router.DefaultRouteBuilder
-
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 

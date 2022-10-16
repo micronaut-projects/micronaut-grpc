@@ -15,7 +15,8 @@
  */
 package io.micronaut.protobuf.convert;
 
-import com.google.protobuf.Message;
+import java.util.Optional;
+
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.convert.ConversionContext;
 import io.micronaut.core.convert.ConversionService;
@@ -23,7 +24,8 @@ import io.micronaut.core.convert.TypeConverter;
 import io.netty.buffer.ByteBuf;
 
 import jakarta.inject.Singleton;
-import java.util.Optional;
+
+import com.google.protobuf.Message;
 
 /**
  * Converts Protocol buffer messages to Netty {@link ByteBuf}.
@@ -34,6 +36,7 @@ import java.util.Optional;
 @Singleton
 @Requires(classes = {Message.class, ByteBuf.class})
 public class ProtoMessageToByteBufConverter implements TypeConverter<Message, ByteBuf> {
+
     private final ConversionService<?> conversionService;
 
     /**

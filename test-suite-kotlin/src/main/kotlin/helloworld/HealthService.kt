@@ -4,6 +4,7 @@ package helloworld
 import io.grpc.health.v1.HealthCheckResponse.ServingStatus
 import io.grpc.protobuf.services.HealthStatusManager
 import jakarta.inject.Singleton
+
 // end::imports[]
 
 // tag::clazz[]

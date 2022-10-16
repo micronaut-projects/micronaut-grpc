@@ -95,7 +95,7 @@ All Micronaut repos have 2 dependency upgrade checking mechanism:
    arrives for both, it will send 2 PRs, where they should both be upgraded at the same time.
 
 2. To overcome those disadvantages, we have our own dependency upgrade solution based on the
-   [Gradle Use Latest Versions Plugin](https://github.com/patrikerdes/gradle-use-latest-versions-plugin). It runs daily
+   [Gradle Use The Latest Versions Plugin](https://github.com/patrikerdes/gradle-use-latest-versions-plugin). It runs daily
    during weekdays.
 
 The consequence of having both approaches in place is that we get multiple dependency upgrade PRs: one created by
@@ -109,7 +109,7 @@ unnecessary upgrade burden on our users. Read the
 [Module Upgrade Strategy](https://github.com/micronaut-projects/micronaut-core/wiki/Module-Upgrade-Strategy) for more
 information.
 
-Note that if a new version arrives and we are not ready yet to do the upgrade, you need to
+Note that if a new version arrives, and we are not ready yet to do the upgrade, you need to
 [pin the old version](https://github.com/micronaut-projects/micronaut-build/#configuration-options), because otherwise,
 Renovate and our workflow will keep sending PRs. You should also create an issue to upgrade so that it's not forgotten.
 
@@ -119,7 +119,7 @@ We have a [template repo](https://github.com/micronaut-projects/micronaut-projec
 source of truth for certain files. It is used as a template to create new repos, and changes to certain files in the
 template repo will get propagated automatically. The files propagated are:
 
-* Workflow files (`.github/workflows/*`). They are copied using rsync"
+* Workflow files (`.github/workflows/*`). They are copied using rsync
   * `central-sync.yml`.
   * `dependency-update.yml`.
   * `graalvm.yml`.

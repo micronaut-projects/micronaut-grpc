@@ -12,11 +12,10 @@ import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.channels.GrpcManagedChannelConfiguration
 import io.micronaut.inject.qualifiers.Qualifiers
 import io.micronaut.runtime.server.EmbeddedServer
-import spock.lang.Retry
-import spock.lang.Specification
-
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import spock.lang.Retry
+import spock.lang.Specification
 
 class GrpcNamedChannelSpec extends Specification {
 
@@ -26,9 +25,9 @@ class GrpcNamedChannelSpec extends Specification {
         given:
         def port = SocketUtils.findAvailableTcpPort()
         EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, [
-                'grpc.server.port': port,
-                'grpc.channels.greeter.address':"localhost:$port",
-                'grpc.channels.greeter.plaintext':true
+                'grpc.server.port'               : port,
+                'grpc.channels.greeter.address'  : "localhost:$port",
+                'grpc.channels.greeter.plaintext': true
         ])
         def context = embeddedServer.getApplicationContext()
         def testBean = context.getBean(TestBean)
@@ -70,7 +69,7 @@ class GrpcNamedChannelSpec extends Specification {
     static class GreeterImpl extends Greeter2Grpc.Greeter2ImplBase {
         @Override
         void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-            HelloReply reply = HelloReply.newBuilder().setMessage("Hello 2 " + request.getName()).build();
+            HelloReply reply = HelloReply.newBuilder().setMessage("Hello 2 " + request.getName()).build()
             responseObserver.onNext(reply)
             responseObserver.onCompleted()
         }

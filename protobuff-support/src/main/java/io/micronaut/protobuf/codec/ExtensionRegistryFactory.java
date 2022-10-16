@@ -15,11 +15,12 @@
  */
 package io.micronaut.protobuf.codec;
 
-import com.google.protobuf.ExtensionRegistry;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
 
 import jakarta.inject.Singleton;
+
+import com.google.protobuf.ExtensionRegistry;
 
 /**
  * Creates the default {@link ExtensionRegistry}.
@@ -33,6 +34,7 @@ public class ExtensionRegistryFactory {
 
     /**
      * Constructs the extension registry.
+     *
      * @return The extension registry
      */
     @Singleton

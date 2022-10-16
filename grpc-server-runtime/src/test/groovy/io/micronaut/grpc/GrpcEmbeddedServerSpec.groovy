@@ -56,7 +56,7 @@ class GrpcEmbeddedServerSpec extends Specification {
     void "test fires server startup events with application name"() {
         when:
         GrpcEmbeddedServer embeddedServer = ApplicationContext.run(GrpcEmbeddedServer, [
-                'micronaut.application.name':'test'
+                'micronaut.application.name': 'test'
         ])
         EventConsumer consumer = embeddedServer.getApplicationContext().getBean(EventConsumer)
 
@@ -84,8 +84,8 @@ class GrpcEmbeddedServerSpec extends Specification {
     void "test fires server startup events with application name and instance id"() {
         when:
         GrpcEmbeddedServer embeddedServer = ApplicationContext.run(GrpcEmbeddedServer, [
-            'micronaut.application.name': 'test',
-            'grpc.server.instance-id'   : 'test-grpc'
+                'micronaut.application.name': 'test',
+                'grpc.server.instance-id'   : 'test-grpc'
         ])
         EventConsumer consumer = embeddedServer.getApplicationContext().getBean(EventConsumer)
 

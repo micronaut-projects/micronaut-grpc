@@ -46,7 +46,7 @@ public class OrderedServerInterceptor implements ServerInterceptor, Ordered {
 
     /**
      * Delegates interceptor logic to {@link #delegate} interceptor.
-     *
+     * <p>
      * {@inheritDoc}
      */
     @Override

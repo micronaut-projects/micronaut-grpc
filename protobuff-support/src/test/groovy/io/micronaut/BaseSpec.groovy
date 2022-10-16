@@ -49,8 +49,8 @@ abstract class BaseSpec extends Specification {
     byte[] getMessage(String url, Class aClass) {
         return httpClient.toBlocking().retrieve(
                 HttpRequest.GET(url)
-                    .header(ProtobufferCodec.X_PROTOBUF_MESSAGE_HEADER, aClass.name)
-                    .header(HttpHeaders.ACCEPT, ProtobufferCodec.PROTOBUFFER_ENCODED),
+                        .header(ProtobufferCodec.X_PROTOBUF_MESSAGE_HEADER, aClass.name)
+                        .header(HttpHeaders.ACCEPT, ProtobufferCodec.PROTOBUFFER_ENCODED),
                 byte[].class
         )
     }
