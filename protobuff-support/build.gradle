@@ -13,6 +13,7 @@ dependencies {
     //protobuf
     api libs.managed.protobuf.java
     api libs.managed.protobuf.java.util
+    api "com.google.guava:guava:31.1-jre"
 
     testImplementation libs.micronaut.http.server.netty
     testImplementation libs.micronaut.reactor.http.client

@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -47,10 +46,6 @@ import com.google.protobuf.Message;
 public class ProtobufferCodec implements MediaTypeCodec {
 
     /**
-     * Protobuffer encoded data: application/x-protobuf.
-     */
-    public static final String PROTOBUFFER_ENCODED = "application/x-protobuf";
-    /**
      * This Header is to say the fully qualified name of the message builder to use.
      * This is needed when the request is untyped
      */
@@ -58,11 +53,28 @@ public class ProtobufferCodec implements MediaTypeCodec {
     /**
      * Protobuffer encoded data: application/x-protobuf.
      */
+    public static final String PROTOBUFFER_ENCODED = "application/x-protobuf";
+    /**
+     * Protobuffer encoded data: application/protobuf.
+     */
+    public static final String PROTOBUFFER_ENCODED2 = "application/protobuf";
+    /**
+     * Protobuffer encoded data: application/x-protobuf.
+     */
     public static final MediaType PROTOBUFFER_ENCODED_TYPE = new MediaType(PROTOBUFFER_ENCODED);
+    /**
+     * Protobuffer encoded data: application/protobuf.
+     */
+    public static final MediaType PROTOBUFFER_ENCODED_TYPE2 = new MediaType(PROTOBUFFER_ENCODED2);
+    /**
+     * List of default protobuf media types.
+     */
+    public static final List<MediaType> DEFAULT_MEDIA_TYPES = List.of(PROTOBUFFER_ENCODED_TYPE, PROTOBUFFER_ENCODED_TYPE2);
 
     private final ConcurrentHashMap<Class<?>, Method> methodCache = new ConcurrentHashMap<>();
 
     private final ExtensionRegistry extensionRegistry;
+    private List<MediaType> mediaTypes = DEFAULT_MEDIA_TYPES;
 
     /**
      * Default constructor.
@@ -80,9 +92,16 @@ public class ProtobufferCodec implements MediaTypeCodec {
 
     @Override
     public Collection<MediaType> getMediaTypes() {
-        List<MediaType> mediaTypes = new ArrayList<>();
-        mediaTypes.add(PROTOBUFFER_ENCODED_TYPE);
         return mediaTypes;
+    }
+
+    /**
+     * Method to customize media types for this codec.
+     *
+     * @param mediaTypes media types for which need use this codec.
+     */
+    public void setMediaTypes(List<MediaType> mediaTypes) {
+        this.mediaTypes = List.copyOf(mediaTypes);
     }
 
     @Override

@@ -16,6 +16,7 @@
 package io.micronaut
 
 import com.example.wire.Example
+import io.micronaut.protobuf.codec.ProtobufferCodec
 
 class SimpleHttpGetSpec extends BaseSpec {
 
@@ -23,7 +24,25 @@ class SimpleHttpGetSpec extends BaseSpec {
 
     void "sample city should be dublin/using sample controller"() {
         when: 'The message is requested from the sever=[#url]'
-        def response = getMessage(url, Example.GeoPoint.class)
+        def response = getMessage(url, Example.GeoPoint.class, ProtobufferCodec.PROTOBUFFER_ENCODED)
+        and: 'The message is parser'
+        Example.GeoPoint city = Example.GeoPoint.parseFrom(response)
+        then: 'Should be Dublin'
+        SampleController.DUBLIN == city
+    }
+
+    void "test second protobuff content type header"() {
+        when: 'The message is requested from the sever=[#url]'
+        def response = getMessage(url, Example.GeoPoint.class, ProtobufferCodec.PROTOBUFFER_ENCODED2)
+        and: 'The message is parser'
+        Example.GeoPoint city = Example.GeoPoint.parseFrom(response)
+        then: 'Should be Dublin'
+        SampleController.DUBLIN == city
+    }
+
+    void "test cutom protobuff content type header"() {
+        when: 'The message is requested from the sever=[#url]'
+        def response = getMessage(url, Example.GeoPoint.class, SampleController.MY_PROTO_ENCODED)
         and: 'The message is parser'
         Example.GeoPoint city = Example.GeoPoint.parseFrom(response)
         then: 'Should be Dublin'
