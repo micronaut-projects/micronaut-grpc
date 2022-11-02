@@ -35,7 +35,6 @@ dependencies {
     implementation "io.grpc:grpc-services"
 
     runtimeOnly "ch.qos.logback:logback-classic"
-    testRuntimeOnly "ch.qos.logback:logback-classic"
 }
 
 tasks.withType(GroovyCompile) {
