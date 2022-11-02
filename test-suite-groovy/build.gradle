@@ -40,8 +40,6 @@ dependencies {
 
     testCompileOnly "javax.annotation:javax.annotation-api"
 
-    testImplementation "org.apache.groovy:groovy"
-
     testRuntimeOnly "ch.qos.logback:logback-classic"
 }
 
