@@ -52,13 +52,10 @@ dependencies {
     // tag::dependencies[]
     implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     compileOnly("io.grpc:grpc-stub:$grpcVersion")
-    compileOnly "javax.annotation:javax.annotation-api"
     // end::dependencies[]
 
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
-
-    testCompileOnly "javax.annotation:javax.annotation-api"
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {

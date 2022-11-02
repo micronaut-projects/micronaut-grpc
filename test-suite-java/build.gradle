@@ -32,7 +32,6 @@ dependencies {
     annotationProcessor "io.micronaut:micronaut-validation"
 
     compileOnly "io.grpc:grpc-stub:$grpcVersion"
-    compileOnly "javax.annotation:javax.annotation-api"
 
     implementation "io.micronaut:micronaut-validation"
     implementation("io.micronaut:micronaut-runtime")
@@ -43,8 +42,6 @@ dependencies {
     runtimeOnly "ch.qos.logback:logback-classic"
 
     testAnnotationProcessor "io.micronaut:micronaut-validation"
-
-    testCompileOnly "javax.annotation:javax.annotation-api"
 }
 
 // tag::config[]
