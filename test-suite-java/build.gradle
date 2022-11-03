@@ -39,6 +39,7 @@ dependencies {
     implementation(project(':grpc-server-runtime'))
     implementation "io.micronaut.discovery:micronaut-discovery-client"
     implementation "io.grpc:grpc-services"
+    implementation "org.yaml:snakeyaml"
 
     runtimeOnly "ch.qos.logback:logback-classic"
 
