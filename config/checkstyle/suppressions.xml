@@ -9,6 +9,4 @@
               <!-- files="DefaultBeanContext.java|BeanDefinitionWriter.java|DefaultHttpClient.java"/> -->
 
     <suppress checks="MissingJavadocType" files=".*doc-examples.*" />
-    <suppress checks="." files="io[\\/]grpc[\\/]examples[\\/]" />
-
 </suppressions>
