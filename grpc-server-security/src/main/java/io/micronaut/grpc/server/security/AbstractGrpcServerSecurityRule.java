@@ -15,7 +15,7 @@
  */
 package io.micronaut.grpc.server.security;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.security.rules.SecurityRule;
 import io.micronaut.security.rules.SecurityRuleResult;
 import io.micronaut.security.token.MapClaims;

@@ -15,9 +15,9 @@
  */
 package io.micronaut.grpc.server.security;
 
-import edu.umd.cs.findbugs.annotations.Nullable;
 import io.grpc.Metadata;
 import io.grpc.ServerCall;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.order.Ordered;
 import io.micronaut.security.rules.SecurityRuleResult;
 
@@ -41,6 +41,6 @@ public interface GrpcServerSecurityRule extends Ordered {
      * @param <S> the type of the server response
      * @return the security rule result
      */
-    <T, S> SecurityRuleResult check(final ServerCall<T, S> serverCall, final Metadata metadata, @Nullable final Map<String, Object> claims);
+    <T, S> SecurityRuleResult check(ServerCall<T, S> serverCall, Metadata metadata, @Nullable Map<String, Object> claims);
 
 }

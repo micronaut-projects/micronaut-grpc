@@ -34,8 +34,11 @@ public interface GrpcServerAuthenticationFetcher extends Ordered {
      * Attempts to read an {@link Authentication} from a {@link ServerCall} being executed.
      *
      * @param serverCall {@link ServerCall} being executed.
+     * @param <S> request type
+     * @param <T> response type
+     * @param metadata the metadata
      * @return {@link Authentication} if found
      */
-    <T, S> Optional<Authentication> fetchAuthentication(final ServerCall<T, S> serverCall, final Metadata metadata);
+    <T, S> Optional<Authentication> fetchAuthentication(ServerCall<T, S> serverCall, Metadata metadata);
 
 }

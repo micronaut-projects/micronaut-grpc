@@ -1,13 +1,11 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+}
 
 dependencies {
-
-    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
-
     api project(":grpc-server-runtime")
-    api "io.micronaut:micronaut-inject:$micronautVersion"
-    api "io.micronaut:micronaut-runtime:$micronautVersion"
 
-    implementation("io.micronaut.security:micronaut-security:$micronautSecurityVersion") {
+    implementation(mn.micronaut.security) {
         exclude group: 'io.micronaut', module: 'micronaut-http'
         exclude group: 'io.micronaut', module: 'micronaut-http-server'
     }
@@ -16,4 +14,10 @@ dependencies {
     testImplementation "io.micronaut:micronaut-inject-java:$micronautVersion"
     testImplementation "io.micronaut.test:micronaut-test-spock:$micronautTestVersion"
 
+}
+
+micronautBuild {
+    binaryCompatibility {
+        enabled = false
+    }
 }
