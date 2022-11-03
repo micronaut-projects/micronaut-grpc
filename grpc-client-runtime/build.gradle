@@ -20,6 +20,7 @@ dependencies {
     testCompileOnly("javax.annotation:javax.annotation-api")
     testImplementation projects.grpcServerRuntime
     testImplementation mn.micronaut.discovery
+    testImplementation mn.micronaut.jackson.databind
     testImplementation libs.opentracing.mock
 }
 
