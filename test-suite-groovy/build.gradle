@@ -14,6 +14,13 @@ repositories {
     }
 }
 
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute(module("org.codehaus.groovy:groovy"))
+                .using(module("org.apache.groovy:groovy:4.0.6"))
+    }
+}
+
 mainClassName = "helloworld.Application"
 micronaut {
     version micronautVersion
