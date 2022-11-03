@@ -34,6 +34,7 @@ micronaut {
 
 dependencies {
     compileOnly "io.grpc:grpc-stub:$grpcVersion"
+    compileOnly("javax.annotation:javax.annotation-api")
 
     implementation "io.micronaut:micronaut-validation"
     implementation("io.micronaut:micronaut-runtime")
