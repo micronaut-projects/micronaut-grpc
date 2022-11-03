@@ -15,16 +15,15 @@
  */
 package io.micronaut.grpc.channels;
 
-import io.grpc.NameResolver;
 import io.grpc.netty.NettyChannelBuilder;
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.env.Environment;
 import io.micronaut.core.naming.Named;
 
-import javax.annotation.Nullable;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
@@ -39,10 +38,16 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
     public static final String PREFIX = "grpc.channels";
     public static final String SETTING_TARGET = ".target";
     public static final String SETTING_URL = ".address";
+    public static final String CONNECT_ON_STARTUP = ".connect-on-startup";
+    public static final String CONNECTION_TIMEOUT = ".connection-timeout";
+    private static final Duration DEFAULT_CONNECTION_TIMEOUT = Duration.ofSeconds(20);
     protected final String name;
 
     @ConfigurationBuilder(prefixes = {"use", ""}, allowZeroArgs = true)
     protected final NettyChannelBuilder channelBuilder;
+
+    private final boolean connectOnStartup;
+    private final Duration connectionTimeout;
 
     /**
      * Constructors a new managed channel configuration.
@@ -52,6 +57,11 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
      */
     public GrpcManagedChannelConfiguration(String name, Environment env, ExecutorService executorService) {
         this.name = name;
+        this.connectOnStartup = env.getProperty(PREFIX + '.' + name + CONNECT_ON_STARTUP, Boolean.class).isPresent();
+        this.connectionTimeout = env.getProperty(PREFIX + '.' + name + CONNECTION_TIMEOUT, Long.class)
+            .filter(t -> t > 0)
+            .map(Duration::ofSeconds)
+            .orElse(DEFAULT_CONNECTION_TIMEOUT);
         final Optional<SocketAddress> socketAddress = env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class);
         if (socketAddress.isPresent()) {
             SocketAddress serverAddress = socketAddress.get();
@@ -75,6 +85,9 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
                 final URI uri = name.contains("//") ? URI.create(name) : null;
                 if (uri != null && uri.getHost() != null && uri.getPort() > -1) {
                     this.channelBuilder = NettyChannelBuilder.forAddress(uri.getHost(), uri.getPort());
+                    if ("http".equalsIgnoreCase(uri.getScheme())) {
+                        this.channelBuilder.usePlaintext();
+                    }
                 } else {
                     this.channelBuilder = NettyChannelBuilder.forTarget(name);
                 }
@@ -83,9 +96,28 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
         this.getChannelBuilder().executor(executorService);
     }
 
+    /**
+     * @return name of the channel
+     */
     @Override
     public String getName() {
         return name;
+    }
+
+    /**
+     * @return true if connect on startup is set for channel
+     * @since 3.4.0
+     */
+    public boolean isConnectOnStartup() {
+        return connectOnStartup;
+    }
+
+    /**
+     * @return connection timeout for the channel
+     * @since 3.4.0
+     */
+    public Duration getConnectionTimeout() {
+        return connectionTimeout;
     }
 
     /**
@@ -93,15 +125,5 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
      */
     public NettyChannelBuilder getChannelBuilder() {
         return channelBuilder;
-    }
-
-    /**
-     * Sets the name resolver factor to use.
-     * @param factory The factory
-     * @deprecated Method {@link NettyChannelBuilder#nameResolverFactory(NameResolver.Factory)} is deprecated
-     */
-    @Deprecated
-    public void setNameResolverFactory(@Nullable NameResolver.Factory factory) {
-        // no-op
     }
 }

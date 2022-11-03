@@ -15,10 +15,21 @@
  */
 package io.micronaut.grpc.discovery;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
-import io.grpc.*;
+import io.grpc.Attributes;
+import io.grpc.EquivalentAddressGroup;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.NameResolver;
+import io.grpc.NameResolverProvider;
+import io.grpc.NameResolverRegistry;
+import io.grpc.Status;
+import io.micronaut.context.BeanProvider;
 import io.micronaut.context.LifeCycle;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.context.event.BeanCreatedEvent;
+import io.micronaut.context.event.BeanCreatedEventListener;
+import io.micronaut.core.annotation.Internal;
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.naming.NameUtils;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.core.util.StringUtils;
@@ -27,12 +38,12 @@ import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.ServiceInstanceList;
 import io.micronaut.discovery.exceptions.NoAvailableServiceException;
 import io.micronaut.grpc.channels.GrpcDefaultManagedChannelConfiguration;
-import io.reactivex.Flowable;
-import io.reactivex.disposables.Disposable;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.inject.Singleton;
+import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.inject.Singleton;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;
@@ -87,11 +98,12 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
     @Override
     public NameResolver newNameResolver(URI targetUri, NameResolver.Args args) {
         final String serviceId = targetUri.toString();
-        if (serviceId.contains(":")) {
+        final String resolvedServiceId = serviceId.startsWith("svc:///") ? serviceId.substring(7) : serviceId;
+        if (resolvedServiceId.contains(":")) {
             return new NameResolver() {
                 @Override
                 public void start(Listener listener) {
-                    final String[] hostAndPort = serviceId.split(":");
+                    final String[] hostAndPort = resolvedServiceId.split(":");
                     final List<EquivalentAddressGroup> equivalentAddressGroups =
                             Collections.singletonList(new EquivalentAddressGroup(new InetSocketAddress(hostAndPort[0], Integer.parseInt(hostAndPort[1]))));
                     listener.onAddresses(equivalentAddressGroups, Attributes.EMPTY);
@@ -99,7 +111,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
 
                 @Override
                 public String getServiceAuthority() {
-                    return serviceId;
+                    return resolvedServiceId;
                 }
 
                 @Override
@@ -107,8 +119,10 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
 
                 }
             };
-        } else if (!NameUtils.isHyphenatedLowerCase(serviceId)) {
-            throw new IllegalArgumentException("Invalid service ID [" + serviceId + "]. Service IDs should be kebab-case (lowercase / hyphen separated). For example 'greeting-service'.");
+        }
+
+        if (!NameUtils.isHyphenatedLowerCase(resolvedServiceId)) {
+            throw new IllegalArgumentException("Invalid service ID [" + resolvedServiceId + "]. Service IDs should be kebab-case (lowercase / hyphen separated). For example 'greeting-service'.");
 
         }
         return new NameResolver() {
@@ -117,13 +131,13 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
 
             @Override
             public String getServiceAuthority() {
-                return "//" + serviceId;
+                return "//" + resolvedServiceId;
             }
 
             @Override
             public void refresh() {
                 for (ServiceInstanceList serviceInstanceList : serviceInstanceLists) {
-                    if (serviceInstanceList.getID().equals(serviceId)) {
+                    if (serviceInstanceList.getID().equals(resolvedServiceId)) {
                         listener.onAddresses(
                                 toAddresses(serviceInstanceList.getInstances()),
                                 Attributes.EMPTY
@@ -132,7 +146,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
                     }
                 }
 
-                this.disposable = Flowable.fromPublisher(discoveryClient.getInstances(serviceId)).subscribe(
+                this.disposable = Flux.from(discoveryClient.getInstances(resolvedServiceId)).subscribe(
                         (instances) -> {
                             if (CollectionUtils.isNotEmpty(instances)) {
                                 final List<EquivalentAddressGroup> servers = toAddresses(instances);
@@ -209,5 +223,28 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
         NameResolverRegistry.getDefaultRegistry().deregister(this);
         operational = false;
         return this;
+    }
+
+    /**
+     * Ensures name resolver is registered.
+     */
+    @Singleton
+    @Internal
+    static final class ManagedChannelBuilderListener implements BeanCreatedEventListener<ManagedChannelBuilder<?>> {
+        private BeanProvider<GrpcNameResolverProvider> beanProvider;
+
+        ManagedChannelBuilderListener(@Nullable BeanProvider<GrpcNameResolverProvider> beanProvider) {
+            this.beanProvider = beanProvider;
+        }
+
+        @Override
+        public ManagedChannelBuilder<?> onCreated(BeanCreatedEvent<ManagedChannelBuilder<?>> event) {
+            if (beanProvider != null) {
+                // init
+                beanProvider.get();
+                beanProvider = null;
+            }
+            return event.getBean();
+        }
     }
 }

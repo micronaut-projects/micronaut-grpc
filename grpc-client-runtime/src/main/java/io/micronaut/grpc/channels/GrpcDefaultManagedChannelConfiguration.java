@@ -15,15 +15,10 @@
  */
 package io.micronaut.grpc.channels;
 
-import io.grpc.NameResolver;
 import io.micronaut.context.annotation.ConfigurationProperties;
-import io.micronaut.context.annotation.Primary;
 import io.micronaut.context.env.Environment;
 import io.micronaut.scheduling.TaskExecutors;
-
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Named;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -32,30 +27,32 @@ import java.util.concurrent.ExecutorService;
  * @author graemerocher
  * @since 1.0
  */
-@Named(GrpcDefaultManagedChannelConfiguration.NAME)
 @ConfigurationProperties(GrpcDefaultManagedChannelConfiguration.PREFIX)
-@Primary
 public class GrpcDefaultManagedChannelConfiguration extends GrpcManagedChannelConfiguration {
     public static final String NAME = "default";
     public static final String PREFIX = "grpc.client";
 
     /**
      * Default constructor.
-     * @param name The name
      * @param env The environment
      * @param executorService The executor service
      */
     public GrpcDefaultManagedChannelConfiguration(
-            String name,
             Environment env,
             @Named(TaskExecutors.IO) ExecutorService executorService) {
-        super(name, env, executorService);
+        super(NAME, env, executorService);
     }
 
-    @Override
-    @Inject
-    @Deprecated
-    public void setNameResolverFactory(@Nullable NameResolver.Factory factory) {
-        super.setNameResolverFactory(factory);
+    /**
+     * Default constructor.
+     * @param target The target
+     * @param env The environment
+     * @param executorService The executor service
+     */
+    public GrpcDefaultManagedChannelConfiguration(
+            String target,
+            Environment env,
+            @Named(TaskExecutors.IO) ExecutorService executorService) {
+        super(target, env, executorService);
     }
 }

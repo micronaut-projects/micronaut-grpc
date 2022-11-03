@@ -1,0 +1,65 @@
+plugins {
+    id 'groovy'
+    id "com.google.protobuf" version "$protobufGradleVersion"
+    id "io.micronaut.minimal.application" version "$micronautGradlePluginVersion"
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+}
+
+mainClassName = "helloworld.Application"
+micronaut {
+    version micronautVersion
+    testRuntime "spock"
+    enableNativeImage false
+    processing {
+        incremental(true)
+        annotations("helloworld.*")
+    }
+}
+
+dependencies {
+    compileOnly "io.grpc:grpc-stub:$grpcVersion"
+
+    implementation "io.micronaut:micronaut-validation"
+    implementation("io.micronaut:micronaut-runtime")
+    implementation(project(':grpc-server-runtime'))
+    implementation "io.micronaut.discovery:micronaut-discovery-client"
+    implementation "io.grpc:grpc-services"
+
+    runtimeOnly "ch.qos.logback:logback-classic"
+}
+
+tasks.withType(GroovyCompile) {
+    groovyOptions.forkOptions.jvmArgs.add('-Dgroovy.parameters=true')
+}
+
+tasks.withType(org.gradle.jvm.tasks.Jar) {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:$protobufJavaVersion" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}

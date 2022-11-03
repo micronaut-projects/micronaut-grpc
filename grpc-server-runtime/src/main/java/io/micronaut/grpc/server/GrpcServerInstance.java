@@ -15,14 +15,14 @@
  */
 package io.micronaut.grpc.server;
 
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.convert.value.ConvertibleValues;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.core.util.StringUtils;
+import io.micronaut.discovery.EmbeddedServerInstance;
 import io.micronaut.discovery.metadata.ServiceInstanceMetadataContributor;
 import io.micronaut.runtime.server.EmbeddedServer;
-import io.micronaut.runtime.server.EmbeddedServerInstance;
 
-import javax.annotation.Nullable;
 import java.net.URI;
 import java.util.LinkedHashMap;
 import java.util.List;

@@ -15,11 +15,10 @@ import io.micronaut.runtime.server.EmbeddedServer
 import spock.lang.Retry
 import spock.lang.Specification
 
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 class GrpcNamedChannelSpec extends Specification {
-
 
     // retry because on Cloud CI you may have a race condition regarding port availability and binding
     @Retry
@@ -35,11 +34,14 @@ class GrpcNamedChannelSpec extends Specification {
         def testBean = context.getBean(TestBean)
         def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
         def channel = testBean.blockingStub.channel
+
         expect:
         channel != null
 
         testBean.sayHello("Fred") == "Hello 2 Fred"
         config.name == 'greeter'
+
+        cleanup:
         embeddedServer.close()
     }
 

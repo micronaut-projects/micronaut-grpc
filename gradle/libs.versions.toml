@@ -1,0 +1,40 @@
+[versions]
+managed-grpc = '1.50.2'
+managed-protobuf = '3.21.9'
+managed-protobuf-gradle = '0.9.1'
+
+jackson-datatype-protobuf = '0.9.13'
+jaeger-core = '1.8.1'
+opentracing-grpc = '0.2.3'
+opentracing-mock = '0.33.0'
+micronaut-docs = '2.0.0'
+
+[libraries]
+
+managed-grpc-protobuf = { module = 'io.grpc:grpc-protobuf', version.ref = 'managed-grpc' }
+managed-grpc-stub = { module = 'io.grpc:grpc-stub', version.ref = 'managed-grpc' }
+managed-grpc-services = { module = 'io.grpc:grpc-services', version.ref = 'managed-grpc' }
+managed-protoc-grpc = { module = 'io.grpc:protoc-gen-grpc-java', version.ref = 'managed-grpc' }
+
+managed-protobuf-java = { module = 'com.google.protobuf:protobuf-java', version.ref = 'managed-protobuf' }
+managed-protobuf-java-util = { module = 'com.google.protobuf:protobuf-java-util', version.ref = 'managed-protobuf' }
+managed-protoc = { module = 'com.google.protobuf:protoc', version.ref = 'managed-protobuf' }
+
+grpc-netty = { module = 'io.grpc:grpc-netty' }
+
+jackson-datatype-protobuf = { module = 'com.hubspot.jackson:jackson-datatype-protobuf', version.ref = 'jackson-datatype-protobuf' }
+
+jaeger-core = { module = 'io.jaegertracing:jaeger-core', version.ref = 'jaeger-core' }
+
+netty-tcnative = { module = 'io.netty:netty-tcnative' }
+netty-tcnative-boringssl-static = { module = 'io.netty:netty-tcnative-boringssl-static' }
+
+opentracing-grpc = { module = 'io.opentracing.contrib:opentracing-grpc', version.ref = 'opentracing-grpc' }
+opentracing-mock = { module = 'io.opentracing:opentracing-mock', version.ref = 'opentracing-mock' }
+
+## BOMs
+boms-protobuf = { module = 'com.google.protobuf:protobuf-bom', version.ref = 'managed-protobuf' }
+boms-grpc = { module = 'io.grpc:grpc-bom', version.ref = 'managed-grpc' }
+
+[plugins]
+protobuf = { id = 'com.google.protobuf', version.ref = 'managed-protobuf-gradle' }

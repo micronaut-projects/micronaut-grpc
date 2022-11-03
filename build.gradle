@@ -1,31 +1,15 @@
-buildscript {
-    repositories {
-        maven { url "https://repo.grails.org/grails/core" }
-    }
-    dependencies {
-        classpath "io.micronaut.build.internal:micronaut-gradle-plugins:3.0.1"
-    }
+plugins {
+    id "io.micronaut.build.internal.docs"
+    id "io.micronaut.build.internal.dependency-updates"
+    id "io.micronaut.build.internal.quality-reporting"
 }
 
-subprojects { Project subproject ->
-    group "io.micronaut.grpc"
-
-    apply plugin: "io.micronaut.build.internal.common"
-
-    if (subproject.parent.name == "docs-examples" || subproject.name == "docs-examples") {
-        return
+repositories {
+    mavenCentral()
+    maven {
+        url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+        mavenContent {
+            snapshotsOnly()
+        }
     }
-
-    apply plugin: "io.micronaut.build.internal.dependency-updates"
-    apply plugin: "io.micronaut.build.internal.publishing"
-    
-    tasks.withType(Test) {
-        useJUnitPlatform()
-    }        
-
-    dependencyUpdates.enabled = false
 }
-
-apply plugin: "io.micronaut.build.internal.docs"
-apply plugin: "io.micronaut.build.internal.dependency-updates"
-dependencyUpdates.enabled = false

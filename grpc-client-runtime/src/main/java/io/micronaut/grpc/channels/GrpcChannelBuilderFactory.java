@@ -22,7 +22,9 @@ import io.micronaut.context.annotation.*;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.inject.qualifiers.Qualifiers;
 import io.micronaut.scheduling.TaskExecutors;
+import jakarta.inject.Named;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
@@ -45,7 +47,7 @@ public class GrpcChannelBuilderFactory {
      */
     public GrpcChannelBuilderFactory(
             ApplicationContext beanContext,
-            @javax.inject.Named(TaskExecutors.IO) ExecutorService executorService) {
+            @Named(TaskExecutors.IO) ExecutorService executorService) {
         this.beanContext = beanContext;
         this.executorService = executorService;
     }
@@ -71,6 +73,7 @@ public class GrpcChannelBuilderFactory {
         );
         final NettyChannelBuilder channelBuilder = config.getChannelBuilder();
         if (CollectionUtils.isNotEmpty(interceptors)) {
+            Collections.reverse(interceptors);
             channelBuilder.intercept(interceptors);
         }
         return channelBuilder;

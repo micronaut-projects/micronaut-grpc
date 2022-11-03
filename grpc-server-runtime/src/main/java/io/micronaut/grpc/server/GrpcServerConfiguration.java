@@ -24,15 +24,15 @@ import io.micronaut.context.annotation.Property;
 import io.micronaut.context.env.Environment;
 import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.annotation.Creator;
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.convert.format.ReadableBytes;
 import io.micronaut.core.io.ResourceResolver;
 import io.micronaut.core.io.socket.SocketUtils;
 import io.micronaut.scheduling.TaskExecutors;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
@@ -54,6 +54,7 @@ public class GrpcServerConfiguration {
     public static final String PORT = PREFIX + ".port";
     public static final String HOST = PREFIX + ".host";
     public static final String ENABLED = PREFIX + ".enabled";
+    @Deprecated
     public static final String HEALTH_ENABLED = PREFIX + ".health.enabled";
     public static final int DEFAULT_PORT = 50051;
     public static final Duration DEFAULT_AWAIT_TERMINATION = Duration.ofSeconds(30);
@@ -127,7 +128,7 @@ public class GrpcServerConfiguration {
      * The server builder.
      * @return The {@link ServerBuilder}
      */
-    public @Nonnull ServerBuilder<?> getServerBuilder() {
+    public @NonNull ServerBuilder<?> getServerBuilder() {
         return serverBuilder;
     }
 
@@ -151,7 +152,7 @@ public class GrpcServerConfiguration {
      * The instance id.
      * @return The instance id
      */
-    public @Nonnull String getInstanceId() {
+    public @NonNull String getInstanceId() {
         return instanceId;
     }
 
@@ -208,7 +209,7 @@ public class GrpcServerConfiguration {
      * The SSL configuration.
      * @return The SSL configuration
      */
-    public @Nonnull GrpcSslConfiguration getServerConfiguration() {
+    public @NonNull GrpcSslConfiguration getServerConfiguration() {
         return serverConfiguration;
     }
 

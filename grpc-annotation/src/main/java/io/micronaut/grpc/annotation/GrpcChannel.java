@@ -17,7 +17,6 @@ package io.micronaut.grpc.annotation;
 
 import io.micronaut.context.annotation.AliasFor;
 
-import javax.inject.Scope;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 
@@ -31,7 +30,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Scope
 public @interface GrpcChannel {
     /**
      * @return The URL or service ID of the remote service

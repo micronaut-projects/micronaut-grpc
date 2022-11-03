@@ -16,7 +16,6 @@
 package io.micronaut.grpc
 
 import io.micronaut.context.ApplicationContext
-import io.micronaut.context.exceptions.NoSuchBeanException
 import io.micronaut.discovery.event.ServiceReadyEvent
 import io.micronaut.discovery.event.ServiceStoppedEvent
 import io.micronaut.grpc.server.GrpcEmbeddedServer
@@ -24,15 +23,13 @@ import io.micronaut.grpc.server.health.GrpcServerHealthIndicator
 import io.micronaut.runtime.event.annotation.EventListener
 import io.micronaut.runtime.server.event.ServerShutdownEvent
 import io.micronaut.runtime.server.event.ServerStartupEvent
+import jakarta.inject.Singleton
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
-
-import javax.inject.Singleton
 
 class GrpcEmbeddedServerSpec extends Specification {
 
     void "test fires server startup events - no application name"() {
-
         when:
         GrpcEmbeddedServer embeddedServer = ApplicationContext.run(GrpcEmbeddedServer)
         EventConsumer consumer = embeddedServer.getApplicationContext().getBean(EventConsumer)
@@ -54,8 +51,6 @@ class GrpcEmbeddedServerSpec extends Specification {
         conditions.eventually {
             embeddedServer.getServer().isTerminated()
         }
-
-
     }
 
     void "test fires server startup events with application name"() {
@@ -111,7 +106,6 @@ class GrpcEmbeddedServerSpec extends Specification {
     }
 
     void "test server does not exist when disabled"() {
-
         when:
         def context = ApplicationContext.run([
                 'grpc.server.enabled': false
@@ -120,7 +114,6 @@ class GrpcEmbeddedServerSpec extends Specification {
         then:
         !context.containsBean(GrpcEmbeddedServer)
         !context.containsBean(GrpcServerHealthIndicator)
-
     }
 
     @Singleton

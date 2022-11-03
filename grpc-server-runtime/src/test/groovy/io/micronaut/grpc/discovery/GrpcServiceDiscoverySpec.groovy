@@ -15,30 +15,29 @@
  */
 package io.micronaut.grpc.discovery
 
-import io.grpc.Channel
+
 import io.grpc.ManagedChannel
 import io.grpc.examples.helloworld.GreeterGrpc
 import io.grpc.examples.helloworld.HelloReply
 import io.grpc.examples.helloworld.HelloRequest
 import io.grpc.stub.StreamObserver
-import io.grpc.stub.StreamObservers
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.annotation.Factory
+import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.annotation.GrpcChannel
-import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.runtime.server.EmbeddedServer
-import io.micronaut.test.annotation.MicronautTest
+import jakarta.inject.Singleton
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
-
-import javax.inject.Singleton
 
 class GrpcServiceDiscoverySpec extends Specification {
 
     void "test GRPC named service discovery"() {
         when:"A service is run"
+        def port = SocketUtils.findAvailableTcpPort()
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet'
+                'micronaut.application.name':'greet',
+                'grpc.server.port': port
         ])
 
         and:'then a client is run that declares the service'
@@ -61,8 +60,10 @@ class GrpcServiceDiscoverySpec extends Specification {
 
     void "test GRPC channel explicit URI"() {
         when:"A service is run"
+        def port = SocketUtils.findAvailableTcpPort()
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet'
+                'micronaut.application.name':'greet',
+                'grpc.server.port': port
         ])
 
         and:'then a client is run that declares the service'

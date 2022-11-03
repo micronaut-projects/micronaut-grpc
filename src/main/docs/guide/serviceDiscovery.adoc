@@ -21,7 +21,7 @@ The way in which this is done is the https://docs.micronaut.io/latest/guide/inde
 
 To register a gRPC service with Consul first add the `micronaut-discovery-client` dependency:
 
-dependency:micronaut-discovery-client[scope="runtime"]
+dependency:micronaut-discovery-client[version="{version}", groupId="io.micronaut.discovery", scope="runtime"]
 
 Then setup Consul correctly:
 

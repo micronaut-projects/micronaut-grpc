@@ -1,48 +1,34 @@
 plugins {
-    id "net.ltgt.apt" version "0.21"
-    id 'com.google.protobuf' version '0.8.15'
+    id 'io.micronaut.build.internal.grpc-module'
+    alias libs.plugins.protobuf
 }
+
 dependencies {
-    annotationProcessor "io.micronaut:micronaut-inject-java:$micronautVersion"
-    annotationProcessor "io.micronaut.docs:micronaut-docs-asciidoc-config-props:$micronautDocsVersion"    
-    api project(":grpc-annotation")
-    api "io.micronaut:micronaut-inject:$micronautVersion"
-    api "io.micronaut:micronaut-runtime:$micronautVersion"
-    implementation "io.grpc:grpc-netty:$grpcVersion"
-    api "io.grpc:grpc-protobuf:$grpcVersion"
-    api "io.grpc:grpc-stub:$grpcVersion"
 
-    compileOnly "io.micronaut.discovery:micronaut-discovery-client:$micronautDiscoveryClientVersion"
-    compileOnly "io.micronaut:micronaut-tracing:$micronautVersion"
-    compileOnly "io.micronaut:micronaut-management"
-    compileOnly 'io.opentracing.contrib:opentracing-grpc:0.2.3'
+    api platform(libs.boms.grpc)
+    api projects.grpcAnnotation
+    api projects.grpcHealth
+    api projects.grpcOpentracing
+    api mn.micronaut.runtime
+    api libs.managed.grpc.protobuf
+    api libs.managed.grpc.stub
 
-    testImplementation "io.micronaut.discovery:micronaut-discovery-client:$micronautDiscoveryClientVersion"
-    testImplementation 'io.opentracing:opentracing-mock:0.33.0'
-    testImplementation "io.micronaut:micronaut-tracing:$micronautVersion"
-    testImplementation 'io.opentracing.contrib:opentracing-grpc:0.2.3'
-    testImplementation 'io.jaegertracing:jaeger-core:1.5.0'
-    testImplementation "io.micronaut:micronaut-inject-groovy:$micronautVersion"
-    testImplementation "io.micronaut:micronaut-inject-java:$micronautVersion"
-    testImplementation 'io.micronaut.test:micronaut-test-spock:2.3.2'
-    testImplementation "io.micronaut:micronaut-management"
-    testImplementation project(":grpc-client-runtime")
+    compileOnly libs.managed.grpc.services
+    compileOnly mn.micronaut.discovery
+    compileOnly mn.micronaut.management
+    compileOnly mn.graal
 
-    testRuntimeOnly "io.netty:netty-tcnative:2.0.36.Final"
-    testRuntimeOnly "io.netty:netty-tcnative-boringssl-static:2.0.36.Final"
-}
+    implementation libs.grpc.netty
+    implementation mn.micronaut.buffer.netty
 
-// compileJava.options.fork=true
-// compileJava.options.forkOptions.jvmArgs = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005']
+    testImplementation libs.managed.grpc.services
+    testImplementation mn.micronaut.discovery
+    testImplementation mn.micronaut.reactor.http.client
+    testImplementation mn.micronaut.management
+    testImplementation projects.grpcClientRuntime
 
-protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:$protocVersion" }
-    plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
-    }
-    generateProtoTasks {
-        all()*.plugins { grpc {} }
-    }
+    testRuntimeOnly libs.netty.tcnative
+    testRuntimeOnly libs.netty.tcnative.boringssl.static
 }
 
 sourceSets {
@@ -55,11 +41,17 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:$protocVersion" }
+    protoc { artifact = libs.managed.protoc.asProvider().get() }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.35.0" }
+        grpc { artifact = libs.managed.protoc.grpc.get() }
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
+    }
+}
+
+micronautBuild {
+    binaryCompatibility {
+        acceptedRegressionsFile = file("config/accepted-api-changes.json")
     }
 }

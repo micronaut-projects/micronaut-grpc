@@ -18,7 +18,7 @@ package io.micronaut.protobuf.convert;
 import java.io.IOException;
 import java.util.Optional;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.google.protobuf.Message;
 
@@ -58,8 +58,8 @@ public class ByteBufToProtoMessageConverter implements TypeConverter<ByteBuf, Me
     }
 
     private Optional<Message> rehydrate(ByteBuf object, Message.Builder builder, ConversionContext context) {
-        try {
-            builder.mergeFrom(new ByteBufInputStream(object.copy(), true), codec.getExtensionRegistry());
+        try (ByteBufInputStream byteBufInputStream = new ByteBufInputStream(object.copy(), true)) {
+            builder.mergeFrom(byteBufInputStream, codec.getExtensionRegistry());
             return Optional.of(builder.build());
         } catch (IOException e) {
             context.reject(e);

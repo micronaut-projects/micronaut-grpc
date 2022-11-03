@@ -21,17 +21,17 @@ import io.grpc.examples.helloworld.HelloReply
 import io.grpc.examples.helloworld.HelloRequest
 import io.grpc.stub.StreamObserver
 import io.micronaut.context.annotation.Factory
+import io.micronaut.core.annotation.Order
+import io.micronaut.core.order.Ordered
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
-import io.micronaut.test.annotation.MicronautTest
+import io.micronaut.test.extensions.spock.annotation.MicronautTest
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import spock.lang.Specification
-
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @MicronautTest
 class HelloWordGrpcSpec extends Specification {
-
 
     @Inject
     TestBean testBean
@@ -39,10 +39,25 @@ class HelloWordGrpcSpec extends Specification {
     @Inject
     MyInterceptor myInterceptor
 
+    @Inject
+    FirstInterceptor firstInterceptor
+
+    @Inject
+    MiddleInterceptor middleInterceptor
+
+    @Inject
+    LastInterceptor lastInterceptor
+
+    @Inject
+    UnorderedInterceptor unorderedInterceptor
+
     void "test hello world grpc"() {
         expect:
         testBean.sayHello("Fred") == "Hello Fred"
         myInterceptor.intercepted
+        firstInterceptor.intercepted < unorderedInterceptor.intercepted
+        unorderedInterceptor.intercepted < middleInterceptor.intercepted
+        middleInterceptor.intercepted < lastInterceptor.intercepted
     }
 
 
@@ -59,11 +74,47 @@ class HelloWordGrpcSpec extends Specification {
 
         boolean intercepted = false
         @Override
-        def <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
+        <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
             intercepted = true
             return next.startCall(call, headers)
         }
     }
+
+
+    static class BaseClientInterceptor implements ClientInterceptor {
+        long intercepted
+
+        @Override
+        <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(
+                MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next
+        ) {
+            sleep 10
+            intercepted = System.currentTimeMillis()
+            return next.newCall(method, callOptions)
+        }
+    }
+
+    @Singleton
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    static class FirstInterceptor extends BaseClientInterceptor {
+    }
+
+    @Singleton
+    @Order(Ordered.LOWEST_PRECEDENCE)
+    static class LastInterceptor extends BaseClientInterceptor {
+    }
+
+    @Singleton
+    static class MiddleInterceptor extends BaseClientInterceptor implements Ordered {
+        @Override
+        int getOrder() {
+            return 1000
+        }
+    }
+
+    @Singleton
+    static class UnorderedInterceptor extends BaseClientInterceptor { }
+
 
     @Singleton
     static class TestBean {
@@ -81,7 +132,7 @@ class HelloWordGrpcSpec extends Specification {
     static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
         @Override
         void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-            HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + request.getName()).build();
+            HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + request.getName()).build()
             responseObserver.onNext(reply)
             responseObserver.onCompleted()
         }

@@ -19,9 +19,10 @@ import com.example.wire.Example
 import groovy.transform.CompileStatic
 import io.micronaut.http.annotation.Get
 import io.micronaut.protobuf.codec.ProtobufferCodec
+import jakarta.inject.Singleton
 
 @CompileStatic
-@javax.inject.Singleton
+@Singleton
 class ProgramaticController {
     public static Example.GeoPoint DUBLIN = Example.GeoPoint.newBuilder()
             .setLat(53.350140D)

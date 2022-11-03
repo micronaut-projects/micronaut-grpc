@@ -1,0 +1,46 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+    alias libs.plugins.protobuf
+}
+
+dependencies {
+
+    api platform(libs.boms.grpc)
+    api projects.grpcAnnotation
+    api mn.micronaut.runtime
+    api libs.managed.grpc.protobuf
+    api libs.managed.grpc.stub
+
+    // change these to "api" dependencies when this module
+    // is removed as a dependency of "grpc-server-runtime"
+    compileOnly libs.managed.grpc.services
+    compileOnly mn.micronaut.tracing.legacy
+    compileOnly mn.micronaut.management
+    compileOnly libs.opentracing.grpc
+    compileOnly mn.javax.annotation.api
+
+    testImplementation projects.grpcServerRuntime
+    testImplementation libs.managed.grpc.services
+    testImplementation libs.opentracing.mock
+    testImplementation mn.micronaut.tracing.legacy
+    testImplementation libs.opentracing.grpc
+    testImplementation libs.jaeger.core
+    testImplementation mn.micronaut.reactor.http.client
+    testImplementation mn.micronaut.management
+}
+
+protobuf {
+    protoc { artifact = libs.managed.protoc.asProvider().get() }
+    plugins {
+        grpc { artifact = libs.managed.protoc.grpc.get() }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+
+micronautBuild {
+    binaryCompatibility {
+        enabled = false
+    }
+}

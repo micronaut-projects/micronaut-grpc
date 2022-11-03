@@ -15,7 +15,7 @@
  */
 package io.micronaut.grpc.annotation;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

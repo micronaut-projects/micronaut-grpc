@@ -15,6 +15,17 @@
  */
 package io.micronaut.grpc.server;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.micronaut.context.ApplicationContext;
@@ -22,6 +33,9 @@ import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.annotation.Secondary;
 import io.micronaut.context.event.ApplicationEventPublisher;
 import io.micronaut.core.annotation.Internal;
+import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.Nullable;
+import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
 import io.micronaut.core.util.ArgumentUtils;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.discovery.ServiceInstance;
@@ -35,22 +49,8 @@ import io.micronaut.runtime.exceptions.ApplicationStartupException;
 import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.event.ServerShutdownEvent;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.inject.Singleton;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
 
 /**
  * Implementation of the {@link EmbeddedServer} interface for GRPC.
@@ -60,6 +60,7 @@ import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
  */
 @Singleton
 @Secondary
+@Named(GrpcServerConfiguration.PREFIX)
 @Requires(classes = ServerBuilder.class)
 @Requires(property = GrpcServerConfiguration.ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 public class GrpcEmbeddedServer implements EmbeddedServer {
@@ -86,11 +87,11 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
      */
     @Internal
     GrpcEmbeddedServer(
-            @Nonnull ApplicationContext applicationContext,
-            @Nonnull ApplicationConfiguration applicationConfiguration,
-            @Nonnull GrpcServerConfiguration grpcServerConfiguration,
-            @Nonnull ServerBuilder<?> serverBuilder,
-            @Nonnull ApplicationEventPublisher eventPublisher,
+            @NonNull ApplicationContext applicationContext,
+            @NonNull ApplicationConfiguration applicationConfiguration,
+            @NonNull GrpcServerConfiguration grpcServerConfiguration,
+            @NonNull ServerBuilder<?> serverBuilder,
+            @NonNull ApplicationEventPublisher eventPublisher,
             @Nullable ComputeInstanceMetadataResolver computeInstanceMetadataResolver,
             @Nullable List<ServiceInstanceMetadataContributor> metadataContributors) {
         ArgumentUtils.requireNonNull("applicationContext", applicationContext);
@@ -108,19 +109,23 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
     /**
      * @return The underlying GRPC {@link Server}.
      */
-    public @Nonnull Server getServer() {
+    public @NonNull Server getServer() {
         return server;
     }
 
     /**
      * @return The configuration for the server
      */
-    public @Nonnull GrpcServerConfiguration getServerConfiguration() {
+    public @NonNull GrpcServerConfiguration getServerConfiguration() {
         return grpcConfiguration;
     }
 
     @Override
     public int getPort() {
+        // support eager init      
+        if (!isRunning()) {
+            start();
+        }
         return server.getPort();
     }
 
@@ -199,11 +204,11 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
                     applicationContext.publishEvent(new ServiceStoppedEvent(serviceInstance));
                 }
             } finally {
-                server.shutdownNow();
+                server.shutdown();
                 try {
                     server.awaitTermination(grpcConfiguration.getAwaitTermination().toMillis(), TimeUnit.MILLISECONDS);
                 } catch (InterruptedException ignored) {
-
+                    Thread.currentThread().interrupt();
                 }
             }
 

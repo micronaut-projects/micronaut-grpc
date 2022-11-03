@@ -1,4 +1,8 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+}
+
 dependencies {
-    api project(":grpc-client-runtime")
-    api project(":grpc-server-runtime")
+    api projects.grpcClientRuntime
+    api projects.grpcServerRuntime
 }

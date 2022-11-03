@@ -4,10 +4,9 @@ To implement a gRPC server for the previously defined `helloworld.proto` definit
 
 For example:
 
-snippet::helloworld.GreetingEndpoint[tags="imports,clazz", project-base="examples/hello-world", source="main"]
+snippet::helloworld.GreetingEndpoint[tags="imports,clazz", source="main"]
 
-
-<1> The class extends from `GreeterGrpc.GreeterImplBase` and is annotated with `javax.inject.Singleton`
+<1> The class extends from `GreeterGrpc.GreeterImplBase` and is annotated with `jakarta.inject.Singleton`
 <2> You can dependency inject other beans into the implementation. In this case `GreetingService` is dependency injected.
 <3> The `StreamObserver` is used to send a response to the client.
 
@@ -109,6 +108,19 @@ Request -> 1 -> 2 -> 3 -> business logic -> 3 -> 2 -> 1 -> Response
 ----
 
 === Health checks
+
+==== gRPC Health checks
+
+If the gRPC services dependency (`io.grpc:grpc-services`) is added, then https://github.com/grpc/grpc/blob/master/doc/health-checking.md[gRPC health checks] will be enabled.
+
+To modify the status of a service, call the `setStatus` method on an instance of `HealthServiceManager`, for example:
+
+snippet::helloworld.HealthService[tags="imports,clazz", source="main"]
+
+If you wish to disable the gRPC health check while still using the services dependency you can set the property `grpc.server.health.enabled` to `false` in your application configuration.
+
+==== Management Health checks
+
 If the management dependency (`io.micronaut:micronaut-management`) is added, then Micronaut’s Health Endpoint can be used to expose the health status of the gRPC server.
 
 For example, if gRPC is running then the `/health` endpoint will return:
@@ -130,7 +142,7 @@ For example, if gRPC is running then the `/health` endpoint will return:
 }
 ----
 
-If you wish to disable the gRPC server health check while still using the management dependency you can set the property `grpc.server.health.enabled` to `false` in your application configuration.
+If you wish to disable the Micronaut gRPC server health check while still using the management dependency you can set the property `grpc.server.health.enabled` to `false` in your application configuration.
 
 === Testing the Server
 
@@ -144,7 +156,7 @@ You can then define a blocking stub bean in `src/test/java`. For example:
 .Defining Test Clients
 [source,java]
 ----
-include::examples/hello-world-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=clients]
+include::test-suite-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=clients]
 ----
 
 <1> A `ManagedChannel` is injected that can communicate with the server.
@@ -154,7 +166,7 @@ The above example uses the `@GrpcChannel` annotation to inject a gRPC `ManagedCh
 
 Now that you have a test client, writing the test becomes trivial:
 
-snippet::helloworld.GreetingEndpointTest[tags="imports,test", project-base="examples/hello-world"]
+snippet::helloworld.GreetingEndpointTest[tags="imports,test"]
 
 <1> The test is annotated with `@MicronautTest`
 <2> The client stub is injected into the test

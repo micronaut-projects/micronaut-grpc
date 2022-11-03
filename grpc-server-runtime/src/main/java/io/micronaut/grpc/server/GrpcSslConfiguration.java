@@ -16,8 +16,8 @@
 package io.micronaut.grpc.server;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
+import io.micronaut.core.annotation.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**

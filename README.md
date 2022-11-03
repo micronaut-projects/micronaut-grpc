@@ -2,6 +2,7 @@
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.micronaut.grpc/micronaut-grpc-runtime.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.micronaut.grpc%22%20AND%20a:%22micronaut-grpc-runtime%22)
 [![Build Status](https://github.com/micronaut-projects/micronaut-grpc/workflows/Java%20CI/badge.svg)](https://github.com/micronaut-projects/micronaut-grpc/actions)
+[![Revved up by Gradle Enterprise](https://img.shields.io/badge/Revved%20up%20by-Gradle%20Enterprise-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.micronaut.io/scans)
 
 This project includes integration between [Micronaut](http://micronaut.io) and [GRPC](https://grpc.io).
 
@@ -13,7 +14,7 @@ See the [Snapshot Documentation](https://micronaut-projects.github.io/micronaut-
 
 ## Examples
 
-Examples for Java, Kotlin and Groovy can be found in the [examples](https://github.com/micronaut-projects/micronaut-grpc/tree/master/examples) directory.
+Examples for Java, Kotlin and Groovy can be found in the [examples](https://github.com/micronaut-projects/micronaut-grpc/tree/master/doc-examples) directory.
 
 ## Snapshots and Releases
 

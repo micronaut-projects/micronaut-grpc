@@ -1,5 +1,17 @@
-rootProject.name = 'grpc'
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
 
+plugins {
+    id 'io.micronaut.build.shared.settings' version '5.3.15'
+}
+
+rootProject.name = 'grpc-parent'
+
+include 'grpc-bom'
 include 'grpc-annotation'
 include 'grpc-client-runtime'
 include 'grpc-server-runtime'
@@ -8,3 +20,27 @@ include 'grpc-server-security-jwt'
 include 'grpc-runtime'
 include 'protobuff-support'
 
+// documentation samples
+include 'test-suite-java'
+include 'test-suite-groovy'
+include 'test-suite-kotlin'
+include 'grpc-health'
+include 'grpc-opentracing'
+
+enableFeaturePreview 'TYPESAFE_PROJECT_ACCESSORS'
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+    }
+}
+
+micronautBuild {
+    importMicronautCatalog()
+}

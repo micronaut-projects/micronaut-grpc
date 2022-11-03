@@ -19,7 +19,7 @@ import com.google.protobuf.ExtensionRegistry;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  * Creates the default {@link ExtensionRegistry}.
