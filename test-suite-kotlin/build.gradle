@@ -2,8 +2,8 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "$kotlinVersion"
     id "org.jetbrains.kotlin.kapt" version "$kotlinVersion"
     id "org.jetbrains.kotlin.plugin.allopen" version "$kotlinVersion"
-    id "io.micronaut.application"
-    id "com.google.protobuf"
+    id "io.micronaut.application" version "$micronautGradlePluginVersion"
+    id "com.google.protobuf" version "$protobufGradleVersion"
 }
 
 // tag::variables[]
@@ -14,6 +14,12 @@ ext {
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
 }
 
 java {
@@ -35,21 +41,21 @@ micronaut {
 dependencies {
     kapt("io.micronaut:micronaut-validation")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinxCoroutinesVersion}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
     implementation("io.micronaut:micronaut-runtime")
     implementation(project(':grpc-server-runtime'))
 
     implementation "io.grpc:grpc-services"
 
     // tag::dependencies[]
-    implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
+    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     compileOnly("io.grpc:grpc-stub:$grpcVersion")
     // end::dependencies[]
 
     runtimeOnly("ch.qos.logback:logback-classic")
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
