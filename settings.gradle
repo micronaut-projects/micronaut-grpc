@@ -1,8 +1,4 @@
 pluginManagement {
-    plugins {
-        id "io.micronaut.application" version "${micronautGradlePluginVersion}"
-        id "com.google.protobuf" version "${protobufGradleVersion}"
-    }
     repositories {
         gradlePluginPortal()
         mavenCentral()
@@ -29,3 +25,20 @@ include 'test-suite-kotlin'
 include 'grpc-health'
 include 'grpc-opentracing'
 
+enableFeaturePreview 'TYPESAFE_PROJECT_ACCESSORS'
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
+    }
+}
+
+micronautBuild {
+    importMicronautCatalog()
+}

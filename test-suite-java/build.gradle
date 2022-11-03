@@ -1,13 +1,19 @@
 plugins {
     id 'java'
     // tag::plugin[]
-    id 'com.google.protobuf'
+    id "com.google.protobuf" version "$protobufGradleVersion"
     // end::plugin[]
-    id 'io.micronaut.application'
+    id "io.micronaut.application" version "$micronautGradlePluginVersion"
 }
 
 repositories {
     mavenCentral()
+    maven {
+        url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
 }
 
 mainClassName = "helloworld.Application"
