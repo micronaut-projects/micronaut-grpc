@@ -35,7 +35,6 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
-<li><a href="../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../index-all.html">Index</a></li>
 <li><a href="../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -130,19 +129,12 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(io.micronaut.context.env.Environment,java.lang.String,java.lang.Integer,java.util.concurrent.ExecutorService)" class="member-name-link">GrpcServerConfiguration</a><wbr>(io.micronaut.context.env.Environment&nbsp;environment,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serverHost,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;serverPort,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ExecutorService.html" title="class or interface in java.util.concurrent" class="external-link">ExecutorService</a>&nbsp;executorService)</code></div>
-<div class="col-last even-row-color">
-<div class="block"><span class="deprecated-label">Deprecated.</span></div>
-</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(io.micronaut.context.env.Environment,java.lang.String,java.lang.Integer,java.util.concurrent.ExecutorService,io.micronaut.core.io.ResourceResolver)" class="member-name-link">GrpcServerConfiguration</a><wbr>(io.micronaut.context.env.Environment&nbsp;environment,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(io.micronaut.context.env.Environment,java.lang.String,java.lang.Integer,java.util.concurrent.ExecutorService,io.micronaut.core.io.ResourceResolver)" class="member-name-link">GrpcServerConfiguration</a><wbr>(io.micronaut.context.env.Environment&nbsp;environment,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serverHost,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;serverPort,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ExecutorService.html" title="class or interface in java.util.concurrent" class="external-link">ExecutorService</a>&nbsp;executorService,
  io.micronaut.core.io.ResourceResolver&nbsp;resourceResolver)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Default constructor.</div>
 </div>
 </div>
@@ -329,32 +321,9 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(io.micronaut.context.env.Environment,java.lang.String,java.lang.Integer,java.util.concurrent.ExecutorService)">
-<h3>GrpcServerConfiguration</h3>
-<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="element-name">GrpcServerConfiguration</span><wbr><span class="parameters">(io.micronaut.context.env.Environment&nbsp;environment,
- @Property(name="grpc.server.host") @Nullable
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serverHost,
- @Property(name="grpc.server.port") @Nullable
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;serverPort,
- @Named("io")
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ExecutorService.html" title="class or interface in java.util.concurrent" class="external-link">ExecutorService</a>&nbsp;executorService)</span></div>
-<div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
-<div class="block">Constructor.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>environment</code> - The environment</dd>
-<dd><code>serverHost</code> - The server host</dd>
-<dd><code>serverPort</code> - The server port</dd>
-<dd><code>executorService</code> - The IO executor service</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="&lt;init&gt;(io.micronaut.context.env.Environment,java.lang.String,java.lang.Integer,java.util.concurrent.ExecutorService,io.micronaut.core.io.ResourceResolver)">
 <h3>GrpcServerConfiguration</h3>
-<div class="member-signature"><span class="annotations">@Creator
-</span><span class="modifiers">public</span>&nbsp;<span class="element-name">GrpcServerConfiguration</span><wbr><span class="parameters">(io.micronaut.context.env.Environment&nbsp;environment,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">GrpcServerConfiguration</span><wbr><span class="parameters">(io.micronaut.context.env.Environment&nbsp;environment,
  @Property(name="grpc.server.host") @Nullable
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serverHost,
  @Property(name="grpc.server.port") @Nullable
