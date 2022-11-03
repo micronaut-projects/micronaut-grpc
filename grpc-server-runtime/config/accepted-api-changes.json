@@ -343,5 +343,200 @@
     "type": "io.micronaut.grpc.server.GrpcServerConfiguration",
     "member": "Field HEALTH_ENABLED",
     "reason": "removed deprecated field for Micronaut 4.0.x"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.inject.BeanConfiguration",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$ServerTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$ServerTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$ServerTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$ServerTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$ServerTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
   }
 ]
