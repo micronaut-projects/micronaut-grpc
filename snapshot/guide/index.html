@@ -237,7 +237,7 @@ cd demo</code></pre>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
     ...
-    id 'com.google.protobuf'
+    id "com.google.protobuf" version "$protobufGradleVersion"
 }</code></pre>
 </div>
 </div>
@@ -277,7 +277,7 @@ protobuf {
 
 dependencies {
 ...
-    implementation("io.grpc:grpc-kotlin-stub:${grpcKotlinVersion}")
+    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     compileOnly("io.grpc:grpc-stub:$grpcVersion")
 }
 
