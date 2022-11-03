@@ -1,6 +1,6 @@
 [versions]
 managed-grpc = '1.50.2'
-managed-protobuf = '3.21.8'
+managed-protobuf = '3.21.9'
 managed-protobuf-gradle = '0.9.1'
 
 jackson-datatype-protobuf = '0.9.13'
