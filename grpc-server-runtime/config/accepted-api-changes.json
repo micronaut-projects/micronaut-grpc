@@ -345,6 +345,11 @@
     "reason": "removed deprecated field for Micronaut 4.0.x"
   },
   {
+    "type": "io.micronaut.grpc.server.GrpcServerConfiguration",
+    "member": "Constructor io.micronaut.grpc.server.GrpcServerConfiguration(io.micronaut.context.env.Environment,java.lang.String,java.lang.Integer,java.util.concurrent.ExecutorService)",
+    "reason": "removed deprecated constructor for Micronaut 4.0.x"
+  },
+  {
     "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
     "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
     "reason": "Micronaut 4.0.0 has different bean definitions"

@@ -23,7 +23,6 @@ import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Property;
 import io.micronaut.context.env.Environment;
 import io.micronaut.context.exceptions.ConfigurationException;
-import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.convert.format.ReadableBytes;
@@ -68,23 +67,6 @@ public class GrpcServerConfiguration {
     private Duration awaitTermination = DEFAULT_AWAIT_TERMINATION;
 
     /**
-     * Constructor.
-     *
-     * @param environment     The environment
-     * @param serverHost      The server host
-     * @param serverPort      The server port
-     * @param executorService The IO executor service
-     */
-    @Deprecated
-    public GrpcServerConfiguration(
-            Environment environment,
-            @Property(name = HOST) @Nullable String serverHost,
-            @Property(name = PORT) @Nullable Integer serverPort,
-            @Named(TaskExecutors.IO) ExecutorService executorService) {
-        this(environment, serverHost, serverPort, executorService, null);
-    }
-
-    /**
      * Default constructor.
      *
      * @param environment      The environment
@@ -93,7 +75,6 @@ public class GrpcServerConfiguration {
      * @param executorService  The IO executor service
      * @param resourceResolver The resource resolver
      */
-    @Creator
     public GrpcServerConfiguration(
             Environment environment,
             @Property(name = HOST) @Nullable String serverHost,
