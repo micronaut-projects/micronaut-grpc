@@ -80,7 +80,7 @@ class HelloWordGrpcSpec extends Specification {
     static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
         @Override
         void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-            HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + request.getName()).build();
+            HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + request.getName()).build()
             responseObserver.onNext(reply)
             responseObserver.onCompleted()
         }

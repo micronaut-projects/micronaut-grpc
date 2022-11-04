@@ -1,15 +1,12 @@
 package io.micronaut.grpc.server
 
-
 import io.grpc.Metadata
 import io.grpc.Server
-import io.grpc.ServerBuilder
 import io.grpc.ServerCall
 import io.grpc.ServerCallHandler
 import io.grpc.ServerInterceptor
 import io.grpc.internal.ServerImpl
 import io.grpc.netty.NettyServerBuilder
-import io.micronaut.core.order.Ordered
 import io.micronaut.grpc.server.interceptor.OrderedServerInterceptor
 import spock.lang.Specification
 
@@ -29,7 +26,7 @@ class GrpcServerBuilderSpec extends Specification {
         ]
 
         when:
-        ServerBuilder<?> serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null)
+        def serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null)
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)
@@ -68,7 +65,7 @@ class GrpcServerBuilderSpec extends Specification {
         ]
 
         when:
-        ServerBuilder<?> serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null)
+        def serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null)
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)
@@ -107,7 +104,7 @@ class GrpcServerBuilderSpec extends Specification {
         ]
 
         when:
-        ServerBuilder<?> serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null)
+        def serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null)
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)

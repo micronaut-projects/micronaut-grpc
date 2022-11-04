@@ -1,6 +1,5 @@
 plugins {
     id "io.micronaut.build.internal.docs"
-    id "io.micronaut.build.internal.dependency-updates"
     id "io.micronaut.build.internal.quality-reporting"
 }
 
@@ -11,5 +10,12 @@ repositories {
         mavenContent {
             snapshotsOnly()
         }
+    }
+}
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute(module("org.codehaus.groovy:groovy"))
+                .using(module("org.apache.groovy:groovy:4.0.6"))
     }
 }

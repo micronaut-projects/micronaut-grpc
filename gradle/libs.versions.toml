@@ -20,6 +20,8 @@ managed-protobuf-java = { module = 'com.google.protobuf:protobuf-java', version.
 managed-protobuf-java-util = { module = 'com.google.protobuf:protobuf-java-util', version.ref = 'managed-protobuf' }
 managed-protoc = { module = 'com.google.protobuf:protoc', version.ref = 'managed-protobuf' }
 
+micronaut-docs-asciidoc-config-props = { module = 'io.micronaut.docs:micronaut-docs-asciidoc-config-props', version.ref = 'micronaut-docs' }
+
 grpc-netty = { module = 'io.grpc:grpc-netty' }
 
 jackson-datatype-protobuf = { module = 'com.hubspot.jackson:jackson-datatype-protobuf', version.ref = 'jackson-datatype-protobuf' }

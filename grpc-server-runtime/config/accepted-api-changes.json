@@ -1,5 +1,200 @@
 [
   {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$HealthStatusManager0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcServerHealthIndicator$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$HealthStatusManagerContainer$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.inject.BeanConfiguration",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$ServerTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$ServerTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$ServerTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$ServerTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$ServerTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
     "type": "io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
     "member": "Class io.micronaut.grpc.server.health.$GrpcHealthFactory$Definition$Reference",
     "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"

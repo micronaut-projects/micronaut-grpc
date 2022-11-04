@@ -23,7 +23,7 @@ import jakarta.inject.Singleton
 
 @CompileStatic
 @Singleton
-class ProgramaticController {
+class ProgrammaticController {
     public static Example.GeoPoint DUBLIN = Example.GeoPoint.newBuilder()
             .setLat(53.350140D)
             .setLng(-6.266155D)
