@@ -62,7 +62,7 @@ class GrpcTracingSpec extends Specification {
         expect:
         conditions.eventually {
             myInterceptor.intercepted
-            tracer.finishedSpans().size()  == 2
+            tracer.finishedSpans().size() == 2
             tracer.finishedSpans()[0].operationName() == 'helloworld.Greeter/SayHello'
             tracer.finishedSpans()[1].operationName() == 'helloworld.Greeter/SayHello'
             tracer.finishedSpans().find { it.tags().get('span.kind') == 'client' }
@@ -74,6 +74,7 @@ class GrpcTracingSpec extends Specification {
     static class TracingInterceptor implements ServerInterceptor {
 
         boolean intercepted = false
+
         @Override
         <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
             intercepted = true

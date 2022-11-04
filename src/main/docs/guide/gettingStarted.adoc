@@ -61,7 +61,7 @@ include::test-suite-kotlin/build.gradle[tags=config]
 
 ----
 
-Finally add the following dependencies to your build:
+Finally, add the following dependencies to your build:
 
 For gRPC servers:
 

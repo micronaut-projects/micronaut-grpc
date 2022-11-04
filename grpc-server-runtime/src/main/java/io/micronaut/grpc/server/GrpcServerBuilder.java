@@ -15,6 +15,8 @@
  */
 package io.micronaut.grpc.server;
 
+import java.util.List;
+
 import io.grpc.BindableService;
 import io.grpc.ServerBuilder;
 import io.grpc.ServerInterceptor;
@@ -26,12 +28,12 @@ import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.order.OrderUtil;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.grpc.server.health.HealthStatusManagerContainer;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Constructs the {@link ServerBuilder} instance. Here to allow extensions via a {@link io.micronaut.context.event.BeanCreatedEventListener} for {@link ServerBuilder}.
@@ -73,6 +75,7 @@ public class GrpcServerBuilder {
      * @param serviceList The bindable services
      * @param interceptors The server interceptors
      * @param serverTransportFilters The server transport filters
+     *
      * @return The builder
      */
     @Bean

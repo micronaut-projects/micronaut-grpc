@@ -15,10 +15,10 @@
  */
 package io.micronaut.grpc.server;
 
+import java.util.Optional;
+
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.core.annotation.Nullable;
-
-import java.util.Optional;
 
 /**
  * Configuration for the SSL properties of GRPC.
@@ -28,6 +28,7 @@ import java.util.Optional;
  */
 @ConfigurationProperties(GrpcServerConfiguration.PREFIX + ".ssl")
 public class GrpcSslConfiguration {
+
     private String certChain;
 
     private String privateKey;

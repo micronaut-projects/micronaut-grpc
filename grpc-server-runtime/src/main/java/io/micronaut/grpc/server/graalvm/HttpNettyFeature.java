@@ -15,19 +15,21 @@
  */
 package io.micronaut.grpc.server.graalvm;
 
-import com.oracle.svm.core.annotate.AutomaticFeature;
-import com.oracle.svm.core.jdk.SystemPropertiesSupport;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.graal.AutomaticFeatureUtils;
 import io.netty.util.internal.logging.InternalLoggerFactory;
 import io.netty.util.internal.logging.Slf4JLoggerFactory;
+
 import org.graalvm.nativeimage.ImageSingletons;
 import org.graalvm.nativeimage.hosted.Feature;
 import org.graalvm.nativeimage.hosted.RuntimeClassInitialization;
 import org.graalvm.nativeimage.hosted.RuntimeReflection;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
+import com.oracle.svm.core.annotate.AutomaticFeature;
+import com.oracle.svm.core.jdk.SystemPropertiesSupport;
 
 /**
  * An HTTP Netty feature that configures the native channels.
@@ -41,29 +43,29 @@ public class HttpNettyFeature implements Feature {
     @Override
     public void beforeAnalysis(BeforeAnalysisAccess access) {
         RuntimeClassInitialization.initializeAtRunTime(
-                "io.netty",
-                "io.micronaut.http.server.netty.ServerAttributeKeys",
-                "io.micronaut.http.server.netty.handler.accesslog.HttpAccessLogHandler",
-                "io.micronaut.session.http.SessionLogElement",
-                "io.micronaut.http.client.netty.ConnectTTLHandler",
-                "io.micronaut.http.client.netty.DefaultHttpClient",
-                "io.micronaut.http.server.netty.websocket.NettyServerWebSocketUpgradeHandler",
-                "io.micronaut.buffer.netty.NettyByteBufferFactory"
+            "io.netty",
+            "io.micronaut.http.server.netty.ServerAttributeKeys",
+            "io.micronaut.http.server.netty.handler.accesslog.HttpAccessLogHandler",
+            "io.micronaut.session.http.SessionLogElement",
+            "io.micronaut.http.client.netty.ConnectTTLHandler",
+            "io.micronaut.http.client.netty.DefaultHttpClient",
+            "io.micronaut.http.server.netty.websocket.NettyServerWebSocketUpgradeHandler",
+            "io.micronaut.buffer.netty.NettyByteBufferFactory"
         );
         RuntimeClassInitialization.initializeAtRunTime(
-                "io.micronaut.http.netty.websocket.NettyWebSocketSession",
-                "io.micronaut.http.netty.channel.NettyThreadFactory",
-                "io.micronaut.http.netty.channel.converters.EpollChannelOptionFactory",
-                "io.micronaut.http.netty.channel.converters.KQueueChannelOptionFactory",
-                "io.micronaut.http.bind.binders.ContinuationArgumentBinder",
-                "io.micronaut.http.bind.binders.ContinuationArgumentBinder.Companion"
+            "io.micronaut.http.netty.websocket.NettyWebSocketSession",
+            "io.micronaut.http.netty.channel.NettyThreadFactory",
+            "io.micronaut.http.netty.channel.converters.EpollChannelOptionFactory",
+            "io.micronaut.http.netty.channel.converters.KQueueChannelOptionFactory",
+            "io.micronaut.http.bind.binders.ContinuationArgumentBinder",
+            "io.micronaut.http.bind.binders.ContinuationArgumentBinder.Companion"
         );
         RuntimeClassInitialization.initializeAtBuildTime("io.netty.util.internal.shaded.org.jctools");
 
         RuntimeClassInitialization.initializeAtBuildTime(
-                "io.netty.util.internal.logging.InternalLoggerFactory",
-                "io.netty.util.internal.logging.Slf4JLoggerFactory",
-                "io.netty.util.internal.logging.LocationAwareSlf4JLogger"
+            "io.netty.util.internal.logging.InternalLoggerFactory",
+            "io.netty.util.internal.logging.Slf4JLoggerFactory",
+            "io.netty.util.internal.logging.LocationAwareSlf4JLogger"
         );
 
         // force netty to use slf4j logging
@@ -74,7 +76,7 @@ public class HttpNettyFeature implements Feature {
         }
 
         registerClasses(access,
-                "io.netty.channel.kqueue.KQueueChannelOption", "io.netty.channel.epoll.EpollChannelOption");
+            "io.netty.channel.kqueue.KQueueChannelOption", "io.netty.channel.epoll.EpollChannelOption");
 
         registerMethods(access, "io.netty.buffer.AbstractByteBufAllocator", "toLeakAwareBuffer");
         registerMethods(access, "io.netty.buffer.AdvancedLeakAwareByteBuf", "touch", "recordLeakNonRefCountingOperation");

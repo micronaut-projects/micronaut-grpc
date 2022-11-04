@@ -15,15 +15,19 @@
  */
 package helloworld;
 // tag::imports[]
+
 import io.grpc.ManagedChannel;
-import io.micronaut.context.annotation.*;
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.Factory;
 import io.micronaut.grpc.annotation.GrpcChannel;
 import io.micronaut.grpc.server.GrpcServerChannel;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
 import jakarta.inject.Inject;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 // end::imports[]
 
 // tag::test[]
@@ -36,12 +40,12 @@ class GreetingEndpointTest {
     @Test
     void testHelloWorld() {
         final HelloRequest request = HelloRequest.newBuilder() // <3>
-                                                 .setName("Fred")
-                                                 .build();
+            .setName("Fred")
+            .build();
         assertEquals(
-                "Hello Fred",
-                blockingStub.sayHello(request)
-                            .getMessage()
+            "Hello Fred",
+            blockingStub.sayHello(request)
+                .getMessage()
         );
     }
 
@@ -51,11 +55,12 @@ class GreetingEndpointTest {
 // tag::clients[]
 @Factory
 class Clients {
+
     @Bean
     GreeterGrpc.GreeterBlockingStub blockingStub(
-            @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) { // <1>
+        @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) { // <1>
         return GreeterGrpc.newBlockingStub( // <2>
-                channel
+            channel
         );
     }
 }

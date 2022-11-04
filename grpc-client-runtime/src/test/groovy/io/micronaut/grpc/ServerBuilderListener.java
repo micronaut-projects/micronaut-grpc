@@ -23,6 +23,7 @@ import jakarta.inject.Singleton;
 
 @Singleton
 public class ServerBuilderListener implements BeanCreatedEventListener<ServerBuilder<?>> {
+
     @Override
     public ServerBuilder<?> onCreated(BeanCreatedEvent<ServerBuilder<?>> event) {
         final ServerBuilder<?> builder = event.getBean();
