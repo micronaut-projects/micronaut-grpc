@@ -15,18 +15,22 @@
  */
 package io.micronaut
 
-import com.example.wire.Example
+import groovy.transform.CompileStatic
+import io.micronaut.context.ExecutionHandleLocator
+import io.micronaut.web.router.DefaultRouteBuilder
 
-class ProgramaticControllerSpec extends BaseSpec {
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
-    String url = embeddedServer.getURL().toString() + '/town'
+@CompileStatic
+@Singleton
+class ProgrammaticControllerCreator extends DefaultRouteBuilder {
+    ProgrammaticControllerCreator(ExecutionHandleLocator executionHandleLocator, UriNamingStrategy uriNamingStrategy) {
+        super(executionHandleLocator, uriNamingStrategy)
+    }
 
-    void "sample city should be dublin/using programmatic controller controller"() {
-        when:'The message is requested from the sever=[#url]'
-            def response = getMessage(url, Example.GeoPoint.class)
-        and:'The message is parser'
-            Example.GeoPoint city  = Example.GeoPoint.parseFrom(response)
-        then:'Should be Dublin'
-            SampleController.DUBLIN == city
+    @Inject
+    void issuesRoutes(ProgrammaticController controller) {
+        GET("/town", controller, "city")
     }
 }

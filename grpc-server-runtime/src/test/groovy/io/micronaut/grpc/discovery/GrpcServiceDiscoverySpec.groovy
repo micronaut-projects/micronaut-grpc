@@ -15,7 +15,6 @@
  */
 package io.micronaut.grpc.discovery
 
-
 import io.grpc.ManagedChannel
 import io.grpc.examples.helloworld.GreeterGrpc
 import io.grpc.examples.helloworld.HelloReply

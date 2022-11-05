@@ -12,16 +12,21 @@ dependencies {
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
+    compileOnly mn.micronaut.discovery
+
     implementation libs.grpc.netty
     implementation mn.reactor
     implementation mn.micronaut.buffer.netty
-    compileOnly mn.micronaut.discovery
+
+    testCompileOnly mn.javax.annotation.api
 
     testCompileOnly("javax.annotation:javax.annotation-api")
     testImplementation projects.grpcServerRuntime
     testImplementation mn.micronaut.discovery
     testImplementation mn.micronaut.jackson.databind
     testImplementation libs.opentracing.mock
+
+    testRuntimeOnly mn.micronaut.jackson.databind
 }
 
 // compileJava.options.fork=true
@@ -51,3 +56,4 @@ micronautBuild {
         acceptedRegressionsFile = file("config/accepted-api-changes.json")
     }
 }
+
