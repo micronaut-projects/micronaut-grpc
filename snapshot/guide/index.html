@@ -278,8 +278,10 @@ protobuf {
 
 dependencies {
 ...
-    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
-    compileOnly("io.grpc:grpc-stub:$grpcVersion")
+    implementation "io.grpc:grpc-kotlin-stub:$grpcKotlinVersion"
+    implementation "io.grpc:grpc-services:$grpcVersion"
+    compileOnly "io.grpc:grpc-stub:$grpcVersion"
+    compileOnly "javax.annotation:javax.annotation-api"
 }
 
 
@@ -542,7 +544,6 @@ class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { // <b class="conum"
 <pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import jakarta.inject.Singleton
 
 @Singleton // <b class="conum">(1)</b>
-@Suppress("unused")
 class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.GreeterCoroutineImplBase() { // <b class="conum">(2)</b>
     override suspend fun sayHello(request: HelloRequest): HelloReply {
         // <b class="conum">(3)</b>
