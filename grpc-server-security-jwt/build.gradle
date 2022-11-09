@@ -1,0 +1,14 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+}
+
+dependencies {
+    api project(":grpc-server-runtime")
+    api project(":grpc-server-security")
+
+    implementation(mn.micronaut.security.jwt)
+
+    testAnnotationProcessor mn.micronaut.security.annotations
+    testImplementation(mn.micronaut.security)
+}
+

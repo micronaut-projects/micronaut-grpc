@@ -22,3 +22,9 @@ dependencies {
 protobuf {
     protoc { artifact = libs.managed.protoc.asProvider().get() }
 }
+
+micronautBuild {
+    binaryCompatibility {
+        enabled = false
+    }
+}

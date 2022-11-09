@@ -22,6 +22,12 @@ dependencies {
     testImplementation projects.grpcServerRuntime
 }
 
+micronautBuild {
+    binaryCompatibility {
+        enabled = false
+    }
+}
+
 protobuf {
     protoc { artifact = libs.managed.protoc.asProvider().get() }
     plugins {

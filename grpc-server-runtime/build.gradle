@@ -9,7 +9,7 @@ dependencies {
     api projects.grpcAnnotation
     api projects.grpcHealth
     api projects.grpcOpentracing
-    api mn.micronaut.runtime
+
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 

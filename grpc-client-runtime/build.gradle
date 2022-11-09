@@ -2,7 +2,6 @@ plugins {
     id 'io.micronaut.build.internal.grpc-module'
     alias libs.plugins.protobuf
 }
-
 dependencies {
 
     api platform(libs.boms.grpc)
