@@ -16,13 +16,12 @@ import io.micronaut.context.env.Environment
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcEmbeddedServer
 import io.micronaut.grpc.server.GrpcServerChannel
-import io.micronaut.security.authentication.UserDetails
+import io.micronaut.security.authentication.ServerAuthentication
 import io.micronaut.security.token.jwt.generator.JwtTokenGenerator
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import javax.inject.Inject
-import javax.inject.Singleton
 
 class GrpcServerSecurityJwtInterceptorSpec extends Specification {
 
@@ -431,7 +430,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         GreeterGrpc.GreeterBlockingStub blockingStub
 
         String sayHelloWithJwt(String message, final List<String> roles = []) {
-            UserDetails userDetails = new UserDetails("micronaut", roles)
+            ServerAuthentication userDetails = new ServerAuthentication("micronaut", roles, [:])
             String jwt = jwtTokenGenerator.generateToken(userDetails, 60).get()
             Metadata metadata = new Metadata()
             metadata.put(Metadata.Key.of("JWT", Metadata.ASCII_STRING_MARSHALLER), jwt)
@@ -440,7 +439,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         }
 
         String sayHelloWithCustomJwt(String metadataKeyName, String message, final List<String> roles = []) {
-            UserDetails userDetails = new UserDetails("micronaut", roles)
+            ServerAuthentication userDetails = new ServerAuthentication("micronaut", roles, [:])
             String jwt = jwtTokenGenerator.generateToken(userDetails, 60).get()
             Metadata metadata = new Metadata()
             metadata.put(Metadata.Key.of(metadataKeyName, Metadata.ASCII_STRING_MARSHALLER), jwt)

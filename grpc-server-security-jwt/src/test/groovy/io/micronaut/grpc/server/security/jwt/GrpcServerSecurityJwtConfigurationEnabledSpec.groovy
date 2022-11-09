@@ -9,7 +9,7 @@ import io.micronaut.grpc.server.security.jwt.interceptor.GrpcServerSecurityJwtIn
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import spock.lang.Specification
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 @MicronautTest
 @Property(name = "grpc.server.security.token.jwt.enabled", value = "true")

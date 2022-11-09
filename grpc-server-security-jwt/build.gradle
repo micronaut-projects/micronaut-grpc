@@ -1,7 +1,5 @@
 plugins {
     id 'io.micronaut.build.internal.grpc-module'
-    id "net.ltgt.apt" version "0.21"
-    id 'com.google.protobuf' version '0.8.15'
 }
 
 dependencies {
@@ -11,24 +9,6 @@ dependencies {
     implementation(mn.micronaut.security.jwt)
 
     testAnnotationProcessor mn.micronaut.security.annotations
-    testImplementation mn.micronaut.inject.java
+    testImplementation(mn.micronaut.security)
 }
 
-protobuf {
-    protoc { artifact = libs.managed.protoc.asProvider().get() }
-    plugins {
-        grpc { artifact = libs.managed.protoc.grpc.get() }
-    }
-    generateProtoTasks {
-        all()*.plugins { grpc {} }
-    }
-}
-
-sourceSets {
-    test {
-        java {
-            srcDirs 'build/generated/source/proto/test/grpc'
-            srcDirs 'build/generated/source/proto/test/java'
-        }
-    }
-}
