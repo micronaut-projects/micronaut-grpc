@@ -23,6 +23,7 @@ import io.opentracing.Tracer;
 import io.opentracing.contrib.grpc.ServerCloseDecorator;
 import io.opentracing.contrib.grpc.ServerSpanDecorator;
 import io.opentracing.contrib.grpc.TracingServerInterceptor;
+
 import jakarta.inject.Inject;
 
 /**
@@ -42,6 +43,7 @@ public class GrpcServerTracingInterceptorConfiguration {
 
     /**
      * Default constructor.
+     *
      * @param tracer The tracer
      */
     protected GrpcServerTracingInterceptorConfiguration(Tracer tracer) {

@@ -15,18 +15,22 @@
  */
 package io.micronaut.grpc.channels;
 
-import io.grpc.ClientInterceptor;
-import io.grpc.netty.NettyChannelBuilder;
-import io.micronaut.context.ApplicationContext;
-import io.micronaut.context.annotation.*;
-import io.micronaut.core.util.CollectionUtils;
-import io.micronaut.inject.qualifiers.Qualifiers;
-import io.micronaut.scheduling.TaskExecutors;
-import jakarta.inject.Named;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+
+import io.grpc.ClientInterceptor;
+import io.grpc.netty.NettyChannelBuilder;
+import io.micronaut.context.ApplicationContext;
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.Factory;
+import io.micronaut.context.annotation.Parameter;
+import io.micronaut.context.annotation.Prototype;
+import io.micronaut.core.util.CollectionUtils;
+import io.micronaut.inject.qualifiers.Qualifiers;
+import io.micronaut.scheduling.TaskExecutors;
+
+import jakarta.inject.Named;
 
 /**
  * Factory class for creating {@link NettyChannelBuilder} instances.
@@ -42,34 +46,37 @@ public class GrpcChannelBuilderFactory {
 
     /**
      * Default constructor.
+     *
      * @param beanContext The bean context
      * @param executorService The I/O executor service
      */
     public GrpcChannelBuilderFactory(
-            ApplicationContext beanContext,
-            @Named(TaskExecutors.IO) ExecutorService executorService) {
+        ApplicationContext beanContext,
+        @Named(TaskExecutors.IO) ExecutorService executorService) {
         this.beanContext = beanContext;
         this.executorService = executorService;
     }
 
     /**
      * Constructor a managed channel build for the given target name and interceptors.
+     *
      * @param target The target name
      * @param interceptors The interceptors
+     *
      * @return The channel builder
      */
     @Bean
     @Prototype
     protected NettyChannelBuilder managedChannelBuilder(@Parameter String target, List<ClientInterceptor> interceptors) {
         GrpcManagedChannelConfiguration config = beanContext.findBean(GrpcManagedChannelConfiguration.class, Qualifiers.byName(target)).orElseGet(() -> {
-                    final GrpcDefaultManagedChannelConfiguration mcc = new GrpcDefaultManagedChannelConfiguration(
-                            target,
-                            beanContext.getEnvironment(),
-                            executorService
-                    );
-                    beanContext.inject(mcc);
-                    return mcc;
-                }
+                final GrpcDefaultManagedChannelConfiguration mcc = new GrpcDefaultManagedChannelConfiguration(
+                    target,
+                    beanContext.getEnvironment(),
+                    executorService
+                );
+                beanContext.inject(mcc);
+                return mcc;
+            }
         );
         final NettyChannelBuilder channelBuilder = config.getChannelBuilder();
         if (CollectionUtils.isNotEmpty(interceptors)) {

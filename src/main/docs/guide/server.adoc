@@ -38,7 +38,7 @@ grpc:
 <1> Load the certificate from `/path/to/my.cert` file.
 <2> Load the private key from the classpath. The file should be in `src/main/resources/my.key`.
 
-By default the gRPC server will be enabled. To disable the gRPC server, set `grpc.server.enabled` to false.
+By default, the gRPC server will be enabled. To disable the gRPC server, set `grpc.server.enabled` to false.
 
 Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
 
@@ -50,7 +50,7 @@ include::grpc-server-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderList
 
 === Auto Injected Types
 
-By default the server will automatically be dependency injected with beans of the following types:
+By default, the server will automatically be dependency injected with beans of the following types:
 
 * `io.grpc.BindableService` - Any services declared as beans
 * `io.grpc.ServerInterceptor` - Any interceptors declared as beans
@@ -148,7 +148,7 @@ If you wish to disable the Micronaut gRPC server health check while still using 
 
 To test the server it is recommended that you use https://github.com/micronaut-projects/micronaut-test[Micronaut Test].
 
-TIP: For detailed instructions on how to setup Micronaut Test for either Spock or JUnit 5 see the https://micronaut-projects.github.io/micronaut-test/latest/guide/index.html[documentation] on the subject.
+TIP: For detailed instructions on how to set up Micronaut Test for either Spock or JUnit 5 see the https://micronaut-projects.github.io/micronaut-test/latest/guide/index.html[documentation] on the subject.
 
 
 You can then define a blocking stub bean in `src/test/java`. For example:

@@ -5,6 +5,7 @@ import io.grpc.health.v1.HealthCheckResponse;
 import io.grpc.protobuf.services.HealthStatusManager;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.annotation.Nullable;
+
 import jakarta.inject.Singleton;
 // end::imports[]
 

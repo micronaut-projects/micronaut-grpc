@@ -1,4 +1,4 @@
-Micronaut for gRPC does not create client beans automatically for you. Instead you must expose which client stubs your application needs using a `@Factory`.
+Micronaut for gRPC does not create client beans automatically for you. Instead, you must expose which client stubs your application needs using a `@Factory`.
 
 You can dependency inject a `io.grpc.ManagedChannel` into the factory. Each injected `io.grpc.ManagedChannel` will automatically be shutdown when the application shuts down.
 
@@ -30,7 +30,7 @@ include::grpc-server-runtime/src/test/groovy/io/micronaut/grpc/ManagedChannelBui
 
 === Auto Injected Types
 
-By default each channel will automatically be dependency injected with beans of the following types:
+By default, each channel will automatically be dependency injected with beans of the following types:
 
 * `io.grpc.ClientInterceptor` - Any client interceptors declared as beans
 * `io.grpc.NameResolver` - The configured name resolver
@@ -45,7 +45,7 @@ The value of the `@GrpcChannel` annotation can be used to specify the target ser
 class Clients {
     @Singleton
     GreeterGrpc.GreeterStub reactiveStub(
-        @GrpcChannel("http://${my.server}:${my.port}")
+        @GrpcChannel("https://${my.server}:${my.port}")
         ManagedChannel channel) {
         return GreeterGrpc.newStub(
                 channel
@@ -84,4 +84,4 @@ GreeterGrpc.GreeterStub reactiveStub(
 
 The ID `greeter` is used to reference the configuration for `grpc.channels.greeter`.
 
-Using service IDs in this way is the preferred way to setup gRPC clients, because it works nicely with Service Discovery (see the next section).
+Using service IDs in this way is the preferred way to set up gRPC clients, because it works nicely with Service Discovery (see the next section).

@@ -15,11 +15,12 @@
  */
 package io.micronaut.grpc.annotation;
 
-import jakarta.inject.Singleton;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
+import jakarta.inject.Singleton;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 

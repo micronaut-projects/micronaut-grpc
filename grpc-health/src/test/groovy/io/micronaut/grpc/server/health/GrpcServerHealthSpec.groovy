@@ -15,7 +15,6 @@ import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcEmbeddedServer
 import io.micronaut.grpc.server.GrpcServerChannel
-import io.micronaut.grpc.server.health.HealthStatusManagerContainer
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import spock.lang.Specification
@@ -99,7 +98,7 @@ class GrpcServerHealthSpec extends Specification {
         def port = SocketUtils.findAvailableTcpPort()
         def defaults = [
                 'grpc.server.port': port,
-                'spec.name': 'GrpcServerHealthSpec',
+                'spec.name'       : 'GrpcServerHealthSpec',
         ]
         ApplicationContext.run(GrpcEmbeddedServer, defaults + props)
     }
