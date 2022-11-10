@@ -163,10 +163,11 @@ extends java.lang.Object</pre>
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected io.grpc.ServerBuilder&lt;?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerBuilder.html#serverBuilder-io.micronaut.grpc.server.GrpcServerConfiguration-java.util.List-java.util.List-java.util.List-">serverBuilder</a></span>(<a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a>&nbsp;configuration,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../io/micronaut/grpc/server/GrpcServerBuilder.html#serverBuilder-io.micronaut.grpc.server.GrpcServerConfiguration-java.util.List-java.util.List-java.util.List-java.util.List-">serverBuilder</a></span>(<a href="../../../../io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a>&nbsp;configuration,
              java.util.List&lt;io.grpc.BindableService&gt;&nbsp;serviceList,
              java.util.List&lt;io.grpc.ServerInterceptor&gt;&nbsp;interceptors,
-             java.util.List&lt;io.grpc.ServerTransportFilter&gt;&nbsp;serverTransportFilters)</code>
+             java.util.List&lt;io.grpc.ServerTransportFilter&gt;&nbsp;serverTransportFilters,
+             java.util.List&lt;io.grpc.ServerServiceDefinition&gt;&nbsp;serverServiceDefinitions)</code>
 <div class="block">The server builder instance.</div>
 </td>
 </tr>
@@ -228,7 +229,7 @@ public&nbsp;GrpcServerBuilder(@Nullable
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="serverBuilder-io.micronaut.grpc.server.GrpcServerConfiguration-java.util.List-java.util.List-java.util.List-">
+<a name="serverBuilder-io.micronaut.grpc.server.GrpcServerConfiguration-java.util.List-java.util.List-java.util.List-java.util.List-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -242,7 +243,9 @@ protected&nbsp;io.grpc.ServerBuilder&lt;?&gt;&nbsp;serverBuilder(<a href="../../
                                                                    @Nullable
                                                                    java.util.List&lt;io.grpc.ServerInterceptor&gt;&nbsp;interceptors,
                                                                    @Nullable
-                                                                   java.util.List&lt;io.grpc.ServerTransportFilter&gt;&nbsp;serverTransportFilters)</pre>
+                                                                   java.util.List&lt;io.grpc.ServerTransportFilter&gt;&nbsp;serverTransportFilters,
+                                                                   @Nullable
+                                                                   java.util.List&lt;io.grpc.ServerServiceDefinition&gt;&nbsp;serverServiceDefinitions)</pre>
 <div class="block">The server builder instance.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
