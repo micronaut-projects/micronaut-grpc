@@ -172,8 +172,8 @@ public class ProtobufferCodec implements MediaTypeCodec {
     @Override
     public <T> void encode(T object, OutputStream outputStream) throws CodecException {
         try {
-            if (object instanceof Message) {
-                ((Message) object).writeTo(outputStream);
+            if (object instanceof Message message) {
+                message.writeTo(outputStream);
             }
         } catch (IOException e) {
             throw new CodecException("Error encoding object [" + object + "] to OutputStream:" + e.getMessage());
@@ -182,10 +182,10 @@ public class ProtobufferCodec implements MediaTypeCodec {
 
     @Override
     public <T> byte[] encode(T object) throws CodecException {
-        if (object instanceof Message) {
-            return ((Message) object).toByteArray();
-        } else if (object instanceof byte[]) {
-            return ((byte[]) object);
+        if (object instanceof Message message) {
+            return message.toByteArray();
+        } else if (object instanceof byte[] bytes) {
+            return bytes;
         }
         return new byte[0];
     }

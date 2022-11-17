@@ -66,8 +66,7 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
         final Optional<SocketAddress> socketAddress = env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class);
         if (socketAddress.isPresent()) {
             SocketAddress serverAddress = socketAddress.get();
-            if (serverAddress instanceof InetSocketAddress) {
-                InetSocketAddress isa = (InetSocketAddress) serverAddress;
+            if (serverAddress instanceof InetSocketAddress isa) {
                 if (isa.isUnresolved()) {
                     isa = new InetSocketAddress(isa.getHostString(), isa.getPort());
                 }

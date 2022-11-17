@@ -20,7 +20,6 @@ import java.net.SocketAddress;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import io.grpc.Attributes;
 import io.grpc.EquivalentAddressGroup;
@@ -119,7 +118,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
 
                 @Override
                 public void shutdown() {
-
+                    // no-op
                 }
             };
         }
@@ -150,7 +149,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
                 }
 
                 this.disposable = Flux.from(discoveryClient.getInstances(resolvedServiceId)).subscribe(
-                    (instances) -> {
+                    instances -> {
                         if (CollectionUtils.isNotEmpty(instances)) {
                             final List<EquivalentAddressGroup> servers = toAddresses(instances);
                             listener.onAddresses(
@@ -174,7 +173,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
 
                         }
                     },
-                    (error) -> listener.onError(Status.fromThrowable(error))
+                    error -> listener.onError(Status.fromThrowable(error))
                 );
             }
 
@@ -187,7 +186,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
             private List<EquivalentAddressGroup> toAddresses(List<ServiceInstance> instances) {
                 final List<SocketAddress> socketAddresses = instances.stream().map(serviceInstance ->
                     new InetSocketAddress(serviceInstance.getHost(), serviceInstance.getPort())
-                ).collect(Collectors.toList());
+                ).map(SocketAddress.class::cast).toList();
                 return Collections.singletonList(new EquivalentAddressGroup(socketAddresses));
             }
 
