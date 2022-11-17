@@ -15,6 +15,11 @@
  */
 package io.micronaut.grpc.server;
 
+import java.net.URI;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.convert.value.ConvertibleValues;
 import io.micronaut.core.util.CollectionUtils;
@@ -22,11 +27,6 @@ import io.micronaut.core.util.StringUtils;
 import io.micronaut.discovery.EmbeddedServerInstance;
 import io.micronaut.discovery.metadata.ServiceInstanceMetadataContributor;
 import io.micronaut.runtime.server.EmbeddedServer;
-
-import java.net.URI;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Implementation of the {@link EmbeddedServerInstance} interface for GRPC.
@@ -45,20 +45,20 @@ class GrpcServerInstance implements EmbeddedServerInstance {
     /**
      * Default constructor.
      *
-     * @param embeddedServer       The embedded server
-     * @param id                   The ID
-     * @param uri                  The URI
-     * @param metadata             The metadata
+     * @param embeddedServer The embedded server
+     * @param id The ID
+     * @param uri The URI
+     * @param metadata The metadata
      * @param metadataContributors The metadata contributors
-     * @param grpcConfiguration    The GRPC Configuration
+     * @param grpcConfiguration The GRPC Configuration
      */
     GrpcServerInstance(
-            EmbeddedServer embeddedServer,
-            String id,
-            URI uri,
-            @Nullable Map<String, String> metadata,
-            @Nullable List<ServiceInstanceMetadataContributor> metadataContributors,
-            GrpcServerConfiguration grpcConfiguration) {
+        EmbeddedServer embeddedServer,
+        String id,
+        URI uri,
+        @Nullable Map<String, String> metadata,
+        @Nullable List<ServiceInstanceMetadataContributor> metadataContributors,
+        GrpcServerConfiguration grpcConfiguration) {
         this.embeddedServer = embeddedServer;
         this.id = calculateInstanceId(id, grpcConfiguration);
         this.uri = uri;

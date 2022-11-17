@@ -23,6 +23,7 @@ import jakarta.inject.Singleton;
 
 @Singleton
 public class ManagedChannelBuilderListener implements BeanCreatedEventListener<ManagedChannelBuilder<?>> {
+
     @Override
     public ManagedChannelBuilder<?> onCreated(BeanCreatedEvent<ManagedChannelBuilder<?>> event) {
         final ManagedChannelBuilder<?> channelBuilder = event.getBean();

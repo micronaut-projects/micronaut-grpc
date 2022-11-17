@@ -31,9 +31,12 @@ import jakarta.inject.Singleton;
  */
 @Factory
 public class GrpcClientTracingInterceptorFactory {
+
     /**
      * The client interceptor.
+     *
      * @param configuration The configuration
+     *
      * @return The client interceptor
      */
     @Requires(beans = GrpcClientTracingInterceptorConfiguration.class)

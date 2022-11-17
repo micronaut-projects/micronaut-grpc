@@ -15,7 +15,12 @@
  */
 package io.micronaut.grpc
 
-import io.grpc.*
+
+import io.grpc.Channel
+import io.grpc.Metadata
+import io.grpc.ServerCall
+import io.grpc.ServerCallHandler
+import io.grpc.ServerInterceptor
 import io.grpc.examples.helloworld.GreeterGrpc
 import io.grpc.examples.helloworld.HelloReply
 import io.grpc.examples.helloworld.HelloRequest
@@ -57,6 +62,7 @@ class HelloWordGrpcSpec extends Specification {
     static class MyInterceptor implements ServerInterceptor {
 
         boolean intercepted = false
+
         @Override
         <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
             intercepted = true

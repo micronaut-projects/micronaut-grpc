@@ -20,20 +20,20 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import jakarta.inject.Inject
-import jakarta.inject.Singleton
 
 @MicronautTest
 class GreetingServiceTest {
 
     @Inject
-    lateinit var greetingClient : GreeterGrpcKt.GreeterCoroutineStub
+    lateinit var greetingClient: GreeterGrpcKt.GreeterCoroutineStub
 
     @Test
-    fun testGreetingService()  = runBlocking {
+    fun testGreetingService() = runBlocking {
         Assertions.assertEquals(
                 "Hello John",
                 greetingClient.sayHello(
@@ -46,7 +46,7 @@ class GreetingServiceTest {
 @Factory
 class Clients {
     @Singleton
-    fun greetingClient( @GrpcChannel(GrpcServerChannel.NAME) channel : ManagedChannel ) : GreeterGrpcKt.GreeterCoroutineStub {
+    fun greetingClient(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): GreeterGrpcKt.GreeterCoroutineStub {
         return GreeterGrpcKt.GreeterCoroutineStub(
                 channel
         )

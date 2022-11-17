@@ -15,10 +15,10 @@
  */
 package io.micronaut.grpc.annotation;
 
-import io.micronaut.context.annotation.AliasFor;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
+
+import io.micronaut.context.annotation.AliasFor;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -31,6 +31,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 public @interface GrpcChannel {
+
     /**
      * @return The URL or service ID of the remote service
      */

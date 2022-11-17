@@ -29,7 +29,7 @@ class ProgrammaticController {
             .setLng(-6.266155D)
             .build()
 
-    @Get(processes = ProtobufferCodec.PROTOBUFFER_ENCODED)
+    @Get(processes = [ProtobufferCodec.PROTOBUFFER_ENCODED, ProtobufferCodec.PROTOBUFFER_ENCODED2, "my/myAppType"])
     Example.GeoPoint city() {
         DUBLIN
     }

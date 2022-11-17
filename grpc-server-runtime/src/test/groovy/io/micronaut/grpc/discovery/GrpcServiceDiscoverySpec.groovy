@@ -32,17 +32,17 @@ import spock.util.concurrent.PollingConditions
 class GrpcServiceDiscoverySpec extends Specification {
 
     void "test GRPC named service discovery"() {
-        when:"A service is run"
+        when: "A service is run"
         def port = SocketUtils.findAvailableTcpPort()
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet',
-                'grpc.server.port': port
+                'micronaut.application.name': 'greet',
+                'grpc.server.port'          : port
         ])
 
-        and:'then a client is run that declares the service'
+        and: 'then a client is run that declares the service'
         ApplicationContext client = ApplicationContext.run([
-                (GrpcNameResolverProvider.ENABLED): true,
-                'grpc.channels.greet.plaintext':true,
+                (GrpcNameResolverProvider.ENABLED) : true,
+                'grpc.channels.greet.plaintext'    : true,
                 'micronaut.http.services.greet.url': server.URL.toString()
         ])
 
@@ -58,18 +58,18 @@ class GrpcServiceDiscoverySpec extends Specification {
     }
 
     void "test GRPC channel explicit URI"() {
-        when:"A service is run"
+        when: "A service is run"
         def port = SocketUtils.findAvailableTcpPort()
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet',
-                'grpc.server.port': port
+                'micronaut.application.name': 'greet',
+                'grpc.server.port'          : port
         ])
 
-        and:'then a client is run that declares the service'
+        and: 'then a client is run that declares the service'
         ApplicationContext client = ApplicationContext.run([
                 (GrpcNameResolverProvider.ENABLED): true,
-                'grpc.client.plaintext':true,
-                'my.port':server.getPort()
+                'grpc.client.plaintext'           : true,
+                'my.port'                         : server.getPort()
         ])
 
         GreeterGrpc.GreeterStub stub = client.getBean(GreeterGrpc.GreeterStub)
@@ -101,7 +101,6 @@ class GrpcServiceDiscoverySpec extends Specification {
         client.stop()
         server.stop()
     }
-
 
 
     @Factory

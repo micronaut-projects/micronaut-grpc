@@ -15,6 +15,13 @@
  */
 package io.micronaut.grpc.discovery;
 
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.URI;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import io.grpc.Attributes;
 import io.grpc.EquivalentAddressGroup;
 import io.grpc.ManagedChannelBuilder;
@@ -38,18 +45,12 @@ import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.ServiceInstanceList;
 import io.micronaut.discovery.exceptions.NoAvailableServiceException;
 import io.micronaut.grpc.channels.GrpcDefaultManagedChannelConfiguration;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Singleton;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
-
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static io.micronaut.grpc.discovery.GrpcNameResolverProvider.ENABLED;
 
@@ -65,22 +66,24 @@ import static io.micronaut.grpc.discovery.GrpcNameResolverProvider.ENABLED;
 @Requires(beans = DiscoveryClient.class)
 @Requires(property = ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.FALSE)
 public class GrpcNameResolverProvider extends NameResolverProvider implements LifeCycle<GrpcNameResolverProvider> {
+
     public static final String ENABLED = GrpcDefaultManagedChannelConfiguration.PREFIX + ".discovery.enabled";
     public static final int PRIORITY = 7;
 
     private static final String SCHEME = "svc";
     private final DiscoveryClient discoveryClient;
     private final List<ServiceInstanceList> serviceInstanceLists;
-    private boolean operational = false;
+    private boolean operational;
 
     /**
      * Default constructor.
+     *
      * @param discoveryClient The discovery client
      * @param serviceInstanceLists The server instance list
      */
     protected GrpcNameResolverProvider(
-            DiscoveryClient discoveryClient,
-            List<ServiceInstanceList> serviceInstanceLists) {
+        DiscoveryClient discoveryClient,
+        List<ServiceInstanceList> serviceInstanceLists) {
         this.discoveryClient = discoveryClient;
         this.serviceInstanceLists = serviceInstanceLists;
     }
@@ -105,7 +108,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
                 public void start(Listener listener) {
                     final String[] hostAndPort = resolvedServiceId.split(":");
                     final List<EquivalentAddressGroup> equivalentAddressGroups =
-                            Collections.singletonList(new EquivalentAddressGroup(new InetSocketAddress(hostAndPort[0], Integer.parseInt(hostAndPort[1]))));
+                        Collections.singletonList(new EquivalentAddressGroup(new InetSocketAddress(hostAndPort[0], Integer.parseInt(hostAndPort[1]))));
                     listener.onAddresses(equivalentAddressGroups, Attributes.EMPTY);
                 }
 
@@ -139,39 +142,39 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
                 for (ServiceInstanceList serviceInstanceList : serviceInstanceLists) {
                     if (serviceInstanceList.getID().equals(resolvedServiceId)) {
                         listener.onAddresses(
-                                toAddresses(serviceInstanceList.getInstances()),
-                                Attributes.EMPTY
+                            toAddresses(serviceInstanceList.getInstances()),
+                            Attributes.EMPTY
                         );
                         return;
                     }
                 }
 
                 this.disposable = Flux.from(discoveryClient.getInstances(resolvedServiceId)).subscribe(
-                        (instances) -> {
-                            if (CollectionUtils.isNotEmpty(instances)) {
-                                final List<EquivalentAddressGroup> servers = toAddresses(instances);
+                    (instances) -> {
+                        if (CollectionUtils.isNotEmpty(instances)) {
+                            final List<EquivalentAddressGroup> servers = toAddresses(instances);
+                            listener.onAddresses(
+                                servers, Attributes.EMPTY
+                            );
+                        } else {
+                            if (targetUri.getHost() != null && targetUri.getPort() > -1) {
                                 listener.onAddresses(
-                                        servers, Attributes.EMPTY
+                                    Collections.singletonList(new EquivalentAddressGroup(
+                                        new InetSocketAddress(
+                                            targetUri.getHost(),
+                                            targetUri.getPort()
+                                        )
+                                    )), Attributes.EMPTY
                                 );
                             } else {
-                                if (targetUri.getHost() != null && targetUri.getPort() > -1) {
-                                    listener.onAddresses(
-                                            Collections.singletonList(new EquivalentAddressGroup(
-                                                    new InetSocketAddress(
-                                                            targetUri.getHost(),
-                                                            targetUri.getPort()
-                                                    )
-                                            )), Attributes.EMPTY
-                                    );
-                                } else {
-                                    listener.onError(Status.UNAVAILABLE.withCause(
-                                            new NoAvailableServiceException(serviceId)
-                                    ));
-                                }
-
+                                listener.onError(Status.UNAVAILABLE.withCause(
+                                    new NoAvailableServiceException(serviceId)
+                                ));
                             }
-                        },
-                        (error) -> listener.onError(Status.fromThrowable(error))
+
+                        }
+                    },
+                    (error) -> listener.onError(Status.fromThrowable(error))
                 );
             }
 
@@ -183,7 +186,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
 
             private List<EquivalentAddressGroup> toAddresses(List<ServiceInstance> instances) {
                 final List<SocketAddress> socketAddresses = instances.stream().map(serviceInstance ->
-                        new InetSocketAddress(serviceInstance.getHost(), serviceInstance.getPort())
+                    new InetSocketAddress(serviceInstance.getHost(), serviceInstance.getPort())
                 ).collect(Collectors.toList());
                 return Collections.singletonList(new EquivalentAddressGroup(socketAddresses));
             }
@@ -231,6 +234,7 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
     @Singleton
     @Internal
     static final class ManagedChannelBuilderListener implements BeanCreatedEventListener<ManagedChannelBuilder<?>> {
+
         private BeanProvider<GrpcNameResolverProvider> beanProvider;
 
         ManagedChannelBuilderListener(@Nullable BeanProvider<GrpcNameResolverProvider> beanProvider) {

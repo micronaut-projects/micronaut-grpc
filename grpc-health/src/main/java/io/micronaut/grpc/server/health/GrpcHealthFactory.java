@@ -19,6 +19,7 @@ import io.grpc.protobuf.services.HealthStatusManager;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.util.StringUtils;
+
 import jakarta.inject.Singleton;
 
 /**
@@ -26,6 +27,7 @@ import jakarta.inject.Singleton;
  */
 @Factory
 public class GrpcHealthFactory {
+
     public static final String HEALTH_ENABLED = "grpc.server.health.enabled";
 
     /**

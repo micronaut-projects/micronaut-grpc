@@ -20,10 +20,9 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
-import spock.lang.Specification
-
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
+import spock.lang.Specification
 
 @MicronautTest
 class GreetingEndpointSpec extends Specification {
@@ -40,7 +39,7 @@ class GreetingEndpointSpec extends Specification {
 
         expect:
         blockingStub.sayHello(
-               request
+                request
         ).message == 'Hello Fred'
     }
 

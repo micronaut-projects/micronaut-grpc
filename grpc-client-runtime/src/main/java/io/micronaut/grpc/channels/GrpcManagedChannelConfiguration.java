@@ -15,11 +15,6 @@
  */
 package io.micronaut.grpc.channels;
 
-import io.grpc.netty.NettyChannelBuilder;
-import io.micronaut.context.annotation.ConfigurationBuilder;
-import io.micronaut.context.env.Environment;
-import io.micronaut.core.naming.Named;
-
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;
@@ -27,14 +22,19 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
+import io.grpc.netty.NettyChannelBuilder;
+import io.micronaut.context.annotation.ConfigurationBuilder;
+import io.micronaut.context.env.Environment;
+import io.micronaut.core.naming.Named;
+
 /**
  * A managed channel configuration.
  *
  * @author graemerocher
  * @since 1.0.0
- *
  */
 public abstract class GrpcManagedChannelConfiguration implements Named {
+
     public static final String PREFIX = "grpc.channels";
     public static final String SETTING_TARGET = ".target";
     public static final String SETTING_URL = ".address";
@@ -51,11 +51,12 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
 
     /**
      * Constructors a new managed channel configuration.
+     *
      * @param name The name
      * @param env The environment
      * @param executorService The executor service to use
      */
-    public GrpcManagedChannelConfiguration(String name, Environment env, ExecutorService executorService) {
+    protected GrpcManagedChannelConfiguration(String name, Environment env, ExecutorService executorService) {
         this.name = name;
         this.connectOnStartup = env.getProperty(PREFIX + '.' + name + CONNECT_ON_STARTUP, Boolean.class).isPresent();
         this.connectionTimeout = env.getProperty(PREFIX + '.' + name + CONNECTION_TIMEOUT, Long.class)
@@ -78,7 +79,7 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
             final Optional<String> target = env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class);
             if (target.isPresent()) {
                 this.channelBuilder = NettyChannelBuilder.forTarget(
-                        target.get()
+                    target.get()
                 );
 
             } else {
@@ -106,6 +107,7 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
 
     /**
      * @return true if connect on startup is set for channel
+     *
      * @since 3.4.0
      */
     public boolean isConnectOnStartup() {
@@ -114,6 +116,7 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
 
     /**
      * @return connection timeout for the channel
+     *
      * @since 3.4.0
      */
     public Duration getConnectionTimeout() {

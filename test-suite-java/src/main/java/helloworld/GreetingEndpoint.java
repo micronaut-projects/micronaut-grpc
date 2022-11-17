@@ -17,6 +17,7 @@ package helloworld;
 
 // tag::imports[]
 import io.grpc.stub.StreamObserver;
+
 import jakarta.inject.Singleton;
 // end::imports[]
 

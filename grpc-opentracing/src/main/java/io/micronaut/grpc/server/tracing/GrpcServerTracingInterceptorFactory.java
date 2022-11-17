@@ -34,7 +34,9 @@ public class GrpcServerTracingInterceptorFactory {
 
     /**
      * The server interceptor.
+     *
      * @param configuration The configuration
+     *
      * @return The server interceptor
      */
     @Requires(beans = GrpcServerTracingInterceptorConfiguration.class)

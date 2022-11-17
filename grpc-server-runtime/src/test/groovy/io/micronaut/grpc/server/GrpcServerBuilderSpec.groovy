@@ -26,7 +26,7 @@ class GrpcServerBuilderSpec extends Specification {
         ]
 
         when:
-        def serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null)
+        def serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null, null)
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)
@@ -65,7 +65,7 @@ class GrpcServerBuilderSpec extends Specification {
         ]
 
         when:
-        def serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null)
+        def serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null, null)
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)
@@ -104,7 +104,7 @@ class GrpcServerBuilderSpec extends Specification {
         ]
 
         when:
-        def serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null)
+        def serverBuilder = grpcServerBuilder.serverBuilder(mockGrpcConfiguration, null, interceptors, null, null)
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)

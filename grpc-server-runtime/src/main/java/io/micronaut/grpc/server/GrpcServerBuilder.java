@@ -15,9 +15,12 @@
  */
 package io.micronaut.grpc.server;
 
+import java.util.List;
+
 import io.grpc.BindableService;
 import io.grpc.ServerBuilder;
 import io.grpc.ServerInterceptor;
+import io.grpc.ServerServiceDefinition;
 import io.grpc.ServerTransportFilter;
 import io.grpc.protobuf.services.HealthStatusManager;
 import io.micronaut.context.annotation.Bean;
@@ -26,12 +29,12 @@ import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.order.OrderUtil;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.grpc.server.health.HealthStatusManagerContainer;
-import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
 /**
  * Constructs the {@link ServerBuilder} instance. Here to allow extensions via a {@link io.micronaut.context.event.BeanCreatedEventListener} for {@link ServerBuilder}.
@@ -63,6 +66,8 @@ public class GrpcServerBuilder {
      * @param serviceList The bindable services
      * @param interceptors The server interceptors
      * @param serverTransportFilters The server transport filters
+     * @param serverServiceDefinitions The server service definitions
+     *
      * @return The builder
      */
     @Bean
@@ -70,7 +75,8 @@ public class GrpcServerBuilder {
     protected ServerBuilder<?> serverBuilder(GrpcServerConfiguration configuration,
                                              @Nullable List<BindableService> serviceList,
                                              @Nullable List<ServerInterceptor> interceptors,
-                                             @Nullable List<ServerTransportFilter> serverTransportFilters) {
+                                             @Nullable List<ServerTransportFilter> serverTransportFilters,
+                                             @Nullable List<ServerServiceDefinition> serverServiceDefinitions) {
         final ServerBuilder<?> serverBuilder = configuration.getServerBuilder();
         if (healthStatusManagerContainer != null) {
             HealthStatusManager healthStatusManager = healthStatusManagerContainer.getHealthStatusManager();
@@ -96,6 +102,9 @@ public class GrpcServerBuilder {
             for (ServerTransportFilter i : serverTransportFilters) {
                 serverBuilder.addTransportFilter(i);
             }
+        }
+        if (CollectionUtils.isNotEmpty(serverServiceDefinitions)) {
+            serverBuilder.addServices(serverServiceDefinitions);
         }
 
         return serverBuilder;
