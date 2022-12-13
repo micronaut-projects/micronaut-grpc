@@ -1,5 +1,5 @@
 [versions]
-managed-grpc = '1.50.2'
+managed-grpc = '1.51.1'
 managed-protobuf = '3.21.9'
 managed-protobuf-gradle = '0.9.1'
 
