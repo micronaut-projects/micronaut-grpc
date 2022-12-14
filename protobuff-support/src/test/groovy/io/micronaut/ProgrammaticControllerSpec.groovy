@@ -18,11 +18,11 @@ package io.micronaut
 import com.example.wire.Example
 import io.micronaut.protobuf.codec.ProtobufferCodec
 
-class SimpleHttpGetSpec extends BaseSpec {
+class ProgrammaticControllerSpec extends BaseSpec {
 
-    String url = embeddedServer.getURL().toString() + '/city'
+    String url = embeddedServer.getURL().toString() + '/town'
 
-    void "sample city should be dublin/using sample controller"() {
+    void "sample city should be dublin/using programmatic controller controller"() {
         when: 'The message is requested from the sever=[#url]'
         def response = getMessage(url, Example.GeoPoint.class, ProtobufferCodec.PROTOBUFFER_ENCODED)
         and: 'The message is parser'
@@ -31,7 +31,7 @@ class SimpleHttpGetSpec extends BaseSpec {
         SampleController.DUBLIN == city
     }
 
-    void "test second protobuff content type header"() {
+    void "sample city should be dublin/using programmatic controller controller with second codec header"() {
         when: 'The message is requested from the sever=[#url]'
         def response = getMessage(url, Example.GeoPoint.class, ProtobufferCodec.PROTOBUFFER_ENCODED2)
         and: 'The message is parser'
@@ -40,7 +40,7 @@ class SimpleHttpGetSpec extends BaseSpec {
         SampleController.DUBLIN == city
     }
 
-    void "test cutom protobuff content type header"() {
+    void "sample city should be dublin/using programmatic controller controller with custom codec header"() {
         when: 'The message is requested from the sever=[#url]'
         def response = getMessage(url, Example.GeoPoint.class, SampleController.MY_PROTO_ENCODED)
         and: 'The message is parser'

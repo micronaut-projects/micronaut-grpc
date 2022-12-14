@@ -23,8 +23,8 @@ repositories {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 mainClassName = "helloworld.Application"
@@ -39,28 +39,32 @@ micronaut {
 }
 
 dependencies {
-    kapt("io.micronaut:micronaut-validation")
+    kapt "io.micronaut:micronaut-validation"
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-    implementation("io.micronaut:micronaut-runtime")
-    implementation(project(':grpc-server-runtime'))
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
+    implementation "io.micronaut:micronaut-runtime"
+    implementation projects.grpcServerRuntime
+    implementation "org.yaml:snakeyaml"
 
-    implementation "io.grpc:grpc-services"
 
     // tag::dependencies[]
-    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
-    compileOnly("io.grpc:grpc-stub:$grpcVersion")
+    implementation "io.grpc:grpc-kotlin-stub:$grpcKotlinVersion"
+    implementation "io.grpc:grpc-services:$grpcVersion"
+    compileOnly "io.grpc:grpc-stub:$grpcVersion"
+    compileOnly "javax.annotation:javax.annotation-api"
     // end::dependencies[]
 
-    runtimeOnly("ch.qos.logback:logback-classic")
-    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+    runtimeOnly "ch.qos.logback:logback-classic"
+    runtimeOnly "com.fasterxml.jackson.module:jackson-module-kotlin"
+
+    testCompileOnly "javax.annotation:javax.annotation-api"
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
         javaParameters = true
     }
 }

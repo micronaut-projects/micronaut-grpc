@@ -17,19 +17,21 @@ package io.micronaut.grpc.server.health;
 
 import java.util.Map;
 
-import org.reactivestreams.Publisher;
-
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.async.publisher.AsyncSingleResultPublisher;
-import static io.micronaut.core.util.CollectionUtils.mapOf;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.health.HealthStatus;
 import io.micronaut.management.endpoint.health.HealthEndpoint;
 import io.micronaut.management.health.indicator.HealthIndicator;
 import io.micronaut.management.health.indicator.HealthResult;
 import io.micronaut.runtime.server.EmbeddedServer;
+
+import org.reactivestreams.Publisher;
+
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
+
+import static io.micronaut.core.util.CollectionUtils.mapOf;
 
 /**
  * A {@link HealthIndicator} for Grpc server.
@@ -42,6 +44,7 @@ import jakarta.inject.Singleton;
 @Requires(beans = HealthEndpoint.class)
 @Requires(beans = EmbeddedServer.class)
 public class GrpcServerHealthIndicator implements HealthIndicator {
+
     private static final String ID = "grpc-server";
 
     private final EmbeddedServer server;
@@ -69,25 +72,25 @@ public class GrpcServerHealthIndicator implements HealthIndicator {
         final HealthStatus healthStatus = server.isRunning() ? HealthStatus.UP : HealthStatus.DOWN;
         final String serverHost = server.getHost();
         try {
-            
-            int serverPort = server.getPort();        
+
+            int serverPort = server.getPort();
             final Map<?, ?> details = mapOf("host", serverHost, "port", serverPort);
-    
+
             return HealthResult
-                    .builder(ID, healthStatus)
-                    .details(details)
-                    .build();
+                .builder(ID, healthStatus)
+                .details(details)
+                .build();
         } catch (IllegalStateException e) {
             /**
-            * BUGFIX: it avoids to call the server.getPort() method when the gRPC-Server is DOWN because
-            * it throws an unexpected exception that breaks the /health endpoint
-            */
-                    
-            final Map<?, ?> details = mapOf("host", serverHost, "port", "N/A");   
+             * BUGFIX: it avoids to call the server.getPort() method when the gRPC-Server is DOWN because
+             * it throws an unexpected exception that breaks the /health endpoint
+             */
+
+            final Map<?, ?> details = mapOf("host", serverHost, "port", "N/A");
             return HealthResult
-                    .builder(ID, healthStatus)
-                    .details(details)
-                    .build();
+                .builder(ID, healthStatus)
+                .details(details)
+                .build();
         }
     }
 }

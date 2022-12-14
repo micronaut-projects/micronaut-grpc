@@ -15,22 +15,22 @@
  */
 package io.micronaut
 
-import com.example.wire.Example
 import groovy.transform.CompileStatic
-import io.micronaut.http.annotation.Get
-import io.micronaut.protobuf.codec.ProtobufferCodec
+import io.micronaut.context.ExecutionHandleLocator
+import io.micronaut.web.router.DefaultRouteBuilder
+
+import jakarta.inject.Inject
 import jakarta.inject.Singleton
 
 @CompileStatic
 @Singleton
-class ProgramaticController {
-    public static Example.GeoPoint DUBLIN = Example.GeoPoint.newBuilder()
-            .setLat(53.350140D)
-            .setLng(-6.266155D)
-            .build()
+class ProgrammaticControllerCreator extends DefaultRouteBuilder {
+    ProgrammaticControllerCreator(ExecutionHandleLocator executionHandleLocator, UriNamingStrategy uriNamingStrategy) {
+        super(executionHandleLocator, uriNamingStrategy)
+    }
 
-    @Get(processes = ProtobufferCodec.PROTOBUFFER_ENCODED)
-    Example.GeoPoint city() {
-        DUBLIN
+    @Inject
+    void issuesRoutes(ProgrammaticController controller) {
+        GET("/town", controller, "city")
     }
 }

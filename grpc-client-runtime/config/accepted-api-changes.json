@@ -1,6 +1,101 @@
 [
   {
     "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.inject.BeanConfiguration",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
     "member": "Class io.micronaut.grpc.client.tracing.$BeanConfiguration",
     "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
   },
@@ -158,5 +253,100 @@
     "type": "io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorFactory",
     "member": "Constructor io.micronaut.grpc.client.tracing.GrpcClientTracingInterceptorFactory()",
     "reason": "Not really a breaking change, just moving to the new module, where the server module has dependency on"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$BeanConfiguration",
+    "member": "Implemented interface io.micronaut.inject.BeanConfiguration",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorConfiguration$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$ClientTracingInterceptor0$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationSource",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanContextConditional",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.core.annotation.AnnotationMetadataProvider",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanType",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
+    "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
+    "reason": "Micronaut 4.0.0 has different bean definitions"
   }
 ]

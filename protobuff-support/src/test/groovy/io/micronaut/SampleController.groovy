@@ -17,6 +17,7 @@ package io.micronaut
 
 import com.example.wire.Example
 import groovy.transform.CompileStatic
+import io.micronaut.http.MediaType
 import io.micronaut.http.annotation.Body
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
@@ -26,17 +27,21 @@ import io.micronaut.protobuf.codec.ProtobufferCodec
 @Controller
 @CompileStatic
 class SampleController {
+
+    public static final String MY_PROTO_ENCODED = "my/myAppType"
+    public static final MediaType MY_PROTO_ENCODED_TYPE = new MediaType(MY_PROTO_ENCODED)
+
     public static Example.GeoPoint DUBLIN = Example.GeoPoint.newBuilder()
             .setLat(53.350140D)
             .setLng(-6.266155D)
             .build()
 
-    @Get(value = "/city", processes = ProtobufferCodec.PROTOBUFFER_ENCODED)
+    @Get(value = "/city", processes = [ProtobufferCodec.PROTOBUFFER_ENCODED, ProtobufferCodec.PROTOBUFFER_ENCODED2, "my/myAppType"])
     Example.GeoPoint city() {
         DUBLIN
     }
 
-    @Post(value = "/nearby", processes = ProtobufferCodec.PROTOBUFFER_ENCODED)
+    @Post(value = "/nearby", processes = [ProtobufferCodec.PROTOBUFFER_ENCODED, ProtobufferCodec.PROTOBUFFER_ENCODED2, "my/myAppType"])
     Example.GeoPoint suggestVisitNearBy(@Body Example.GeoPoint point) {
         DUBLIN
     }

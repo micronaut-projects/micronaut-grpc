@@ -21,6 +21,8 @@ dependencies {
     implementation libs.grpc.netty
     implementation mn.micronaut.buffer.netty
 
+    testCompileOnly mn.javax.annotation.api
+
     testImplementation libs.managed.grpc.services
     testImplementation mn.micronaut.discovery
     testImplementation mn.micronaut.reactor.http.client

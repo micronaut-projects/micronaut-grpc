@@ -19,6 +19,7 @@ package helloworld
 import groovy.transform.CompileStatic
 import io.grpc.stub.StreamObserver
 import jakarta.inject.Singleton
+
 // end::imports[]
 
 
