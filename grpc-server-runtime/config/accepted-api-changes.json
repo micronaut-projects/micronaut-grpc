@@ -738,5 +738,40 @@
     "type": "io.micronaut.grpc.server.tracing.$GrpcServerTracingInterceptorFactory$ServerTracingInterceptor0$Definition$Reference",
     "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
     "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.server.GrpcEmbeddedServer",
+    "member": "Implemented interface io.micronaut.runtime.server.EmbeddedServer",
+    "reason": "Micronaut 4.0.0 has core API changes"
+  },
+  {
+    "type": "io.micronaut.grpc.server.GrpcEmbeddedServer",
+    "member": "Implemented interface java.io.Closeable",
+    "reason": "Micronaut 4.0.0 has core API changes"
+  },
+  {
+    "type": "io.micronaut.grpc.server.GrpcEmbeddedServer",
+    "member": "Implemented interface io.micronaut.context.ApplicationContextLifeCycle",
+    "reason": "Micronaut 4.0.0 has core API changes"
+  },
+  {
+    "type": "io.micronaut.grpc.server.GrpcEmbeddedServer",
+    "member": "Implemented interface io.micronaut.context.ApplicationContextProvider",
+    "reason": "Micronaut 4.0.0 has core API changes"
+  },
+  {
+    "type": "io.micronaut.grpc.server.GrpcEmbeddedServer",
+    "member": "Implemented interface io.micronaut.context.LifeCycle",
+    "reason": "Micronaut 4.0.0 has core API changes"
+  },
+  {
+    "type": "io.micronaut.grpc.server.GrpcEmbeddedServer",
+    "member": "Implemented interface java.lang.AutoCloseable",
+    "reason": "Micronaut 4.0.0 has core API changes"
+  },
+  {
+    "type": "io.micronaut.grpc.server.GrpcEmbeddedServer",
+    "member": "Implemented interface io.micronaut.runtime.EmbeddedApplication",
+    "reason": "Micronaut 4.0.0 has core API changes"
   }
 ]

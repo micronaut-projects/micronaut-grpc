@@ -348,5 +348,10 @@
     "type": "io.micronaut.grpc.client.tracing.$GrpcClientTracingInterceptorFactory$Definition$Reference",
     "member": "Implemented interface io.micronaut.inject.BeanDefinitionReference",
     "reason": "Micronaut 4.0.0 has different bean definitions"
+  },
+  {
+    "type": "io.micronaut.grpc.channels.GrpcManagedChannelConfiguration",
+    "member": "Constructor io.micronaut.grpc.channels.GrpcManagedChannelConfiguration(java.lang.String,io.micronaut.context.env.Environment,java.util.concurrent.ExecutorService)",
+    "reason": "Narrowed access to protected for Micronaut 4"
   }
 ]

@@ -9,27 +9,25 @@ dependencies {
     api projects.grpcAnnotation
     api projects.grpcHealth
     api projects.grpcOpentracing
-    api mn.micronaut.runtime
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
     compileOnly libs.managed.grpc.services
-    compileOnly mn.micronaut.discovery
+    compileOnly mn.micronaut.discovery.core
     compileOnly mn.micronaut.management
-    compileOnly mn.graal
+    compileOnly libs.graal.svm
 
     implementation libs.grpc.netty
     implementation mn.micronaut.buffer.netty
 
-    testCompileOnly mn.javax.annotation.api
+    testCompileOnly libs.javax.annotation.api
 
     testImplementation libs.managed.grpc.services
-    testImplementation mn.micronaut.discovery
-    testImplementation mn.micronaut.reactor.http.client
+    testImplementation mn.micronaut.discovery.core
+    testImplementation mnReactor.micronaut.reactor.http.client
     testImplementation mn.micronaut.management
     testImplementation projects.grpcClientRuntime
 
-    testRuntimeOnly libs.netty.tcnative
     testRuntimeOnly libs.netty.tcnative.boringssl.static
 }
 

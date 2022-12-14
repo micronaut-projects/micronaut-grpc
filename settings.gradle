@@ -6,7 +6,7 @@ pluginManagement {
 }
 
 plugins {
-    id 'io.micronaut.build.shared.settings' version '6.0.1'
+    id 'io.micronaut.build.shared.settings' version '6.1.1'
 }
 
 rootProject.name = 'grpc-parent'
@@ -27,18 +27,9 @@ include 'grpc-opentracing'
 
 enableFeaturePreview 'TYPESAFE_PROJECT_ACCESSORS'
 
-dependencyResolutionManagement {
-    repositories {
-        mavenCentral()
-        maven {
-            url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-            mavenContent {
-                snapshotsOnly()
-            }
-        }
-    }
-}
-
 micronautBuild {
+    addSnapshotRepository()
     importMicronautCatalog()
+    importMicronautCatalog("micronaut-reactor")
+    importMicronautCatalog("micronaut-tracing")
 }

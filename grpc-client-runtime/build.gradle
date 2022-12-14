@@ -8,21 +8,19 @@ dependencies {
     api platform(libs.boms.grpc)
     api projects.grpcAnnotation
     api projects.grpcOpentracing
-    api mn.micronaut.runtime
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
-    compileOnly mn.micronaut.discovery
+    compileOnly mn.micronaut.discovery.core
 
     implementation libs.grpc.netty
     implementation mn.reactor
     implementation mn.micronaut.buffer.netty
 
-    testCompileOnly mn.javax.annotation.api
+    testCompileOnly libs.javax.annotation.api
 
-    testCompileOnly("javax.annotation:javax.annotation-api")
     testImplementation projects.grpcServerRuntime
-    testImplementation mn.micronaut.discovery
+    testImplementation mn.micronaut.discovery.core
     testImplementation mn.micronaut.jackson.databind
     testImplementation libs.opentracing.mock
 
