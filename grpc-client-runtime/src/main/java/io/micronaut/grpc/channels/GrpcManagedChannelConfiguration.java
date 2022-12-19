@@ -15,17 +15,16 @@
  */
 package io.micronaut.grpc.channels;
 
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.URI;
-import java.time.Duration;
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-
 import io.grpc.netty.NettyChannelBuilder;
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.env.Environment;
 import io.micronaut.core.naming.Named;
+
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.URI;
+import java.time.Duration;
+import java.util.concurrent.ExecutorService;
 
 /**
  * A managed channel configuration.
@@ -76,8 +75,7 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
                     candidate[0] = NettyChannelBuilder.forAddress(serverAddress);
                 }
             },
-            () -> {
-                env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class).ifPresentOrElse(
+            () -> env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class).ifPresentOrElse(
                     s -> candidate[0] = NettyChannelBuilder.forTarget(s),
                     () -> {
                         final URI uri = name.contains("//") ? URI.create(name) : null;
@@ -90,8 +88,7 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
                             candidate[0] = NettyChannelBuilder.forTarget(name);
                         }
                     }
-                );
-            }
+                )
         );
         this.channelBuilder = candidate[0];
         this.getChannelBuilder().executor(executorService);
