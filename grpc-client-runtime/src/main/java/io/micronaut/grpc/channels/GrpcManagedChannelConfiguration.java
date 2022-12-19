@@ -63,36 +63,37 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
             .filter(t -> t > 0)
             .map(Duration::ofSeconds)
             .orElse(DEFAULT_CONNECTION_TIMEOUT);
-        final Optional<SocketAddress> socketAddress = env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class);
-        if (socketAddress.isPresent()) {
-            SocketAddress serverAddress = socketAddress.get();
-            if (serverAddress instanceof InetSocketAddress isa) {
-                if (isa.isUnresolved()) {
-                    isa = new InetSocketAddress(isa.getHostString(), isa.getPort());
-                }
-                this.channelBuilder = NettyChannelBuilder.forAddress(isa.getHostName(), isa.getPort());
-            } else {
-                this.channelBuilder = NettyChannelBuilder.forAddress(serverAddress);
-            }
-        } else {
-            final Optional<String> target = env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class);
-            if (target.isPresent()) {
-                this.channelBuilder = NettyChannelBuilder.forTarget(
-                    target.get()
-                );
 
-            } else {
-                final URI uri = name.contains("//") ? URI.create(name) : null;
-                if (uri != null && uri.getHost() != null && uri.getPort() > -1) {
-                    this.channelBuilder = NettyChannelBuilder.forAddress(uri.getHost(), uri.getPort());
-                    if ("http".equalsIgnoreCase(uri.getScheme())) {
-                        this.channelBuilder.usePlaintext();
+        final NettyChannelBuilder[] candidate = new NettyChannelBuilder[1];
+        env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class).ifPresentOrElse(
+            serverAddress -> {
+                if (serverAddress instanceof InetSocketAddress isa) {
+                    if (isa.isUnresolved()) {
+                        isa = new InetSocketAddress(isa.getHostString(), isa.getPort());
                     }
+                    candidate[0] = NettyChannelBuilder.forAddress(isa.getHostName(), isa.getPort());
                 } else {
-                    this.channelBuilder = NettyChannelBuilder.forTarget(name);
+                    candidate[0] = NettyChannelBuilder.forAddress(serverAddress);
                 }
+            },
+            () -> {
+                env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class).ifPresentOrElse(
+                    s -> candidate[0] = NettyChannelBuilder.forTarget(s),
+                    () -> {
+                        final URI uri = name.contains("//") ? URI.create(name) : null;
+                        if (uri != null && uri.getHost() != null && uri.getPort() > -1) {
+                            candidate[0] = NettyChannelBuilder.forAddress(uri.getHost(), uri.getPort());
+                            if ("http".equalsIgnoreCase(uri.getScheme())) {
+                                candidate[0].usePlaintext();
+                            }
+                        } else {
+                            candidate[0] = NettyChannelBuilder.forTarget(name);
+                        }
+                    }
+                );
             }
-        }
+        );
+        this.channelBuilder = candidate[0];
         this.getChannelBuilder().executor(executorService);
     }
 
