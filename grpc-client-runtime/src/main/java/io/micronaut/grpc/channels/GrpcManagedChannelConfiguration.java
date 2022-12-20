@@ -51,8 +51,8 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
     /**
      * Constructors a new managed channel configuration.
      *
-     * @param name The name
-     * @param env The environment
+     * @param name            The name
+     * @param env             The environment
      * @param executorService The executor service to use
      */
     protected GrpcManagedChannelConfiguration(String name, Environment env, ExecutorService executorService) {
@@ -63,35 +63,35 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
             .map(Duration::ofSeconds)
             .orElse(DEFAULT_CONNECTION_TIMEOUT);
 
-        final NettyChannelBuilder[] candidate = new NettyChannelBuilder[1];
-        env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class).ifPresentOrElse(
-            serverAddress -> {
-                if (serverAddress instanceof InetSocketAddress isa) {
-                    if (isa.isUnresolved()) {
-                        isa = new InetSocketAddress(isa.getHostString(), isa.getPort());
-                    }
-                    candidate[0] = NettyChannelBuilder.forAddress(isa.getHostName(), isa.getPort());
-                } else {
-                    candidate[0] = NettyChannelBuilder.forAddress(serverAddress);
-                }
-            },
-            () -> env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class).ifPresentOrElse(
-                    s -> candidate[0] = NettyChannelBuilder.forTarget(s),
-                    () -> {
-                        final URI uri = name.contains("//") ? URI.create(name) : null;
-                        if (uri != null && uri.getHost() != null && uri.getPort() > -1) {
-                            candidate[0] = NettyChannelBuilder.forAddress(uri.getHost(), uri.getPort());
-                            if ("http".equalsIgnoreCase(uri.getScheme())) {
-                                candidate[0].usePlaintext();
-                            }
-                        } else {
-                            candidate[0] = NettyChannelBuilder.forTarget(name);
+        this.channelBuilder = env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class)
+            .map(this::getChannelBuilder)
+            .orElseGet(() -> env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class)
+                .map(NettyChannelBuilder::forTarget)
+                .orElseGet(() -> {
+                    final URI uri = name.contains("//") ? URI.create(name) : null;
+                    if (uri != null && uri.getHost() != null && uri.getPort() > -1) {
+                        NettyChannelBuilder nettyChannelBuilder = NettyChannelBuilder.forAddress(uri.getHost(), uri.getPort());
+                        if ("http".equalsIgnoreCase(uri.getScheme())) {
+                            nettyChannelBuilder.usePlaintext();
                         }
+                        return nettyChannelBuilder;
+                    } else {
+                        return NettyChannelBuilder.forTarget(name);
                     }
-                )
-        );
-        this.channelBuilder = candidate[0];
+                })
+            );
         this.getChannelBuilder().executor(executorService);
+    }
+
+    private NettyChannelBuilder getChannelBuilder(SocketAddress serverAddress) {
+        if (serverAddress instanceof InetSocketAddress isa) {
+            if (isa.isUnresolved()) {
+                isa = new InetSocketAddress(isa.getHostString(), isa.getPort());
+            }
+            return NettyChannelBuilder.forAddress(isa.getHostName(), isa.getPort());
+        } else {
+            return NettyChannelBuilder.forAddress(serverAddress);
+        }
     }
 
     /**
@@ -104,7 +104,6 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
 
     /**
      * @return true if connect on startup is set for channel
-     *
      * @since 3.4.0
      */
     public boolean isConnectOnStartup() {
@@ -113,7 +112,6 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
 
     /**
      * @return connection timeout for the channel
-     *
      * @since 3.4.0
      */
     public Duration getConnectionTimeout() {
