@@ -26,9 +26,9 @@ class GrpcNamedChannelSpec extends Specification {
         given:
         def port = SocketUtils.findAvailableTcpPort()
         EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, [
-                'grpc.server.port': port,
-                'grpc.channels.greeter.address':"localhost:$port",
-                'grpc.channels.greeter.plaintext':true
+                'grpc.server.port'               : port,
+                'grpc.channels.greeter.address'  : "localhost:$port",
+                'grpc.channels.greeter.plaintext': true
         ])
         def context = embeddedServer.getApplicationContext()
         def testBean = context.getBean(TestBean)
@@ -48,9 +48,9 @@ class GrpcNamedChannelSpec extends Specification {
         given:
         def port = SocketUtils.findAvailableTcpPort()
         EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, [
-                'grpc.server.port': port,
-                'grpc.channels.greeter.address':"localhost:${SocketUtils.findAvailableTcpPort()}",
-                'grpc.channels.greeter.plaintext':true,
+                'grpc.server.port'                        : port,
+                'grpc.channels.greeter.address'           : "localhost:${SocketUtils.findAvailableTcpPort()}",
+                'grpc.channels.greeter.plaintext'         : true,
                 'grpc.channels.greeter.connect-on-startup': true,
                 'grpc.channels.greeter.connection-timeout': 10
         ])
@@ -74,9 +74,9 @@ class GrpcNamedChannelSpec extends Specification {
         given:
         def port = SocketUtils.findAvailableTcpPort()
         EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, [
-                'grpc.server.port': port,
-                'grpc.channels.greeter.address':"localhost:$port",
-                'grpc.channels.greeter.plaintext':true,
+                'grpc.server.port'                        : port,
+                'grpc.channels.greeter.address'           : "localhost:$port",
+                'grpc.channels.greeter.plaintext'         : true,
                 'grpc.channels.greeter.connect-on-startup': true,
                 'grpc.channels.greeter.connection-timeout': 5
         ])
@@ -100,15 +100,15 @@ class GrpcNamedChannelSpec extends Specification {
         given:
         def port = SocketUtils.findAvailableTcpPort()
         EmbeddedServer embeddedServer = ApplicationContext
-            .builder()
-            .eagerInitSingletons(true)
-            .properties([
-                'my.port': SocketUtils.findAvailableTcpPort(),
-                'grpc.server.port': port,
-                'grpc.channels.greeter.address':"localhost:$port",
-                'grpc.channels.greeter.plaintext':true
-            ])
-            .run(EmbeddedServer)
+                .builder()
+                .eagerInitSingletons(true)
+                .properties([
+                        'my.port'                        : SocketUtils.findAvailableTcpPort(),
+                        'grpc.server.port'               : port,
+                        'grpc.channels.greeter.address'  : "localhost:$port",
+                        'grpc.channels.greeter.plaintext': true
+                ])
+                .run(EmbeddedServer)
         def context = embeddedServer.getApplicationContext()
         def testBean = context.getBean(TestBean)
         def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
@@ -150,7 +150,7 @@ class GrpcNamedChannelSpec extends Specification {
     static class GreeterImpl extends Greeter2Grpc.Greeter2ImplBase {
         @Override
         void sayHello(HelloRequest request, StreamObserver<HelloReply> responseObserver) {
-            HelloReply reply = HelloReply.newBuilder().setMessage("Hello 2 " + request.getName()).build();
+            HelloReply reply = HelloReply.newBuilder().setMessage("Hello 2 " + request.getName()).build()
             responseObserver.onNext(reply)
             responseObserver.onCompleted()
         }

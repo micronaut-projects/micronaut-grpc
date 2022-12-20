@@ -34,12 +34,12 @@ import java.util.Optional;
 @Singleton
 @Requires(classes = {Message.class, ByteBuf.class})
 public class ProtoMessageToByteBufConverter implements TypeConverter<Message, ByteBuf> {
-    private final ConversionService<?> conversionService;
+    private final ConversionService conversionService;
 
     /**
      * @param conversionService The conversion service
      */
-    public ProtoMessageToByteBufConverter(ConversionService<?> conversionService) {
+    public ProtoMessageToByteBufConverter(ConversionService conversionService) {
         this.conversionService = conversionService;
     }
 

@@ -21,8 +21,7 @@ import jakarta.inject.Singleton
 
 // tag::clazz[]
 @Singleton // <1>
-@Suppress("unused")
-class GreetingEndpoint(val greetingService : GreetingService) : GreeterGrpcKt.GreeterCoroutineImplBase() { // <2>
+class GreetingEndpoint(val greetingService: GreetingService) : GreeterGrpcKt.GreeterCoroutineImplBase() { // <2>
     override suspend fun sayHello(request: HelloRequest): HelloReply {
         // <3>
         val message = greetingService.sayHello(request.name)

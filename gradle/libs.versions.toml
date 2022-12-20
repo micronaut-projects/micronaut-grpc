@@ -7,7 +7,20 @@ jackson-datatype-protobuf = '0.9.13'
 jaeger-core = '1.8.1'
 opentracing-grpc = '0.2.3'
 opentracing-mock = '0.33.0'
+
+micronaut = "4.0.0-SNAPSHOT"
 micronaut-docs = '2.0.0'
+micronaut-test = "4.0.0-SNAPSHOT"
+
+graal-svm = "22.0.0.2"
+groovy = "4.0.6"
+javax-annotation-api = "1.3.2"
+spock = "2.3-groovy-4.0"
+
+micronaut-discovery = "4.0.0-SNAPSHOT"
+micronaut-reactor = "3.0.0-SNAPSHOT"
+micronaut-tracing = "4.4.0"
+micronaut-tracing-legacy = "3.2.7"
 
 [libraries]
 
@@ -20,9 +33,15 @@ managed-protobuf-java = { module = 'com.google.protobuf:protobuf-java', version.
 managed-protobuf-java-util = { module = 'com.google.protobuf:protobuf-java-util', version.ref = 'managed-protobuf' }
 managed-protoc = { module = 'com.google.protobuf:protoc', version.ref = 'managed-protobuf' }
 
+micronaut-discovery-client = { module = "io.micronaut.discovery:micronaut-discovery-client", version.ref = "micronaut-discovery" }
+micronaut-docs-asciidoc-config-props = { module = 'io.micronaut.docs:micronaut-docs-asciidoc-config-props', version.ref = 'micronaut-docs' }
+micronaut-tracing-legacy = { module = "io.micronaut:micronaut-tracing", version.ref = "micronaut-tracing-legacy" }
+
+graal-svm = { module = "org.graalvm.nativeimage:svm", version.ref = "graal-svm" }
 grpc-netty = { module = 'io.grpc:grpc-netty' }
 
 jackson-datatype-protobuf = { module = 'com.hubspot.jackson:jackson-datatype-protobuf', version.ref = 'jackson-datatype-protobuf' }
+javax-annotation-api = { module = "javax.annotation:javax.annotation-api", version.ref = "javax-annotation-api" }
 
 jaeger-core = { module = 'io.jaegertracing:jaeger-core', version.ref = 'jaeger-core' }
 
@@ -33,6 +52,9 @@ opentracing-grpc = { module = 'io.opentracing.contrib:opentracing-grpc', version
 opentracing-mock = { module = 'io.opentracing:opentracing-mock', version.ref = 'opentracing-mock' }
 
 ## BOMs
+micronaut-reactor = { module = 'io.micronaut.reactor:micronaut-reactor-bom', version.ref = "micronaut-reactor" }
+micronaut-tracing = { module = "io.micronaut.tracing:micronaut-tracing-bom", version.ref = "micronaut-tracing" }
+
 boms-protobuf = { module = 'com.google.protobuf:protobuf-bom', version.ref = 'managed-protobuf' }
 boms-grpc = { module = 'io.grpc:grpc-bom', version.ref = 'managed-grpc' }
 

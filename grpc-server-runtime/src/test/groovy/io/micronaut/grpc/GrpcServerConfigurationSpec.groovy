@@ -45,7 +45,7 @@ class GrpcServerConfigurationSpec extends Specification {
         configuration.instanceId == 'hello-grpc'
 
         cleanup:
-        server.shutdown().awaitTermination();
+        server.shutdown().awaitTermination()
         ctx.close()
     }
 

@@ -28,8 +28,8 @@ import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.inject.qualifiers.Qualifiers
 import io.micronaut.runtime.server.EmbeddedServer
-import jakarta.inject.Singleton
 import jakarta.inject.Named
+import jakarta.inject.Singleton
 import spock.lang.Specification
 import spock.util.concurrent.PollingConditions
 
@@ -39,16 +39,16 @@ class GrpcServiceDiscoverySpec extends Specification {
 
         def port = SocketUtils.findAvailableTcpPort()
 
-        when:"A service is run"
+        when: "A service is run"
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet',
-                'grpc.server.port': port
+                'micronaut.application.name': 'greet',
+                'grpc.server.port'          : port
         ])
 
-        and:'then a client is run that declares the service'
+        and: 'then a client is run that declares the service'
         ApplicationContext client = ApplicationContext.run([
-                (GrpcNameResolverProvider.ENABLED): true,
-                'grpc.channels.greet.plaintext':true,
+                (GrpcNameResolverProvider.ENABLED) : true,
+                'grpc.channels.greet.plaintext'    : true,
                 'micronaut.http.services.greet.url': server.URL.toString()
         ])
 
@@ -67,17 +67,17 @@ class GrpcServiceDiscoverySpec extends Specification {
 
         def port = SocketUtils.findAvailableTcpPort()
 
-        when:"A service is run"
+        when: "A service is run"
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet',
-                'grpc.server.port': port
+                'micronaut.application.name': 'greet',
+                'grpc.server.port'          : port
         ])
 
-        and:'then a client is run that declares the service'
+        and: 'then a client is run that declares the service'
         ApplicationContext client = ApplicationContext.run([
                 (GrpcNameResolverProvider.ENABLED): true,
-                'grpc.client.plaintext':true,
-                'my.port':server.getPort()
+                'grpc.client.plaintext'           : true,
+                'my.port'                         : server.getPort()
         ])
 
         GreeterGrpc.GreeterStub stub = client.getBean(GreeterGrpc.GreeterStub)
@@ -114,16 +114,16 @@ class GrpcServiceDiscoverySpec extends Specification {
 
         def port = SocketUtils.findAvailableTcpPort()
 
-        when:"A service is run"
+        when: "A service is run"
         EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
-                'micronaut.application.name':'greet',
-                'grpc.server.port': port
+                'micronaut.application.name': 'greet',
+                'grpc.server.port'          : port
         ])
 
-        and:'then a client is run that declares the service'
+        and: 'then a client is run that declares the service'
         ApplicationContext client = ApplicationContext.run([
-                'grpc.client.plaintext':true,
-                'my.port':server.getPort()
+                'grpc.client.plaintext': true,
+                'my.port'              : server.getPort()
         ])
 
         GreeterGrpc.GreeterStub stub = client.getBean(GreeterGrpc.GreeterStub)
@@ -153,7 +153,7 @@ class GrpcServiceDiscoverySpec extends Specification {
 
         when:
         stub = client.getBean(GreeterGrpc.GreeterStub, Qualifiers.byName("other"))
-        reply = null;
+        reply = null
         stub.sayHello(HelloRequest.newBuilder().setName("test").build(), new StreamObserver<HelloReply>() {
             @Override
             void onNext(HelloReply value) {
@@ -179,7 +179,6 @@ class GrpcServiceDiscoverySpec extends Specification {
         client.stop()
         server.stop()
     }
-
 
 
     @Factory

@@ -38,9 +38,11 @@ import io.micronaut.inject.ArgumentInjectionPoint;
 import io.micronaut.inject.FieldInjectionPoint;
 import io.micronaut.inject.InjectionPoint;
 import io.micronaut.inject.qualifiers.Qualifiers;
-import jakarta.annotation.PreDestroy;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.annotation.PreDestroy;
 
 /**
  * Factory bean for creating {@link ManagedChannel} instances.
@@ -50,12 +52,14 @@ import org.slf4j.LoggerFactory;
  */
 @Factory
 public class GrpcManagedChannelFactory implements AutoCloseable {
+
     private static final Logger LOG = LoggerFactory.getLogger(GrpcManagedChannelFactory.class);
     private final Map<ChannelKey, ManagedChannel> channels = new ConcurrentHashMap<>();
     private final ApplicationContext beanContext;
 
     /**
      * Default constructor.
+     *
      * @param beanContext The bean context
      */
     public GrpcManagedChannelFactory(ApplicationContext beanContext) {
@@ -64,7 +68,9 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
 
     /**
      * Builds a managed channel for the given target.
+     *
      * @param injectionPoint The injection point
+     *
      * @return The channel
      */
     @Bean
@@ -149,6 +155,7 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
      * Client key.
      */
     private static final class ChannelKey {
+
         final Argument<?> identifier;
         final String value;
 
@@ -167,7 +174,7 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
             }
             ChannelKey clientKey = (ChannelKey) o;
             return Objects.equals(identifier, clientKey.identifier) &&
-                    Objects.equals(value, clientKey.value);
+                Objects.equals(value, clientKey.value);
         }
 
         @Override

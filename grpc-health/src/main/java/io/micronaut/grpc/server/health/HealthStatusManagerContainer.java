@@ -18,6 +18,7 @@ package io.micronaut.grpc.server.health;
 import io.grpc.protobuf.services.HealthStatusManager;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.core.util.StringUtils;
+
 import jakarta.inject.Singleton;
 
 /**

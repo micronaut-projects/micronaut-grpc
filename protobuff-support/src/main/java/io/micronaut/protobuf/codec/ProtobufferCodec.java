@@ -15,8 +15,18 @@
  */
 package io.micronaut.protobuf.codec;
 
-import com.google.protobuf.ExtensionRegistry;
-import com.google.protobuf.Message;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
 import io.micronaut.core.io.buffer.ByteBuffer;
 import io.micronaut.core.io.buffer.ByteBufferFactory;
 import io.micronaut.core.type.Argument;
@@ -25,15 +35,9 @@ import io.micronaut.http.codec.CodecException;
 import io.micronaut.http.codec.MediaTypeCodec;
 
 import jakarta.inject.Singleton;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+
+import com.google.protobuf.ExtensionRegistry;
+import com.google.protobuf.Message;
 
 /**
  * Protocol buffers codec.
@@ -43,10 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Singleton
 public class ProtobufferCodec implements MediaTypeCodec {
-    /**
-     * Protobuffer encoded data: application/x-protobuf.
-     */
-    public static final String PROTOBUFFER_ENCODED = "application/x-protobuf";
+
     /**
      * This Header is to say the fully qualified name of the message builder to use.
      * This is needed when the request is untyped
@@ -55,14 +56,32 @@ public class ProtobufferCodec implements MediaTypeCodec {
     /**
      * Protobuffer encoded data: application/x-protobuf.
      */
+    public static final String PROTOBUFFER_ENCODED = "application/x-protobuf";
+    /**
+     * Protobuffer encoded data: application/protobuf.
+     */
+    public static final String PROTOBUFFER_ENCODED2 = "application/protobuf";
+    /**
+     * Protobuffer encoded data: application/x-protobuf.
+     */
     public static final MediaType PROTOBUFFER_ENCODED_TYPE = new MediaType(PROTOBUFFER_ENCODED);
+    /**
+     * Protobuffer encoded data: application/protobuf.
+     */
+    public static final MediaType PROTOBUFFER_ENCODED_TYPE2 = new MediaType(PROTOBUFFER_ENCODED2);
+    /**
+     * List of default protobuf media types.
+     */
+    public static final List<MediaType> DEFAULT_MEDIA_TYPES = Arrays.asList(PROTOBUFFER_ENCODED_TYPE, PROTOBUFFER_ENCODED_TYPE2);
 
     private final ConcurrentHashMap<Class<?>, Method> methodCache = new ConcurrentHashMap<>();
 
     private final ExtensionRegistry extensionRegistry;
+    private List<MediaType> mediaTypes = DEFAULT_MEDIA_TYPES;
 
     /**
      * Default constructor.
+     *
      * @param extensionRegistry The extension registry
      */
     public ProtobufferCodec(ExtensionRegistry extensionRegistry) {
@@ -76,16 +95,23 @@ public class ProtobufferCodec implements MediaTypeCodec {
 
     @Override
     public Collection<MediaType> getMediaTypes() {
-        List<MediaType> mediaTypes = new ArrayList<>();
-        mediaTypes.add(PROTOBUFFER_ENCODED_TYPE);
         return mediaTypes;
+    }
+
+    /**
+     * Method to customize media types for this codec.
+     *
+     * @param mediaTypes media types for which need use this codec.
+     */
+    public void setMediaTypes(List<MediaType> mediaTypes) {
+        this.mediaTypes = Collections.unmodifiableList(new ArrayList<>(mediaTypes));
     }
 
     @Override
     public <T> T decode(Argument<T> type, InputStream inputStream) throws CodecException {
         try {
             Message.Builder builder = getBuilder(type)
-                    .orElseThrow(() -> new CodecException("Unable to create builder"));
+                .orElseThrow(() -> new CodecException("Unable to create builder"));
             if (type.hasTypeVariables()) {
                 throw new IllegalStateException("Generic type arguments are not supported");
             } else {
@@ -104,7 +130,7 @@ public class ProtobufferCodec implements MediaTypeCodec {
                 return (T) buffer.toByteArray();
             } else {
                 Message.Builder builder = getBuilder(type)
-                        .orElseThrow(() -> new CodecException("Unable to create builder"));
+                    .orElseThrow(() -> new CodecException("Unable to create builder"));
                 if (type.hasTypeVariables()) {
                     throw new IllegalStateException("Generic type arguments are not supported");
                 } else {
@@ -124,7 +150,7 @@ public class ProtobufferCodec implements MediaTypeCodec {
                 return (T) bytes;
             } else {
                 Message.Builder builder = getBuilder(type)
-                        .orElseThrow(() -> new CodecException("Unable to create builder"));
+                    .orElseThrow(() -> new CodecException("Unable to create builder"));
                 if (type.hasTypeVariables()) {
                     throw new IllegalStateException("Generic type arguments are not supported");
                 } else {
@@ -146,8 +172,8 @@ public class ProtobufferCodec implements MediaTypeCodec {
     @Override
     public <T> void encode(T object, OutputStream outputStream) throws CodecException {
         try {
-            if (object instanceof Message) {
-                ((Message) object).writeTo(outputStream);
+            if (object instanceof Message message) {
+                message.writeTo(outputStream);
             }
         } catch (IOException e) {
             throw new CodecException("Error encoding object [" + object + "] to OutputStream:" + e.getMessage());
@@ -156,10 +182,10 @@ public class ProtobufferCodec implements MediaTypeCodec {
 
     @Override
     public <T> byte[] encode(T object) throws CodecException {
-        if (object instanceof Message) {
-            return ((Message) object).toByteArray();
-        } else if (object instanceof byte[]) {
-            return ((byte[]) object);
+        if (object instanceof Message message) {
+            return message.toByteArray();
+        } else if (object instanceof byte[] bytes) {
+            return bytes;
         }
         return new byte[0];
     }
@@ -181,6 +207,7 @@ public class ProtobufferCodec implements MediaTypeCodec {
      * <p>This method uses a ConcurrentHashMap for caching method lookups.
      *
      * @param clazz The class.
+     *
      * @return The message builder
      */
     public Optional<Message.Builder> getMessageBuilder(Class<? extends Message> clazz) {
@@ -192,7 +219,7 @@ public class ProtobufferCodec implements MediaTypeCodec {
     }
 
     private Optional<Message.Builder> createBuilder(Class<? extends Message> clazz) throws Exception {
-        return Optional.of ((Message.Builder) getMethod(clazz).invoke(clazz));
+        return Optional.of((Message.Builder) getMethod(clazz).invoke(clazz));
     }
 
     private Method getMethod(Class<? extends Message> clazz) throws NoSuchMethodException {

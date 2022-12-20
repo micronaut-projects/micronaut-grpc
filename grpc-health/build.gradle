@@ -7,7 +7,6 @@ dependencies {
 
     api platform(libs.boms.grpc)
     api projects.grpcAnnotation
-    api mn.micronaut.runtime
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
@@ -18,7 +17,7 @@ dependencies {
 
     testImplementation libs.managed.grpc.services
     testImplementation mn.micronaut.management
-    testImplementation mn.micronaut.reactor.http.client
+    testImplementation mnReactor.micronaut.reactor.http.client
     testImplementation projects.grpcServerRuntime
 }
 
