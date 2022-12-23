@@ -15,13 +15,14 @@
  */
 package io.micronaut.grpc.channels;
 
+import java.util.concurrent.ExecutorService;
+
 import io.micronaut.context.annotation.EachProperty;
 import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.env.Environment;
 import io.micronaut.scheduling.TaskExecutors;
 
 import jakarta.inject.Named;
-import java.util.concurrent.ExecutorService;
 
 /**
  * Constructs a named channel configuration for each property specified in {@link GrpcManagedChannelConfiguration#PREFIX}.
@@ -34,14 +35,15 @@ public class GrpcNamedManagedChannelConfiguration extends GrpcManagedChannelConf
 
     /**
      * Default constructor.
+     *
      * @param name The name
      * @param env The environment
      * @param executorService The executor service
      */
     public GrpcNamedManagedChannelConfiguration(
-            @Parameter String name,
-            Environment env,
-            @Named(TaskExecutors.IO) ExecutorService executorService) {
+        @Parameter String name,
+        Environment env,
+        @Named(TaskExecutors.IO) ExecutorService executorService) {
         super(name, env, executorService);
     }
 }

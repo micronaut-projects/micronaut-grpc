@@ -27,18 +27,18 @@ class HealthCheckTest {
     @Test
     fun testHealthCheck() = runBlocking {
         Assertions.assertEquals(
-            HealthCheckResponse.ServingStatus.SERVING,
-            healthStub.check(HealthCheckRequest.newBuilder().build()).status
+                HealthCheckResponse.ServingStatus.SERVING,
+                healthStub.check(HealthCheckRequest.newBuilder().build()).status
         )
 
         healthService.setStatus(
-            HealthStatusManager.SERVICE_NAME_ALL_SERVICES,
-            HealthCheckResponse.ServingStatus.NOT_SERVING
+                HealthStatusManager.SERVICE_NAME_ALL_SERVICES,
+                HealthCheckResponse.ServingStatus.NOT_SERVING
         )
 
         Assertions.assertEquals(
-            HealthCheckResponse.ServingStatus.NOT_SERVING,
-            healthStub.check(HealthCheckRequest.newBuilder().build()).status
+                HealthCheckResponse.ServingStatus.NOT_SERVING,
+                healthStub.check(HealthCheckRequest.newBuilder().build()).status
         )
     }
 }
@@ -48,5 +48,5 @@ class HealthClient {
 
     @Singleton
     fun healthClient(@GrpcChannel(GrpcServerChannel.NAME) channel: Channel): HealthGrpc.HealthBlockingStub =
-        HealthGrpc.newBlockingStub(channel)
+            HealthGrpc.newBlockingStub(channel)
 }

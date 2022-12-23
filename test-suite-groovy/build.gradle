@@ -14,6 +14,13 @@ repositories {
     }
 }
 
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute(module("org.codehaus.groovy:groovy"))
+                .using(module("org.apache.groovy:groovy:4.0.6"))
+    }
+}
+
 mainClassName = "helloworld.Application"
 micronaut {
     version micronautVersion
@@ -27,14 +34,24 @@ micronaut {
 
 dependencies {
     compileOnly "io.grpc:grpc-stub:$grpcVersion"
+    compileOnly "javax.annotation:javax.annotation-api"
 
     implementation "io.micronaut:micronaut-validation"
-    implementation("io.micronaut:micronaut-runtime")
-    implementation(project(':grpc-server-runtime'))
+    implementation "io.micronaut:micronaut-runtime"
+    implementation "io.micronaut.grpc:micronaut-grpc-server-runtime"
     implementation "io.micronaut.discovery:micronaut-discovery-client"
-    implementation "io.grpc:grpc-services"
+    implementation "io.grpc:grpc-services:$grpcVersion"
+    implementation "io.grpc:grpc-protobuf:$grpcVersion"
+    implementation "com.google.protobuf:protobuf-java-util:$protobufJavaVersion"
+    implementation "org.yaml:snakeyaml"
 
     runtimeOnly "ch.qos.logback:logback-classic"
+
+    testCompileOnly "javax.annotation:javax.annotation-api"
+
+    testImplementation "org.apache.groovy:groovy"
+
+    testRuntimeOnly "ch.qos.logback:logback-classic"
 }
 
 tasks.withType(GroovyCompile) {

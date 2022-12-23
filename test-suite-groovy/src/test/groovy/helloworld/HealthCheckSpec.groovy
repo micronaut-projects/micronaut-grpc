@@ -1,7 +1,6 @@
 package helloworld
 
 import io.grpc.Channel
-import io.grpc.ManagedChannel
 import io.grpc.health.v1.HealthCheckRequest
 import io.grpc.health.v1.HealthCheckResponse
 import io.grpc.health.v1.HealthGrpc

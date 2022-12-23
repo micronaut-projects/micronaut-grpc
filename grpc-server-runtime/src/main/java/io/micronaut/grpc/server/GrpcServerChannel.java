@@ -15,6 +15,10 @@
  */
 package io.micronaut.grpc.server;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+
 import io.grpc.ClientInterceptor;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -26,10 +30,6 @@ import io.micronaut.scheduling.TaskExecutors;
 
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 /**
  * A factory that returns a {@link ManagedChannel} allowing communication with the embedded server.
@@ -45,9 +45,11 @@ public class GrpcServerChannel {
 
     /**
      * Constructs a managed server channel.
+     *
      * @param server The server
      * @param executorService The executor service
      * @param clientInterceptors The client interceptors
+     *
      * @return The channel
      */
     @Singleton
@@ -55,12 +57,12 @@ public class GrpcServerChannel {
     @Requires(beans = GrpcEmbeddedServer.class)
     @Bean(preDestroy = "shutdown")
     protected ManagedChannel serverChannel(
-            GrpcEmbeddedServer server,
-            @Named(TaskExecutors.IO) ExecutorService executorService,
-            List<ClientInterceptor> clientInterceptors) {
+        GrpcEmbeddedServer server,
+        @Named(TaskExecutors.IO) ExecutorService executorService,
+        List<ClientInterceptor> clientInterceptors) {
         final ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forAddress(
-                server.getHost(),
-                server.getPort()
+            server.getHost(),
+            server.getPort()
         ).executor(executorService);
         if (!server.getServerConfiguration().isSecure()) {
             builder.usePlaintext();

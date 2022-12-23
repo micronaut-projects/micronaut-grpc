@@ -15,14 +15,18 @@
  */
 package io.micronaut
 
+import com.google.protobuf.ExtensionRegistry
 import com.google.protobuf.Message
 import io.micronaut.context.ApplicationContext
+import io.micronaut.context.annotation.Factory
+import io.micronaut.context.annotation.Replaces
 import io.micronaut.http.HttpHeaders
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.client.HttpClient
 import io.micronaut.protobuf.codec.ProtobufferCodec
 import io.micronaut.runtime.server.EmbeddedServer
 import io.micronaut.websocket.WebSocketClient
+import jakarta.inject.Singleton
 import spock.lang.AutoCleanup
 import spock.lang.Shared
 import spock.lang.Specification
@@ -46,32 +50,45 @@ abstract class BaseSpec extends Specification {
             embeddedServer.getURL()
     )
 
-    byte[] getMessage(String url, Class aClass) {
+    byte[] getMessage(String url, Class aClass, String mediaType) {
         return httpClient.toBlocking().retrieve(
                 HttpRequest.GET(url)
-                    .header(ProtobufferCodec.X_PROTOBUF_MESSAGE_HEADER, aClass.name)
-                    .header(HttpHeaders.ACCEPT, ProtobufferCodec.PROTOBUFFER_ENCODED),
+                        .header(ProtobufferCodec.X_PROTOBUF_MESSAGE_HEADER, aClass.name)
+                        .header(HttpHeaders.ACCEPT, mediaType),
                 byte[].class
         )
     }
 
-    byte[] postMessage(String url, Message message) {
+    byte[] postMessage(String url, Message message, String mediaType) {
         return httpClient.toBlocking().retrieve(
                 HttpRequest.POST(url, message)
-                        .header(HttpHeaders.CONTENT_TYPE, ProtobufferCodec.PROTOBUFFER_ENCODED)
+                        .header(HttpHeaders.CONTENT_TYPE, mediaType)
                         .header(ProtobufferCodec.X_PROTOBUF_MESSAGE_HEADER, message.class.name)
-                        .header(HttpHeaders.ACCEPT, ProtobufferCodec.PROTOBUFFER_ENCODED),
+                        .header(HttpHeaders.ACCEPT, mediaType),
                 byte[].class
         )
     }
 
-    byte[] postMessage(String url, byte[] message) {
+    byte[] postMessage(String url, byte[] message, String mediaType) {
         return httpClient.toBlocking().retrieve(
                 HttpRequest.POST(url, message)
-                        .header(HttpHeaders.CONTENT_TYPE, ProtobufferCodec.PROTOBUFFER_ENCODED)
+                        .header(HttpHeaders.CONTENT_TYPE, mediaType)
                         .header(ProtobufferCodec.X_PROTOBUF_MESSAGE_HEADER, message.class.name)
-                        .header(HttpHeaders.ACCEPT, ProtobufferCodec.PROTOBUFFER_ENCODED),
+                        .header(HttpHeaders.ACCEPT, mediaType),
                 byte[].class
         )
+    }
+
+    @Factory
+    static class SetCutomHeadersConfig {
+
+        @Singleton
+        @Replaces(ProtobufferCodec.class)
+        ProtobufferCodec init(ExtensionRegistry registry) {
+            def codec = new ProtobufferCodec(registry)
+            codec.setMediaTypes([ProtobufferCodec.PROTOBUFFER_ENCODED_TYPE, ProtobufferCodec.PROTOBUFFER_ENCODED_TYPE2, SampleController.MY_PROTO_ENCODED_TYPE])
+            return codec;
+        }
     }
 }
+

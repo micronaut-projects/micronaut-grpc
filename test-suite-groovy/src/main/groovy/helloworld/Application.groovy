@@ -15,8 +15,8 @@
  */
 package helloworld
 
-import io.micronaut.runtime.Micronaut
 import groovy.transform.CompileStatic
+import io.micronaut.runtime.Micronaut
 
 @CompileStatic
 class Application {
@@ -24,6 +24,6 @@ class Application {
         Micronaut.build(args)
                 .packages("helloworld")
                 .mainClass(Application.class)
-                .start();
+                .start()
     }
 }

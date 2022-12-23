@@ -24,7 +24,6 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;
 import java.time.Duration;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -32,9 +31,9 @@ import java.util.concurrent.ExecutorService;
  *
  * @author graemerocher
  * @since 1.0.0
- *
  */
 public abstract class GrpcManagedChannelConfiguration implements Named {
+
     public static final String PREFIX = "grpc.channels";
     public static final String SETTING_TARGET = ".target";
     public static final String SETTING_URL = ".address";
@@ -51,49 +50,48 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
 
     /**
      * Constructors a new managed channel configuration.
-     * @param name The name
-     * @param env The environment
+     *
+     * @param name            The name
+     * @param env             The environment
      * @param executorService The executor service to use
      */
-    public GrpcManagedChannelConfiguration(String name, Environment env, ExecutorService executorService) {
+    protected GrpcManagedChannelConfiguration(String name, Environment env, ExecutorService executorService) {
         this.name = name;
         this.connectOnStartup = env.getProperty(PREFIX + '.' + name + CONNECT_ON_STARTUP, Boolean.class).isPresent();
         this.connectionTimeout = env.getProperty(PREFIX + '.' + name + CONNECTION_TIMEOUT, Long.class)
             .filter(t -> t > 0)
             .map(Duration::ofSeconds)
             .orElse(DEFAULT_CONNECTION_TIMEOUT);
-        final Optional<SocketAddress> socketAddress = env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class);
-        if (socketAddress.isPresent()) {
-            SocketAddress serverAddress = socketAddress.get();
-            if (serverAddress instanceof InetSocketAddress) {
-                InetSocketAddress isa = (InetSocketAddress) serverAddress;
-                if (isa.isUnresolved()) {
-                    isa = new InetSocketAddress(isa.getHostString(), isa.getPort());
-                }
-                this.channelBuilder = NettyChannelBuilder.forAddress(isa.getHostName(), isa.getPort());
-            } else {
-                this.channelBuilder = NettyChannelBuilder.forAddress(serverAddress);
-            }
-        } else {
-            final Optional<String> target = env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class);
-            if (target.isPresent()) {
-                this.channelBuilder = NettyChannelBuilder.forTarget(
-                        target.get()
-                );
 
-            } else {
-                final URI uri = name.contains("//") ? URI.create(name) : null;
-                if (uri != null && uri.getHost() != null && uri.getPort() > -1) {
-                    this.channelBuilder = NettyChannelBuilder.forAddress(uri.getHost(), uri.getPort());
-                    if ("http".equalsIgnoreCase(uri.getScheme())) {
-                        this.channelBuilder.usePlaintext();
+        this.channelBuilder = env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class)
+            .map(this::getChannelBuilder)
+            .orElseGet(() -> env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class)
+                .map(NettyChannelBuilder::forTarget)
+                .orElseGet(() -> {
+                    final URI uri = name.contains("//") ? URI.create(name) : null;
+                    if (uri != null && uri.getHost() != null && uri.getPort() > -1) {
+                        NettyChannelBuilder nettyChannelBuilder = NettyChannelBuilder.forAddress(uri.getHost(), uri.getPort());
+                        if ("http".equalsIgnoreCase(uri.getScheme())) {
+                            nettyChannelBuilder.usePlaintext();
+                        }
+                        return nettyChannelBuilder;
+                    } else {
+                        return NettyChannelBuilder.forTarget(name);
                     }
-                } else {
-                    this.channelBuilder = NettyChannelBuilder.forTarget(name);
-                }
-            }
-        }
+                })
+            );
         this.getChannelBuilder().executor(executorService);
+    }
+
+    private NettyChannelBuilder getChannelBuilder(SocketAddress serverAddress) {
+        if (serverAddress instanceof InetSocketAddress isa) {
+            if (isa.isUnresolved()) {
+                isa = new InetSocketAddress(isa.getHostString(), isa.getPort());
+            }
+            return NettyChannelBuilder.forAddress(isa.getHostName(), isa.getPort());
+        } else {
+            return NettyChannelBuilder.forAddress(serverAddress);
+        }
     }
 
     /**

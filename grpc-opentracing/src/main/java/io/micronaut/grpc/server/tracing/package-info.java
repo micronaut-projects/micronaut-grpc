@@ -17,7 +17,7 @@
  * Classes related to distributed tracing.
  */
 @Configuration
-@Requires(classes = {Tracer.class, TracingClientInterceptor.class, io.opentracing.contrib.grpc.TracingServerInterceptor.class})
+@Requires(classes = {Tracer.class, TracingClientInterceptor.class, TracingServerInterceptor.class})
 @Requires(beans = Tracer.class)
 package io.micronaut.grpc.server.tracing;
 
@@ -25,3 +25,4 @@ import io.micronaut.context.annotation.Configuration;
 import io.micronaut.context.annotation.Requires;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.grpc.TracingClientInterceptor;
+import io.opentracing.contrib.grpc.TracingServerInterceptor;
