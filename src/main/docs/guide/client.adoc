@@ -8,7 +8,7 @@ The channel can be configured using properties defined under `grpc.client` by de
 
 For example, if you wish to disable secure communication:
 
-[source,yaml]
+[configuration]
 ----
 grpc:
     client:
@@ -58,7 +58,7 @@ The above example requires that `my.server` and `my.port` are specified in `appl
 
 For example given the following configuration:
 
-[source,yaml]
+[configuration]
 ----
 grpc:
     channels:
