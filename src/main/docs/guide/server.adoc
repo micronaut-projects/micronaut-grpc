@@ -24,7 +24,7 @@ The server can be be configured in a number of different ways. You can use the `
 For example:
 
 .Configuring the gRPC server
-[source,yaml]
+[configuration]
 ----
 grpc:
     server:
@@ -32,11 +32,11 @@ grpc:
         keep-alive-time: 3h
         max-inbound-message-size: 1024
         ssl:
-            cert-chain: 'file://path/to/my.cert' # <1>
-            private-key: 'classpath:my.key' # <2>
+            cert-chain: 'file://path/to/my.cert'
+            private-key: 'classpath:my.key'
 ----
-<1> Load the certificate from `/path/to/my.cert` file.
-<2> Load the private key from the classpath. The file should be in `src/main/resources/my.key`.
+- `cert-chain` specifies the file to load the certificate from.
+- `private-key` specifies the classpath resource for the private key. The file should be in `src/main/resources/`.
 
 By default, the gRPC server will be enabled. To disable the gRPC server, set `grpc.server.enabled` to false.
 
