@@ -1,4 +1,3 @@
-io.grpc.examples.helloworld
 io.micronaut.grpc.annotation
 io.micronaut.grpc.channels
 io.micronaut.grpc.client.tracing
