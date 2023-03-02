@@ -32,4 +32,5 @@ micronautBuild {
     importMicronautCatalog()
     importMicronautCatalog("micronaut-reactor")
     importMicronautCatalog("micronaut-tracing")
+    importMicronautCatalog("micronaut-validation")
 }
