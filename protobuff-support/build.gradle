@@ -4,9 +4,6 @@ plugins {
 }
 
 dependencies {
-
-    annotationProcessor mn.micronaut.validation
-
     api platform(libs.boms.protobuf)
     api mn.micronaut.http
     api mn.micronaut.http.netty
