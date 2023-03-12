@@ -279,8 +279,8 @@ protobuf {
 dependencies {
 ...
     implementation "io.grpc:grpc-kotlin-stub:$grpcKotlinVersion"
-    implementation "io.grpc:grpc-services:$grpcVersion"
-    compileOnly "io.grpc:grpc-stub:$grpcVersion"
+    implementation "io.grpc:grpc-services"
+    compileOnly "io.grpc:grpc-stub"
     compileOnly "javax.annotation:javax.annotation-api"
 }
 
@@ -296,7 +296,7 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:${protobufJavaVersion}" }
+    protoc { artifact = "com.google.protobuf:protoc:$protobufJavaVersion" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
         grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk8@jar" }
