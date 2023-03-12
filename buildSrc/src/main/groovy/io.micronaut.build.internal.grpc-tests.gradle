@@ -1,3 +1,29 @@
 plugins {
     id "io.micronaut.build.internal.grpc-base"
+    id 'org.graalvm.buildtools.native'
+}
+
+tasks.named("check") { task ->
+    def graal = ["jvmci.Compiler", "java.vendor.version", "java.vendor"].any {
+        System.getProperty(it)?.toLowerCase(Locale.ENGLISH)?.contains("graal")
+    }
+    if (graal) {
+        task.dependsOn("nativeTest")
+    }
+}
+
+tasks.named("test") {
+    useJUnitPlatform()
+}
+
+graalvmNative {
+    toolchainDetection = false
+    metadataRepository {
+        enabled = true
+    }
+    binaries {
+        all {
+            resources.autodetect()
+        }
+    }
 }

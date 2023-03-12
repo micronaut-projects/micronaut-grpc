@@ -1,9 +1,6 @@
 micronaut:
   application:
     name: helloworld
-grpc:
-  server:
-    port: 8080
 # Uncomment to enable service discovery with Consul
 #consul:
 #  client:

@@ -1,9 +1,6 @@
 micronaut:
   application:
     name: hello-world-java
-grpc:
-  server:
-    port: 8080
 # Uncomment to enable service discovery with Consul
 #consul:
 #    client:
