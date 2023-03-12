@@ -6,8 +6,8 @@ plugins {
 dependencies {
 
     api platform(libs.boms.grpc)
-    api projects.grpcAnnotation
-    api projects.grpcOpentracing
+    api projects.micronautGrpcAnnotation
+    api projects.micronautGrpcOpentracing
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
@@ -19,7 +19,7 @@ dependencies {
 
     testCompileOnly libs.javax.annotation.api
 
-    testImplementation projects.grpcServerRuntime
+    testImplementation projects.micronautGrpcServerRuntime
     testImplementation libs.micronaut.discovery.client
     testImplementation mn.micronaut.jackson.databind
     testImplementation libs.opentracing.mock

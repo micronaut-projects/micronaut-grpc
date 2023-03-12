@@ -1,5 +1,0 @@
-profile: service
-defaultPackage: helloworld
----
-testFramework: spock
-sourceLanguage: groovy
