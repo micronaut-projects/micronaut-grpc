@@ -6,9 +6,9 @@ plugins {
 dependencies {
 
     api platform(libs.boms.grpc)
-    api projects.grpcAnnotation
-    api projects.grpcHealth
-    api projects.grpcOpentracing
+    api projects.micronautGrpcAnnotation
+    api projects.micronautGrpcHealth
+    api projects.micronautGrpcOpentracing
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
@@ -26,7 +26,7 @@ dependencies {
     testImplementation mn.micronaut.discovery.core
     testImplementation mnReactor.micronaut.reactor.http.client
     testImplementation mn.micronaut.management
-    testImplementation projects.grpcClientRuntime
+    testImplementation projects.micronautGrpcClientRuntime
 
     testRuntimeOnly libs.netty.tcnative.boringssl.static
 }

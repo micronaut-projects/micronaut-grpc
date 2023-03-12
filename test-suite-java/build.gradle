@@ -3,17 +3,8 @@ plugins {
     // tag::plugin[]
     id "com.google.protobuf" version "$protobufGradleVersion"
     // end::plugin[]
-    id "io.micronaut.application" version "$micronautGradlePluginVersion"
-}
-
-repositories {
-    mavenCentral()
-    maven {
-        url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-        mavenContent {
-            snapshotsOnly()
-        }
-    }
+    id "io.micronaut.application" 
+    id "io.micronaut.build.internal.grpc-base"
 }
 
 mainClassName = "helloworld.Application"
@@ -29,21 +20,21 @@ micronaut {
 
 dependencies {
 
-    annotationProcessor "io.micronaut:micronaut-validation"
+    annotationProcessor "io.micronaut.validation:micronaut-validation-processor"
 
-    compileOnly "io.grpc:grpc-stub:$grpcVersion"
+    compileOnly "io.grpc:grpc-stub"
     compileOnly "javax.annotation:javax.annotation-api"
 
-    implementation "io.micronaut:micronaut-validation"
+    implementation "io.micronaut.validation:micronaut-validation"
     implementation "io.micronaut:micronaut-runtime"
-    implementation projects.grpcServerRuntime
+    implementation projects.micronautGrpcServerRuntime
     implementation "io.micronaut.discovery:micronaut-discovery-client"
     implementation "io.grpc:grpc-services"
     implementation "org.yaml:snakeyaml"
 
     runtimeOnly "ch.qos.logback:logback-classic"
 
-    testAnnotationProcessor "io.micronaut:micronaut-validation"
+    testAnnotationProcessor "io.micronaut.validation:micronaut-validation-processor"
 
     testCompileOnly "javax.annotation:javax.annotation-api"
 }

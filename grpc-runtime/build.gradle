@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    api projects.grpcClientRuntime
-    api projects.grpcServerRuntime
+    api projects.micronautGrpcClientRuntime
+    api projects.micronautGrpcServerRuntime
 }
