@@ -9,7 +9,7 @@ jaeger-core = '1.8.1'
 opentracing-grpc = '0.2.3'
 opentracing-mock = '0.33.0'
 
-micronaut = "4.0.0-SNAPSHOT"
+micronaut = "4.0.0-M1"
 micronaut-docs = '2.0.0'
 micronaut-test = "4.0.0-SNAPSHOT"
 micronaut-gradle-plugin = "4.0.0-SNAPSHOT"
