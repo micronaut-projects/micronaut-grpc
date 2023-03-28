@@ -35,7 +35,7 @@ dependencies {
     implementation "io.micronaut.validation:micronaut-validation"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.jetbrains.kotlin:kotlin-reflect"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta"
     implementation "io.micronaut:micronaut-runtime"
     implementation projects.micronautGrpcServerRuntime
     implementation "org.yaml:snakeyaml"
