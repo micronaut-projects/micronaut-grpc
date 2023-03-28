@@ -12,3 +12,8 @@ repositories {
         }
     }
 }
+configurations.all {
+    resolutionStrategy {
+        preferProjectModules()
+    }
+}
