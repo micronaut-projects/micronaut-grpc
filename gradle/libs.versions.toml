@@ -27,6 +27,8 @@ micronaut-tracing-legacy = "3.2.7"
 micronaut-validation = "4.0.0-M2"
 
 [libraries]
+# Core
+micronaut-core = { module = 'io.micronaut:micronaut-core-bom', version.ref = 'micronaut' }
 
 managed-grpc-protobuf = { module = 'io.grpc:grpc-protobuf', version.ref = 'managed-grpc' }
 managed-grpc-stub = { module = 'io.grpc:grpc-stub', version.ref = 'managed-grpc' }
