@@ -1,8 +1,8 @@
 plugins {
-    id "org.jetbrains.kotlin.jvm" 
+    id "org.jetbrains.kotlin.jvm"
     id "org.jetbrains.kotlin.kapt"
     id "org.jetbrains.kotlin.plugin.allopen"
-    id "io.micronaut.application" 
+    id "io.micronaut.application"
     id "com.google.protobuf" version "$protobufGradleVersion"
     id "io.micronaut.build.internal.grpc-base"
 }
@@ -20,7 +20,7 @@ java {
 
 mainClassName = "helloworld.Application"
 micronaut {
-    version '4.0.0-SNAPSHOT'
+    version '4.0.0-M2'
     //version micronautVersion
     testRuntime "junit5"
     enableNativeImage false

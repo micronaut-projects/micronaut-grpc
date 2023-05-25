@@ -3,13 +3,13 @@ plugins {
     // tag::plugin[]
     id "com.google.protobuf" version "$protobufGradleVersion"
     // end::plugin[]
-    id "io.micronaut.application" 
+    id "io.micronaut.application"
     id "io.micronaut.build.internal.grpc-tests"
 }
 
 mainClassName = "helloworld.Application"
 micronaut {
-    version '4.0.0-SNAPSHOT'
+    version '4.0.0-M2'
     //version micronautVersion
     testRuntime "junit5"
     enableNativeImage false
