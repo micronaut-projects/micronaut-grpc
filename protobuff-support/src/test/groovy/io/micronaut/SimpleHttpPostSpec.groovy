@@ -16,6 +16,7 @@
 package io.micronaut
 
 import com.example.wire.Example
+import io.micronaut.context.annotation.Property
 import io.micronaut.protobuf.codec.ProtobufferCodec
 
 class SimpleHttpPostSpec extends BaseSpec {

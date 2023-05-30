@@ -15,6 +15,19 @@
  */
 package io.micronaut.protobuf.codec;
 
+import com.google.protobuf.ExtensionRegistry;
+import com.google.protobuf.Message;
+import io.micronaut.core.annotation.Nullable;
+import io.micronaut.core.io.buffer.ByteBuffer;
+import io.micronaut.core.io.buffer.ByteBufferFactory;
+import io.micronaut.core.type.Argument;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.codec.CodecConfiguration;
+import io.micronaut.http.codec.CodecException;
+import io.micronaut.http.codec.MediaTypeCodec;
+import jakarta.inject.Named;
+import jakarta.inject.Singleton;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,18 +40,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.micronaut.core.io.buffer.ByteBuffer;
-import io.micronaut.core.io.buffer.ByteBufferFactory;
-import io.micronaut.core.type.Argument;
-import io.micronaut.http.MediaType;
-import io.micronaut.http.codec.CodecException;
-import io.micronaut.http.codec.MediaTypeCodec;
-
-import jakarta.inject.Singleton;
-
-import com.google.protobuf.ExtensionRegistry;
-import com.google.protobuf.Message;
-
 /**
  * Protocol buffers codec.
  *
@@ -46,6 +47,7 @@ import com.google.protobuf.Message;
  * @author luistrigueiros
  */
 @Singleton
+@Named("protobuf")
 public class ProtobufferCodec implements MediaTypeCodec {
 
     /**
@@ -72,7 +74,7 @@ public class ProtobufferCodec implements MediaTypeCodec {
     /**
      * List of default protobuf media types.
      */
-    public static final List<MediaType> DEFAULT_MEDIA_TYPES = Arrays.asList(PROTOBUFFER_ENCODED_TYPE, PROTOBUFFER_ENCODED_TYPE2);
+    public static final List<MediaType> DEFAULT_MEDIA_TYPES = List.of(PROTOBUFFER_ENCODED_TYPE, PROTOBUFFER_ENCODED_TYPE2);
 
     private final ConcurrentHashMap<Class<?>, Method> methodCache = new ConcurrentHashMap<>();
 
