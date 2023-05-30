@@ -8,3 +8,4 @@ io.micronaut.grpc.server.interceptor
 io.micronaut.grpc.server.tracing
 io.micronaut.protobuf.codec
 io.micronaut.protobuf.convert
+io.micronaut.protobuf.handler

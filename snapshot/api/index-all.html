@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:X">X</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<a href="#I:X">X</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
 <h2 class="title" id="I:B">B</h2>
 <dl class="index">
 <dt><a href="io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorConfiguration.html#builder" class="member-name-link">builder</a> - Variable in class io.micronaut.grpc.client.tracing.<a href="io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.client.tracing">GrpcClientTracingInterceptorConfiguration</a></dt>
@@ -391,6 +391,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/protobuf/convert/package-summary.html">io.micronaut.protobuf.convert</a> - package io.micronaut.protobuf.convert</dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/handler/package-summary.html">io.micronaut.protobuf.handler</a> - package io.micronaut.protobuf.handler</dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#isAvailable()" class="member-name-link">isAvailable()</a> - Method in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#isConnectOnStartup()" class="member-name-link">isConnectOnStartup()</a> - Method in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
@@ -458,6 +460,12 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#PRIORITY" class="member-name-link">PRIORITY</a> - Static variable in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html" class="type-name-link" title="class in io.micronaut.protobuf.handler">ProtobufBodyHandler</a>&lt;<a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html" title="type parameter in ProtobufBodyHandler">T</a> extends com.google.protobuf.Message&gt; - Class in <a href="io/micronaut/protobuf/handler/package-summary.html">io.micronaut.protobuf.handler</a></dt>
+<dd>
+<div class="block">Message body handler for protobuf <code>Message</code>s.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html#%3Cinit%3E(io.micronaut.protobuf.codec.ProtobufferCodec,com.google.protobuf.ExtensionRegistry)" class="member-name-link">ProtobufBodyHandler(ProtobufferCodec, ExtensionRegistry)</a> - Constructor for class io.micronaut.protobuf.handler.<a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html" title="class in io.micronaut.protobuf.handler">ProtobufBodyHandler</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#PROTOBUFFER_ENCODED" class="member-name-link">PROTOBUFFER_ENCODED</a> - Static variable in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
 <dd>
 <div class="block">Protobuffer encoded data: application/x-protobuf.</div>
@@ -487,6 +495,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Converts Protocol buffer messages to Netty <code>ByteBuf</code>.</div>
 </dd>
 <dt><a href="io/micronaut/protobuf/convert/ProtoMessageToByteBufConverter.html#%3Cinit%3E(io.micronaut.core.convert.ConversionService)" class="member-name-link">ProtoMessageToByteBufConverter(ConversionService)</a> - Constructor for class io.micronaut.protobuf.convert.<a href="io/micronaut/protobuf/convert/ProtoMessageToByteBufConverter.html" title="class in io.micronaut.protobuf.convert">ProtoMessageToByteBufConverter</a></dt>
+<dd>&nbsp;</dd>
+</dl>
+<h2 class="title" id="I:R">R</h2>
+<dl class="index">
+<dt><a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html#read(io.micronaut.core.type.Argument,io.micronaut.http.MediaType,io.micronaut.core.type.Headers,java.io.InputStream)" class="member-name-link">read(Argument&lt;T&gt;, MediaType, Headers, InputStream)</a> - Method in class io.micronaut.protobuf.handler.<a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html" title="class in io.micronaut.protobuf.handler">ProtobufBodyHandler</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
@@ -569,6 +582,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="io/micronaut/grpc/annotation/GrpcChannel.html#value()" class="member-name-link">value()</a> - Element in annotation interface io.micronaut.grpc.annotation.<a href="io/micronaut/grpc/annotation/GrpcChannel.html" title="annotation interface in io.micronaut.grpc.annotation">GrpcChannel</a></dt>
 <dd>&nbsp;</dd>
 </dl>
+<h2 class="title" id="I:W">W</h2>
+<dl class="index">
+<dt><a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html#writeTo(io.micronaut.core.type.Argument,io.micronaut.http.MediaType,T,io.micronaut.core.type.MutableHeaders,java.io.OutputStream)" class="member-name-link">writeTo(Argument&lt;T&gt;, MediaType, T, MutableHeaders, OutputStream)</a> - Method in class io.micronaut.protobuf.handler.<a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html" title="class in io.micronaut.protobuf.handler">ProtobufBodyHandler</a></dt>
+<dd>&nbsp;</dd>
+</dl>
 <h2 class="title" id="I:X">X</h2>
 <dl class="index">
 <dt><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#X_PROTOBUF_MESSAGE_HEADER" class="member-name-link">X_PROTOBUF_MESSAGE_HEADER</a> - Static variable in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
@@ -576,7 +594,7 @@ loadScripts(document, 'script');</script>
 <div class="block">This Header is to say the fully qualified name of the message builder to use.</div>
 </dd>
 </dl>
-<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:X">X</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<a href="#I:X">X</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
 </div>
 </div>
 </body>
