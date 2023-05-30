@@ -34,7 +34,9 @@ import spock.lang.Specification
 abstract class BaseSpec extends Specification {
     @Shared
     @AutoCleanup
-    EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer)
+    EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, [
+            "micronaut.codec.protobuf.additional-types": [SampleController.MY_PROTO_ENCODED]
+    ])
 
     @Shared
     @AutoCleanup
@@ -77,18 +79,6 @@ abstract class BaseSpec extends Specification {
                         .header(HttpHeaders.ACCEPT, mediaType),
                 byte[].class
         )
-    }
-
-    @Factory
-    static class SetCutomHeadersConfig {
-
-        @Singleton
-        @Replaces(ProtobufferCodec.class)
-        ProtobufferCodec init(ExtensionRegistry registry) {
-            def codec = new ProtobufferCodec(registry)
-            codec.setMediaTypes([ProtobufferCodec.PROTOBUFFER_ENCODED_TYPE, ProtobufferCodec.PROTOBUFFER_ENCODED_TYPE2, SampleController.MY_PROTO_ENCODED_TYPE])
-            return codec;
-        }
     }
 }
 
