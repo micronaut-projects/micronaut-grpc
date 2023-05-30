@@ -17,7 +17,6 @@ package io.micronaut.protobuf.handler;
 
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.Message;
-import io.micronaut.core.io.buffer.ByteBuffer;
 import io.micronaut.core.type.Argument;
 import io.micronaut.core.type.Headers;
 import io.micronaut.core.type.MutableHeaders;
