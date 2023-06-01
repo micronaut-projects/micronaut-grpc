@@ -11,8 +11,8 @@
 
     <properties>
         <packaging>jar</packaging>
-        <micronaut.version>4.0.0-SNAPSHOT</micronaut.version>
-        <grpc.version>1.50.2</grpc.version>
+        <micronaut.version>4.0.0</micronaut.version>
+        <grpc.version>1.55.1</grpc.version>
         <protoc.version>3.23.2</protoc.version>
         <guava.version>31.1-jre</guava.version>
         <jdk.version>17</jdk.version>
@@ -24,10 +24,6 @@
         <repository>
             <id>central</id>
             <url>https://repo1.maven.org/maven2/</url>
-        </repository>
-        <repository>
-            <id>snapshots</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </repository>
     </repositories>
 
