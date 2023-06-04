@@ -88,7 +88,7 @@ public class ServerInterceptorFactory {
 
     @Bean // <2>
     @Singleton
-    public ServerInterceptor customSeverInterceptor() {
+    public ServerInterceptor customServerInterceptor() {
         return new OrderedServerInterceptor(new CustomInterceptor(), 10); // <3>
     }
 
