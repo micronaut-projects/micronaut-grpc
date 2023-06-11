@@ -130,8 +130,8 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(io.micronaut.context.env.Environment,java.lang.String,java.lang.Integer,java.util.concurrent.ExecutorService,io.micronaut.core.io.ResourceResolver)" class="member-name-link">GrpcServerConfiguration</a><wbr>(io.micronaut.context.env.Environment&nbsp;environment,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serverHost,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;serverPort,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serverHost,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;serverPort,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ExecutorService.html" title="class or interface in java.util.concurrent" class="external-link">ExecutorService</a>&nbsp;executorService,
  io.micronaut.core.io.ResourceResolver&nbsp;resourceResolver)</code></div>
 <div class="col-last even-row-color">
@@ -156,17 +156,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the maximum duration application will wait for the server to terminate and release all resources.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NonNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInstanceId()" class="member-name-link">getInstanceId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The instance id.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>io.grpc.ServerBuilder&lt;?&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NonNull io.grpc.ServerBuilder&lt;?&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getServerBuilder()" class="member-name-link">getServerBuilder</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The server builder.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NonNull <a href="GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getServerConfiguration()" class="member-name-link">getServerConfiguration</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The SSL configuration.</div>
@@ -325,9 +325,9 @@ loadScripts(document, 'script');</script>
 <h3>GrpcServerConfiguration</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">GrpcServerConfiguration</span><wbr><span class="parameters">(io.micronaut.context.env.Environment&nbsp;environment,
  @Property(name="grpc.server.host") @Nullable
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serverHost,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serverHost,
  @Property(name="grpc.server.port") @Nullable
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;serverPort,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;serverPort,
  @Named("io")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ExecutorService.html" title="class or interface in java.util.concurrent" class="external-link">ExecutorService</a>&nbsp;executorService,
  io.micronaut.core.io.ResourceResolver&nbsp;resourceResolver)</span></div>
@@ -365,7 +365,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getServerBuilder()">
 <h3>getServerBuilder</h3>
 <div class="member-signature"><span class="annotations">@NonNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">io.grpc.ServerBuilder&lt;?&gt;</span>&nbsp;<span class="element-name">getServerBuilder</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NonNull io.grpc.ServerBuilder&lt;?&gt;</span>&nbsp;<span class="element-name">getServerBuilder</span>()</div>
 <div class="block">The server builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -399,7 +399,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getInstanceId()">
 <h3>getInstanceId</h3>
 <div class="member-signature"><span class="annotations">@NonNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getInstanceId</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NonNull <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getInstanceId</span>()</div>
 <div class="block">The instance id.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -470,7 +470,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getServerConfiguration()">
 <h3>getServerConfiguration</h3>
 <div class="member-signature"><span class="annotations">@NonNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></span>&nbsp;<span class="element-name">getServerConfiguration</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NonNull <a href="GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></span>&nbsp;<span class="element-name">getServerConfiguration</span>()</div>
 <div class="block">The SSL configuration.</div>
 <dl class="notes">
 <dt>Returns:</dt>

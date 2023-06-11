@@ -122,10 +122,10 @@ implements io.micronaut.runtime.server.EmbeddedServer</span></div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getScheme()" class="member-name-link">getScheme</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>io.grpc.Server</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NonNull io.grpc.Server</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getServer()" class="member-name-link">getServer</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NonNull <a href="GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getServerConfiguration()" class="member-name-link">getServerConfiguration</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a></code></div>
@@ -176,7 +176,7 @@ implements io.micronaut.runtime.server.EmbeddedServer</span></div>
 <section class="detail" id="getServer()">
 <h3>getServer</h3>
 <div class="member-signature"><span class="annotations">@NonNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">io.grpc.Server</span>&nbsp;<span class="element-name">getServer</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NonNull io.grpc.Server</span>&nbsp;<span class="element-name">getServer</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The underlying GRPC <code>Server</code>.</dd>
@@ -187,7 +187,7 @@ implements io.micronaut.runtime.server.EmbeddedServer</span></div>
 <section class="detail" id="getServerConfiguration()">
 <h3>getServerConfiguration</h3>
 <div class="member-signature"><span class="annotations">@NonNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></span>&nbsp;<span class="element-name">getServerConfiguration</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NonNull <a href="GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></span>&nbsp;<span class="element-name">getServerConfiguration</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The configuration for the server</dd>

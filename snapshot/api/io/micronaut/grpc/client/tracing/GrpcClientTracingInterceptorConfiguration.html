@@ -139,12 +139,12 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getBuilder()" class="member-name-link">getBuilder</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setClientCloseDecorator(io.opentracing.contrib.grpc.ClientCloseDecorator)" class="member-name-link">setClientCloseDecorator</a><wbr>(io.opentracing.contrib.grpc.ClientCloseDecorator&nbsp;clientCloseDecorator)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setClientCloseDecorator(io.opentracing.contrib.grpc.ClientCloseDecorator)" class="member-name-link">setClientCloseDecorator</a><wbr>(@Nullable io.opentracing.contrib.grpc.ClientCloseDecorator&nbsp;clientCloseDecorator)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Decorates the server span with custom data when the gRPC call is closed.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setClientSpanDecorator(io.opentracing.contrib.grpc.ClientSpanDecorator)" class="member-name-link">setClientSpanDecorator</a><wbr>(io.opentracing.contrib.grpc.ClientSpanDecorator&nbsp;clientSpanDecorator)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setClientSpanDecorator(io.opentracing.contrib.grpc.ClientSpanDecorator)" class="member-name-link">setClientSpanDecorator</a><wbr>(@Nullable io.opentracing.contrib.grpc.ClientSpanDecorator&nbsp;clientSpanDecorator)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Decorates the server span with custom data.</div>
 </div>
@@ -230,7 +230,7 @@ loadScripts(document, 'script');</script>
 <h3>setClientSpanDecorator</h3>
 <div class="member-signature"><span class="annotations">@Inject
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setClientSpanDecorator</span><wbr><span class="parameters">(@Nullable
- io.opentracing.contrib.grpc.ClientSpanDecorator&nbsp;clientSpanDecorator)</span></div>
+ @Nullable io.opentracing.contrib.grpc.ClientSpanDecorator&nbsp;clientSpanDecorator)</span></div>
 <div class="block">Decorates the server span with custom data.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -243,7 +243,7 @@ loadScripts(document, 'script');</script>
 <h3>setClientCloseDecorator</h3>
 <div class="member-signature"><span class="annotations">@Inject
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setClientCloseDecorator</span><wbr><span class="parameters">(@Nullable
- io.opentracing.contrib.grpc.ClientCloseDecorator&nbsp;clientCloseDecorator)</span></div>
+ @Nullable io.opentracing.contrib.grpc.ClientCloseDecorator&nbsp;clientCloseDecorator)</span></div>
 <div class="block">Decorates the server span with custom data when the gRPC call is closed.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

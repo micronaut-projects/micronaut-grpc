@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(io.micronaut.grpc.server.health.HealthStatusManagerContainer)" class="member-name-link">GrpcServerBuilder</a><wbr>(<a href="health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a>&nbsp;healthStatusManagerContainer)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(io.micronaut.grpc.server.health.HealthStatusManagerContainer)" class="member-name-link">GrpcServerBuilder</a><wbr>(@Nullable <a href="health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a>&nbsp;healthStatusManagerContainer)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructs the <code>ServerBuilder</code> instance.</div>
 </div>
@@ -116,10 +116,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected io.grpc.ServerBuilder&lt;?&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#serverBuilder(io.micronaut.grpc.server.GrpcServerConfiguration,java.util.List,java.util.List,java.util.List,java.util.List)" class="member-name-link">serverBuilder</a><wbr>(<a href="GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a>&nbsp;configuration,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.BindableService&gt;&nbsp;serviceList,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerInterceptor&gt;&nbsp;interceptors,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerTransportFilter&gt;&nbsp;serverTransportFilters,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerServiceDefinition&gt;&nbsp;serverServiceDefinitions)</code></div>
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.BindableService&gt;&nbsp;serviceList,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerInterceptor&gt;&nbsp;interceptors,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerTransportFilter&gt;&nbsp;serverTransportFilters,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerServiceDefinition&gt;&nbsp;serverServiceDefinitions)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The server builder instance.</div>
 </div>
@@ -145,7 +145,7 @@ loadScripts(document, 'script');</script>
 <h3>GrpcServerBuilder</h3>
 <div class="member-signature"><span class="annotations">@Inject
 </span><span class="modifiers">public</span>&nbsp;<span class="element-name">GrpcServerBuilder</span><wbr><span class="parameters">(@Nullable
- <a href="health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a>&nbsp;healthStatusManagerContainer)</span></div>
+ @Nullable <a href="health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a>&nbsp;healthStatusManagerContainer)</span></div>
 <div class="block">Constructs the <code>ServerBuilder</code> instance.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -168,13 +168,13 @@ loadScripts(document, 'script');</script>
 @Singleton
 </span><span class="modifiers">protected</span>&nbsp;<span class="return-type">io.grpc.ServerBuilder&lt;?&gt;</span>&nbsp;<span class="element-name">serverBuilder</span><wbr><span class="parameters">(<a href="GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a>&nbsp;configuration,
  @Nullable
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.BindableService&gt;&nbsp;serviceList,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.BindableService&gt;&nbsp;serviceList,
  @Nullable
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerInterceptor&gt;&nbsp;interceptors,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerInterceptor&gt;&nbsp;interceptors,
  @Nullable
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerTransportFilter&gt;&nbsp;serverTransportFilters,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerTransportFilter&gt;&nbsp;serverTransportFilters,
  @Nullable
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerServiceDefinition&gt;&nbsp;serverServiceDefinitions)</span></div>
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;io.grpc.ServerServiceDefinition&gt;&nbsp;serverServiceDefinitions)</span></div>
 <div class="block">The server builder instance.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
