@@ -10,9 +10,10 @@ opentracing-grpc = '0.2.3'
 opentracing-mock = '0.33.0'
 
 micronaut = "4.0.0-M7"
-micronaut-docs = '2.0.0'
+micronaut-platform = "4.0.0-M3"
+micronaut-docs = "2.0.0"
 micronaut-test = "4.0.0-M7"
-micronaut-gradle-plugin = "4.0.0-M3"
+micronaut-gradle-plugin = "4.0.0-M4"
 
 graal-svm = "22.3.2"
 groovy = "4.0.12"
