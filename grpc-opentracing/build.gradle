@@ -39,10 +39,3 @@ protobuf {
         all()*.plugins { grpc {} }
     }
 }
-
-micronautBuild {
-    binaryCompatibility {
-        enabled = false
-    }
-}
-
