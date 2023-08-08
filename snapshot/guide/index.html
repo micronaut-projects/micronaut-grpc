@@ -320,7 +320,7 @@ protobuf {
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-server-runtime:4.0.2-SNAPSHOT")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-server-runtime")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -328,7 +328,6 @@ protobuf {
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-grpc-server-runtime&lt;/artifactId&gt;
-    &lt;version&gt;4.0.2-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div></p>
@@ -340,7 +339,7 @@ protobuf {
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-client-runtime:4.0.2-SNAPSHOT")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-client-runtime")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -348,7 +347,6 @@ protobuf {
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-grpc-client-runtime&lt;/artifactId&gt;
-    &lt;version&gt;4.0.2-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div></p>
@@ -1113,7 +1111,7 @@ GreeterGrpc.GreeterStub reactiveStub(
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">runtimeOnly(<span class="hljs-string">"io.micronaut.discovery:micronaut-discovery-client:4.0.2-SNAPSHOT")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">runtimeOnly(<span class="hljs-string">"io.micronaut.discovery:micronaut-discovery-client")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1121,7 +1119,6 @@ GreeterGrpc.GreeterStub reactiveStub(
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.discovery&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-discovery-client&lt;/artifactId&gt;
-    &lt;version&gt;4.0.2-SNAPSHOT&lt;/version&gt;
     &lt;scope&gt;runtime&lt;/scope&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
@@ -1221,14 +1218,14 @@ GreeterGrpc.GreeterStub greeterStub(
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut:micronaut-tracing")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.tracing:micronaut-tracing-brave-http")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
-    &lt;groupId&gt;io.micronaut&lt;/groupId&gt;
-    &lt;artifactId&gt;micronaut-tracing&lt;/artifactId&gt;
+    &lt;groupId&gt;io.micronaut.tracing&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-tracing-brave-http&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div></p>
@@ -1252,7 +1249,7 @@ GreeterGrpc.GreeterStub greeterStub(
 </div></p>
 </div>
 <div class="paragraph">
-<p>You then need to <a href="https://docs.micronaut.io/latest/guide/index.html#distributedTracing">configure either Jaeger or Zipkin</a> appropriately.</p>
+<p>You then need to <a href="https://micronaut-projects.github.io/micronaut-tracing/latest/guide/#jaeger">configure either Jaeger or Zipkin</a> appropriately.</p>
 </div>
 
 <h1 id="protocolBuffers"><a class="anchor" href="#protocolBuffers"></a>8 Protocol Buffers Support</h1>
@@ -1274,7 +1271,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-support:4.0.2-SNAPSHOT")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-support")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1282,7 +1279,6 @@ GreeterGrpc.GreeterStub greeterStub(
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-protobuff-support&lt;/artifactId&gt;
-    &lt;version&gt;4.0.2-SNAPSHOT&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div></p>
