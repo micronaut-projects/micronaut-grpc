@@ -65,11 +65,11 @@ Finally, add the following dependencies to your build:
 
 For gRPC servers:
 
-dependency:micronaut-grpc-server-runtime[version="{version}", groupId="io.micronaut.grpc"]
+dependency:micronaut-grpc-server-runtime[groupId="io.micronaut.grpc"]
 
 For gRPC clients:
 
-dependency:micronaut-grpc-client-runtime[version="{version}", groupId="io.micronaut.grpc"]
+dependency:micronaut-grpc-client-runtime[groupId="io.micronaut.grpc"]
 
 NOTE: If you wish to use gRPC standalone without the Micronaut HTTP server you should comment out the `micronaut-http-server-netty` dependency.
 

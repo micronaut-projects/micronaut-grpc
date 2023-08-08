@@ -2,6 +2,6 @@ This project also includes a module that adds the ability to encode and decode P
 
 To use this adds the `micronaut-protobuff-support` dependency:
 
-dependency:micronaut-protobuff-support[version="{version}", groupId="io.micronaut.grpc"]
+dependency:micronaut-protobuff-support[groupId="io.micronaut.grpc"]
 
 Micronaut will now support the encoding and decoding requests / responses of type `application/x-protobuf`.
