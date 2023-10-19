@@ -4,7 +4,13 @@ plugins {
     id "org.jetbrains.kotlin.plugin.allopen"
     id "io.micronaut.application"
     id "com.google.protobuf" version "$protobufGradleVersion"
-    id "io.micronaut.build.internal.grpc-base"
+    id "io.micronaut.build.internal.grpc-tests"
+}
+
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 // tag::variables[]
@@ -13,10 +19,6 @@ ext {
 }
 // end::variables[]
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
 
 mainClassName = "helloworld.Application"
 micronaut {
@@ -52,13 +54,6 @@ dependencies {
     runtimeOnly "com.fasterxml.jackson.module:jackson-module-kotlin"
 
     testCompileOnly "javax.annotation:javax.annotation-api"
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
-    kotlinOptions {
-        jvmTarget = "17"
-        javaParameters = true
-    }
 }
 
 // tag::config[]
