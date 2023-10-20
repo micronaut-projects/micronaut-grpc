@@ -4,7 +4,6 @@ plugins {
 }
 
 dependencies {
-
     api platform(libs.boms.grpc)
     api projects.micronautGrpcAnnotation
     api projects.micronautGrpcOpentracing
