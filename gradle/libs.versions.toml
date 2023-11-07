@@ -18,7 +18,7 @@ micronaut-gradle-plugin = "4.1.1"
 graal-svm = "23.0.0"
 groovy = "4.0.15"
 javax-annotation-api = "1.3.2"
-kotlin = "1.9.10"
+kotlin = "1.9.20"
 spock = "2.3-groovy-4.0"
 
 micronaut-discovery = "4.0.1"
