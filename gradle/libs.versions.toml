@@ -4,7 +4,7 @@ managed-protobuf = '3.25.0'
 managed-protobuf-gradle = '0.9.4'
 managed-grpc-kotlin = '1.4.0'
 
-jackson-datatype-protobuf = '0.9.13'
+jackson-datatype-protobuf = '0.9.14'
 jaeger-core = '1.8.1'
 opentracing-grpc = '0.2.3'
 opentracing-mock = '0.33.0'
