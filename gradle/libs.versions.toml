@@ -22,7 +22,7 @@ kotlin = "1.9.20"
 spock = "2.3-groovy-4.0"
 
 micronaut-discovery = "4.0.1"
-micronaut-reactor = "3.0.3"
+micronaut-reactor = "3.1.0"
 micronaut-tracing = "6.0.0"
 micronaut-tracing-legacy = "3.2.7"
 micronaut-validation = "4.0.3"
