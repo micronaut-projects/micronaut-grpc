@@ -15,10 +15,11 @@ kotlin {
 
 // tag::variables[]
 ext {
-    grpcKotlinVersion = "1.4.0"
+    grpcVersion = libs.versions.managed.grpc.asProvider().get()
+    grpcKotlinVersion = libs.versions.managed.grpc.kotlin.get()
+    protobufVersion = libs.versions.managed.protobuf.asProvider().get()
 }
 // end::variables[]
-
 
 mainClassName = "helloworld.Application"
 micronaut {
@@ -33,27 +34,26 @@ micronaut {
 }
 
 dependencies {
-    kapt "io.micronaut.validation:micronaut-validation-processor"
-    implementation "io.micronaut.validation:micronaut-validation"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "org.jetbrains.kotlin:kotlin-reflect"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
-    implementation "io.micronaut:micronaut-runtime"
+    kapt mnValidation.micronaut.validation.processor
+    implementation mnValidation.micronaut.validation
+    implementation libs.kotlin.stdlib.jdk8
+    implementation libs.kotlin.reflect
+    implementation libs.kotlinx.coroutines.core
+    implementation mn.micronaut.runtime
     implementation projects.micronautGrpcServerRuntime
-    implementation "org.yaml:snakeyaml"
-
+    implementation mn.snakeyaml
 
     // tag::dependencies[]
-    implementation "io.grpc:grpc-kotlin-stub:$grpcKotlinVersion"
-    implementation "io.grpc:grpc-services"
-    compileOnly "io.grpc:grpc-stub"
-    compileOnly "javax.annotation:javax.annotation-api"
+    implementation libs.managed.grpc.kotlin.stub
+    implementation libs.managed.grpc.services
+    compileOnly libs.managed.grpc.stub
+    compileOnly libs.javax.annotation.api
     // end::dependencies[]
 
-    runtimeOnly "ch.qos.logback:logback-classic"
-    runtimeOnly "com.fasterxml.jackson.module:jackson-module-kotlin"
+    runtimeOnly mnLogging.logback.classic
+    runtimeOnly libs.jackson.module.kotlin
 
-    testCompileOnly "javax.annotation:javax.annotation-api"
+    testCompileOnly libs.javax.annotation.api
 }
 
 // tag::config[]
@@ -69,9 +69,9 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:$protobufJavaVersion" }
+    protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
         grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk8@jar" }
     }
     generateProtoTasks {
