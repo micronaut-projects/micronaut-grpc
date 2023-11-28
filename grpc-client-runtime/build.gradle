@@ -10,7 +10,7 @@ dependencies {
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
 
-    compileOnly libs.micronaut.discovery.client
+    compileOnly mn.micronaut.discovery.core
 
     implementation libs.grpc.netty
     implementation mn.reactor
@@ -19,7 +19,8 @@ dependencies {
     testCompileOnly libs.javax.annotation.api
 
     testImplementation projects.micronautGrpcServerRuntime
-    testImplementation libs.micronaut.discovery.client
+    testImplementation mn.micronaut.discovery.core
+    testImplementation mnReactor.micronaut.reactor.http.client
     testImplementation mn.micronaut.jackson.databind
     testImplementation libs.opentracing.mock
 
