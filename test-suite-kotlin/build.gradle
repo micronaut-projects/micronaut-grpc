@@ -3,7 +3,7 @@ plugins {
     id "org.jetbrains.kotlin.kapt"
     id "org.jetbrains.kotlin.plugin.allopen"
     id "io.micronaut.application"
-    id "com.google.protobuf" version "$protobufGradleVersion"
+    alias(libs.plugins.protobuf)
     id "io.micronaut.build.internal.grpc-tests"
 }
 
