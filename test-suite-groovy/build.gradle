@@ -1,9 +1,16 @@
 plugins {
-    id 'groovy'
-    id "com.google.protobuf" version "$protobufGradleVersion"
+    id "groovy"
+    alias(libs.plugins.protobuf)
     id "io.micronaut.minimal.application"
     id "io.micronaut.build.internal.grpc-base"
 }
+
+// tag::variables[]
+ext {
+    grpcVersion = libs.versions.managed.grpc.asProvider().get()
+    protobufVersion = libs.versions.managed.protobuf.asProvider().get()
+}
+// end::variables[]
 
 mainClassName = "helloworld.Application"
 micronaut {
@@ -18,25 +25,26 @@ micronaut {
 }
 
 dependencies {
-    compileOnly "io.grpc:grpc-stub"
-    compileOnly "javax.annotation:javax.annotation-api"
-    compileOnly "io.micronaut.validation:micronaut-validation-processor"
-    implementation "io.micronaut.validation:micronaut-validation"
-    implementation "io.micronaut:micronaut-runtime"
-    implementation "io.micronaut.grpc:micronaut-grpc-server-runtime"
-    implementation "io.micronaut.discovery:micronaut-discovery-client"
-    implementation "io.grpc:grpc-services"
-    implementation "io.grpc:grpc-protobuf"
-    implementation "com.google.protobuf:protobuf-java-util"
-    implementation "org.yaml:snakeyaml"
+    compileOnly libs.managed.grpc.stub
+    compileOnly libs.javax.annotation.api
+    compileOnly mnValidation.micronaut.validation.processor
 
-    runtimeOnly "ch.qos.logback:logback-classic"
+    implementation mnValidation.micronaut.validation
+    implementation mn.micronaut.runtime
+    implementation projects.micronautGrpcRuntime
+    implementation libs.micronaut.discovery.client
+    implementation libs.managed.grpc.services
+    implementation libs.managed.grpc.protobuf
+    implementation libs.managed.protobuf.java.util
+    implementation mn.snakeyaml
 
-    testCompileOnly "javax.annotation:javax.annotation-api"
+    runtimeOnly mnLogging.logback.classic
 
-    testImplementation "org.apache.groovy:groovy"
+    testCompileOnly libs.javax.annotation.api
 
-    testRuntimeOnly "ch.qos.logback:logback-classic"
+    testImplementation libs.groovy
+
+    testRuntimeOnly mnLogging.logback.classic
 }
 
 tasks.withType(GroovyCompile) {
@@ -57,7 +65,7 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:$protobufJavaVersion" }
+    protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
     }

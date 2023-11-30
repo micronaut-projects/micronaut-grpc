@@ -1,11 +1,18 @@
 plugins {
-    id 'java'
+    id "java"
     // tag::plugin[]
-    id "com.google.protobuf" version "$protobufGradleVersion"
+    alias(libs.plugins.protobuf)
     // end::plugin[]
     id "io.micronaut.application"
     id "io.micronaut.build.internal.grpc-tests"
 }
+
+// tag::variables[]
+ext {
+    grpcVersion = libs.versions.managed.grpc.asProvider().get()
+    protobufVersion = libs.versions.managed.protobuf.asProvider().get()
+}
+// end::variables[]
 
 mainClassName = "helloworld.Application"
 micronaut {
@@ -21,23 +28,23 @@ micronaut {
 
 dependencies {
 
-    annotationProcessor "io.micronaut.validation:micronaut-validation-processor"
+    annotationProcessor mnValidation.micronaut.validation.processor
 
-    compileOnly "io.grpc:grpc-stub"
-    compileOnly "javax.annotation:javax.annotation-api"
+    compileOnly libs.managed.grpc.stub
+    compileOnly libs.javax.annotation.api
 
-    implementation "io.micronaut.validation:micronaut-validation"
-    implementation "io.micronaut:micronaut-runtime"
+    implementation mnValidation.micronaut.validation
+    implementation mn.micronaut.runtime
     implementation projects.micronautGrpcServerRuntime
-    implementation "io.micronaut.discovery:micronaut-discovery-client"
-    implementation "io.grpc:grpc-services"
-    implementation "org.yaml:snakeyaml"
+    implementation libs.micronaut.discovery.client
+    implementation libs.managed.grpc.services
+    implementation mn.snakeyaml
 
-    runtimeOnly "ch.qos.logback:logback-classic"
+    runtimeOnly mnLogging.logback.classic
 
-    testAnnotationProcessor "io.micronaut.validation:micronaut-validation-processor"
+    testAnnotationProcessor mnValidation.micronaut.validation.processor
 
-    testCompileOnly "javax.annotation:javax.annotation-api"
+    testCompileOnly libs.javax.annotation.api
 }
 
 // tag::config[]
@@ -52,7 +59,7 @@ sourceSets {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:$protobufJavaVersion" }
+    protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
     }
