@@ -1,5 +1,5 @@
 [versions]
-managed-grpc = '1.59.1'
+managed-grpc = '1.61.0'
 managed-protobuf = '3.25.2'
 managed-protobuf-gradle = '0.9.4'
 managed-grpc-kotlin = '1.4.1'
@@ -40,6 +40,7 @@ micronaut-kotlin = { module = 'io.micronaut.kotlin:micronaut-kotlin-bom', versio
 micronaut-logging = { module = 'io.micronaut.logging:micronaut-logging-bom', version.ref = 'micronaut-logging' }
 micronaut-test = { module = 'io.micronaut.test:micronaut-test-bom', version.ref = 'micronaut-test' }
 
+managed-grpc-core = { module = 'io.grpc:grpc-core', version.ref = 'managed-grpc' }
 managed-grpc-protobuf = { module = 'io.grpc:grpc-protobuf', version.ref = 'managed-grpc' }
 managed-grpc-stub = { module = 'io.grpc:grpc-stub', version.ref = 'managed-grpc' }
 managed-grpc-services = { module = 'io.grpc:grpc-services', version.ref = 'managed-grpc' }
