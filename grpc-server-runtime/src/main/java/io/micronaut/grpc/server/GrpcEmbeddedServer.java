@@ -63,7 +63,10 @@ import static io.micronaut.core.io.socket.SocketUtils.LOCALHOST;
 @Singleton
 @Secondary
 @Named(GrpcServerConfiguration.PREFIX)
-@Requires(classes = ServerBuilder.class)
+@Requires(classes = {
+    ServerBuilder.class,
+    ServiceInstance.class
+})
 @Requires(property = GrpcServerConfiguration.ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 public class GrpcEmbeddedServer implements EmbeddedServer {
 
