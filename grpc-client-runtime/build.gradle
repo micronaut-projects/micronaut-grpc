@@ -18,6 +18,7 @@ dependencies {
     implementation mn.micronaut.buffer.netty
 
     testCompileOnly libs.javax.annotation.api
+    testCompileOnly libs.managed.protobuf.java
 
     testImplementation projects.micronautGrpcServerRuntime
     testImplementation mn.micronaut.discovery.core

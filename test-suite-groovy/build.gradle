@@ -43,6 +43,7 @@ dependencies {
 
     testImplementation mn.groovy
 
+    testCompileOnly libs.managed.protobuf.java
     testRuntimeOnly mnLogging.logback.classic
 }
 

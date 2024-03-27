@@ -20,6 +20,7 @@ dependencies {
     compileOnly libs.javax.annotation.api
 
     testCompileOnly libs.javax.annotation.api
+    testCompileOnly libs.managed.protobuf.java
 
     testImplementation projects.micronautGrpcServerRuntime
     testImplementation libs.managed.grpc.services
