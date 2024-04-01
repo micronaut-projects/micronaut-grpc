@@ -14,12 +14,12 @@ dependencies {
     api libs.managed.grpc.stub
 
     compileOnly libs.managed.grpc.services
-    compileOnly mn.micronaut.discovery.core
     compileOnly mn.micronaut.management
     compileOnly libs.graal.svm
 
     implementation libs.grpc.netty
     implementation mn.micronaut.buffer.netty
+    implementation mn.micronaut.discovery.core
 
     testCompileOnly libs.javax.annotation.api
 
