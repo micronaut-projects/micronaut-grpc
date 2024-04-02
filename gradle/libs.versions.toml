@@ -15,7 +15,7 @@ kotlin = '1.9.23'
 spock = '2.3-groovy-4.0'
 
 micronaut = '4.4.0'
-micronaut-platform = '4.2.0'
+micronaut-platform = '4.3.7'
 micronaut-docs = '2.0.0'
 micronaut-gradle-plugin = '4.3.5'
 micronaut-discovery-client = '4.2.0'
