@@ -1,6 +1,7 @@
 plugins {
     id "io.micronaut.build.internal.grpc-base"
     id 'org.graalvm.buildtools.native'
+    id "io.micronaut.application"
 }
 
 tasks.named("test") {
