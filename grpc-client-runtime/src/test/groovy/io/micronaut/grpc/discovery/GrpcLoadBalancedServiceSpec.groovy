@@ -7,6 +7,7 @@ import io.grpc.examples.helloworld.MultiNodeGreeterGrpc
 import io.grpc.stub.StreamObserver
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.annotation.Factory
+import io.micronaut.context.annotation.Requires
 import io.micronaut.context.annotation.Value
 import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.annotation.GrpcChannel
@@ -24,22 +25,26 @@ class GrpcLoadBalancedServiceSpec extends Specification {
         def port3 = SocketUtils.findAvailableTcpPort()
 
         EmbeddedServer server1 = ApplicationContext.run(EmbeddedServer, [
+                'spec.name': 'GrpcLoadBalancedServiceSpec-Server',
                 'micronaut.application.name': 'greet',
                 'grpc.server.port'          : port1
         ])
 
         EmbeddedServer server2 = ApplicationContext.run(EmbeddedServer, [
+                'spec.name': 'GrpcLoadBalancedServiceSpec-Server',
                 'micronaut.application.name': 'greet',
                 'grpc.server.port'          : port2
         ])
 
         EmbeddedServer server3 = ApplicationContext.run(EmbeddedServer, [
+                'spec.name': 'GrpcLoadBalancedServiceSpec-Server',
                 'micronaut.application.name': 'greet',
                 'grpc.server.port'          : port3
         ])
 
         and: 'then a client is run that declares the service'
         ApplicationContext client = ApplicationContext.run([
+                'spec.name': 'GrpcLoadBalancedServiceSpec-Client',
                 (GrpcNameResolverProvider.ENABLED) : true,
                 'grpc.channels.greet.plaintext'    : true,
                 'grpc.channels.greet.default-load-balancing-policy' : 'round_robin',
@@ -48,10 +53,10 @@ class GrpcLoadBalancedServiceSpec extends Specification {
                 'micronaut.http.services.greet.urls[2]': server3.URL.toString()
         ])
 
-        when: 'the service is called three times'
+        when: 'the service is called many times'
         MultiNodeGreeterGrpc.MultiNodeGreeterFutureStub stub = client.getBean(MultiNodeGreeterGrpc.MultiNodeGreeterFutureStub)
         Set<String> results = new HashSet<>()
-        for (int i=0; i<3; i++) {
+        for (int i=0; i<12; i++) {
             results.add(stub.sayHello(HelloRequest.newBuilder().setName("test").build()).get().message)
         }
 
@@ -65,6 +70,7 @@ class GrpcLoadBalancedServiceSpec extends Specification {
         server3.stop()
     }
 
+    @Requires(property = "spec.name", value = "GrpcLoadBalancedServiceSpec-Client")
     @Factory
     static class Clients {
         @Singleton
@@ -76,6 +82,7 @@ class GrpcLoadBalancedServiceSpec extends Specification {
     }
 
     @Singleton
+    @Requires(property = "spec.name", value = "GrpcLoadBalancedServiceSpec-Server")
     static class MultiNodeGreeterImpl extends MultiNodeGreeterGrpc.MultiNodeGreeterImplBase {
 
         @Value('${grpc.server.port}')
