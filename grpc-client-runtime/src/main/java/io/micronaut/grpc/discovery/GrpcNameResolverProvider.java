@@ -15,12 +15,6 @@
  */
 package io.micronaut.grpc.discovery;
 
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.net.URI;
-import java.util.Collections;
-import java.util.List;
-
 import io.grpc.Attributes;
 import io.grpc.EquivalentAddressGroup;
 import io.grpc.ManagedChannelBuilder;
@@ -44,12 +38,16 @@ import io.micronaut.discovery.ServiceInstance;
 import io.micronaut.discovery.ServiceInstanceList;
 import io.micronaut.discovery.exceptions.NoAvailableServiceException;
 import io.micronaut.grpc.channels.GrpcDefaultManagedChannelConfiguration;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Singleton;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.util.Collections;
+import java.util.List;
 
 import static io.micronaut.grpc.discovery.GrpcNameResolverProvider.ENABLED;
 
@@ -184,10 +182,10 @@ public class GrpcNameResolverProvider extends NameResolverProvider implements Li
             }
 
             private List<EquivalentAddressGroup> toAddresses(List<ServiceInstance> instances) {
-                final List<SocketAddress> socketAddresses = instances.stream().map(serviceInstance ->
-                    new InetSocketAddress(serviceInstance.getHost(), serviceInstance.getPort())
-                ).map(SocketAddress.class::cast).toList();
-                return Collections.singletonList(new EquivalentAddressGroup(socketAddresses));
+                return instances.stream()
+                    .map(serviceInstance -> new InetSocketAddress(serviceInstance.getHost(), serviceInstance.getPort()))
+                    .map(EquivalentAddressGroup::new)
+                    .toList();
             }
 
             @Override
