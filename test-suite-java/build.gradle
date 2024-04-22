@@ -45,6 +45,7 @@ dependencies {
     testAnnotationProcessor mnValidation.micronaut.validation.processor
 
     testCompileOnly libs.javax.annotation.api
+    testCompileOnly libs.managed.protobuf.java
 }
 
 // tag::config[]
