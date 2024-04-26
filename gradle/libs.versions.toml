@@ -25,7 +25,7 @@ micronaut-tracing-legacy = '3.2.7'
 micronaut-validation = '4.4.4'
 micronaut-kotlin = '4.3.0'
 micronaut-logging = '1.2.3'
-micronaut-test = '4.2.1'
+micronaut-test = '4.3.0'
 
 [libraries]
 # Core
