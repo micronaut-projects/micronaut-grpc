@@ -1,4 +1,5 @@
-rootProject.name = 'grpc-parent'
+rootProject.name = 'build-logic'
+
 dependencyResolutionManagement {
     versionCatalogs {
         libs {

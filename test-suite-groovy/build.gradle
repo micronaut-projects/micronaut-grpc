@@ -1,8 +1,7 @@
 plugins {
     id "groovy"
     alias(libs.plugins.protobuf)
-    id "io.micronaut.minimal.application"
-    id "io.micronaut.build.internal.grpc-base"
+    id "io.micronaut.build.internal.grpc-minimal-test"
 }
 
 // tag::variables[]
@@ -42,7 +41,7 @@ dependencies {
 
     testCompileOnly libs.javax.annotation.api
 
-    testImplementation libs.groovy
+    testImplementation mn.groovy
 
     testRuntimeOnly mnLogging.logback.classic
 }

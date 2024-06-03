@@ -3,7 +3,6 @@ plugins {
     // tag::plugin[]
     alias(libs.plugins.protobuf)
     // end::plugin[]
-    id "io.micronaut.application"
     id "io.micronaut.build.internal.grpc-tests"
 }
 
@@ -45,6 +44,8 @@ dependencies {
     testAnnotationProcessor mnValidation.micronaut.validation.processor
 
     testCompileOnly libs.javax.annotation.api
+
+    testRuntimeOnly mnLogging.logback.classic
 }
 
 // tag::config[]

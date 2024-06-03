@@ -3,11 +3,14 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
+    includeBuild "build-logic"
 }
 
 plugins {
     id 'io.micronaut.build.shared.settings' version '6.7.0'
 }
+
+enableFeaturePreview 'TYPESAFE_PROJECT_ACCESSORS'
 
 rootProject.name = 'grpc-parent'
 
@@ -24,8 +27,6 @@ include 'test-suite-groovy'
 include 'test-suite-kotlin'
 include 'grpc-health'
 include 'grpc-opentracing'
-
-enableFeaturePreview 'TYPESAFE_PROJECT_ACCESSORS'
 
 micronautBuild {
     useStandardizedProjectNames = true

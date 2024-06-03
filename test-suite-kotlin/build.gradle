@@ -1,10 +1,9 @@
 plugins {
-    id "org.jetbrains.kotlin.jvm"
-    id "org.jetbrains.kotlin.kapt"
-    id "org.jetbrains.kotlin.plugin.allopen"
-    id "io.micronaut.application"
+    alias(mn.plugins.kotlin.jvm)
+    alias(mn.plugins.kotlin.kapt)
+    alias(mn.plugins.kotlin.allopen)
     alias(libs.plugins.protobuf)
-    id "io.micronaut.build.internal.grpc-tests"
+    id "io.micronaut.build.internal.grpc-minimal-test"
 }
 
 kotlin {
@@ -36,9 +35,9 @@ micronaut {
 dependencies {
     kapt mnValidation.micronaut.validation.processor
     implementation mnValidation.micronaut.validation
-    implementation libs.kotlin.stdlib.jdk8
-    implementation libs.kotlin.reflect
-    implementation libs.kotlinx.coroutines.core
+    implementation mn.kotlin.stdlib.jdk8
+    implementation mn.kotlin.reflect
+    implementation mn.kotlinx.coroutines.core
     implementation mn.micronaut.runtime
     implementation projects.micronautGrpcServerRuntime
     implementation mn.snakeyaml
@@ -51,9 +50,12 @@ dependencies {
     // end::dependencies[]
 
     runtimeOnly mnLogging.logback.classic
-    runtimeOnly libs.jackson.module.kotlin
+    runtimeOnly mn.jackson.module.kotlin
 
     testCompileOnly libs.javax.annotation.api
+
+    testRuntimeOnly mnLogging.logback.classic
+    testRuntimeOnly mn.jackson.module.kotlin
 }
 
 // tag::config[]

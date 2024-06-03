@@ -1,0 +1,4 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-base'
+    id 'io.micronaut.minimal.application'
+}
