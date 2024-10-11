@@ -13,7 +13,7 @@
         <packaging>jar</packaging>
         <micronaut.version>4.2.0</micronaut.version>
         <grpc.version>1.59.1</grpc.version>
-        <protoc.version>4.27.5</protoc.version>
+        <protoc.version>4.28.2</protoc.version>
         <guava.version>33.2.1-jre</guava.version>
         <jdk.version>17</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
