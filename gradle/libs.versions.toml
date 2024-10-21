@@ -8,7 +8,7 @@ jackson-datatype-protobuf = '0.9.15'
 jaeger-core = '1.8.1'
 opentracing-grpc = '0.2.3'
 opentracing-mock = '0.33.0'
-graal-svm = '24.0.2'
+graal-svm = '24.1.1'
 javax-annotation-api = '1.3.2'
 
 micronaut-docs = '2.0.0'
