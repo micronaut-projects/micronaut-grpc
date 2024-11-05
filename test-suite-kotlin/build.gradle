@@ -46,6 +46,7 @@ dependencies {
     implementation libs.managed.grpc.kotlin.stub
     implementation libs.managed.grpc.services
     compileOnly libs.managed.grpc.stub
+    compileOnly libs.managed.protobuf.java
     compileOnly libs.javax.annotation.api
     // end::dependencies[]
 
