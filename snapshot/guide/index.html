@@ -117,13 +117,13 @@
         <h1>Micronaut gRPC</h1>
         <p></p>
         <p>Integration between Micronaut and gRPC</p>
-        <p><strong>Version:</strong> 4.7.2-SNAPSHOT </p>
+        <p><strong>Version:</strong> 4.8.1-SNAPSHOT </p>
     </div>
     
 <h1 id="introduction"><a class="anchor" href="#introduction"></a>1 Introduction</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.7.x/src/main/docs/guide/introduction.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.8.x/src/main/docs/guide/introduction.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -155,7 +155,7 @@
 <h1 id="releaseHistory"><a class="anchor" href="#releaseHistory"></a>2 Release History</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.7.x/src/main/docs/guide/releaseHistory.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.8.x/src/main/docs/guide/releaseHistory.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -171,7 +171,7 @@
 <h1 id="gettingStarted"><a class="anchor" href="#gettingStarted"></a>3 Getting Started</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.7.x/src/main/docs/guide/gettingStarted.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.8.x/src/main/docs/guide/gettingStarted.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -283,6 +283,7 @@ dependencies {
     implementation libs.managed.grpc.kotlin.stub
     implementation libs.managed.grpc.services
     compileOnly libs.managed.grpc.stub
+    compileOnly libs.managed.protobuf.java
     compileOnly libs.javax.annotation.api
 }
 
@@ -496,7 +497,7 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 <h1 id="server"><a class="anchor" href="#server"></a>4 gRPC Server</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.7.x/src/main/docs/guide/server.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.8.x/src/main/docs/guide/server.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -919,7 +920,7 @@ class Clients {
 <h1 id="client"><a class="anchor" href="#client"></a>5 gRPC Clients</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.7.x/src/main/docs/guide/client.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.8.x/src/main/docs/guide/client.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1073,7 +1074,7 @@ GreeterGrpc.GreeterStub reactiveStub(
 <h1 id="serviceDiscovery"><a class="anchor" href="#serviceDiscovery"></a>6 Service Discovery</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.7.x/src/main/docs/guide/serviceDiscovery.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.8.x/src/main/docs/guide/serviceDiscovery.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1207,7 +1208,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <h1 id="tracing"><a class="anchor" href="#tracing"></a>7 Distributed Tracing</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.7.x/src/main/docs/guide/tracing.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.8.x/src/main/docs/guide/tracing.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1257,7 +1258,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <h1 id="protocolBuffers"><a class="anchor" href="#protocolBuffers"></a>8 Protocol Buffers Support</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.7.x/src/main/docs/guide/protocolBuffers.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.8.x/src/main/docs/guide/protocolBuffers.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1292,7 +1293,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <h1 id="repository"><a class="anchor" href="#repository"></a>9 Repository</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.7.x/src/main/docs/guide/repository.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.8.x/src/main/docs/guide/repository.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
