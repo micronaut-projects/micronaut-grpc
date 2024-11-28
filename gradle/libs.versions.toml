@@ -1,5 +1,5 @@
 [versions]
-managed-grpc = '1.68.1'
+managed-grpc = '1.68.2'
 managed-protobuf = '3.25.5'
 managed-protobuf-gradle = '0.9.4'
 managed-grpc-kotlin = '1.4.1'
