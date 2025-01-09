@@ -10,5 +10,6 @@ if (sonatypePluginConfigured) {
     ossIndexAudit {
         username = ossIndexUsername
         password = ossIndexPassword
+        excludeCompileOnly = true
     }
 }
