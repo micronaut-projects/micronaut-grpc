@@ -70,7 +70,7 @@ public class GrpcProxyController {
      *                      Must not be null.
      */
     public GrpcProxyController(GrpcServiceRegistry registry) {
-        this.jsonPrinter = JsonFormat.printer().alwaysPrintFieldsWithNoPresence().sortingMapKeys();
+        this.jsonPrinter = JsonFormat.printer().includingDefaultValueFields().sortingMapKeys();
         this.jsonParser = JsonFormat.parser();
         this.registry = checkNotNull(registry, "Registry must not be null");
         LOG.info("GrpcProxyController initialized.");

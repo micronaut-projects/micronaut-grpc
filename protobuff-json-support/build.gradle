@@ -10,7 +10,6 @@ dependencies {
 
     //jackson (for json mapping)
     api mn.jackson.databind
-    api libs.managed.jackson.protobuf
 
     //protobuf
     api libs.managed.protobuf.java
@@ -21,8 +20,6 @@ dependencies {
     testImplementation mn.micronaut.http.server.netty
     testImplementation mnReactor.micronaut.reactor.http.client
     testImplementation mn.micronaut.jackson.databind
-
-    testRuntimeOnly mn.micronaut.jackson.databind
 }
 
 protobuf {
