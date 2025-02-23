@@ -1,0 +1,34 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+    alias libs.plugins.protobuf
+}
+
+dependencies {
+    api platform(libs.boms.protobuf)
+    api mn.micronaut.http
+    api mn.micronaut.http.netty
+
+    //jackson (for json mapping)
+    api mn.jackson.databind
+    api libs.managed.jackson.protobuf
+
+    //protobuf
+    api libs.managed.protobuf.java
+    api libs.managed.protobuf.java.util
+    api libs.managed.grpc.stub
+    api projects.micronautGrpcAnnotation
+
+    testImplementation mn.micronaut.http.server.netty
+    testImplementation mnReactor.micronaut.reactor.http.client
+    testImplementation mn.micronaut.jackson.databind
+    testImplementation libs.jackson.datatype.protobuf
+
+    testRuntimeOnly mn.micronaut.jackson.databind
+}
+
+protobuf {
+    protoc { artifact = libs.managed.protoc.asProvider().get() }
+}
+test {
+    useJUnitPlatform()
+}
