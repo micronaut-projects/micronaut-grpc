@@ -21,7 +21,6 @@ dependencies {
     testImplementation mn.micronaut.http.server.netty
     testImplementation mnReactor.micronaut.reactor.http.client
     testImplementation mn.micronaut.jackson.databind
-    testImplementation libs.jackson.datatype.protobuf
 
     testRuntimeOnly mn.micronaut.jackson.databind
 }

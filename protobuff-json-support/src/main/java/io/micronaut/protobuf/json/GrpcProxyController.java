@@ -15,15 +15,14 @@
  */
 package io.micronaut.protobuf.json;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.protobuf.Message;
+import com.google.protobuf.util.JsonFormat;
 import io.grpc.stub.StreamObserver;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.HttpStatus;
-import io.micronaut.http.annotation.Body;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Post;
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.*;
 import io.micronaut.http.exceptions.HttpStatusException;
 import org.slf4j.Logger;
 
@@ -59,20 +58,20 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Requires(bean = GrpcServiceRegistrar.class)
 public class GrpcProxyController {
     private static final Logger LOG = getLogger(GrpcProxyController.class);
+    private final JsonFormat.Printer jsonPrinter;
+    private final JsonFormat.Parser jsonParser;
 
-    private final ObjectMapper objectMapper;
     private final GrpcServiceRegistry registry;
 
     /**
      * Constructs a new instance of GrpcProxyController.
      *
-     * @param objectMapper The ObjectMapper instance used for JSON serialization and deserialization.
-     *                      Must not be null.
      * @param registry      The GrpcServiceRegistry used to manage gRPC service definitions.
      *                      Must not be null.
      */
-    public GrpcProxyController(ObjectMapper objectMapper, GrpcServiceRegistry registry) {
-        this.objectMapper = checkNotNull(objectMapper, "ObjectMapper must not be null");
+    public GrpcProxyController(GrpcServiceRegistry registry) {
+        this.jsonPrinter = JsonFormat.printer().alwaysPrintFieldsWithNoPresence().sortingMapKeys();
+        this.jsonParser = JsonFormat.parser();
         this.registry = checkNotNull(registry, "Registry must not be null");
         LOG.info("GrpcProxyController initialized.");
     }
@@ -88,8 +87,9 @@ public class GrpcProxyController {
      *         in JSON format if the operation fails.
      */
     @Post("/{serviceName}/{methodName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public HttpResponse<String> handlePost(String serviceName, String methodName, @Body String jsonBody) {
-
         LOG.debug("Received request for gRPC service: [{}], method: [{}]", serviceName, methodName);
         // Lookup the service
         var serviceDef = registry.getService(serviceName)
@@ -101,23 +101,25 @@ public class GrpcProxyController {
         }
 
         try {
+            // Create a new builder for the request type
             Class<?> requestType = method.getParameterTypes()[0];
-            Object requestMessage = objectMapper.readValue(jsonBody, requestType);
+            Message.Builder builder = (Message.Builder) requestType.getMethod("newBuilder").invoke(null);
+
+            // Parse JSON into the protobuf message
+            jsonParser.merge(jsonBody, builder);
+            Message requestMessage = builder.build();
 
             SimpleStreamObserver<?> observer = new SimpleStreamObserver<>();
             method.invoke(serviceDef.serviceBean, requestMessage, observer);
 
             Object responseMsg = observer.getResponse();
-            String jsonResponse = objectMapper.writeValueAsString(responseMsg);
+            // Convert response protobuf message to JSON
+            String jsonResponse = jsonPrinter.print((Message) responseMsg);
             return HttpResponse.ok(jsonResponse);
         } catch (Exception e) {
-            String errorJson = null;
-            try {
-                errorJson = objectMapper.writeValueAsString(Map.of("error", e.getMessage()));
-            } catch (JsonProcessingException ex) {
-                //this will never happen unless e.getMessage() throws an exception
-                LOG.error("Failed to serialize error response", ex);
-            }
+            // Simple manual JSON error response
+            String errorJson = String.format("{\"error\":\"%s\"}",
+                e.getMessage().replace("\"", "\\\""));  // Basic JSON escaping
             return HttpResponse.serverError(errorJson);
         }
     }
