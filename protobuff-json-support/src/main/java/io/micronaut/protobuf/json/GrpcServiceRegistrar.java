@@ -1,3 +1,18 @@
+/*
+ * Copyright 2017-2025 original authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.micronaut.protobuf.json;
 
 import io.grpc.stub.StreamObserver;
@@ -11,14 +26,47 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.slf4j.LoggerFactory.getLogger;
 
+/**
+ * The GrpcServiceRegistrar initializes and registers gRPC service beans with the
+ * {@link GrpcServiceRegistry}. It scans the provided application {@link BeanContext}
+ * for beans annotated with {@link GrpcRestJsonExposed} and registers them in the
+ * gRPC service registry. This enables the gRPC services to be exposed via JSON.
+ *<br/>
+ * This class identifies and processes gRPC services without directly instantiating them
+ * unless necessary, ensuring lazy initialization where applicable. The process involves:
+ * - Scanning bean definitions in the context for the {@link GrpcRestJsonExposed} annotation.
+ * - Validating that the detected bean contains gRPC-compatible methods.
+ * - Registering the service and its methods in a structured mapping within the {@link GrpcServiceRegistry}.
+ *<br/>
+ * Main Features:
+ * - Scans and processes services annotated with {@link GrpcRestJsonExposed}.
+ * - Identifies and validates gRPC methods using method signature checks.
+ * - Logs detailed information about the registration process and errors encountered.
+ *<br/>
+ * Responsibilities:
+ * - Efficiently map and register supported gRPC services with minimal resource usage.
+ * - Log warnings for services with no identifiable gRPC methods.
+ * - Gracefully handle failures in bean resolution or registration.
+ */
 @Singleton
 public class GrpcServiceRegistrar {
-    private static final Logger log = getLogger(GrpcServiceRegistrar.class);
+    private static final Logger LOG = getLogger(GrpcServiceRegistrar.class);
 
+    /**
+     * Constructs a new GrpcServiceRegistrar that scans the provided {@link BeanContext}
+     * for gRPC service beans annotated with {@link GrpcRestJsonExposed} and registers
+     * them with the provided {@link GrpcServiceRegistry}.
+     *
+     * @param context  The {@link BeanContext} used to discover and manage bean definitions. Must not be null.
+     * @param registry The {@link GrpcServiceRegistry} used to register discovered gRPC services. Must not be null.
+     */
     public GrpcServiceRegistrar(BeanContext context, GrpcServiceRegistry registry) {
-        log.info("GrpcServiceRegistrar initializing.  Registering gRPC service beans tagged with " +
+        checkNotNull(context);
+        checkNotNull(registry);
+        LOG.info("GrpcServiceRegistrar initializing.  Registering gRPC service beans tagged with " +
             "{}", GrpcRestJsonExposed.class.getSimpleName());
         for (BeanDefinition<?> beanDefinition : context.getBeanDefinitions(Object.class)) {
             // Check if the bean has @GrpcService or @GrpcRestJsonExposed annotations
@@ -28,6 +76,17 @@ public class GrpcServiceRegistrar {
         }
     }
 
+    /**
+     * Registers a gRPC service as a JSON-compatible service with the provided gRPC service registry.
+     * This method attempts to find a bean instance of the specified type, discovers gRPC methods
+     * implemented by the bean, and registers the service if any gRPC methods are found. If no methods
+     * are discovered, a warning is logged. Any exceptions encountered during the process are logged
+     * as errors.
+     *
+     * @param context        The {@link BeanContext} used to resolve the bean instance. Must not be null.
+     * @param registry       The {@link GrpcServiceRegistry} where the gRPC service will be registered. Must not be null.
+     * @param beanDefinition The {@link BeanDefinition} representing the gRPC service bean type. Must not be null.
+     */
     private void registerGrpcServiceAsJson(BeanContext context, GrpcServiceRegistry registry, BeanDefinition<?> beanDefinition) {
         // Attempt to resolve the bean only if necessary
         try {
@@ -36,16 +95,16 @@ public class GrpcServiceRegistrar {
                 String serviceName = bean.getClass().getSimpleName();
                 Map<String, Method> methodMap = discoverGrpcMethods(bean);
                 if (methodMap.isEmpty()) {
-                    log.warn("No gRPC methods found for service: [{}]", serviceName);
+                    LOG.warn("No gRPC methods found for service: [{}]", serviceName);
                 } else {
-                    log.info("Registering gRPC service: [{}] with method map: [{}]",
+                    LOG.info("Registering gRPC service: [{}] with method map: [{}]",
                         serviceName, methodMapString(methodMap));
                     registry.registerService(serviceName, bean, methodMap);
                 }
             }
         } catch (Exception e) {
             // Log an error or handle exceptions gracefully
-            log.error("Failed to register gRPC service: [{}]", beanDefinition.getBeanType(), e);
+            LOG.error("Failed to register gRPC service: [{}]", beanDefinition.getBeanType(), e);
         }
     }
 
