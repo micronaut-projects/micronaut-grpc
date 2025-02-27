@@ -19,6 +19,7 @@ import io.grpc.stub.StreamObserver;
 import io.micronaut.context.BeanContext;
 import io.micronaut.grpc.annotation.GrpcRestJsonExposed;
 import io.micronaut.inject.BeanDefinition;
+import jakarta.annotation.PostConstruct;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 
@@ -54,6 +55,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 @Singleton
 public class GrpcServiceRegistrar {
     private static final Logger LOG = getLogger(GrpcServiceRegistrar.class);
+    private final GrpcServiceRegistry registry;
+    private final BeanContext context;
 
     /**
      * Constructs a new GrpcServiceRegistrar that scans the provided {@link BeanContext}
@@ -64,8 +67,11 @@ public class GrpcServiceRegistrar {
      * @param registry The {@link GrpcServiceRegistry} used to register discovered gRPC services. Must not be null.
      */
     public GrpcServiceRegistrar(BeanContext context, GrpcServiceRegistry registry) {
-        checkNotNull(context);
-        checkNotNull(registry);
+        this.context = checkNotNull(context);
+        this.registry = checkNotNull(registry);
+    }
+
+    public void registerGrpcServices() {
         LOG.info("GrpcServiceRegistrar initializing.  Registering gRPC service beans tagged with " +
             "{}", GrpcRestJsonExposed.class.getSimpleName());
         for (BeanDefinition<?> beanDefinition : context.getBeanDefinitions(Object.class)) {

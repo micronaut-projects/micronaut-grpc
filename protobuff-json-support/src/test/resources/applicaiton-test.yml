@@ -1,0 +1,10 @@
+micronaut:
+  application:
+    name: grpc-proxy-test
+  server:
+    netty:
+      port: 0  # auto-assign a free port for testing
+grpc:
+  rest:
+    json:
+      exposed: true

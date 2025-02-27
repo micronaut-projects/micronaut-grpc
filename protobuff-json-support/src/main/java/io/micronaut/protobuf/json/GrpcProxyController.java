@@ -24,6 +24,7 @@ import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.exceptions.HttpStatusException;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Method;
@@ -54,22 +55,23 @@ import static org.slf4j.LoggerFactory.getLogger;
  * - {@code @Controller}: Configures the controller path, defaulting to `/grpc-json`.
  * - {@code @Requires}: Ensures the necessary gRPC service registrar component is available.
  */
+@Requires(property = "grpc.rest.json.exposed", value = "true")
 @Controller("/${micronaut.grpc.proxy.path:`grpc-json`}")
-@Requires(bean = GrpcServiceRegistrar.class)
 public class GrpcProxyController {
     private static final Logger LOG = getLogger(GrpcProxyController.class);
     private final JsonFormat.Printer jsonPrinter;
     private final JsonFormat.Parser jsonParser;
 
     private final GrpcServiceRegistry registry;
-
+    private final GrpcServiceRegistrar registrar;
     /**
      * Constructs a new instance of GrpcProxyController.
      *
      * @param registry      The GrpcServiceRegistry used to manage gRPC service definitions.
      *                      Must not be null.
      */
-    public GrpcProxyController(GrpcServiceRegistry registry) {
+    public GrpcProxyController(GrpcServiceRegistry registry, GrpcServiceRegistrar registrar) {
+        this.registrar = registrar;
         this.jsonPrinter = JsonFormat.printer().includingDefaultValueFields().sortingMapKeys();
         this.jsonParser = JsonFormat.parser();
         this.registry = checkNotNull(registry, "Registry must not be null");
@@ -156,6 +158,11 @@ public class GrpcProxyController {
             }
             return response;
         }
+    }
+
+    @PostConstruct
+    public void registerGrpcServices() {
+        registrar.registerGrpcServices();
     }
 
 }

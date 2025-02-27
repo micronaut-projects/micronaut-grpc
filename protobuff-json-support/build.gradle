@@ -6,7 +6,9 @@ plugins {
 dependencies {
     api platform(libs.boms.protobuf)
     api mn.micronaut.http
+    api mn.micronaut.http.client
     api mn.micronaut.http.netty
+    api mn.micronaut.http.server.netty
 
     //jackson (for json mapping)
     api mn.jackson.databind
@@ -15,16 +17,32 @@ dependencies {
     api libs.managed.protobuf.java
     api libs.managed.protobuf.java.util
     api libs.managed.grpc.stub
+    api libs.managed.grpc.protobuf
     api projects.micronautGrpcAnnotation
 
     testImplementation mn.micronaut.http.server.netty
     testImplementation mnReactor.micronaut.reactor.http.client
     testImplementation mn.micronaut.jackson.databind
+    testImplementation projects.micronautGrpcServerRuntime
+    testImplementation projects.micronautGrpcRuntime
+    testImplementation 'javax.annotation:javax.annotation-api:1.3.2'
+
 }
 
 protobuf {
     protoc { artifact = libs.managed.protoc.asProvider().get() }
-}
-test {
-    useJUnitPlatform()
+    plugins {
+        grpc {
+            // Specify the gRPC code generation plugin artifact.
+            artifact = "io.grpc:protoc-gen-grpc-java:1.70.0"
+        }
+    }
+    // For all proto generation tasks (including test sources if applicable)
+    generateProtoTasks {
+        all().each { task ->
+            task.plugins {
+                grpc {}
+            }
+        }
+    }
 }
