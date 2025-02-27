@@ -1,4 +1,5 @@
 micronaut:
+
   application:
     name: grpc-proxy-test
   server:
@@ -8,3 +9,7 @@ grpc:
   rest:
     json:
       exposed: true
+logger:
+  levels:
+    io.micronaut.context.condition: TRACE
+    io.micronaut.context: DEBUG

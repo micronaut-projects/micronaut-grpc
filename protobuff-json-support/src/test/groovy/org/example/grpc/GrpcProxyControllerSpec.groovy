@@ -14,6 +14,9 @@ import spock.lang.Specification
 class GrpcProxyControllerSpec extends Specification {
 
     @Inject
+    GreeterService greeterService;
+
+    @Inject
     @Client("/")  // This instructs Micronaut to use the embedded server's base URL.
     HttpClient httpClient
 
