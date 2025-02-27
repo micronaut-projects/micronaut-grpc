@@ -28,7 +28,6 @@ import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Method;
-import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -57,18 +56,23 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 @Requires(property = "grpc.rest.json.exposed", value = "true")
 @Controller("/${micronaut.grpc.proxy.path:`grpc-json`}")
-public class GrpcProxyController {
+public final class GrpcProxyController {
     private static final Logger LOG = getLogger(GrpcProxyController.class);
     private final JsonFormat.Printer jsonPrinter;
     private final JsonFormat.Parser jsonParser;
 
     private final GrpcServiceRegistry registry;
     private final GrpcServiceRegistrar registrar;
+
     /**
-     * Constructs a new instance of GrpcProxyController.
+     * Constructor for the GrpcProxyController class, responsible for initializing the controller
+     * with the specified gRPC service registry and registrar. This controller facilitates the
+     * handling of gRPC proxy requests, enabling gRPC service invocation through a JSON-based interface.
      *
-     * @param registry      The GrpcServiceRegistry used to manage gRPC service definitions.
-     *                      Must not be null.
+     * @param registry An instance of {@code GrpcServiceRegistry} used for managing and retrieving
+     *                 gRPC service definitions. Must not be null.
+     * @param registrar An instance of {@code GrpcServiceRegistrar} responsible for registering gRPC
+     *                  services in the application context. Must not be null.
      */
     public GrpcProxyController(GrpcServiceRegistry registry, GrpcServiceRegistrar registrar) {
         this.registrar = registrar;
@@ -126,6 +130,17 @@ public class GrpcProxyController {
         }
     }
 
+
+    /**
+     * This method runs after all the gRPC services should've been registered
+     * in the bean context.  Once this is run, we trigger the
+     * @see GrpcServiceRegistrar to register the grpc services.
+     */
+    @PostConstruct
+    public void registerGrpcServices() {
+        registrar.registerGrpcServices();
+    }
+
     /**
      * A simple implementation of the StreamObserver interface for handling gRPC stream events.
      * This class captures a single response or an error from a gRPC method invocation and
@@ -158,11 +173,6 @@ public class GrpcProxyController {
             }
             return response;
         }
-    }
-
-    @PostConstruct
-    public void registerGrpcServices() {
-        registrar.registerGrpcServices();
     }
 
 }

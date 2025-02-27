@@ -20,7 +20,6 @@ include 'grpc-client-runtime'
 include 'grpc-server-runtime'
 include 'grpc-runtime'
 include 'protobuff-support'
-include 'protobuff-json-support'
 
 // documentation samples
 include 'test-suite-java'
@@ -28,6 +27,9 @@ include 'test-suite-groovy'
 include 'test-suite-kotlin'
 include 'grpc-health'
 include 'grpc-opentracing'
+
+//experiemental feature so we're putting at the bottoom
+include 'protobuff-json-support'
 
 micronautBuild {
     useStandardizedProjectNames = true

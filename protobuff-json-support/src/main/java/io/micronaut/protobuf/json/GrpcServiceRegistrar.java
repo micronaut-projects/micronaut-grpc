@@ -19,7 +19,6 @@ import io.grpc.stub.StreamObserver;
 import io.micronaut.context.BeanContext;
 import io.micronaut.grpc.annotation.GrpcRestJsonExposed;
 import io.micronaut.inject.BeanDefinition;
-import jakarta.annotation.PostConstruct;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 
@@ -66,11 +65,27 @@ public class GrpcServiceRegistrar {
      * @param context  The {@link BeanContext} used to discover and manage bean definitions. Must not be null.
      * @param registry The {@link GrpcServiceRegistry} used to register discovered gRPC services. Must not be null.
      */
+    @SuppressWarnings("MnInjectionPoints")
     public GrpcServiceRegistrar(BeanContext context, GrpcServiceRegistry registry) {
         this.context = checkNotNull(context);
         this.registry = checkNotNull(registry);
     }
 
+    /**
+     * Scans the application context for gRPC service beans annotated with
+     * {@link GrpcRestJsonExposed} and registers them with the provided gRPC
+     * service registry. This method identifies gRPC-related beans based on
+     * specific annotations and ensures that each identified service is properly
+     * registered.
+     *<br/>
+     * If a bean has relevant gRPC-related annotations, it is processed and
+     * registered as a JSON-compatible gRPC service. The method logs the
+     * initialization process, iterates over all available bean definitions in
+     * the context, and uses helper methods to validate and register gRPC
+     * services.
+     *<br/>
+     * Any exceptions during the registration process are logged appropriately.
+     */
     public void registerGrpcServices() {
         LOG.info("GrpcServiceRegistrar initializing.  Registering gRPC service beans tagged with " +
             "{}", GrpcRestJsonExposed.class.getSimpleName());
