@@ -11,6 +11,9 @@ ext {
 // end::variables[]
 
 dependencies {
+    // For the test source set
+    testAnnotationProcessor mn.micronaut.inject.java
+
     api platform(libs.boms.protobuf)
     api mn.micronaut.http
     api mn.micronaut.http.client
@@ -38,6 +41,10 @@ dependencies {
     testImplementation mn.micronaut.jackson.databind
     testImplementation projects.micronautGrpcServerRuntime
     testImplementation projects.micronautGrpcRuntime
+
+    testImplementation mn.micronaut.inject.java
+    testImplementation mn.micronaut.inject.groovy
+
 
 }
 sourceSets {
