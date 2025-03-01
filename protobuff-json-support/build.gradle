@@ -13,7 +13,7 @@ ext {
 dependencies {
     // For the test source set
     testAnnotationProcessor mn.micronaut.inject.java
-
+    testAnnotationProcessor mn.micronaut.inject.groovy
     api platform(libs.boms.protobuf)
     api mn.micronaut.http
     api mn.micronaut.http.client

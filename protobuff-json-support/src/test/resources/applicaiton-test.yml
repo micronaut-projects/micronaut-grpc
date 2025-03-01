@@ -3,10 +3,12 @@ micronaut:
     trace: true
   application:
     name: grpc-proxy-test
-  server:
-    netty:
-      port: 0  # auto-assign a free port for testing
+
 grpc:
+  server:
+    port: ${random.port}
+    keep-alive-time: 3h
+    max-inbound-message-size: 1024
   rest:
     json:
       exposed: true
