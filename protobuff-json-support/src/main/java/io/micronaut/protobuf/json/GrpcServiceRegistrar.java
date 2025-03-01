@@ -17,6 +17,7 @@ package io.micronaut.protobuf.json;
 
 import io.grpc.stub.StreamObserver;
 import io.micronaut.context.BeanContext;
+import io.micronaut.core.annotation.Experimental;
 import io.micronaut.grpc.annotation.GrpcRestJsonExposed;
 import io.micronaut.inject.BeanDefinition;
 import jakarta.inject.Singleton;
@@ -52,6 +53,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * - Gracefully handle failures in bean resolution or registration.
  */
 @Singleton
+@Experimental
 public class GrpcServiceRegistrar {
     private static final Logger LOG = getLogger(GrpcServiceRegistrar.class);
     private final GrpcServiceRegistry registry;

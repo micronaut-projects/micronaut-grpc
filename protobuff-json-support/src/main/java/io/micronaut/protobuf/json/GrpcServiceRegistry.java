@@ -15,6 +15,7 @@
  */
 package io.micronaut.protobuf.json;
 
+import io.micronaut.core.annotation.Experimental;
 import jakarta.inject.Singleton;
 
 import java.lang.reflect.Method;
@@ -34,6 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * - {@code @Singleton}: Ensures a single instance of this registry is used within the application.
  */
 @Singleton
+@Experimental
 public class GrpcServiceRegistry {
 
     private final Map<String, ServiceDefinition> services = new ConcurrentHashMap<>();

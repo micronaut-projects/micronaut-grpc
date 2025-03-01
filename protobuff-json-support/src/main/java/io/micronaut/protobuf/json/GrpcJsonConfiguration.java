@@ -17,9 +17,20 @@ package io.micronaut.protobuf.json;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.core.annotation.Experimental;
 
+/**
+ * Configuration properties for enabling and configuring the gRPC JSON proxy feature in a Micronaut application.
+ * <br/>
+ * This configuration class enables support for exposing gRPC services via JSON endpoints
+ * by leveraging the {@link GrpcProxyController}. The configuration is activated only when the
+ * {@link GrpcProxyController} class is available in the classpath.
+ * <br/>
+ * This class is marked as experimental and may change in future versions of the framework.
+ */
 @ConfigurationProperties("micronaut.grpc.json")
 @Requires(classes = {GrpcProxyController.class})
+@Experimental
 public class GrpcJsonConfiguration {
     // Any configuration properties if needed
 }
