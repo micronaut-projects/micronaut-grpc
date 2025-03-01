@@ -90,6 +90,13 @@ public class ProtobufJsonTranscoder {
      * Custom exception for Protobuf transcoding errors.
      */
     public static class ProtobufTranscodingException extends RuntimeException {
+        /**
+         * Constructs a new instance of ProtobufTranscodingException with a specified error message
+         * and the cause of the exception.
+         *
+         * @param message The detail message for this exception, providing information about the error.
+         * @param cause The underlying cause of the exception, typically another throwable that led to this error.
+         */
         public ProtobufTranscodingException(String message, Throwable cause) {
             super(message, cause);
         }

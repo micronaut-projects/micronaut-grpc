@@ -15,19 +15,28 @@
  */
 package io.micronaut.protobuf.json;
 
-import io.micronaut.core.annotation.Experimental;
+import io.micronaut.http.exceptions.HttpStatusException;
+import io.micronaut.http.HttpStatus;
 
 /**
- * Exception thrown when a gRPC service is not found.
+ * Exception thrown when a requested service cannot be found.
+ * <p>
+ * This exception extends {@link HttpStatusException} and is specifically used
+ * to signal a {@code NOT_FOUND} HTTP status when a gRPC service is not
+ * available in the registry.
+ * <p>
+ * The exception message includes the name of the service that was not found.
  */
-@Experimental
-public class ServiceNotFoundException extends RuntimeException {
+public class ServiceNotFoundException extends HttpStatusException {
     /**
-     * Constructs a new ServiceNotFoundException with the specific service name that was not found.
+     * Constructs a new ServiceNotFoundException with a detailed error message
+     * indicating the service that could not be found.
      *
-     * @param serviceName The name of the gRPC service that could not be located.
+     * @param serviceName The name of the service that was not found. This value
+     *                    will be included in the exception message to provide
+     *                    context about the missing service.
      */
     public ServiceNotFoundException(String serviceName) {
-        super(String.format("Service '%s' not found", serviceName));
+        super(HttpStatus.NOT_FOUND, String.format("Service '%s' not found", serviceName));
     }
 }
