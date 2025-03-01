@@ -33,26 +33,32 @@ import java.util.Map;
  * Micronaut application. This class provides a centralized mechanism to handle exceptions
  * that occur during the processing of HTTP requests, ensuring exceptions are logged and
  * appropriate HTTP responses are returned.
- *
+ *<br/>
  * The handler implements the {@link ExceptionHandler} interface, allowing it to intercept
  * exceptions of type {@link HttpStatusException} and generate custom HTTP responses.
- *
- * Annotations:
- * - {@code @Produces}: Indicates this class can produce objects for injection.
- * - {@code @Singleton}: Specifies that a single instance of this handler will exist within the application context.
- * - {@code @Requires}: Ensures this handler is only loaded if the specified classes are available at runtime.
- * - {@code @Experimental}: Marks this class as experimental and subject to change in future versions.
- *
+ *<br/>
+ * Annotations:<br/>
+ * <ul>
+ * <li> {@code @Produces}: Indicates this class can produce objects for injection.</li>
+ * <li> {@code @Singleton}: Specifies that a single instance of this handler will exist within the application context.</li>
+ * <li> {@code @Requires}: Ensures this handler is only loaded if the specified classes are
+ * available at runtime.</li>
+ * <li> {@code @Experimental}: Marks this class as experimental and subject to change in future
+ * versions.</li>
+ *</ul>
+ * <br/>
  * Features:
- * - Logs the error message and the root cause if available.
- * - Constructs an HTTP response with the status code from the exception and includes
- *   an error message in the response body.
- *
- * Logging:
+ * <ul>
+ * <li>Logs the error message and the root cause if available.</li>
+ * <li>Constructs an HTTP response with the status code from the exception and includes
+ *   an error message in the response body.</li>
+ * </ul>
+ *<br/>
+ * Logging:<br/>
  * - Errors are logged using SLF4J {@link Logger}, and the log includes the error message
  *   and the root cause of the exception if present.
- *
- * Usage:
+ *<br/>
+ * Usage:<br/>
  * This class is intended to be used internally by the Micronaut framework for handling
  * {@link HttpStatusException}s. It ensures consistent error representations and provides
  * helpful debugging logs for developers.
