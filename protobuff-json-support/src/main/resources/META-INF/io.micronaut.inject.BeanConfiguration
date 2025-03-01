@@ -1,0 +1,3 @@
+io.micronaut.protobuf.json.GrpcProxyController
+io.micronaut.protobuf.json.GrpcServiceRegistrar
+io.micronaut.protobuf.json.GrpcServiceRegistry

@@ -48,8 +48,7 @@ micronaut {
     testRuntime("spock2")
     processing {
         incremental(true)
-        annotations("com.example.services.*", "io.micronaut.protobuf.json.*")
-
+        annotations("com.example.services.*")
     }
     aot {
         // Please review carefully the optimizations enabled below
