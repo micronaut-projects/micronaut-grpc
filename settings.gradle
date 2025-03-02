@@ -25,10 +25,11 @@ include 'protobuff-support'
 include 'test-suite-java'
 include 'test-suite-groovy'
 include 'test-suite-kotlin'
+include 'test-suite-protobuff-json-java'
 include 'grpc-health'
 include 'grpc-opentracing'
 
-//experiemental feature so we're putting at the bottoom
+//experiemental feature so we're putting at the bottom
 include 'protobuff-json-support'
 
 micronautBuild {

@@ -1,3 +1,6 @@
+io.micronaut.protobuf.json.GrpcGlobalExceptionHandler
+io.micronaut.protobuf.json.GrpcJsonConfiguration
 io.micronaut.protobuf.json.GrpcProxyController
 io.micronaut.protobuf.json.GrpcServiceRegistrar
 io.micronaut.protobuf.json.GrpcServiceRegistry
+io.micronaut.protobuf.json.ProtobufJsonTranscoder
