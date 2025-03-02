@@ -96,24 +96,6 @@ public class GrpcServiceRegistry {
         final Map<String, Method> methods;
 
         /**
-         * Retrieves an immutable copy of the map containing method names and their corresponding {@code Method} objects.
-         *
-         * @return A {@code Map<String, Method>} where the keys represent the method names and the values are the {@code Method} objects.
-         */
-        public Method getMethod(String methodName) {
-            return methods.get(methodName);
-        }
-
-
-        /**
-         * Retrieves the service bean instance associated with this service definition.
-         *
-         * @return The service bean instance representing the gRPC service logic.
-         */
-        public Object getServiceBean() {
-            return serviceBean;
-        }
-        /**
          * Constructs a new ServiceDefinition instance with the specified service bean and method mapping.
          *
          * @param serviceBean The service bean instance representing the gRPC service logic. Must not be null.
@@ -126,7 +108,26 @@ public class GrpcServiceRegistry {
             this.methods = ImmutableMap.copyOf(methods);
         }
 
+        /**
+         * Retrieves an immutable copy of the map containing method names and their corresponding {@code Method} objects.
+         *
+         * @param methodName the name of the method to retrieve
+         * @return A {@code Method} object corresponding to the given method name, or null if not found
+         */
+        public Method getMethod(String methodName) {
+            return methods.get(methodName);
+        }
+
+        /**
+         * Retrieves the service bean instance associated with this service definition.
+         *
+         * @return The service bean instance representing the gRPC service logic.
+         */
+        public Object getServiceBean() {
+            return serviceBean;
+        }
     }
+
 }
 
 
