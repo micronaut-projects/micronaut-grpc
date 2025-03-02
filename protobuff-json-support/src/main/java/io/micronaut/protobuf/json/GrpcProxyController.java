@@ -38,25 +38,24 @@ import java.lang.reflect.Method;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * The GrpcProxyController class provides a mechanism for dynamically handling gRPC requests via HTTP POST
- * endpoints. It enables JSON-based interaction with gRPC services by translating JSON payloads to Protobuf
- * messages and vice versa. This controller relies on a service registry for dynamic lookups and invocation
- * of gRPC service methods.
+ * The GrpcProxyController is a controller designed to act as a bridge between HTTP-based clients
+ * and gRPC services. It offers an interface to invoke gRPC methods using JSON payloads over HTTP,
+ * making it easier to integrate gRPC services with systems or clients that may not natively support gRPC.
  *<br/>
- * Annotations:
- * - {@code @Experimental}: Indicates that this feature is experimental and may be subject to change.
- * - {@code @Singleton}: Ensures a single instance of this controller throughout the application's lifecycle.
- * - {@code @Controller}: Defines this class as a Micronaut HTTP controller and maps its routes to the
- *   specified base path, which can be overridden with the `micronaut.grpc.proxy.path` configuration property.
+ * This controller uses a combination of the gRPC service registry to discover service and method definitions,
+ * and a Protobuf JSON transcoder to handle data serialization/deserialization between JSON and Protobuf formats.
  *<br/>
- * Dependencies:
- * - GrpcServiceRegistry: Manages the available gRPC services and their respective methods for dynamic invocation.
- * - GrpcServiceRegistrar: Responsible for registering available gRPC services at initialization.
- * - ProtobufJsonTranscoder: Handles the conversion between Protobuf and JSON formats for request and response payloads.
+ * It leverages routing to dynamically map HTTP endpoints to gRPC services and provides error handling
+ * mechanisms for various scenarios, such as service or method not found, invalid request formats,
+ * and internal invocation errors.
  *<br/>
- * Responsibilities:
- * - Provides an HTTP POST endpoint mapped to gRPC services and methods.
- **/
+ * The controller is experimental and marked as {@code @Experimental}.
+ *<br/>
+ * Key responsibilities:
+ * - Dynamically route HTTP calls to appropriate gRPC services and methods.
+ * - Transcode JSON payloads into Protobuf data models and vice versa.
+ * - Provide error handling for common gRPC invocation issues.
+ */
 @Experimental
 @Singleton
 @Controller("/${micronaut.grpc.proxy.path:`grpc-json`}")
@@ -82,21 +81,17 @@ public final class GrpcProxyController {
             @NonNull ProtobufJsonTranscoder transcoder) {
         this.registry = registry;
         this.transcoder = transcoder;
-
         registrar.registerGrpcServices();
         LOG.info("GrpcProxyController initialized and services registered");
     }
 
     /**
-     * Handles a gRPC POST request by invoking the specified service and method, using the provided JSON body as the request message.
-     * Converts the incoming JSON payload into a Protobuf message, dynamically invokes the corresponding gRPC method,
-     * and then converts the response back to JSON for the HTTP response.
+     * Handles an HTTP POST that maps to a gRPC call.
      *
-     * @param serviceName The name of the gRPC service to invoke. Must not be null.
-     * @param methodName The name of the method within the specified service to invoke. Must not be null.
-     * @param jsonBody The JSON-encoded payload to be used as the method's input. Must not be null.
-     * @return An {@link HttpResponse} containing the JSON-encoded result of the gRPC method invocation.
-     *         If the service or method cannot be found, or if there is an issue with the payload, an appropriate HTTP error is returned.
+     * @param serviceName The gRPC service name (for client stubs, a composite key is expected).
+     * @param methodName  The name of the method to invoke.
+     * @param jsonBody    The JSON payload representing the Protobuf request.
+     * @return An HTTP response with the JSON representation of the gRPC response.
      */
     @Post("/{serviceName}/{methodName}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -106,15 +101,12 @@ public final class GrpcProxyController {
             @NonNull String methodName,
             @Body @NonNull String jsonBody) {
         LOG.debug("Handling gRPC request - service: [{}], method: [{}]", serviceName, methodName);
-
         var serviceDef = registry.getService(serviceName)
                 .orElseThrow(() -> new ServiceNotFoundException(serviceName));
-
         Method method = serviceDef.getMethod(methodName);
         if (method == null) {
             throw new MethodNotFoundException(methodName);
         }
-
         return invokeGrpcMethod(method, serviceDef.getServiceBean(), jsonBody);
     }
 
@@ -137,29 +129,67 @@ public final class GrpcProxyController {
         }
     }
 
+    /**
+     * Handles the scenario where a requested gRPC service cannot be found.
+     * This method is triggered when a {@link ServiceNotFoundException} is thrown and
+     * returns an HTTP 404 response with a message indicating the missing service.
+     *
+     * @param e The exception containing details about the service that could not be found.
+     * @return An HTTP response with a 404 status code and a message describing the missing service.
+     */
     @Error(ServiceNotFoundException.class)
     public HttpResponse<String> handleServiceNotFound(ServiceNotFoundException e) {
         return HttpResponse.notFound("Service not found: " + e.getMessage());
     }
 
+    /**
+     * Handles the scenario where a specified gRPC method is not found.
+     * This method is triggered when a {@link MethodNotFoundException} is thrown
+     * and returns an HTTP 404 response with an error message indicating the missing method.
+     *
+     * @param e The {@link MethodNotFoundException} containing details about the method
+     *          that could not be found, including its name.
+     * @return An HTTP response with a 404 status code and a message describing
+     *         the missing method.
+     */
     @Error(MethodNotFoundException.class)
     public HttpResponse<String> handleMethodNotFound(MethodNotFoundException e) {
         return HttpResponse.notFound("Method not found: " + e.getMessage());
     }
 
+    /**
+     * Handles a bad request error triggered by an {@link HttpStatusException}.
+     * This method captures the exception details and returns an HTTP response
+     * with the corresponding status code and error message.
+     *
+     * @param e The HttpStatusException containing details about the error, including
+     *          the HTTP status code and a descriptive message.
+     * @return An HTTP response with the status code from the exception and the error message as the body.
+     */
     @Error(HttpStatusException.class)
     public HttpResponse<String> handleBadRequest(HttpStatusException e) {
         return HttpResponse.status(e.getStatus()).body(e.getMessage());
     }
 
+    /**
+     * Handles errors that occur during the invocation of gRPC methods.
+     * This method catches {@link GrpcInvocationException} and returns an HTTP 500
+     * response with an error message describing the gRPC invocation failure.
+     *
+     * @param e The {@link GrpcInvocationException} that triggered the error handling. This
+     *          exception provides details about the specific gRPC invocation error.
+     * @return An HTTP response with a 500 status code and a message indicating the
+     *         gRPC invocation error.
+     */
     @Error(GrpcInvocationException.class)
     public HttpResponse<String> handleGrpcError(GrpcInvocationException e) {
         return HttpResponse.serverError("GRPC invocation error: " + e.getMessage());
     }
 
     /**
-     * Simple StreamObserver implementation for handling gRPC responses.
-     * @param <T> the type of response values this observer handles
+     * A simple StreamObserver implementation to capture a gRPC response.
+     *
+     * @param <T> The type of the response.
      */
     @Experimental
     public static class SimpleStreamObserver<T> implements StreamObserver<T> {
@@ -168,7 +198,7 @@ public final class GrpcProxyController {
 
         /**
          * Processes the next value from the stream and stores it as the response.
-         *
+         *<br/>
          * This method is part of the {@code StreamObserver} lifecycle and is called
          * each time a new value is emitted by the gRPC stream. The received value
          * is stored and can be accessed later.
@@ -182,7 +212,7 @@ public final class GrpcProxyController {
 
         /**
          * Handles errors that occur during gRPC calls.
-         *
+         * <br/>
          * This method is invoked when an error is encountered during the execution
          * of a gRPC call. The error is captured and stored for later retrieval or
          * processing.
@@ -196,11 +226,11 @@ public final class GrpcProxyController {
 
         /**
          * Notifies that the gRPC call has been completed successfully.
-         *
+         * <br/>
          * This method is invoked when the server has successfully completed sending
          * all responses. It is part of the {@code StreamObserver} lifecycle and indicates
          * that no more data will be received.
-         *
+         * <br/>
          * No action is needed in this implementation.
          */
         @Override
@@ -223,5 +253,4 @@ public final class GrpcProxyController {
             return response;
         }
     }
-
 }

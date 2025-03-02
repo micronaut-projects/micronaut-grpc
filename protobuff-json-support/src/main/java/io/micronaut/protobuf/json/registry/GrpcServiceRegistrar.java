@@ -15,6 +15,7 @@
  */
 package io.micronaut.protobuf.json.registry;
 
+import io.grpc.stub.AbstractStub;
 import io.grpc.stub.StreamObserver;
 import io.micronaut.context.BeanContext;
 import io.micronaut.core.annotation.Experimental;
@@ -31,26 +32,22 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
- * The GrpcServiceRegistrar initializes and registers gRPC service beans with the
- * {@link GrpcServiceRegistry}. It scans the provided application {@link BeanContext}
- * for beans annotated with {@link GrpcRestJsonExposed} and registers them in the
- * gRPC service registry. This enables the gRPC services to be exposed via JSON.
+ * The GrpcServiceRegistrar is responsible for scanning a {@link BeanContext} to identify
+ * gRPC service beans annotated with {@link GrpcRestJsonExposed} and registering them with
+ * the provided {@link GrpcServiceRegistry}. This class provides mechanisms to discover and
+ * manage gRPC services in a modular application context.
  *<br/>
- * This class identifies and processes gRPC services without directly instantiating them
- * unless necessary, ensuring lazy initialization where applicable. The process involves:
- * - Scanning bean definitions in the context for the {@link GrpcRestJsonExposed} annotation.
- * - Validating that the detected bean contains gRPC-compatible methods.
- * - Registering the service and its methods in a structured mapping within the {@link GrpcServiceRegistry}.
+ * Annotations such as {@link GrpcRestJsonExposed} are used to identify beans suitable for
+ * JSON compatibility and exposure over gRPC. The registrar manages the service lifecycle
+ * by ensuring that discovered services are registered properly in the context of the
+ * application's gRPC infrastructure.
  *<br/>
- * Main Features:
- * - Scans and processes services annotated with {@link GrpcRestJsonExposed}.
- * - Identifies and validates gRPC methods using method signature checks.
- * - Logs detailed information about the registration process and errors encountered.
+ * This class must be instantiated with a valid {@link BeanContext} and {@link GrpcServiceRegistry}.
+ * The core functionality of this class includes identifying gRPC-related beans, determining
+ * candidate methods, and safely registering services with appropriate logging for success
+ * and failure scenarios.
  *<br/>
- * Responsibilities:
- * - Efficiently map and register supported gRPC services with minimal resource usage.
- * - Log warnings for services with no identifiable gRPC methods.
- * - Gracefully handle failures in bean resolution or registration.
+ * Note: This class is experimental and subject to potential changes in future versions.
  */
 @Singleton
 @Experimental
@@ -89,8 +86,8 @@ public class GrpcServiceRegistrar {
      * Any exceptions during the registration process are logged appropriately.
      */
     public void registerGrpcServices() {
-        LOG.info("GrpcServiceRegistrar initializing.  Registering gRPC service beans tagged with " +
-            "{}", GrpcRestJsonExposed.class.getSimpleName());
+        LOG.info("GrpcServiceRegistrar initializing. Registering gRPC service beans tagged with {}",
+                GrpcRestJsonExposed.class.getSimpleName());
         for (BeanDefinition<?> beanDefinition : context.getBeanDefinitions(Object.class)) {
             // Check if the bean has @GrpcService or @GrpcRestJsonExposed annotations
             if (isGrpcRelatedService(beanDefinition)) {
@@ -116,17 +113,35 @@ public class GrpcServiceRegistrar {
             Object bean = context.findBean(beanDefinition.getBeanType()).orElse(null);
             if (bean != null) {
                 String serviceName = bean.getClass().getSimpleName();
+                // For client stubs, adjust the service name by trimming "Stub" (if present)
+                // and appending a client identifier if available.
+                if (bean instanceof AbstractStub<?>) {
+                    if (serviceName.endsWith("Stub")) {
+                        serviceName = serviceName.substring(0, serviceName.length() - 4);
+                    }
+                    try {
+                        Method getClientIdMethod = bean.getClass().getMethod("getClientId");
+                        if (String.class.equals(getClientIdMethod.getReturnType())) {
+                            String clientId = (String) getClientIdMethod.invoke(bean);
+                            if (clientId != null && !clientId.isBlank()) {
+                                serviceName = serviceName + "-" + clientId;
+                            }
+                        }
+                    } catch (NoSuchMethodException e) {
+                        // No getClientId method; continue using the base service name.
+                    } catch (Exception e) {
+                        LOG.error("Error retrieving clientId from bean: [{}]", bean.getClass().getName(), e);
+                    }
+                }
                 Map<String, Method> methodMap = discoverGrpcMethods(bean);
                 if (methodMap.isEmpty()) {
                     LOG.warn("No gRPC methods found for service: [{}]", serviceName);
                 } else {
-                    LOG.info("Registering gRPC service: [{}] with method map: [{}]",
-                        serviceName, methodMapString(methodMap));
+                    LOG.info("Registering gRPC service: [{}] with method map: [{}]", serviceName, methodMapString(methodMap));
                     registry.registerService(serviceName, bean, methodMap);
                 }
             }
         } catch (Exception e) {
-            // Log an error or handle exceptions gracefully
             LOG.error("Failed to register gRPC service: [{}]", beanDefinition.getBeanType(), e);
         }
     }
@@ -147,9 +162,9 @@ public class GrpcServiceRegistrar {
     }
 
     private boolean isGrpcMethod(Method method) {
-        // Check if the method matches gRPC signature
+        // A valid gRPC method should have two parameters with the second being a StreamObserver.
         return method.getParameterCount() == 2 &&
-                StreamObserver.class.isAssignableFrom(method.getParameterTypes()[1]);
+               StreamObserver.class.isAssignableFrom(method.getParameterTypes()[1]);
     }
 
     private static String methodMapString(Map<String, Method> methodMap) {

@@ -42,29 +42,21 @@ public class GrpcServiceRegistry {
     private final Map<String, ServiceDefinition> services = new ConcurrentHashMap<>();
 
     /**
-     * Registers a gRPC service by associating it with a service name and its corresponding
-     * service bean and methods.
+     * Registers a gRPC service by associating it with a service name and its corresponding bean and methods.
      *
-     * @param name The name of the gRPC service to register. This value is case-insensitive
-     *             and will be converted to lowercase for storage.
-     * @param serviceBean The service bean instance that implements the gRPC service being
-     *                    registered. This object is used to invoke the associated methods.
-     * @param methods A map of method names to their corresponding {@code Method} objects.
-     *                This defines the available methods for the service and allows dynamic
-     *                invocation based on method name.
+     * @param name        The name of the gRPC service to register.
+     * @param serviceBean The service bean instance.
+     * @param methods     A map of method names to {@code Method} objects.
      */
     public void registerService(String name, Object serviceBean, Map<String, Method> methods) {
         services.put(name, new ServiceDefinition(serviceBean, methods));
     }
 
     /**
-     * Retrieves the {@code ServiceDefinition} associated with the given service name, if it exists.
-     * This method performs a case-insensitive lookup for the service name in the registered services.
+     * Retrieves the {@code ServiceDefinition} associated with the given service name, if available.
      *
-     * @param name The name of the gRPC service to retrieve. This value is case-insensitive.
-     *             It will be converted to lowercase for the lookup.
-     * @return An {@code Optional} containing the {@code ServiceDefinition} if the service is found,
-     *         or an empty {@code Optional} if the service is not registered.
+     * @param name The name of the gRPC service (case-sensitive).
+     * @return An {@code Optional} containing the {@code ServiceDefinition} if found.
      */
     public Optional<ServiceDefinition> getService(String name) {
         return Optional.ofNullable(services.get(name));
@@ -104,7 +96,6 @@ public class GrpcServiceRegistry {
          */
         public ServiceDefinition(Object serviceBean, Map<String, Method> methods) {
             this.serviceBean = serviceBean;
-            // Create an immutable copy of the methods map
             this.methods = ImmutableMap.copyOf(methods);
         }
 
@@ -127,8 +118,4 @@ public class GrpcServiceRegistry {
             return serviceBean;
         }
     }
-
 }
-
-
-
