@@ -2,7 +2,6 @@ package io.micronaut.protobuf.grpc
 
 import io.grpc.Server
 import io.grpc.ServerBuilder
-import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import jakarta.inject.Singleton
 import org.example.grpc.GreeterGrpc
