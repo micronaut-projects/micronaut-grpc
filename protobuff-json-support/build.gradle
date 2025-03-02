@@ -29,6 +29,7 @@ dependencies {
 
     testCompileOnly libs.javax.annotation.api
     testCompileOnly libs.managed.protobuf.java
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-json
 
     testImplementation libs.managed.grpc.services
     testImplementation mn.micronaut.discovery.core

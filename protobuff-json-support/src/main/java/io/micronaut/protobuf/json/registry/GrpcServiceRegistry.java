@@ -122,8 +122,10 @@ public class GrpcServiceRegistry {
          */
         public ServiceDefinition(Object serviceBean, Map<String, Method> methods) {
             this.serviceBean = serviceBean;
-            this.methods = methods;
+            // Create an immutable copy of the methods map
+            this.methods = ImmutableMap.copyOf(methods);
         }
+
     }
 }
 
