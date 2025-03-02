@@ -21,7 +21,7 @@ class GreeterServiceHttpSpec extends Specification {
 
         when: "we call the REST endpoint"
         def response = client.toBlocking().exchange(
-                HttpRequest.POST("/grpc-json/GreeterService/sayhello", requestBody)
+                HttpRequest.POST("/grpc-json/GreeterService/sayHello", requestBody)
                         .header("Content-Type", MediaType.APPLICATION_JSON),
                 Map
         )

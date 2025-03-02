@@ -140,7 +140,7 @@ public class GrpcServiceRegistrar {
         Map<String, Method> methods = new HashMap<>();
         for (Method method : serviceBean.getClass().getMethods()) {
             if (isGrpcMethod(method)) {
-                methods.put(method.getName().toLowerCase(), method);
+                methods.put(method.getName(), method);
             }
         }
         return methods;

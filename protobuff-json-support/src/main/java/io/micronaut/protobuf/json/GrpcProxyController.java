@@ -103,7 +103,7 @@ public final class GrpcProxyController {
         var serviceDef = registry.getService(serviceName)
                 .orElseThrow(() -> new ServiceNotFoundException(serviceName));
 
-        Method method = serviceDef.methods.get(methodName.toLowerCase());
+        Method method = serviceDef.methods.get(methodName);
         if (method == null) {
             throw new MethodNotFoundException(methodName);
         }

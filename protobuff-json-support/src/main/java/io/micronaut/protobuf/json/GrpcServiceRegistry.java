@@ -53,7 +53,7 @@ public class GrpcServiceRegistry {
      *                invocation based on method name.
      */
     public void registerService(String name, Object serviceBean, Map<String, Method> methods) {
-        services.put(name.toLowerCase(), new ServiceDefinition(serviceBean, methods));
+        services.put(name, new ServiceDefinition(serviceBean, methods));
     }
 
     /**
@@ -66,7 +66,7 @@ public class GrpcServiceRegistry {
      *         or an empty {@code Optional} if the service is not registered.
      */
     public Optional<ServiceDefinition> getService(String name) {
-        return Optional.ofNullable(services.get(name.toLowerCase()));
+        return Optional.ofNullable(services.get(name));
     }
 
     /**
