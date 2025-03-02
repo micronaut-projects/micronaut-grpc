@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.protobuf.json;
+package io.micronaut.protobuf.json.exception;
 
 import io.micronaut.core.annotation.Experimental;
 import io.micronaut.http.exceptions.HttpStatusException;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.protobuf.json;
+package io.micronaut.protobuf.json.registry;
 
 import io.grpc.stub.StreamObserver;
 import io.micronaut.context.BeanContext;

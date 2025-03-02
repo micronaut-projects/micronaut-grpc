@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.micronaut.protobuf.json;
+package io.micronaut.protobuf.json.registry;
 
+import com.google.common.collect.ImmutableMap;
 import io.micronaut.core.annotation.Experimental;
 import jakarta.inject.Singleton;
 
@@ -94,6 +95,24 @@ public class GrpcServiceRegistry {
         final Object serviceBean;
         final Map<String, Method> methods;
 
+        /**
+         * Retrieves an immutable copy of the map containing method names and their corresponding {@code Method} objects.
+         *
+         * @return A {@code Map<String, Method>} where the keys represent the method names and the values are the {@code Method} objects.
+         */
+        public Method getMethod(String methodName) {
+            return methods.get(methodName);
+        }
+
+
+        /**
+         * Retrieves the service bean instance associated with this service definition.
+         *
+         * @return The service bean instance representing the gRPC service logic.
+         */
+        public Object getServiceBean() {
+            return serviceBean;
+        }
         /**
          * Constructs a new ServiceDefinition instance with the specified service bean and method mapping.
          *
