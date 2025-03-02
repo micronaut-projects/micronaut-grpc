@@ -108,31 +108,10 @@ public class GrpcServiceRegistrar {
      * @param beanDefinition The {@link BeanDefinition} representing the gRPC service bean type. Must not be null.
      */
     private void registerGrpcServiceAsJson(BeanContext context, GrpcServiceRegistry registry, BeanDefinition<?> beanDefinition) {
-        // Attempt to resolve the bean only if necessary
         try {
             Object bean = context.findBean(beanDefinition.getBeanType()).orElse(null);
             if (bean != null) {
-                String serviceName = bean.getClass().getSimpleName();
-                // For client stubs, adjust the service name by trimming "Stub" (if present)
-                // and appending a client identifier if available.
-                if (bean instanceof AbstractStub<?>) {
-                    if (serviceName.endsWith("Stub")) {
-                        serviceName = serviceName.substring(0, serviceName.length() - 4);
-                    }
-                    try {
-                        Method getClientIdMethod = bean.getClass().getMethod("getClientId");
-                        if (String.class.equals(getClientIdMethod.getReturnType())) {
-                            String clientId = (String) getClientIdMethod.invoke(bean);
-                            if (clientId != null && !clientId.isBlank()) {
-                                serviceName = serviceName + "-" + clientId;
-                            }
-                        }
-                    } catch (NoSuchMethodException e) {
-                        // No getClientId method; continue using the base service name.
-                    } catch (Exception e) {
-                        LOG.error("Error retrieving clientId from bean: [{}]", bean.getClass().getName(), e);
-                    }
-                }
+                String serviceName = determineServiceName(bean);
                 Map<String, Method> methodMap = discoverGrpcMethods(bean);
                 if (methodMap.isEmpty()) {
                     LOG.warn("No gRPC methods found for service: [{}]", serviceName);
@@ -144,6 +123,15 @@ public class GrpcServiceRegistrar {
         } catch (Exception e) {
             LOG.error("Failed to register gRPC service: [{}]", beanDefinition.getBeanType(), e);
         }
+    }
+
+    private String determineServiceName(Object bean) {
+        String baseName = bean.getClass().getSimpleName();
+        // If it's a client stub, remove the Stub suffix
+        if (bean instanceof AbstractStub<?>) {
+            return baseName.replaceFirst("Stub$", "");
+        }
+        return baseName;
     }
 
     private boolean isGrpcRelatedService(BeanDefinition<?> beanDefinition) {
