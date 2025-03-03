@@ -100,7 +100,6 @@ public class GrpcServiceRegistrar {
         }
     }
 
-
     /**
      * Registers a gRPC service as a JSON-compatible service with the provided gRPC service registry.
      * This method attempts to find a bean instance of the specified type, discovers gRPC methods
@@ -145,7 +144,6 @@ public class GrpcServiceRegistrar {
         return GrpcServiceType.ASYNC;
     }
 
-
     private Map<String, Method> discoverGrpcMethods(Object serviceBean) {
         GrpcServiceType serviceType = identifyGrpcServiceType(serviceBean);
 
@@ -184,7 +182,6 @@ public class GrpcServiceRegistrar {
             .anyMatch(method -> method.hasAnnotation(GrpcRestJsonExposed.class));
     }
 
-
     private GrpcServiceType identifyGrpcServiceType(Object serviceBean) {
         // For any blocking stub type, keeping it generic
         if (serviceBean instanceof io.grpc.stub.AbstractStub
@@ -207,7 +204,6 @@ public class GrpcServiceRegistrar {
         }
         return GrpcServiceType.UNKNOWN;
     }
-
 
     private Map<String, Method> discoverServiceMethods(Object serviceBean) {
         Map<String, Method> methods = new HashMap<>();
