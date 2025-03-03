@@ -15,9 +15,12 @@
  */
 package io.micronaut.protobuf.json.registry;
 
+import io.grpc.BindableService;
+import io.grpc.stub.AbstractBlockingStub;
 import io.grpc.stub.AbstractStub;
 import io.grpc.stub.StreamObserver;
 import io.micronaut.context.BeanContext;
+import io.micronaut.context.annotation.Factory;
 import io.micronaut.core.annotation.Experimental;
 import io.micronaut.grpc.annotation.GrpcRestJsonExposed;
 import io.micronaut.inject.BeanDefinition;
@@ -25,6 +28,8 @@ import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -87,14 +92,14 @@ public class GrpcServiceRegistrar {
      */
     public void registerGrpcServices() {
         LOG.info("GrpcServiceRegistrar initializing. Registering gRPC service beans tagged with {}",
-                GrpcRestJsonExposed.class.getSimpleName());
+            GrpcRestJsonExposed.class.getSimpleName());
         for (BeanDefinition<?> beanDefinition : context.getBeanDefinitions(Object.class)) {
-            // Check if the bean has @GrpcService or @GrpcRestJsonExposed annotations
             if (isGrpcRelatedService(beanDefinition)) {
                 registerGrpcServiceAsJson(context, registry, beanDefinition);
             }
         }
     }
+
 
     /**
      * Registers a gRPC service as a JSON-compatible service with the provided gRPC service registry.
@@ -113,16 +118,42 @@ public class GrpcServiceRegistrar {
             if (bean != null) {
                 String serviceName = determineServiceName(bean);
                 Map<String, Method> methodMap = discoverGrpcMethods(bean);
+
                 if (methodMap.isEmpty()) {
                     LOG.warn("No gRPC methods found for service: [{}]", serviceName);
                 } else {
-                    LOG.info("Registering gRPC service: [{}] with method map: [{}]", serviceName, methodMapString(methodMap));
-                    registry.registerService(serviceName, bean, methodMap);
+                    GrpcServiceType serviceType = determineServiceType(bean);
+                    GrpcServiceMetadata metadata = new GrpcServiceMetadata(bean, serviceType, methodMap);
+
+                    LOG.info("Registering gRPC service: [{}] with type: [{}] and methods: [{}]",
+                        serviceName, serviceType, methodMapString(methodMap));
+                    registry.registerService(serviceName, metadata);
                 }
             }
         } catch (Exception e) {
             LOG.error("Failed to register gRPC service: [{}]", beanDefinition.getBeanType(), e);
         }
+    }
+
+    private GrpcServiceType determineServiceType(Object serviceBean) {
+        if (serviceBean instanceof AbstractBlockingStub) {
+            return io.micronaut.protobuf.json.registry.GrpcServiceType.BLOCKING;
+        } else if (serviceBean instanceof BindableService || serviceBean instanceof AbstractStub) {
+            return io.micronaut.protobuf.json.registry.GrpcServiceType.ASYNC;
+        }
+        // Default to ASYNC for backward compatibility
+        return GrpcServiceType.ASYNC;
+    }
+
+
+    private Map<String, Method> discoverGrpcMethods(Object serviceBean) {
+        GrpcServiceType serviceType = identifyGrpcServiceType(serviceBean);
+
+        return switch (serviceType) {
+            case BLOCKING -> discoverBlockingStubMethods(serviceBean);
+            case ASYNC -> discoverServiceMethods(serviceBean);
+            default -> Collections.emptyMap();
+        };
     }
 
     private String determineServiceName(Object bean) {
@@ -135,14 +166,85 @@ public class GrpcServiceRegistrar {
     }
 
     private boolean isGrpcRelatedService(BeanDefinition<?> beanDefinition) {
-        // Check for @GrpcRestJsonExposed annotation without needing to instantiate
-        return beanDefinition.getAnnotation(GrpcRestJsonExposed.class) != null;
+        // Check for @GrpcRestJsonExposed annotation on type
+        if (beanDefinition.getAnnotation(GrpcRestJsonExposed.class) != null) {
+            return true;
+        }
+
+        // Check for @GrpcRestJsonExposed annotation on fields
+        if (beanDefinition.getInjectedFields()
+            .stream()
+            .anyMatch(field -> field.getAnnotation(GrpcRestJsonExposed.class) != null)) {
+            return true;
+        }
+
+        // Check for @GrpcRestJsonExposed annotation on methods
+        return beanDefinition.getExecutableMethods()
+            .stream()
+            .anyMatch(method -> method.hasAnnotation(GrpcRestJsonExposed.class));
     }
 
-    private Map<String, Method> discoverGrpcMethods(Object serviceBean) {
+
+    private GrpcServiceType identifyGrpcServiceType(Object serviceBean) {
+        // For any blocking stub type, keeping it generic
+        if (serviceBean instanceof io.grpc.stub.AbstractStub
+            && serviceBean.getClass().getSimpleName().endsWith("BlockingStub")) {
+            return GrpcServiceType.BLOCKING;
+        }
+        // For factory classes that will produce annotated stubs
+        if (serviceBean.getClass().isAnnotationPresent(Factory.class)) {
+            // Check if any method is annotated with @GrpcRestJsonExposed and returns an AbstractStub
+            for (Method method : serviceBean.getClass().getMethods()) {
+                if (method.isAnnotationPresent(GrpcRestJsonExposed.class)
+                    && io.grpc.stub.AbstractStub.class.isAssignableFrom(method.getReturnType())) {
+                    return GrpcServiceType.BLOCKING;
+                }
+            }
+        }
+        // For regular gRPC services
+        if (serviceBean instanceof io.grpc.BindableService) {
+            return GrpcServiceType.ASYNC;
+        }
+        return GrpcServiceType.UNKNOWN;
+    }
+
+
+    private Map<String, Method> discoverServiceMethods(Object serviceBean) {
         Map<String, Method> methods = new HashMap<>();
         for (Method method : serviceBean.getClass().getMethods()) {
+            // Skip if method is from AbstractStub class
+            if (method.getDeclaringClass().equals(io.grpc.stub.AbstractStub.class)) {
+                continue;
+            }
+
+            // Skip if method is one of the static factory methods
+            if (Modifier.isStatic(method.getModifiers())) {
+                continue;
+            }
+
             if (isGrpcMethod(method)) {
+                // Only include actual service methods (like sayHello)
+                if (!method.getName().equals("getCallOptions") &&
+                    !method.getName().equals("newStub") &&
+                    !method.getName().startsWith("new") &&
+                    !method.getName().startsWith("build")) {
+
+                    methods.put(method.getName(), method);
+                }
+            }
+        }
+        return methods;
+    }
+
+    private Map<String, Method> discoverBlockingStubMethods(Object serviceBean) {
+        Map<String, Method> methods = new HashMap<>();
+        for (Method method : serviceBean.getClass().getMethods()) {
+            if (!method.getDeclaringClass().equals(Object.class)
+                && !method.getName().equals("getCallOptions")
+                && !method.getName().equals("newStub")
+                && !method.getName().startsWith("with")
+                && !method.getName().equals("getChannel")
+                && !method.getName().equals("build")) {
                 methods.put(method.getName(), method);
             }
         }

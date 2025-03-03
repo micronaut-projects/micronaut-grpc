@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_package = "io.grpc.examples.hostname";
+option java_outer_classname = "HostnameProto";
+option objc_class_prefix = "HSP";
+
+package hostname;
+
+// The hostname service definition.
+service HostnameService {
+  // Get hostname
+  rpc GetHostname (Empty) returns (HostnameResponse) {}
+}
+
+message Empty {
+}
+
+message HostnameResponse {
+  string hostname = 1;
+}

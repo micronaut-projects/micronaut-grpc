@@ -41,10 +41,12 @@ class GrpcServiceRegistrarSpec extends Specification {
         then:
         1 * registry.registerService(
                 'GreeterService',
-                greeterService,
-                { Map<String, Method> methods ->
-                    methods.size() == 1 &&
-                            methods.containsKey('sayHello')
+                { GrpcServiceMetadata metadata ->
+                    //noinspection GroovyAccessibility
+                    metadata.serviceBean == greeterService &&
+                            metadata.type == GrpcServiceType.ASYNC &&
+                            metadata.methods.size() == 1 &&
+                            metadata.methods.containsKey('sayHello')
                 }
         )
     }
@@ -140,6 +142,7 @@ class GrpcServiceRegistrarSpec extends Specification {
     }
 
     static class TestServiceStub extends AbstractStub<TestServiceStub> {
+        @SuppressWarnings('unused')
         TestServiceStub(Channel channel) {
             super(channel)
         }
@@ -154,6 +157,7 @@ class GrpcServiceRegistrarSpec extends Specification {
         }
 
         // This follows the standard gRPC method descriptor pattern
+        @SuppressWarnings('unused')
         static MethodDescriptor<String, String> getMethodDescriptor(String methodName) {
             return null // Will be overridden by spy
         }

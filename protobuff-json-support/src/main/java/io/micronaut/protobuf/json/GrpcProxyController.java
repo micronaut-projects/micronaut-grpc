@@ -16,6 +16,7 @@
 package io.micronaut.protobuf.json;
 
 import com.google.protobuf.Message;
+import io.grpc.stub.AbstractBlockingStub;
 import io.grpc.stub.StreamObserver;
 import io.micronaut.core.annotation.Experimental;
 import io.micronaut.core.annotation.NonNull;
@@ -111,17 +112,26 @@ public final class GrpcProxyController {
     }
 
     private HttpResponse<String> invokeGrpcMethod(
-            @NonNull Method method,
-            @NonNull Object serviceBean,
-            @NonNull String jsonBody) {
+        @NonNull Method method,
+        @NonNull Object serviceBean,
+        @NonNull String jsonBody) {
         try {
             Class<?> requestType = method.getParameterTypes()[0];
             @SuppressWarnings("unchecked")
             Message requestMessage = transcoder.fromJson(jsonBody, (Class<? extends Message>) requestType);
-            SimpleStreamObserver<Message> observer = new SimpleStreamObserver<>();
-            method.invoke(serviceBean, requestMessage, observer);
-            String jsonResponse = transcoder.toJson(observer.getResponse());
-            return HttpResponse.ok(jsonResponse);
+
+            if (serviceBean instanceof AbstractBlockingStub) {
+                // Handle blocking call
+                Object response = method.invoke(serviceBean, requestMessage);
+                String jsonResponse = transcoder.toJson((Message) response);
+                return HttpResponse.ok(jsonResponse);
+            } else {
+                // Handle async call with StreamObserver
+                SimpleStreamObserver<Message> observer = new SimpleStreamObserver<>();
+                method.invoke(serviceBean, requestMessage, observer);
+                String jsonResponse = transcoder.toJson(observer.getResponse());
+                return HttpResponse.ok(jsonResponse);
+            }
         } catch (ProtobufJsonTranscoder.ProtobufTranscodingException e) {
             throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Invalid request format");
         } catch (Exception e) {

@@ -14,9 +14,10 @@ class GrpcServiceRegistrySpec extends Specification {
         def serviceBean = Mock(TestService)
         def method = TestService.getDeclaredMethod("testMethod")
         def methods = [(method.name): method]
+        def metadata = new GrpcServiceMetadata(serviceBean, GrpcServiceType.BLOCKING, methods)
 
         when:
-        registry.registerService(serviceName, serviceBean, methods)
+        registry.registerService(serviceName, metadata)
         def result = registry.getService(serviceName)
 
         then:
@@ -24,6 +25,7 @@ class GrpcServiceRegistrySpec extends Specification {
         with(result.get()) {
             getServiceBean() == serviceBean
             getMethod("testMethod") == method
+            getType() == GrpcServiceType.BLOCKING
         }
     }
 
@@ -41,28 +43,36 @@ class GrpcServiceRegistrySpec extends Specification {
         def service2 = Mock(TestService)
         def method = TestService.getDeclaredMethod("testMethod")
         def methods = [(method.name): method]
+        def metadata1 = new GrpcServiceMetadata(service1, GrpcServiceType.BLOCKING, methods)
+        def metadata2 = new GrpcServiceMetadata(service2, GrpcServiceType.ASYNC, methods)
 
         when:
-        registry.registerService("service1", service1, methods)
-        registry.registerService("service2", service2, methods)
+        registry.registerService("service1", metadata1)
+        registry.registerService("service2", metadata2)
 
         then:
         registry.getService("service1").isPresent()
         registry.getService("service2").isPresent()
-        registry.getService("service1").get().getServiceBean() == service1
-        registry.getService("service2").get().getServiceBean() == service2
+        with(registry.getService("service1").get()) {
+            getServiceBean() == service1
+            getType() == GrpcServiceType.BLOCKING
+        }
+        with(registry.getService("service2").get()) {
+            getServiceBean() == service2
+            getType() == GrpcServiceType.ASYNC
+        }
     }
 
-    def "service definition should return correct method"() {
+    def "metadata should return correct method"() {
         given:
         def serviceBean = Mock(TestService)
         def method = TestService.getDeclaredMethod("testMethod")
         def methods = [(method.name): method]
-        def serviceDef = new GrpcServiceRegistry.ServiceDefinition(serviceBean, methods)
+        def metadata = new GrpcServiceMetadata(serviceBean, GrpcServiceType.BLOCKING, methods)
 
         expect:
-        serviceDef.getMethod("testMethod") == method
-        serviceDef.getMethod("nonExistentMethod") == null
+        metadata.getMethod("testMethod") == method
+        metadata.getMethod("nonExistentMethod") == null
     }
 
     // Helper class for testing

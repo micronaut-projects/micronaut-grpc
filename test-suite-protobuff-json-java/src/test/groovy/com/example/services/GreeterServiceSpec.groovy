@@ -4,6 +4,7 @@ import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.micronaut.context.annotation.Property
 import io.micronaut.grpc.annotation.GrpcChannel
+import io.micronaut.grpc.annotation.GrpcRestJsonExposed
 import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
 import jakarta.inject.Inject
@@ -21,6 +22,7 @@ class GreeterServiceSpec extends Specification {
     ManagedChannel channel
 
     @Shared
+    @GrpcRestJsonExposed
     GreeterGrpc.GreeterBlockingStub blockingStub
 
     void setup() {
