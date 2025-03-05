@@ -45,6 +45,18 @@ Then configure the gRPC and protobuf plugins:
 ----
 include::test-suite-java/build.gradle[tags=config]
 ----
+NOTE: If you are using JDK9 or above, in order to avoid issues javax packages, provide the following compiler option to the grpc plugin to skip these stubs: `option '@generated=omit'` (added on link:https://github.com/grpc/grpc-java/releases/tag/v1.64.0[grpc-kava v1.64.0]) See discussion here: link:https://github.com/grpc/grpc-java/issues/9179[issue 9179]
+
+[source,groovy]
+----
+    ...
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {
+                option '@generated=omit'
+            } }
+    }
+----
 
 Use this configuration for Kotlin projects:
 
