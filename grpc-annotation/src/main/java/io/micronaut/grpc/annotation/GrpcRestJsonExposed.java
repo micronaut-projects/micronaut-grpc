@@ -22,7 +22,7 @@ import java.lang.annotation.*;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD}) // Add METHOD to targets
+@Target({ElementType.TYPE})
 @Executable
 @Bean
 public @interface GrpcRestJsonExposed {

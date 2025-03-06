@@ -34,7 +34,8 @@ class GreeterServiceClientSpec extends Specification {
         response.getGreeting().contains("Hello, Micronaut")
 
         where:
-        serviceName << ["GreeterService", "GreeterBlocking"]
+        serviceName << ["GreeterService"]
+        //serviceName << ["GreeterService", "GreeterBlocking"]
     }
 
     @Unroll
@@ -55,7 +56,7 @@ class GreeterServiceClientSpec extends Specification {
         response.body().contains("Hello, Micronaut")
 
         where:
-        serviceName << ["GreeterService", "GreeterBlocking"]
+        serviceName << ["GreeterService"]
     }
 
     @Unroll
@@ -75,7 +76,7 @@ class GreeterServiceClientSpec extends Specification {
         e.response.status() == HttpStatus.NOT_FOUND
 
         where:
-        serviceName << ["GreeterService", "GreeterBlocking"]
+        serviceName << ["GreeterService"]
     }
 
     @Unroll
@@ -95,7 +96,7 @@ class GreeterServiceClientSpec extends Specification {
         e.response.status() == HttpStatus.NOT_FOUND
 
         where:
-        serviceName << ["GreeterService", "GreeterBlocking"]
+        serviceName << ["GreeterService"]
     }
 
     @Unroll
@@ -115,6 +116,6 @@ class GreeterServiceClientSpec extends Specification {
         e.response.status() == HttpStatus.BAD_REQUEST
 
         where:
-        serviceName << ["GreeterService", "GreeterBlocking"]
+        serviceName << ["GreeterService"]
     }
 }
