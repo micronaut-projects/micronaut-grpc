@@ -19,7 +19,9 @@ import io.micronaut.context.BeanContext;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.core.annotation.Internal;
+import io.micronaut.runtime.event.annotation.EventListener;
 import io.micronaut.runtime.server.EmbeddedServer;
+import io.micronaut.runtime.server.event.ServerShutdownEvent;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
 
 import org.slf4j.Logger;
@@ -38,7 +40,7 @@ import jakarta.inject.Singleton;
 @Internal
 @Singleton
 @Requires(beans = GrpcEmbeddedServer.class)
-class GrpcEmbeddedServerListener implements ApplicationEventListener<ServerStartupEvent>, AutoCloseable {
+class GrpcEmbeddedServerListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(GrpcEmbeddedServerListener.class);
 
@@ -54,8 +56,8 @@ class GrpcEmbeddedServerListener implements ApplicationEventListener<ServerStart
         this.beanContext = beanContext;
     }
 
-    @Override
-    public void onApplicationEvent(ServerStartupEvent event) {
+    @EventListener
+    public void onServerStartupEvent(ServerStartupEvent event) {
         final EmbeddedServer server = event.getSource();
         if (!(server instanceof GrpcEmbeddedServer)) {
             this.grpcServer = beanContext.getBean(GrpcEmbeddedServer.class);
@@ -66,11 +68,13 @@ class GrpcEmbeddedServerListener implements ApplicationEventListener<ServerStart
         }
     }
 
-    @Override
-    @PreDestroy
-    public void close() {
-        if (grpcServer != null && grpcServer.isRunning()) {
-            grpcServer.stop();
+    @EventListener
+    public void onServerShutdownEvent(ServerShutdownEvent event) {
+        final EmbeddedServer server = event.getSource();
+        if (!(server instanceof GrpcEmbeddedServer)) {
+            if (grpcServer != null && grpcServer.isRunning()) {
+                grpcServer.stop();
+            }
         }
     }
 }
