@@ -22,6 +22,7 @@ import io.micronaut.inject.ExecutableMethod;
 import io.micronaut.protobuf.json.ProtobufJsonTranscoder;
 import io.micronaut.protobuf.json.exception.GrpcInvocationException;
 import io.micronaut.protobuf.json.exception.MethodNotFoundException;
+import io.micronaut.protobuf.json.exception.ProtobufTranscodingException;
 import io.micronaut.protobuf.json.exception.ServiceNotFoundException;
 import io.micronaut.protobuf.json.registry.GrpcServiceRegistry;
 import jakarta.inject.Singleton;
@@ -31,6 +32,31 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * A service responsible for enabling interaction with gRPC methods through a JSON-based interface.
+ * This class facilitates the invocation of gRPC methods by handling tasks such as locating the appropriate
+ * service and method, converting JSON request payloads into Protobuf messages, executing the gRPC call reflectively,
+ * and then transforming the Protobuf response back into a JSON format for the consumer.
+ * <br/>
+ * Responsibilities:
+ * - Resolves the gRPC service and method metadata through the {@link GrpcServiceRegistry}.
+ * - Manages the lifecycle of gRPC service beans within the application, utilizing the {@link ApplicationContext}.
+ * - Coordinates JSON-to-Protobuf and Protobuf-to-JSON transformations via the {@link ProtobufJsonTranscoder}.
+ * <br/>
+ * This service is primarily designed to make it easier to expose gRPC methods for external clients
+ * and bridge the gap between JSON REST interfaces and Protobuf-based gRPC method implementations.
+ * <br/>
+ * Thread Safety:
+ * - Instances of this class are effectively singletons, managed by the application framework.
+ * - While the class itself does not explicitly manage threading, it relies on thread-safe components
+ *   like {@link GrpcServiceRegistry} for service and method lookups.
+ * <br/>
+ * Exceptions:
+ * - {@link MethodNotFoundException}: Thrown when a specific method cannot be found in the given service.
+ * - {@link ServiceNotFoundException}: Thrown when a service is not registered or managed in the application context.
+ * - {@link ProtobufTranscodingException}: Thrown for errors during JSON-Protobuf serialization or deserialization.
+ * - {@link GrpcInvocationException}: Thrown when gRPC method invocation fails, or a timeout occurs.
+ */
 @Singleton
 public class GrpcProxyService {
     private static final Logger LOG = LoggerFactory.getLogger(GrpcProxyService.class);
@@ -47,6 +73,20 @@ public class GrpcProxyService {
         this.transcoder = transcoder;
     }
 
+    /**
+     * Invokes a specified gRPC method on a service and converts the Protobuf response to a JSON string.
+     * This method handles locating the gRPC method, converting the JSON request to a Protobuf message,
+     * invoking the method reflectively, and transforming the Protobuf response back to JSON format.
+     *
+     * @param serviceName The name of the gRPC service containing the method. Must not be null or empty.
+     * @param methodName The name of the gRPC method to invoke within the service. Must not be null or empty.
+     * @param jsonRequest A JSON string representing the request payload. Must not be null or empty.
+     * @return A JSON string representation of the Protobuf response. Never null.
+     * @throws MethodNotFoundException If the specified method cannot be found in the gRPC service.
+     * @throws ServiceNotFoundException If the specified service cannot be located in the context.
+     * @throws ProtobufTranscodingException If there is an error in converting JSON to or from Protobuf.
+     * @throws GrpcInvocationException If the invocation of the gRPC method fails.
+     */
     public String invokeGrpcMethod(String serviceName, String methodName, String jsonRequest) {
         // Obtain the executable method
         ExecutableMethod<?, ?> grpcMethod = registry.getExecutableMethod(serviceName, methodName)
