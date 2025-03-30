@@ -23,6 +23,7 @@ import io.micronaut.runtime.server.EmbeddedServer;
 import io.micronaut.runtime.server.event.ServerShutdownEvent;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
 
+import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +39,7 @@ import jakarta.inject.Singleton;
 @Internal
 @Singleton
 @Requires(beans = GrpcEmbeddedServer.class)
-class GrpcEmbeddedServerListener {
+class GrpcEmbeddedServerListener implements AutoCloseable{
 
     private static final Logger LOG = LoggerFactory.getLogger(GrpcEmbeddedServerListener.class);
 
@@ -70,9 +71,15 @@ class GrpcEmbeddedServerListener {
     public void onServerShutdownEvent(ServerShutdownEvent event) {
         final EmbeddedServer server = event.getSource();
         if (!(server instanceof GrpcEmbeddedServer)) {
-            if (grpcServer != null && grpcServer.isRunning()) {
-                grpcServer.stop();
-            }
+            this.close();
+        }
+    }
+
+    @Override
+    @PreDestroy
+    public void close() {
+        if (grpcServer != null && grpcServer.isRunning()) {
+            grpcServer.stop();
         }
     }
 }
