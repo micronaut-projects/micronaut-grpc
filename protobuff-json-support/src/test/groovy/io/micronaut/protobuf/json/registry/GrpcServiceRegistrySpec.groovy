@@ -1,5 +1,6 @@
 package io.micronaut.protobuf.json.registry
 
+import io.micronaut.inject.ExecutableMethod
 import spock.lang.Specification
 import spock.lang.Subject
 
@@ -8,75 +9,57 @@ class GrpcServiceRegistrySpec extends Specification {
     @Subject
     GrpcServiceRegistry registry = new GrpcServiceRegistry()
 
-    def "should register and retrieve service"() {
+    def "should register and retrieve executable method"() {
         given:
-        def serviceName = "testService"
-        def serviceBean = Mock(TestService)
-        def method = TestService.getDeclaredMethod("testMethod")
-        def methods = [(method.name): method]
-        def metadata = new GrpcServiceMetadata(serviceBean, GrpcServiceType.BLOCKING, methods)
+        ExecutableMethod executableMethod = Mock(ExecutableMethod) {
+            getMethodName() >> "testMethod"
+            getDeclaringType() >> TestService.class
+        }
 
         when:
-        registry.registerService(serviceName, metadata)
-        def result = registry.getService(serviceName)
+        registry.register(TestService.class, "testMethod", executableMethod)
+        def result = registry.getExecutableMethod("TestService", "testMethod")
 
         then:
         result.isPresent()
-        with(result.get()) {
-            getServiceBean() == serviceBean
-            getMethod("testMethod") == method
-            getType() == GrpcServiceType.BLOCKING
-        }
+        result.get() == executableMethod
     }
 
-    def "should return empty optional for non-existent service"() {
+    def "should return empty optional when method doesn't exist"() {
         when:
-        def result = registry.getService("nonExistentService")
+        def result = registry.getExecutableMethod("NonExistentService", "nonExistentMethod")
 
         then:
         !result.isPresent()
     }
 
-    def "should handle multiple service registrations"() {
+    def "should handle multiple registrations correctly"() {
         given:
-        def service1 = Mock(TestService)
-        def service2 = Mock(TestService)
-        def method = TestService.getDeclaredMethod("testMethod")
-        def methods = [(method.name): method]
-        def metadata1 = new GrpcServiceMetadata(service1, GrpcServiceType.BLOCKING, methods)
-        def metadata2 = new GrpcServiceMetadata(service2, GrpcServiceType.ASYNC, methods)
+        ExecutableMethod method1 = Mock(ExecutableMethod) {
+            getMethodName() >> "method1"
+            getDeclaringType() >> TestService.class
+        }
+        ExecutableMethod method2 = Mock(ExecutableMethod) {
+            getMethodName() >> "method2"
+            getDeclaringType() >> AnotherTestService.class
+        }
 
         when:
-        registry.registerService("service1", metadata1)
-        registry.registerService("service2", metadata2)
+        registry.register(TestService.class, "method1", method1)
+        registry.register(AnotherTestService.class, "method2", method2)
 
         then:
-        registry.getService("service1").isPresent()
-        registry.getService("service2").isPresent()
-        with(registry.getService("service1").get()) {
-            getServiceBean() == service1
-            getType() == GrpcServiceType.BLOCKING
-        }
-        with(registry.getService("service2").get()) {
-            getServiceBean() == service2
-            getType() == GrpcServiceType.ASYNC
-        }
+        registry.getExecutableMethod("TestService", "method1").isPresent()
+        registry.getExecutableMethod("AnotherTestService", "method2").isPresent()
+        registry.getExecutableMethod("TestService", "method1").get() == method1
+        registry.getExecutableMethod("AnotherTestService", "method2").get() == method2
     }
 
-    def "metadata should return correct method"() {
-        given:
-        def serviceBean = Mock(TestService)
-        def method = TestService.getDeclaredMethod("testMethod")
-        def methods = [(method.name): method]
-        def metadata = new GrpcServiceMetadata(serviceBean, GrpcServiceType.BLOCKING, methods)
-
-        expect:
-        metadata.getMethod("testMethod") == method
-        metadata.getMethod("nonExistentMethod") == null
-    }
-
-    // Helper class for testing
     static class TestService {
         void testMethod() {}
+    }
+
+    static class AnotherTestService {
+        void method2() {}
     }
 }

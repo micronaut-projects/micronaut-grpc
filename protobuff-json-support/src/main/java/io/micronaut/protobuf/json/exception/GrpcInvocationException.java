@@ -38,9 +38,8 @@ public class GrpcInvocationException extends HttpStatusException {
      * gRPC method in the server logic.
      *
      * @param message The detail message explaining the reason for the exception. Must not be null.
-     * @param cause The underlying cause of the exception. May be null to indicate that the cause is unknown.
      */
-    public GrpcInvocationException(String message, Throwable cause) {
+    public GrpcInvocationException(String message) {
         super(HttpStatus.INTERNAL_SERVER_ERROR, message);
     }
 }

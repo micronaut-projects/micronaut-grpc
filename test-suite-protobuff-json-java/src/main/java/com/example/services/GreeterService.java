@@ -10,15 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Singleton
-@GrpcRestJsonExposed
 public class GreeterService extends GreeterGrpc.GreeterImplBase {
     private static final Logger log = LoggerFactory.getLogger(GreeterService.class);
-    public GreeterService() {
-        super();
-        log.info("GreeterService created");
-    }
+
+    @GrpcRestJsonExposed
     @Override
     public void sayHello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
+        log.debug("Received request: {}", request);
         String name = request.getName();
         String greeting = "Hello, " + name;
 
