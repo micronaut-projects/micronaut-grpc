@@ -95,6 +95,4 @@ public class ProtobufJsonTranscoder {
                     String.format("Failed to deserialize JSON to %s", messageType.getSimpleName()), e);
         }
     }
-
-
 }

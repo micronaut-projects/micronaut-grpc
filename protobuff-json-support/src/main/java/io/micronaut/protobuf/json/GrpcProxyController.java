@@ -28,6 +28,22 @@ import org.slf4j.Logger;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.slf4j.LoggerFactory.getLogger;
 
+/**
+ * Controller handling gRPC method invocations via HTTP requests.
+ * <br/>
+ * This class acts as a bridge to invoke gRPC methods by forwarding HTTP requests
+ * to the corresponding gRPC services, enabling seamless interaction with gRPC endpoints
+ * using JSON payloads. It is designed to facilitate gRPC-JSON transcoding through the
+ * `GrpcProxyService`.
+ * <br/>
+ * The `GrpcProxyController` is marked as `@Experimental`, indicating that its API or
+ * functionality may undergo changes in future versions. This controller is registered
+ * as a singleton and handles requests on the path defined by the configuration
+ * property `micronaut.grpc.proxy.path`, defaulting to `grpc-json`.
+ * <br/>
+ * The controller provides an HTTP POST endpoint to handle gRPC service method invocations
+ * and manages various errors, mapping them to appropriate HTTP responses.
+ */
 @Experimental
 @Singleton
 @Controller("/${micronaut.grpc.proxy.path:`grpc-json`}")
@@ -48,7 +64,7 @@ public final class GrpcProxyController {
         try {
             String jsonResponse = grpcProxyService.invokeGrpcMethod(serviceName, methodName, jsonRequest);
             return HttpResponse.ok(jsonResponse);
-        } catch ( MalformedGrpcJsonException | GrpcInvocationException | ServiceNotFoundException | MethodNotFoundException e) {
+        } catch (MalformedGrpcJsonException | GrpcInvocationException | ServiceNotFoundException | MethodNotFoundException e) {
             LOG.error("Requested service/method not found: {}/{}", serviceName, methodName, e);
             throw e; // Rethrow these for Micronaut's default exception handling
         } catch (Exception e) {
