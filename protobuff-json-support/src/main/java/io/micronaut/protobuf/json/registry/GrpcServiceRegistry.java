@@ -15,120 +15,64 @@
  */
 package io.micronaut.protobuf.json.registry;
 
-import com.google.common.collect.ImmutableMap;
 import io.micronaut.core.annotation.Experimental;
+import io.micronaut.inject.ExecutableMethod;
 import jakarta.inject.Singleton;
 
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A registry for managing gRPC services and their associated method definitions within
- * a Micronaut application. This class allows dynamic registration and retrieval of
- * gRPC service definitions, enabling services to be invoked dynamically at runtime.
- *<br/>
- * This registry associates a service name with a {@code ServiceDefinition}, which
- * encapsulates the service bean and a map of the available methods for that service.
- *<br/>
+ * A class responsible for maintaining a registry of gRPC service methods, enabling them
+ * to be exposed and invoked via JSON over REST. The registry manages mappings between
+ * service names, method names, and their corresponding {@link ExecutableMethod} instances.
+ * <br/>
+ * The {@code GrpcServiceRegistry} is primarily used to support the integration of gRPC
+ * methods with REST-based clients by providing a centralized point for method registration
+ * and lookup.
+ * <br/>
  * Annotations:
- * - {@code @Singleton}: Ensures a single instance of this registry is used within the application.
+ * - {@code @Singleton}: Indicates that this class is a singleton within the application context.
+ * - {@code @Experimental}: Marks the class as experimental functionality, which is subject to
+ *   change in future releases.
+ * <br/>
+ * Thread Safety:
+ * - This class uses a thread-safe {@link ConcurrentHashMap} to store service and method mappings,
+ *   ensuring safe registration and retrieval in concurrent environments.
  */
 @Singleton
 @Experimental
 public class GrpcServiceRegistry {
 
-    private final Map<String, ServiceDefinition> services = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, ExecutableMethod<?, ?>>> methods = new ConcurrentHashMap<>();
 
     /**
-     * Registers a gRPC service by associating it with a service name and its corresponding
-     * service bean and methods.
+     * Registers a gRPC service method with the internal registry, allowing it to be exposed
+     * for invocation via JSON over REST. This method maintains a mapping between the service
+     * name, method name, and its corresponding {@code ExecutableMethod}.
      *
-     * @param name The name of the gRPC service to register. This value is case-insensitive
-     *             and will be converted to lowercase for storage.
-     * @param serviceBean The service bean instance that implements the gRPC service being
-     *                    registered. This object is used to invoke the associated methods.
-     * @param methods A map of method names to their corresponding {@code Method} objects.
-     *                This defines the available methods for the service and allows dynamic
-     *                invocation based on method name.
+     * @param serviceBeanType The class type of the gRPC service bean being registered. Must not be null.
+     * @param methodName The name of the method in the gRPC service being registered. Must not be null or empty.
+     * @param method The {@code ExecutableMethod} representing the method's metadata and logic. Must not be null.
      */
-    public void registerService(String name, Object serviceBean, Map<String, Method> methods) {
-        services.put(name, new ServiceDefinition(serviceBean, methods));
+    public void register(Class<?> serviceBeanType, String methodName, ExecutableMethod<?, ?> method) {
+        methods.computeIfAbsent(serviceBeanType.getSimpleName(), key -> new ConcurrentHashMap<>())
+            .put(methodName, method);
     }
 
     /**
-     * Retrieves the {@code ServiceDefinition} associated with the given service name, if it exists.
-     * This method performs a case-insensitive lookup for the service name in the registered services.
+     * Retrieves an {@code ExecutableMethod} instance based on the specified service name and method name.
+     * This method is used to locate a registered gRPC method within the given service context.
      *
-     * @param name The name of the gRPC service to retrieve. This value is case-insensitive.
-     *             It will be converted to lowercase for the lookup.
-     * @return An {@code Optional} containing the {@code ServiceDefinition} if the service is found,
-     *         or an empty {@code Optional} if the service is not registered.
+     * @param serviceName The name of the gRPC service containing the method. Must not be null or empty.
+     * @param methodName The name of the method within the service to retrieve. Must not be null or empty.
+     * @return An {@code Optional} containing the {@code ExecutableMethod} if found, or an empty {@code Optional}
+     *         if no matching service or method is registered.
      */
-    public Optional<ServiceDefinition> getService(String name) {
-        return Optional.ofNullable(services.get(name));
-    }
-
-    /**
-     * Represents a gRPC service definition containing the service bean instance and its
-     * associated methods. This class provides the necessary encapsulation for managing
-     * gRPC services, enabling dynamic invocation of service methods.
-     *<br/>
-     * A `ServiceDefinition` object is created with a reference to the service bean that
-     * implements the gRPC service logic, as well as a mapping of method names to their
-     * corresponding {@code Method} objects. This structure allows for flexible and dynamic
-     * handling of gRPC service methods at runtime.
-     *<br/>
-     * Constructors:
-     * - {@link #ServiceDefinition(Object, Map)}: Initializes the service definition with
-     *   the service bean and method map.
-     *<br/>
-     * Fields:
-     * - `serviceBean`: The instance of the service bean associated with this service
-     *   definition. This object is the implementation of the gRPC service.
-     * - `methods`: A map of method names to corresponding {@code Method} objects. Each
-     *   entry in this map represents an accessible service method for the associated gRPC
-     *   service.
-     */
-    public static class ServiceDefinition {
-        final Object serviceBean;
-        final Map<String, Method> methods;
-
-        /**
-         * Constructs a new ServiceDefinition instance with the specified service bean and method mapping.
-         *
-         * @param serviceBean The service bean instance representing the gRPC service logic. Must not be null.
-         * @param methods A map of method names (as keys) to their corresponding {@code Method} objects (as values),
-         *                representing the accessible methods for the service. Must not be null.
-         */
-        public ServiceDefinition(Object serviceBean, Map<String, Method> methods) {
-            this.serviceBean = serviceBean;
-            // Create an immutable copy of the methods map
-            this.methods = ImmutableMap.copyOf(methods);
-        }
-
-        /**
-         * Retrieves an immutable copy of the map containing method names and their corresponding {@code Method} objects.
-         *
-         * @param methodName the name of the method to retrieve
-         * @return A {@code Method} object corresponding to the given method name, or null if not found
-         */
-        public Method getMethod(String methodName) {
-            return methods.get(methodName);
-        }
-
-        /**
-         * Retrieves the service bean instance associated with this service definition.
-         *
-         * @return The service bean instance representing the gRPC service logic.
-         */
-        public Object getServiceBean() {
-            return serviceBean;
-        }
+    public Optional<ExecutableMethod<?, ?>> getExecutableMethod(String serviceName, String methodName) {
+        return Optional.ofNullable(methods.getOrDefault(serviceName, Map.of()).get(methodName));
     }
 
 }
-
-
 

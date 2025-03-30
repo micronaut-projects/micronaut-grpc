@@ -17,23 +17,23 @@ package io.micronaut.protobuf.json;
 
 import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
+import io.micronaut.context.ApplicationContext;
 import io.micronaut.core.annotation.Experimental;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.HttpStatus;
-import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.annotation.Error;
 import io.micronaut.http.exceptions.HttpStatusException;
+import io.micronaut.inject.ExecutableMethod;
 import io.micronaut.protobuf.json.exception.GrpcInvocationException;
 import io.micronaut.protobuf.json.exception.MethodNotFoundException;
 import io.micronaut.protobuf.json.exception.ServiceNotFoundException;
-import io.micronaut.protobuf.json.registry.GrpcServiceRegistrar;
 import io.micronaut.protobuf.json.registry.GrpcServiceRegistry;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 
-import java.lang.reflect.Method;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -65,75 +65,90 @@ public final class GrpcProxyController {
 
     private final GrpcServiceRegistry registry;
     private final ProtobufJsonTranscoder transcoder;
+    private final ApplicationContext context;
 
-    /**
-     * Constructs a new instance of GrpcProxyController, initializing its dependencies and registering gRPC services.
-     *
-     * @param registry The {@link GrpcServiceRegistry} instance used to manage gRPC service definitions.
-     *                 This allows retrieval of service and method definitions for dynamic invocation.
-     * @param registrar The {@link GrpcServiceRegistrar} responsible for registering gRPC services with this controller
-     *                  on initialization.
-     * @param transcoder The {@link ProtobufJsonTranscoder} used for converting between Protobuf messages and JSON
-     *                   representations, enabling JSON-based gRPC service interaction.
-     */
     public GrpcProxyController(
             @NonNull GrpcServiceRegistry registry,
-            @NonNull GrpcServiceRegistrar registrar,
+            @NonNull ApplicationContext context,
             @NonNull ProtobufJsonTranscoder transcoder) {
         this.registry = registry;
         this.transcoder = transcoder;
-
-        registrar.registerGrpcServices();
+        this.context = context;
         LOG.info("GrpcProxyController initialized and services registered");
     }
 
-    /**
-     * Handles a gRPC POST request by invoking the specified service and method, using the provided JSON body as the request message.
-     * Converts the incoming JSON payload into a Protobuf message, dynamically invokes the corresponding gRPC method,
-     * and then converts the response back to JSON for the HTTP response.
-     *
-     * @param serviceName The name of the gRPC service to invoke. Must not be null.
-     * @param methodName The name of the method within the specified service to invoke. Must not be null.
-     * @param jsonBody The JSON-encoded payload to be used as the method's input. Must not be null.
-     * @return An {@link HttpResponse} containing the JSON-encoded result of the gRPC method invocation.
-     *         If the service or method cannot be found, or if there is an issue with the payload, an appropriate HTTP error is returned.
-     */
+
     @Post("/{serviceName}/{methodName}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public HttpResponse<String> handlePost(
-            @NonNull String serviceName,
-            @NonNull String methodName,
-            @Body @NonNull String jsonBody) {
-        LOG.debug("Handling gRPC request - service: [{}], method: [{}]", serviceName, methodName);
+    public HttpResponse<String> invokeMethod(@PathVariable String serviceName,
+                                             @PathVariable String methodName,
+                                             @Body String jsonRequest) {
+        // Retrieve the executable method explicitly at runtime
+        ExecutableMethod<Object, Object> executableMethod = (ExecutableMethod<Object, Object>) registry
+            .getExecutableMethod(serviceName, methodName)
+            .orElseThrow(() -> new MethodNotFoundException("Method `" + serviceName + "." + methodName + "` not found"));
 
-        var serviceDef = registry.getService(serviceName)
-                .orElseThrow(() -> new ServiceNotFoundException(serviceName));
+        // Get bean from context
+        Object beanInstance = context.getBean(executableMethod.getDeclaringType());
 
-        Method method = serviceDef.getMethod(methodName);
-        if (method == null) {
-            throw new MethodNotFoundException(methodName);
-        }
+        // Explicitly resolve request and response types at runtime (Protobuf messages)
+        Class<? extends Message> requestType =
+            (Class<? extends Message>) executableMethod.getArguments()[0].getType();
 
-        return invokeGrpcMethod(method, serviceDef.getServiceBean(), jsonBody);
+        // Deserialize JSON explicitly (reflection-driven is fine here)
+        Message requestMessage = transcoder.fromJson(jsonRequest, requestType);
+
+        // Reflective invocation using a StreamObserver clearly needed explicitly
+        Message responseMessage = invokeGrpcMethodReflectively(beanInstance, executableMethod, requestMessage);
+
+        // Serialize response explicitly to JSON via Google's protobuf reflection mechanisms explicitly
+        String jsonResponse = transcoder.toJson(responseMessage);
+        return HttpResponse.ok(jsonResponse);
     }
 
-    private HttpResponse<String> invokeGrpcMethod(
-            @NonNull Method method,
-            @NonNull Object serviceBean,
-            @NonNull String jsonBody) {
+    // Explicit helper to clean up reflective invocation explicitly as isolated method clearly:
+    private Message invokeGrpcMethodReflectively(Object beanInstance,
+                                                 ExecutableMethod<Object, Object> method,
+                                                 Message requestMessage) {
         try {
-            Class<?> requestType = method.getParameterTypes()[0];
-            @SuppressWarnings("unchecked")
-            Message requestMessage = transcoder.fromJson(jsonBody, (Class<? extends Message>) requestType);
-            SimpleStreamObserver<Message> observer = new SimpleStreamObserver<>();
-            method.invoke(serviceBean, requestMessage, observer);
-            String jsonResponse = transcoder.toJson(observer.getResponse());
-            return HttpResponse.ok(jsonResponse);
-        } catch (ProtobufJsonTranscoder.ProtobufTranscodingException e) {
-            throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Invalid request format");
-        } catch (Exception e) {
-            throw new GrpcInvocationException("Failed to process gRPC request", e);
+            // Create a simple, explicitly correct response observer to capture the response
+            SingleMessageObserver responseObserver = new SingleMessageObserver();
+
+            // Call explicitly reflectively with exact two required parameters (request + observer)
+            method.invoke(beanInstance, requestMessage, responseObserver);
+
+            // Obtain explicitly the response synchronously from grpc response observer explicitly
+            return responseObserver.getResponse();
+        } catch (Exception ex) {
+            throw new GrpcInvocationException("Reflective gRPC call failed");
+        }
+    }
+
+    // Explicit observer implementation explicitly capturing single response synchronously
+    private static class SingleMessageObserver implements StreamObserver<Message> {
+        private Message message;
+        private Throwable error;
+        private final CountDownLatch latch = new CountDownLatch(1);
+
+        @Override
+        public void onNext(Message value) { this.message = value; }
+
+        @Override
+        public void onError(Throwable t) {
+            this.error = t;
+            latch.countDown();
+        }
+
+        @Override
+        public void onCompleted() { latch.countDown(); }
+
+        public Message getResponse() throws InterruptedException {
+            boolean timeExceeded = latch.await(5, TimeUnit.SECONDS);
+            if (timeExceeded) {
+                LOG.warn("Response timeout exceeded for the message response");
+            }
+            if (error != null) throw new GrpcInvocationException("Error during gRPC call");
+            if (message == null) throw new GrpcInvocationException("No response received from gRPC call");
+            return message;
         }
     }
 
@@ -156,72 +171,4 @@ public final class GrpcProxyController {
     public HttpResponse<String> handleGrpcError(GrpcInvocationException e) {
         return HttpResponse.serverError("GRPC invocation error: " + e.getMessage());
     }
-
-    /**
-     * Simple StreamObserver implementation for handling gRPC responses.
-     * @param <T> the type of response values this observer handles
-     */
-    @Experimental
-    public static class SimpleStreamObserver<T> implements StreamObserver<T> {
-        private T response;
-        private Throwable error;
-
-        /**
-         * Processes the next value from the stream and stores it as the response.
-         *
-         * This method is part of the {@code StreamObserver} lifecycle and is called
-         * each time a new value is emitted by the gRPC stream. The received value
-         * is stored and can be accessed later.
-         *
-         * @param value the value received from the gRPC stream
-         */
-        @Override
-        public void onNext(T value) {
-            response = value;
-        }
-
-        /**
-         * Handles errors that occur during gRPC calls.
-         *
-         * This method is invoked when an error is encountered during the execution
-         * of a gRPC call. The error is captured and stored for later retrieval or
-         * processing.
-         *
-         * @param t the {@code Throwable} representing the error that occurred
-         */
-        @Override
-        public void onError(Throwable t) {
-            error = t;
-        }
-
-        /**
-         * Notifies that the gRPC call has been completed successfully.
-         *
-         * This method is invoked when the server has successfully completed sending
-         * all responses. It is part of the {@code StreamObserver} lifecycle and indicates
-         * that no more data will be received.
-         *
-         * No action is needed in this implementation.
-         */
-        @Override
-        public void onCompleted() {
-            // No action needed
-        }
-
-        /**
-         * Retrieves the response of a gRPC call if available.
-         * If an error occurred during the gRPC call, a {@link GrpcInvocationException}
-         * is thrown with the corresponding error details.
-         *
-         * @return the response of the gRPC call
-         * @throws GrpcInvocationException if the gRPC call resulted in an error
-         */
-        public T getResponse() {
-            if (error != null) {
-                throw new GrpcInvocationException("gRPC call failed", error);
-            }
-            return response;
-        }
-    }
-
 }
