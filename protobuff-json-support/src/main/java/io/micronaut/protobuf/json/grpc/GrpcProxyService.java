@@ -54,7 +54,7 @@ public class GrpcProxyService {
         Message requestMessage = transcoder.fromJson(jsonRequest, requestType);
 
         // Invoke method and return Protobuf response
-        Message responseMessage = null;
+        final Message responseMessage;
         try {
             //noinspection unchecked
             responseMessage = invokeGrpcMethodReflectively(beanInstance, (ExecutableMethod<Object, Object>) grpcMethod, requestMessage);
