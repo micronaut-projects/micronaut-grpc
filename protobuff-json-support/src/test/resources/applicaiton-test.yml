@@ -1,0 +1,18 @@
+micronaut:
+  inject:
+    trace: true
+  application:
+    name: grpc-proxy-test
+
+grpc:
+  server:
+    port: ${random.port}
+    keep-alive-time: 3h
+    max-inbound-message-size: 1024
+  rest:
+    json:
+      exposed: true
+logger:
+  levels:
+    io.micronaut.context.condition: TRACE
+    io.micronaut.context: DEBUG
