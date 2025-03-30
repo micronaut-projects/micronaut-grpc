@@ -148,6 +148,7 @@ public final class GrpcProxyController {
 
     @Error(HttpStatusException.class)
     public HttpResponse<String> handle(ProtobufJsonTranscoder.ProtobufTranscodingException e) {
+        LOG.error("Problem transcoding JSON to Protobuf", e);
         return HttpResponse.badRequest();
     }
 

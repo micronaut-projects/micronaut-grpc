@@ -1,10 +1,8 @@
 package io.micronaut.protobuf.json;
 
 import io.grpc.BindableService;
-import io.micronaut.context.BeanContext;
 import io.micronaut.context.event.BeanInitializedEventListener;
 import io.micronaut.context.event.BeanInitializingEvent;
-import io.micronaut.core.type.Argument;
 import io.micronaut.grpc.annotation.GrpcRestJsonExposed;
 import io.micronaut.inject.ExecutableMethod;
 import jakarta.annotation.PostConstruct;
