@@ -33,28 +33,28 @@ import java.util.stream.Collectors;
  * Validates beans that implement gRPC services and have methods annotated with {@code @GrpcRestJsonExposed}.
  * This validator ensures the annotated methods belong to classes that implement {@link BindableService}, which is
  * a requirement for defining a valid gRPC service.
- *
+ * <br/>
  * The purpose of this class is to identify and validate any misconfigured or improperly annotated gRPC service
  * classes during the initialization phase of the application's lifecycle. This includes:
  * - Checking if any methods in the bean are annotated with {@code @GrpcRestJsonExposed}.
  * - Validating that the containing class of those methods implements the {@link BindableService} interface.
- *
+ * <br/>
  * If a violation is found during validation, an {@link IllegalStateException} is thrown to prevent misconfigured
  * services from running in the application.
- *
+ * <br/>
  * This class is triggered automatically as a listener for bean initialization events, utilizing the Micronaut
  * {@link BeanInitializedEventListener}.
- *
+ * <br/>
  * Note:
  * - This validator explicitly processes beans flagged with the {@code @GrpcRestJsonExposed} annotation at the
  *   method level. Only those beans are inspected for compliance.
  * - Validation happens prior to {@link PostConstruct} or other lifecycle hooks being executed.
- *
+ * <br/>
  * Responsibilities:
  * - Enforces that methods annotated with {@code @GrpcRestJsonExposed} are correctly defined within a gRPC
  *   {@link BindableService}.
  * - Logs successful validation or throws an exception if validation fails.
- *
+ * <br/>
  * Dependency Injection:
  * This class is a Singleton and is managed by Micronaut's dependency injection.
  */
