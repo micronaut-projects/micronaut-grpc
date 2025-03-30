@@ -26,6 +26,7 @@ include 'protobuff-json-support'
 include 'test-suite-java'
 include 'test-suite-groovy'
 include 'test-suite-kotlin'
+include 'test-suite-protobuff-json-java'
 include 'grpc-health'
 include 'grpc-opentracing'
 

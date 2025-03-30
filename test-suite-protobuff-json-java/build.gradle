@@ -1,0 +1,88 @@
+plugins {
+    id "groovy"
+    id "java-library"
+    id("io.micronaut.minimal.application") version "4.4.5"
+    alias(libs.plugins.protobuf)
+}
+
+group = "com.example.services"
+mainClassName = "com.example.services.Application"
+
+// tag::variables[]
+ext {
+    grpcVersion = libs.versions.managed.grpc.asProvider().get()
+    protobufVersion = libs.versions.managed.protobuf.asProvider().get()
+}
+// end::variables[]
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor mnValidation.micronaut.validation.processor
+    annotationProcessor mnValidation.micronaut.validation
+    annotationProcessor "io.micronaut.serde:micronaut-serde-processor"
+    runtimeOnly "ch.qos.logback:logback-classic"
+    compileOnly mn.micronaut.http.client
+    api projects.micronautGrpcRuntime
+    api libs.managed.protobuf.java.util
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    api projects.micronautProtobuffJsonSupport
+    api projects.micronautGrpcAnnotation
+    testImplementation  mn.micronaut.http.client
+    testImplementation projects.micronautGrpcClientRuntime
+    testImplementation projects.micronautGrpcServerRuntime
+    api libs.javax.annotation.api
+}
+
+
+application {
+    mainClass = "com.example.services.Application"
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+micronaut {
+    version.set(libs.versions.micronaut.platform.get())
+    coreVersion.set(libs.versions.micronaut.asProvider().get())
+    runtime("netty")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("com.example.services.*")
+    }
+
+    // Explicitly disable native image and Docker support
+    enableNativeImage(false)
+}
+
+// Add this configuration to exclude GraalVM related dependencies
+configurations.all {
+    exclude group: 'org.graalvm.buildtools', module: 'native-gradle-plugin'
+    exclude module: 'graal-sdk'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs("build/generated/source/proto/main/grpc")
+            srcDirs("build/generated/source/proto/main/java")
+        }
+    }
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+
+
