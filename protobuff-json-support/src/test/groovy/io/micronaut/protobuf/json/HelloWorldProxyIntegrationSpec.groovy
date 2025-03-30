@@ -7,12 +7,10 @@ import io.micronaut.http.client.BlockingHttpClient
 import io.micronaut.http.client.HttpClient
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import io.micronaut.json.JsonMapper
-import io.micronaut.protobuf.grpc.GreeterService
 import spock.lang.Specification
 
 class HelloWorldProxyIntegrationSpec extends Specification {
 
-    GreeterService greeterService = Mock()
     JsonMapper jsonMapper = Mock()
     HttpClient httpClient = Mock()
     BlockingHttpClient blockingClient = Mock()

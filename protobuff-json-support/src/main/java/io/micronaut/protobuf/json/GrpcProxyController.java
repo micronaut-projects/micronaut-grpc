@@ -77,7 +77,6 @@ public final class GrpcProxyController {
         LOG.info("GrpcProxyController initialized and services registered");
     }
 
-
     @Post("/{serviceName}/{methodName}")
     public HttpResponse<String> invokeMethod(@PathVariable String serviceName,
                                              @PathVariable String methodName,
@@ -119,37 +118,11 @@ public final class GrpcProxyController {
 
             // Obtain explicitly the response synchronously from grpc response observer explicitly
             return responseObserver.getResponse();
+        } catch (GrpcInvocationException e) {
+          LOG.error("Problem invoking gRPC method: " + e.getMessage());
+          throw e;
         } catch (Exception ex) {
             throw new GrpcInvocationException("Reflective gRPC call failed");
-        }
-    }
-
-    // Explicit observer implementation explicitly capturing single response synchronously
-    private static class SingleMessageObserver implements StreamObserver<Message> {
-        private Message message;
-        private Throwable error;
-        private final CountDownLatch latch = new CountDownLatch(1);
-
-        @Override
-        public void onNext(Message value) { this.message = value; }
-
-        @Override
-        public void onError(Throwable t) {
-            this.error = t;
-            latch.countDown();
-        }
-
-        @Override
-        public void onCompleted() { latch.countDown(); }
-
-        public Message getResponse() throws InterruptedException {
-            boolean timeExceeded = latch.await(5, TimeUnit.SECONDS);
-            if (timeExceeded) {
-                LOG.warn("Response timeout exceeded for the message response");
-            }
-            if (error != null) throw new GrpcInvocationException("Error during gRPC call");
-            if (message == null) throw new GrpcInvocationException("No response received from gRPC call");
-            return message;
         }
     }
 
@@ -172,4 +145,49 @@ public final class GrpcProxyController {
     public HttpResponse<String> handleGrpcError(GrpcInvocationException e) {
         return HttpResponse.serverError("GRPC invocation error: " + e.getMessage());
     }
+
+    @Error(HttpStatusException.class)
+    public HttpResponse<String> handle(ProtobufJsonTranscoder.ProtobufTranscodingException e) {
+        return HttpResponse.badRequest();
+    }
+
+
+    // Explicit observer implementation explicitly capturing single response synchronously
+    private static class SingleMessageObserver implements StreamObserver<Message> {
+        private Message message;
+        private Throwable error;
+        private final CountDownLatch latch = new CountDownLatch(1);
+
+        @Override
+        public void onNext(Message value) {
+            this.message = value;
+        }
+
+        @Override
+        public void onError(Throwable t) {
+            this.error = t;
+            latch.countDown();
+        }
+
+        @Override
+        public void onCompleted() {
+            latch.countDown();
+        }
+
+        public Message getResponse() throws InterruptedException {
+            boolean timeExceeded = latch.await(5, TimeUnit.SECONDS);
+            if (timeExceeded) {
+                LOG.warn("Response timeout exceeded for the message response");
+            }
+            if (error != null) {
+                throw new GrpcInvocationException("Error during gRPC call");
+            }
+            if (message == null) {
+                throw new GrpcInvocationException("No response received from " +
+                    "gRPC call");
+            }
+            return message;
+        }
+    }
+
 }

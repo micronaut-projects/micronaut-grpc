@@ -22,7 +22,6 @@ class GreeterServiceSpec extends Specification {
     ManagedChannel channel
 
     @Shared
-    @GrpcRestJsonExposed
     GreeterGrpc.GreeterBlockingStub blockingStub
 
     void setup() {

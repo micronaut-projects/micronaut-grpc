@@ -13,7 +13,6 @@ import org.example.grpc.GreeterGrpc;
 public class GreeterClientFactory {
 
     @Bean
-    @GrpcRestJsonExposed
     @Singleton
     GreeterGrpc.GreeterBlockingStub createBlockingStub(@GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) {
         return GreeterGrpc.newBlockingStub(channel);
