@@ -15,10 +15,14 @@
  */
 package io.micronaut.protobuf.json;
 
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 import io.micronaut.core.annotation.Experimental;
 import io.micronaut.core.annotation.NonNull;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.protobuf.json.exception.MalformedGrpcJsonException;
+import io.micronaut.protobuf.json.exception.ProtobufTranscodingException;
 import jakarta.inject.Singleton;
 
 /**
@@ -80,25 +84,17 @@ public class ProtobufJsonTranscoder {
             @SuppressWarnings("unchecked")
             T message = (T) builder.build();
             return message;
+        } catch (InvalidProtocolBufferException ipbe) {
+            throw new MalformedGrpcJsonException(HttpStatus.BAD_REQUEST,
+                    String.format("Failed to deserialize JSON to %s.  " +
+                            "JSON sent: " +
+                            "[%s] ",
+                        messageType.getSimpleName(), jsonBody));
         } catch (Exception e) {
             throw new ProtobufTranscodingException(
                     String.format("Failed to deserialize JSON to %s", messageType.getSimpleName()), e);
         }
     }
 
-    /**
-     * Custom exception for Protobuf transcoding errors.
-     */
-    public static class ProtobufTranscodingException extends RuntimeException {
-        /**
-         * Constructs a new instance of ProtobufTranscodingException with a specified error message
-         * and the cause of the exception.
-         *
-         * @param message The detail message for this exception, providing information about the error.
-         * @param cause The underlying cause of the exception, typically another throwable that led to this error.
-         */
-        public ProtobufTranscodingException(String message, Throwable cause) {
-            super(message, cause);
-        }
-    }
+
 }

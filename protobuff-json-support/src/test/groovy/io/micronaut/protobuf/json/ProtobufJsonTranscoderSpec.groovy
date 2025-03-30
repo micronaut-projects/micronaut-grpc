@@ -1,5 +1,6 @@
 package io.micronaut.protobuf.json
 
+import io.micronaut.protobuf.json.exception.MalformedGrpcJsonException
 import org.example.grpc.HelloRequest
 import spock.lang.Specification
 import spock.lang.Subject
@@ -30,7 +31,7 @@ class ProtobufJsonTranscoderSpec extends Specification {
         transcoder.fromJson(invalidJson, HelloRequest.class)
 
         then:
-        thrown(ProtobufJsonTranscoder.ProtobufTranscodingException)
+        thrown(MalformedGrpcJsonException)
 
         where:
         invalidJson          << [
