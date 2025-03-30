@@ -83,6 +83,7 @@ public final class GrpcProxyController {
                                              @PathVariable String methodName,
                                              @Body String jsonRequest) {
         // Retrieve the executable method explicitly at runtime
+        //noinspection unchecked
         ExecutableMethod<Object, Object> executableMethod = (ExecutableMethod<Object, Object>) registry
             .getExecutableMethod(serviceName, methodName)
             .orElseThrow(() -> new MethodNotFoundException("Method `" + serviceName + "." + methodName + "` not found"));
@@ -91,7 +92,7 @@ public final class GrpcProxyController {
         Object beanInstance = context.getBean(executableMethod.getDeclaringType());
 
         // Explicitly resolve request and response types at runtime (Protobuf messages)
-        Class<? extends Message> requestType =
+        @SuppressWarnings("unchecked") Class<? extends Message> requestType =
             (Class<? extends Message>) executableMethod.getArguments()[0].getType();
 
         // Deserialize JSON explicitly (reflection-driven is fine here)
