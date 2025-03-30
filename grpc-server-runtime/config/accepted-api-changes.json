@@ -773,5 +773,10 @@
     "type": "io.micronaut.grpc.server.GrpcEmbeddedServer",
     "member": "Implemented interface io.micronaut.runtime.EmbeddedApplication",
     "reason": "Micronaut 4.0.0 has core API changes"
+  },
+  {
+    "type": "io.micronaut.grpc.server.$GrpcEmbeddedServerListener$Definition",
+    "member": "Implemented interface io.micronaut.inject.DisposableBeanDefinition",
+    "reason": "This is not a true breaking change, just a different implementation of the EventListener"
   }
 ]
