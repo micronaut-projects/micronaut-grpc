@@ -1,5 +1,0 @@
-io.micronaut.protobuf.json.$GrpcJsonConfiguration$Definition
-io.micronaut.protobuf.json.$GrpcProxyController$Definition
-io.micronaut.protobuf.json.$ProtobufJsonTranscoder$Definition
-io.micronaut.protobuf.json.registry.$GrpcServiceRegistrar$Definition
-io.micronaut.protobuf.json.registry.$GrpcServiceRegistry$Definition
