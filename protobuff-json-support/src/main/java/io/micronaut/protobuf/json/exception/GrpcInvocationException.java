@@ -18,6 +18,8 @@ package io.micronaut.protobuf.json.exception;
 import io.micronaut.core.annotation.Experimental;
 import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Exception indicating a failure during the invocation of a gRPC method.
@@ -32,6 +34,8 @@ import io.micronaut.http.HttpStatus;
  */
 @Experimental
 public class GrpcInvocationException extends HttpStatusException {
+    private static final Logger LOG = LoggerFactory.getLogger(GrpcInvocationException.class);
+
     /**
      * Constructs a new {@code GrpcInvocationException} with the specified detail message
      * and cause. This exception is used to indicate a failure during the invocation of a
@@ -41,5 +45,20 @@ public class GrpcInvocationException extends HttpStatusException {
      */
     public GrpcInvocationException(String message) {
         super(HttpStatus.INTERNAL_SERVER_ERROR, message);
+        LOG.error(message);
+    }
+
+    /**
+     * Constructs a new {@code GrpcInvocationException} with the specified detail message
+     * and cause. This exception is used to indicate a failure during the invocation of a
+     * gRPC method in the server logic.
+     *
+     * @param message The detail message explaining the reason for the exception. Must not be null.
+     * @param throwable The underlying cause of the exception. Provides additional context
+     *                  about the error encountered during the gRPC invocation process.
+     */
+    public GrpcInvocationException(String message, Throwable throwable) {
+        super(HttpStatus.INTERNAL_SERVER_ERROR, message);
+        LOG.error(message, throwable);
     }
 }

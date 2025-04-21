@@ -28,9 +28,10 @@ import io.micronaut.core.annotation.Experimental;
  * <br/>
  * This class is marked as experimental and may change in future versions of the framework.
  */
-@ConfigurationProperties("micronaut.grpc.json")
+@ConfigurationProperties(GrpcJsonConfiguration.PREFIX)
 @Requires(classes = {GrpcProxyController.class})
 @Experimental
 public class GrpcJsonConfiguration {
-    // Any configuration properties if needed
+    public static final String PREFIX = "micronaut.grpc.json";
+
 }
