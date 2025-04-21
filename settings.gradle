@@ -20,6 +20,7 @@ include 'grpc-client-runtime'
 include 'grpc-server-runtime'
 include 'grpc-runtime'
 include 'protobuff-support'
+include 'protobuff-json-support'
 
 // documentation samples
 include 'test-suite-java'
