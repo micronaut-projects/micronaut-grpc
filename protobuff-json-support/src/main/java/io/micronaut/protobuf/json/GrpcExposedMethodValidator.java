@@ -18,6 +18,7 @@ package io.micronaut.protobuf.json;
 import io.grpc.BindableService;
 import io.micronaut.context.event.BeanInitializedEventListener;
 import io.micronaut.context.event.BeanInitializingEvent;
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.grpc.annotation.GrpcRestJsonExposed;
 import io.micronaut.inject.ExecutableMethod;
 import jakarta.annotation.PostConstruct;
@@ -58,6 +59,7 @@ import java.util.stream.Collectors;
  * Dependency Injection:
  * This class is a Singleton and is managed by Micronaut's dependency injection.
  */
+@Internal
 @Singleton
 public class GrpcExposedMethodValidator implements BeanInitializedEventListener<Object> {
 
