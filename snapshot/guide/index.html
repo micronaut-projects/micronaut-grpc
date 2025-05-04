@@ -267,6 +267,29 @@ protobuf {
 }</code></pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If you are using JDK9 or above, in order to avoid issues javax packages, provide the following compiler option to the grpc plugin to skip these stubs: <code>option '@generated=omit'</code> (added on <a href="https://github.com/grpc/grpc-java/releases/tag/v1.64.0">grpc-kava v1.64.0</a>) See discussion here: <a href="https://github.com/grpc/grpc-java/issues/9179">issue 9179</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">    ...
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {
+                option '@generated=omit'
+            } }
+    }</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>Use this configuration for Kotlin projects:</p>
 </div>
