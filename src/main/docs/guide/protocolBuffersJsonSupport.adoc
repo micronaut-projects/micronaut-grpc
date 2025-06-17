@@ -5,14 +5,13 @@ To use this add the `micronaut-protobuff-json-support` dependency:
 
 dependency:micronaut-protobuff-json-support[groupId="io.micronaut.grpc"]
 
-
 `grpc.rest.json.exposed=true`
 
 And then include the `@GrpcRestJsonExposed` annotation on your gRPC service definition:
 
 [source,java]
 ----
-include::../../../../test-suite-protobuff-json-java/src/main/java/com/example/services/GreeterService.java[]
+include::test-suite-protobuff-json-java/src/main/java/com/example/services/GreeterService.java[]
 ----
 
 Micronaut will now support the encoding and decoding requests / responses of type `application/json` via http 1.1.
@@ -48,7 +47,7 @@ For example:
 
 [source,protobuf]
 ----
-include::../../../../test-suite-protobuff-json-java/src/main/proto/greeter.proto[]
+include::test-suite-protobuff-json-java/src/main/proto/greeter.proto[]
 ----
 
 Mapping this to a grpc service, the request would look like this:
