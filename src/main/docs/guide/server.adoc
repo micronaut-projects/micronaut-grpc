@@ -45,7 +45,7 @@ Alternatively if you prefer programmatic configuration you can write a `BeanCrea
 .Configuring the ServerBuilder
 [source,java]
 ----
-include::../../../../grpc-server-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderListener.java[]
+include::grpc-server-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderListener.java[]
 ----
 
 === Auto Injected Types
@@ -156,7 +156,7 @@ You can then define a blocking stub bean in `src/test/java`. For example:
 .Defining Test Clients
 [source,java]
 ----
-include::../../../../test-suite-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=clients]
+include::test-suite-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=clients]
 ----
 
 <1> A `ManagedChannel` is injected that can communicate with the server.
