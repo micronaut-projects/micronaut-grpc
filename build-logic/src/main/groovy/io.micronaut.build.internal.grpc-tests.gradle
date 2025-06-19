@@ -1,20 +1,21 @@
 plugins {
     id "io.micronaut.build.internal.grpc-base"
-    id "io.micronaut.minimal.application"
+    id 'org.graalvm.buildtools.native'
+    id "io.micronaut.application"
 }
 
 tasks.named("test") {
     useJUnitPlatform()
 }
 
-//graalvmNative {
-//    toolchainDetection = false
-//    metadataRepository {
-//        enabled = true
-//    }
-//    binaries {
-//        all {
-//            resources.autodetect()
-//        }
-//    }
-//}
+graalvmNative {
+    toolchainDetection = false
+    metadataRepository {
+        enabled = true
+    }
+    binaries {
+        all {
+            resources.autodetect()
+        }
+    }
+}
