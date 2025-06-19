@@ -17,15 +17,16 @@ package io.micronaut.grpc.server;
 
 import io.micronaut.context.BeanContext;
 import io.micronaut.context.annotation.Requires;
-import io.micronaut.context.event.ApplicationEventListener;
 import io.micronaut.core.annotation.Internal;
+import io.micronaut.runtime.event.annotation.EventListener;
 import io.micronaut.runtime.server.EmbeddedServer;
+import io.micronaut.runtime.server.event.ServerShutdownEvent;
 import io.micronaut.runtime.server.event.ServerStartupEvent;
 
+import jakarta.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jakarta.annotation.PreDestroy;
 import jakarta.inject.Singleton;
 
 /**
@@ -38,7 +39,7 @@ import jakarta.inject.Singleton;
 @Internal
 @Singleton
 @Requires(beans = GrpcEmbeddedServer.class)
-class GrpcEmbeddedServerListener implements ApplicationEventListener<ServerStartupEvent>, AutoCloseable {
+class GrpcEmbeddedServerListener implements AutoCloseable{
 
     private static final Logger LOG = LoggerFactory.getLogger(GrpcEmbeddedServerListener.class);
 
@@ -54,8 +55,8 @@ class GrpcEmbeddedServerListener implements ApplicationEventListener<ServerStart
         this.beanContext = beanContext;
     }
 
-    @Override
-    public void onApplicationEvent(ServerStartupEvent event) {
+    @EventListener
+    public void onServerStartupEvent(ServerStartupEvent event) {
         final EmbeddedServer server = event.getSource();
         if (!(server instanceof GrpcEmbeddedServer)) {
             this.grpcServer = beanContext.getBean(GrpcEmbeddedServer.class);
@@ -63,6 +64,14 @@ class GrpcEmbeddedServerListener implements ApplicationEventListener<ServerStart
             if (LOG.isInfoEnabled()) {
                 LOG.info("GRPC started on port {}", grpcServer.getPort());
             }
+        }
+    }
+
+    @EventListener
+    public void onServerShutdownEvent(ServerShutdownEvent event) {
+        final EmbeddedServer server = event.getSource();
+        if (!(server instanceof GrpcEmbeddedServer)) {
+            this.close();
         }
     }
 
