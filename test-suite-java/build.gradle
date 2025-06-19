@@ -46,6 +46,9 @@ dependencies {
     testCompileOnly libs.javax.annotation.api
     testRuntimeOnly mnLogging.logback.classic
     testCompileOnly libs.managed.protobuf.java
+    nativeImageTestCompileOnly(mn.micronaut.http.netty) {
+      because("workaround for Netty GraalVM metadata not being compatible")
+    }
 
 }
 
