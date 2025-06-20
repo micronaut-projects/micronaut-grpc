@@ -63,7 +63,7 @@ To produce a consistent and predictable order of execution for server intercepto
 for the `io.grpc.ServerInterceptor` implementation to do one of the following:
 
 .Implement `io.micronaut.core.order.Ordered` interface
-[source,java]
+[source,java,opts=novalidate]
 ----
 @Singleton // <1>
 public class CustomInterceptor implements ServerInterceptor, Ordered { // <2>
@@ -124,7 +124,7 @@ If you wish to disable the gRPC health check while still using the services depe
 If the management dependency (`io.micronaut:micronaut-management`) is added, then Micronaut’s Health Endpoint can be used to expose the health status of the gRPC server.
 
 For example, if gRPC is running then the `/health` endpoint will return:
-[source,json]
+[source,json,opts=novalidate]
 ----
 {
   "status": "UP",

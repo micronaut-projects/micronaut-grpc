@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.example.services";
+option java_outer_classname = "ProtobuffJsonSupportTest";
+option objc_class_prefix = "HLW";
+
+package com.example.services;
+
+service ProtobuffJsonSupportTestService {
+  rpc send (ProtobuffJsonSupportTestRequest) returns (ProtobuffJsonSupportTestReply) {}
+}
+
+message ProtobuffJsonSupportTestRequest {
+  string name = 1;
+}
+
+message ProtobuffJsonSupportTestReply {
+  string message = 1;
+}

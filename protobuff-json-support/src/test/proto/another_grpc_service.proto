@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package org.example.grpc;
+
+option java_package = "org.example.grpc";
+option java_multiple_files = true;
+
+service Another {
+  rpc AnotherMethod (AnotherRequest) returns (AnotherResponse);
+}
+
+message AnotherRequest {
+  string message = 1;
+}
+
+message AnotherResponse {
+  string reply = 1;
+}

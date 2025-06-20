@@ -1,0 +1,71 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+    alias libs.plugins.protobuf
+}
+
+// tag::variables[]
+ext {
+    grpcVersion = libs.versions.managed.grpc.asProvider().get()
+    protobufVersion = libs.versions.managed.protobuf.asProvider().get()
+}
+// end::variables[]
+
+dependencies {
+    // For the test source set
+    annotationProcessor mn.micronaut.inject.java
+    annotationProcessor mn.micronaut.inject.groovy
+    api platform(libs.boms.protobuf)
+    api mn.micronaut.http
+    api mn.micronaut.http.client
+    api mn.micronaut.http.netty
+    api mn.micronaut.http.server.netty
+
+    //protobuf
+    api libs.managed.protobuf.java
+    api libs.managed.protobuf.java.util
+    api libs.managed.grpc.stub
+    api libs.managed.grpc.protobuf
+    api projects.micronautGrpcAnnotation
+
+    testCompileOnly libs.javax.annotation.api
+    testCompileOnly libs.managed.protobuf.java
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-json
+
+    testImplementation libs.managed.grpc.services
+    testImplementation mn.micronaut.discovery.core
+    testImplementation mnReactor.micronaut.reactor.http.client
+    testImplementation mn.micronaut.management
+    testImplementation projects.micronautGrpcClientRuntime
+
+    testImplementation mn.micronaut.http.server.netty
+    testImplementation mnReactor.micronaut.reactor.http.client
+    testImplementation mn.micronaut.jackson.databind
+    testImplementation projects.micronautGrpcServerRuntime
+    testImplementation projects.micronautGrpcRuntime
+
+    testImplementation mn.micronaut.inject.java
+    testImplementation mn.micronaut.inject.groovy
+    compileOnly mn.micronaut.inject.java
+}
+sourceSets {
+    test {
+        java {
+            srcDirs 'build/generated/source/proto/test/grpc'
+            srcDirs 'build/generated/source/proto/test/java'
+        }
+    }
+}
+
+protobuf {
+    protoc { artifact = libs.managed.protoc.asProvider().get() }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+//Experiemental feature
+tasks.named("findBaseline") {
+    enabled = false
+}
