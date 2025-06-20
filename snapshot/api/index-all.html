@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 <div class="header">
 <h1>Index</h1>
 </div>
-<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<a href="#I:X">X</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a>
+<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<a href="#I:X">X</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a>
 <h2 class="title" id="I:B">B</h2>
 <dl class="index">
 <dt><a href="io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorConfiguration.html#builder" class="member-name-link">builder</a> - Variable in class io.micronaut.grpc.client.tracing.<a href="io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.client.tracing">GrpcClientTracingInterceptorConfiguration</a></dt>
@@ -124,6 +124,13 @@ loadScripts(document, 'script');</script>
 <dt><a href="io/micronaut/protobuf/codec/ExtensionRegistryFactory.html#%3Cinit%3E()" class="member-name-link">ExtensionRegistryFactory()</a> - Constructor for class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ExtensionRegistryFactory.html" title="class in io.micronaut.protobuf.codec">ExtensionRegistryFactory</a></dt>
 <dd>&nbsp;</dd>
 </dl>
+<h2 class="title" id="I:F">F</h2>
+<dl class="index">
+<dt><a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html#fromJson(java.lang.String,java.lang.Class)" class="member-name-link">fromJson(String, Class&lt;T&gt;)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a></dt>
+<dd>
+<div class="block">Creates a Protobuf message from JSON string.</div>
+</dd>
+</dl>
 <h2 class="title" id="I:G">G</h2>
 <dl class="index">
 <dt><a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html#getApplicationConfiguration()" class="member-name-link">getApplicationConfiguration()</a> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server">GrpcEmbeddedServer</a></dt>
@@ -146,6 +153,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#getDefaultScheme()" class="member-name-link">getDefaultScheme()</a> - Method in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html#getExecutableMethod(java.lang.String,java.lang.String)" class="member-name-link">getExecutableMethod(String, String)</a> - Method in class io.micronaut.protobuf.json.registry.<a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a></dt>
+<dd>
+<div class="block">Retrieves an <code>ExecutableMethod</code> instance based on the specified service name and method name.</div>
+</dd>
 <dt><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#getExtensionRegistry()" class="member-name-link">getExtensionRegistry()</a> - Method in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html#getHealthStatusManager()" class="member-name-link">getHealthStatusManager()</a> - Method in class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a></dt>
@@ -243,9 +254,35 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Implementation of the <code>EmbeddedServer</code> interface for GRPC.</div>
 </dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcExposedMethodValidator.html" class="type-name-link" title="class in io.micronaut.protobuf.json">GrpcExposedMethodValidator</a> - Class in <a href="io/micronaut/protobuf/json/package-summary.html">io.micronaut.protobuf.json</a></dt>
+<dd>
+<div class="block">Validates beans that implement gRPC services and have methods annotated with <code>@GrpcRestJsonExposed</code>.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcExposedMethodValidator.html#%3Cinit%3E()" class="member-name-link">GrpcExposedMethodValidator()</a> - Constructor for class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcExposedMethodValidator.html" title="class in io.micronaut.protobuf.json">GrpcExposedMethodValidator</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" class="type-name-link" title="class in io.micronaut.grpc.server.health">GrpcHealthFactory</a> - Class in <a href="io/micronaut/grpc/server/health/package-summary.html">io.micronaut.grpc.server.health</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html#%3Cinit%3E()" class="member-name-link">GrpcHealthFactory()</a> - Constructor for class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" title="class in io.micronaut.grpc.server.health">GrpcHealthFactory</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/exception/GrpcInvocationException.html" class="type-name-link" title="class in io.micronaut.protobuf.json.exception">GrpcInvocationException</a> - Exception in <a href="io/micronaut/protobuf/json/exception/package-summary.html">io.micronaut.protobuf.json.exception</a></dt>
+<dd>
+<div class="block">Exception indicating a failure during the invocation of a gRPC method.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/exception/GrpcInvocationException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">GrpcInvocationException(String)</a> - Constructor for exception io.micronaut.protobuf.json.exception.<a href="io/micronaut/protobuf/json/exception/GrpcInvocationException.html" title="class in io.micronaut.protobuf.json.exception">GrpcInvocationException</a></dt>
+<dd>
+<div class="block">Constructs a new <code>GrpcInvocationException</code> with the specified detail message
+ and cause.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/exception/GrpcInvocationException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">GrpcInvocationException(String, Throwable)</a> - Constructor for exception io.micronaut.protobuf.json.exception.<a href="io/micronaut/protobuf/json/exception/GrpcInvocationException.html" title="class in io.micronaut.protobuf.json.exception">GrpcInvocationException</a></dt>
+<dd>
+<div class="block">Constructs a new <code>GrpcInvocationException</code> with the specified detail message
+ and cause.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html" class="type-name-link" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a> - Class in <a href="io/micronaut/protobuf/json/package-summary.html">io.micronaut.protobuf.json</a></dt>
+<dd>
+<div class="block">Configuration properties for enabling and configuring the gRPC JSON proxy feature in a Micronaut application.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html#%3Cinit%3E()" class="member-name-link">GrpcJsonConfiguration()</a> - Constructor for class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a> - Class in <a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a></dt>
 <dd>
@@ -279,6 +316,22 @@ loadScripts(document, 'script');</script>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#%3Cinit%3E(io.micronaut.discovery.DiscoveryClient,java.util.List)" class="member-name-link">GrpcNameResolverProvider(DiscoveryClient, List&lt;ServiceInstanceList&gt;)</a> - Constructor for class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>
 <div class="block">Default constructor.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcProxyController.html" class="type-name-link" title="class in io.micronaut.protobuf.json">GrpcProxyController</a> - Class in <a href="io/micronaut/protobuf/json/package-summary.html">io.micronaut.protobuf.json</a></dt>
+<dd>
+<div class="block">Controller handling gRPC method invocations via HTTP requests.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcProxyController.html#%3Cinit%3E(io.micronaut.protobuf.json.grpc.GrpcProxyService)" class="member-name-link">GrpcProxyController(GrpcProxyService)</a> - Constructor for class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcProxyController.html" title="class in io.micronaut.protobuf.json">GrpcProxyController</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html" class="type-name-link" title="class in io.micronaut.protobuf.json.grpc">GrpcProxyService</a> - Class in <a href="io/micronaut/protobuf/json/grpc/package-summary.html">io.micronaut.protobuf.json.grpc</a></dt>
+<dd>
+<div class="block">A service responsible for enabling interaction with gRPC methods through a JSON-based interface.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html#%3Cinit%3E(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder)" class="member-name-link">GrpcProxyService(GrpcServiceRegistry, ApplicationContext, ProtobufJsonTranscoder)</a> - Constructor for class io.micronaut.protobuf.json.grpc.<a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html" title="class in io.micronaut.protobuf.json.grpc">GrpcProxyService</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/annotation/GrpcRestJsonExposed.html" class="type-name-link" title="annotation interface in io.micronaut.grpc.annotation">GrpcRestJsonExposed</a> - Annotation Interface in <a href="io/micronaut/grpc/annotation/package-summary.html">io.micronaut.grpc.annotation</a></dt>
+<dd>
+<div class="block">Annotation used to expose a gRPC method for handling JSON over REST requests.</div>
 </dd>
 <dt><a href="io/micronaut/grpc/server/GrpcServerBuilder.html" class="type-name-link" title="class in io.micronaut.grpc.server">GrpcServerBuilder</a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
 <dd>
@@ -329,6 +382,21 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">A meta annotation for annotation GRPC services.</div>
 </dd>
+<dt><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistrar.html" class="type-name-link" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistrar</a> - Class in <a href="io/micronaut/protobuf/json/registry/package-summary.html">io.micronaut.protobuf.json.registry</a></dt>
+<dd>
+<div class="block">The <code>GrpcServiceRegistrar</code> is responsible for processing methods annotated with
+ <code>@GrpcRestJsonExposed</code> during application startup and registering them with the
+ <a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry"><code>GrpcServiceRegistry</code></a>.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistrar.html#%3Cinit%3E(io.micronaut.protobuf.json.registry.GrpcServiceRegistry)" class="member-name-link">GrpcServiceRegistrar(GrpcServiceRegistry)</a> - Constructor for class io.micronaut.protobuf.json.registry.<a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistrar.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistrar</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html" class="type-name-link" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a> - Class in <a href="io/micronaut/protobuf/json/registry/package-summary.html">io.micronaut.protobuf.json.registry</a></dt>
+<dd>
+<div class="block">A class responsible for maintaining a registry of gRPC service methods, enabling them
+ to be exposed and invoked via JSON over REST.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html#%3Cinit%3E()" class="member-name-link">GrpcServiceRegistry()</a> - Constructor for class io.micronaut.protobuf.json.registry.<a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
 <dd>
 <div class="block">Configuration for the SSL properties of GRPC.</div>
@@ -338,6 +406,16 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:H">H</h2>
 <dl class="index">
+<dt><a href="io/micronaut/protobuf/json/GrpcProxyController.html#handle(io.micronaut.protobuf.json.exception.ProtobufTranscodingException)" class="member-name-link">handle(ProtobufTranscodingException)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcProxyController.html" title="class in io.micronaut.protobuf.json">GrpcProxyController</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcProxyController.html#handleBadRequest(io.micronaut.http.exceptions.HttpStatusException)" class="member-name-link">handleBadRequest(HttpStatusException)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcProxyController.html" title="class in io.micronaut.protobuf.json">GrpcProxyController</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcProxyController.html#handleGrpcError(io.micronaut.protobuf.json.exception.GrpcInvocationException)" class="member-name-link">handleGrpcError(GrpcInvocationException)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcProxyController.html" title="class in io.micronaut.protobuf.json">GrpcProxyController</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcProxyController.html#handleMethodNotFound(io.micronaut.protobuf.json.exception.MethodNotFoundException)" class="member-name-link">handleMethodNotFound(MethodNotFoundException)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcProxyController.html" title="class in io.micronaut.protobuf.json">GrpcProxyController</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcProxyController.html#handleServiceNotFound(io.micronaut.protobuf.json.exception.ServiceNotFoundException)" class="member-name-link">handleServiceNotFound(ServiceNotFoundException)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcProxyController.html" title="class in io.micronaut.protobuf.json">GrpcProxyController</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html#HEALTH_ENABLED" class="member-name-link">HEALTH_ENABLED</a> - Static variable in class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" title="class in io.micronaut.grpc.server.health">GrpcHealthFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html#healthStatusManager()" class="member-name-link">healthStatusManager()</a> - Method in class io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" title="class in io.micronaut.grpc.server.health">GrpcHealthFactory</a></dt>
@@ -361,6 +439,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Delegates interceptor logic to <code>OrderedServerInterceptor.delegate</code> interceptor.</div>
 </dd>
+<dt><a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html#invokeGrpcMethod(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">invokeGrpcMethod(String, String, String)</a> - Method in class io.micronaut.protobuf.json.grpc.<a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html" title="class in io.micronaut.protobuf.json.grpc">GrpcProxyService</a></dt>
+<dd>
+<div class="block">Invokes a specified gRPC method on a service and converts the Protobuf response(s) to a JSON string.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcProxyController.html#invokeMethod(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">invokeMethod(String, String, String)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcProxyController.html" title="class in io.micronaut.protobuf.json">GrpcProxyController</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/annotation/package-summary.html">io.micronaut.grpc.annotation</a> - package io.micronaut.grpc.annotation</dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a> - package io.micronaut.grpc.channels</dt>
@@ -393,6 +477,14 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/protobuf/handler/package-summary.html">io.micronaut.protobuf.handler</a> - package io.micronaut.protobuf.handler</dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/package-summary.html">io.micronaut.protobuf.json</a> - package io.micronaut.protobuf.json</dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/exception/package-summary.html">io.micronaut.protobuf.json.exception</a> - package io.micronaut.protobuf.json.exception</dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/grpc/package-summary.html">io.micronaut.protobuf.json.grpc</a> - package io.micronaut.protobuf.json.grpc</dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/registry/package-summary.html">io.micronaut.protobuf.json.registry</a> - package io.micronaut.protobuf.json.registry</dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#isAvailable()" class="member-name-link">isAvailable()</a> - Method in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#isConnectOnStartup()" class="member-name-link">isConnectOnStartup()</a> - Method in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
@@ -410,6 +502,12 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:M">M</h2>
 <dl class="index">
+<dt><a href="io/micronaut/protobuf/json/exception/MalformedGrpcJsonException.html" class="type-name-link" title="class in io.micronaut.protobuf.json.exception">MalformedGrpcJsonException</a> - Exception in <a href="io/micronaut/protobuf/json/exception/package-summary.html">io.micronaut.protobuf.json.exception</a></dt>
+<dd>
+<div class="block">Exception thrown to indicate that a gRPC JSON payload is malformed or invalid.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/exception/MalformedGrpcJsonException.html#%3Cinit%3E(io.micronaut.http.HttpStatus,java.lang.Object)" class="member-name-link">MalformedGrpcJsonException(HttpStatus, Object)</a> - Constructor for exception io.micronaut.protobuf.json.exception.<a href="io/micronaut/protobuf/json/exception/MalformedGrpcJsonException.html" title="class in io.micronaut.protobuf.json.exception">MalformedGrpcJsonException</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcManagedChannelFactory.html#managedChannel(io.micronaut.inject.InjectionPoint)" class="member-name-link">managedChannel(InjectionPoint&lt;Channel&gt;)</a> - Method in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelFactory.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelFactory</a></dt>
 <dd>
 <div class="block">Builds a managed channel for the given target.</div>
@@ -417,6 +515,16 @@ loadScripts(document, 'script');</script>
 <dt><a href="io/micronaut/grpc/channels/GrpcChannelBuilderFactory.html#managedChannelBuilder(java.lang.String,java.util.List)" class="member-name-link">managedChannelBuilder(String, List&lt;ClientInterceptor&gt;)</a> - Method in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcChannelBuilderFactory.html" title="class in io.micronaut.grpc.channels">GrpcChannelBuilderFactory</a></dt>
 <dd>
 <div class="block">Constructor a managed channel build for the given target name and interceptors.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/exception/MethodNotFoundException.html" class="type-name-link" title="class in io.micronaut.protobuf.json.exception">MethodNotFoundException</a> - Exception in <a href="io/micronaut/protobuf/json/exception/package-summary.html">io.micronaut.protobuf.json.exception</a></dt>
+<dd>
+<div class="block">Exception thrown to indicate that a specified method could not be found within
+ a given context, such as a gRPC service.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/exception/MethodNotFoundException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">MethodNotFoundException(String)</a> - Constructor for exception io.micronaut.protobuf.json.exception.<a href="io/micronaut/protobuf/json/exception/MethodNotFoundException.html" title="class in io.micronaut.protobuf.json.exception">MethodNotFoundException</a></dt>
+<dd>
+<div class="block">Constructs a new <code>MethodNotFoundException</code> with a detailed message indicating
+ the method name that could not be found.</div>
 </dd>
 </dl>
 <h2 class="title" id="I:N">N</h2>
@@ -432,6 +540,12 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:O">O</h2>
 <dl class="index">
+<dt><a href="io/micronaut/protobuf/json/GrpcExposedMethodValidator.html#onInitialized(io.micronaut.context.event.BeanInitializingEvent)" class="member-name-link">onInitialized(BeanInitializingEvent&lt;Object&gt;)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcExposedMethodValidator.html" title="class in io.micronaut.protobuf.json">GrpcExposedMethodValidator</a></dt>
+<dd>
+<div class="block">Fired when a bean is instantiated but the <code>PostConstruct</code> initialization hooks have not
+ yet been called and in this case of bean <code>Provider</code> instances the
+ <code>Provider.get()</code> method has not yet been invoked.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/interceptor/OrderedServerInterceptor.html" class="type-name-link" title="class in io.micronaut.grpc.server.interceptor">OrderedServerInterceptor</a> - Class in <a href="io/micronaut/grpc/server/interceptor/package-summary.html">io.micronaut.grpc.server.interceptor</a></dt>
 <dd>
 <div class="block">A <code>ServerInterceptor</code> implementation which allows ordering and simply passes all
@@ -456,10 +570,16 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/tracing/GrpcServerTracingInterceptorConfiguration.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class io.micronaut.grpc.server.tracing.<a href="io/micronaut/grpc/server/tracing/GrpcServerTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.server.tracing">GrpcServerTracingInterceptorConfiguration</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#priority()" class="member-name-link">priority()</a> - Method in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#PRIORITY" class="member-name-link">PRIORITY</a> - Static variable in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistrar.html#process(io.micronaut.inject.BeanDefinition,io.micronaut.inject.ExecutableMethod)" class="member-name-link">process(BeanDefinition&lt;?&gt;, ExecutableMethod&lt;?, ?&gt;)</a> - Method in class io.micronaut.protobuf.json.registry.<a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistrar.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistrar</a></dt>
+<dd>
+<div class="block">Processes a bean definition and its executable method annotated with <code>@GrpcRestJsonExposed</code>.</div>
+</dd>
 <dt><a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html" class="type-name-link" title="class in io.micronaut.protobuf.handler">ProtobufBodyHandler</a>&lt;<a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html" title="type parameter in ProtobufBodyHandler">T</a> extends com.google.protobuf.Message&gt; - Class in <a href="io/micronaut/protobuf/handler/package-summary.html">io.micronaut.protobuf.handler</a></dt>
 <dd>
 <div class="block">Message body handler for protobuf <code>Message</code>s.</div>
@@ -490,6 +610,23 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Default constructor.</div>
 </dd>
+<dt><a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html" class="type-name-link" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a> - Class in <a href="io/micronaut/protobuf/json/package-summary.html">io.micronaut.protobuf.json</a></dt>
+<dd>
+<div class="block">Utility class for handling Protobuf message serialization and deserialization to/from JSON.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html#%3Cinit%3E()" class="member-name-link">ProtobufJsonTranscoder()</a> - Constructor for class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a></dt>
+<dd>
+<div class="block">Constructs a new instance of <code>ProtobufJsonTranscoder</code>.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/exception/ProtobufTranscodingException.html" class="type-name-link" title="class in io.micronaut.protobuf.json.exception">ProtobufTranscodingException</a> - Exception in <a href="io/micronaut/protobuf/json/exception/package-summary.html">io.micronaut.protobuf.json.exception</a></dt>
+<dd>
+<div class="block">Custom exception for Protobuf transcoding errors.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/exception/ProtobufTranscodingException.html#%3Cinit%3E(java.lang.String,java.lang.Throwable)" class="member-name-link">ProtobufTranscodingException(String, Throwable)</a> - Constructor for exception io.micronaut.protobuf.json.exception.<a href="io/micronaut/protobuf/json/exception/ProtobufTranscodingException.html" title="class in io.micronaut.protobuf.json.exception">ProtobufTranscodingException</a></dt>
+<dd>
+<div class="block">Constructs a new <code>ProtobufTranscodingException</code> with a detailed error
+ message and the underlying cause of the exception.</div>
+</dd>
 <dt><a href="io/micronaut/protobuf/convert/ProtoMessageToByteBufConverter.html" class="type-name-link" title="class in io.micronaut.protobuf.convert">ProtoMessageToByteBufConverter</a> - Class in <a href="io/micronaut/protobuf/convert/package-summary.html">io.micronaut.protobuf.convert</a></dt>
 <dd>
 <div class="block">Converts Protocol buffer messages to Netty <code>ByteBuf</code>.</div>
@@ -501,6 +638,11 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html#read(io.micronaut.core.type.Argument,io.micronaut.http.MediaType,io.micronaut.core.type.Headers,java.io.InputStream)" class="member-name-link">read(Argument&lt;T&gt;, MediaType, Headers, InputStream)</a> - Method in class io.micronaut.protobuf.handler.<a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html" title="class in io.micronaut.protobuf.handler">ProtobufBodyHandler</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html#register(java.lang.Class,java.lang.String,io.micronaut.inject.ExecutableMethod)" class="member-name-link">register(Class&lt;?&gt;, String, ExecutableMethod&lt;?, ?&gt;)</a> - Method in class io.micronaut.protobuf.json.registry.<a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a></dt>
+<dd>
+<div class="block">Registers a gRPC service method with the internal registry, allowing it to be exposed
+ for invocation via JSON over REST.</div>
+</dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>
 <dl class="index">
@@ -517,6 +659,15 @@ loadScripts(document, 'script');</script>
 <dt><a href="io/micronaut/grpc/server/tracing/GrpcServerTracingInterceptorFactory.html#serverTracingInterceptor(io.micronaut.grpc.server.tracing.GrpcServerTracingInterceptorConfiguration)" class="member-name-link">serverTracingInterceptor(GrpcServerTracingInterceptorConfiguration)</a> - Method in class io.micronaut.grpc.server.tracing.<a href="io/micronaut/grpc/server/tracing/GrpcServerTracingInterceptorFactory.html" title="class in io.micronaut.grpc.server.tracing">GrpcServerTracingInterceptorFactory</a></dt>
 <dd>
 <div class="block">The server interceptor.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/exception/ServiceNotFoundException.html" class="type-name-link" title="class in io.micronaut.protobuf.json.exception">ServiceNotFoundException</a> - Exception in <a href="io/micronaut/protobuf/json/exception/package-summary.html">io.micronaut.protobuf.json.exception</a></dt>
+<dd>
+<div class="block">Exception thrown when a requested service cannot be found.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/exception/ServiceNotFoundException.html#%3Cinit%3E(java.lang.String)" class="member-name-link">ServiceNotFoundException(String)</a> - Constructor for exception io.micronaut.protobuf.json.exception.<a href="io/micronaut/protobuf/json/exception/ServiceNotFoundException.html" title="class in io.micronaut.protobuf.json.exception">ServiceNotFoundException</a></dt>
+<dd>
+<div class="block">Constructs a new ServiceNotFoundException with a detailed error message
+ indicating the service that could not be found.</div>
 </dd>
 <dt><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#setAwaitTermination(java.time.Duration)" class="member-name-link">setAwaitTermination(Duration)</a> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
 <dd>
@@ -577,6 +728,13 @@ loadScripts(document, 'script');</script>
 <dt><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#supportsType(java.lang.Class)" class="member-name-link">supportsType(Class&lt;?&gt;)</a> - Method in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
 <dd>&nbsp;</dd>
 </dl>
+<h2 class="title" id="I:T">T</h2>
+<dl class="index">
+<dt><a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html#toJson(com.google.protobuf.Message)" class="member-name-link">toJson(Message)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a></dt>
+<dd>
+<div class="block">Converts a Protobuf message to JSON string.</div>
+</dd>
+</dl>
 <h2 class="title" id="I:V">V</h2>
 <dl class="index">
 <dt><a href="io/micronaut/grpc/annotation/GrpcChannel.html#value()" class="member-name-link">value()</a> - Element in annotation interface io.micronaut.grpc.annotation.<a href="io/micronaut/grpc/annotation/GrpcChannel.html" title="annotation interface in io.micronaut.grpc.annotation">GrpcChannel</a></dt>
@@ -594,7 +752,7 @@ loadScripts(document, 'script');</script>
 <div class="block">This Header is to say the fully qualified name of the message builder to use.</div>
 </dd>
 </dl>
-<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<a href="#I:X">X</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a></main>
+<a href="#I:B">B</a>&nbsp;<a href="#I:C">C</a>&nbsp;<a href="#I:D">D</a>&nbsp;<a href="#I:E">E</a>&nbsp;<a href="#I:F">F</a>&nbsp;<a href="#I:G">G</a>&nbsp;<a href="#I:H">H</a>&nbsp;<a href="#I:I">I</a>&nbsp;<a href="#I:M">M</a>&nbsp;<a href="#I:N">N</a>&nbsp;<a href="#I:O">O</a>&nbsp;<a href="#I:P">P</a>&nbsp;<a href="#I:R">R</a>&nbsp;<a href="#I:S">S</a>&nbsp;<a href="#I:T">T</a>&nbsp;<a href="#I:V">V</a>&nbsp;<a href="#I:W">W</a>&nbsp;<a href="#I:X">X</a>&nbsp;<br><a href="allclasses-index.html">All&nbsp;Classes&nbsp;and&nbsp;Interfaces</a><span class="vertical-separator">|</span><a href="allpackages-index.html">All&nbsp;Packages</a><span class="vertical-separator">|</span><a href="constant-values.html">Constant&nbsp;Field&nbsp;Values</a><span class="vertical-separator">|</span><a href="serialized-form.html">Serialized&nbsp;Form</a></main>
 </div>
 </div>
 </body>

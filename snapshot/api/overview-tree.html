@@ -60,7 +60,11 @@ loadScripts(document, 'script');</script>
 <li><a href="io/micronaut/grpc/server/tracing/package-tree.html">io.micronaut.grpc.server.tracing</a>, </li>
 <li><a href="io/micronaut/protobuf/codec/package-tree.html">io.micronaut.protobuf.codec</a>, </li>
 <li><a href="io/micronaut/protobuf/convert/package-tree.html">io.micronaut.protobuf.convert</a>, </li>
-<li><a href="io/micronaut/protobuf/handler/package-tree.html">io.micronaut.protobuf.handler</a></li>
+<li><a href="io/micronaut/protobuf/handler/package-tree.html">io.micronaut.protobuf.handler</a>, </li>
+<li><a href="io/micronaut/protobuf/json/package-tree.html">io.micronaut.protobuf.json</a>, </li>
+<li><a href="io/micronaut/protobuf/json/exception/package-tree.html">io.micronaut.protobuf.json.exception</a>, </li>
+<li><a href="io/micronaut/protobuf/json/grpc/package-tree.html">io.micronaut.protobuf.json.grpc</a>, </li>
+<li><a href="io/micronaut/protobuf/json/registry/package-tree.html">io.micronaut.protobuf.json.registry</a></li>
 </ul>
 </div>
 <section class="hierarchy">
@@ -74,7 +78,9 @@ loadScripts(document, 'script');</script>
 <li class="circle">io.micronaut.grpc.client.tracing.<a href="io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.client.tracing">GrpcClientTracingInterceptorConfiguration</a></li>
 <li class="circle">io.micronaut.grpc.client.tracing.<a href="io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorFactory.html" class="type-name-link" title="class in io.micronaut.grpc.client.tracing">GrpcClientTracingInterceptorFactory</a></li>
 <li class="circle">io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcEmbeddedServer.html" class="type-name-link" title="class in io.micronaut.grpc.server">GrpcEmbeddedServer</a> (implements io.micronaut.runtime.server.EmbeddedServer)</li>
+<li class="circle">io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcExposedMethodValidator.html" class="type-name-link" title="class in io.micronaut.protobuf.json">GrpcExposedMethodValidator</a> (implements io.micronaut.context.event.BeanInitializedEventListener&lt;T&gt;)</li>
 <li class="circle">io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" class="type-name-link" title="class in io.micronaut.grpc.server.health">GrpcHealthFactory</a></li>
+<li class="circle">io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html" class="type-name-link" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a></li>
 <li class="circle">io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a> (implements io.micronaut.core.naming.Named)
 <ul>
 <li class="circle">io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcDefaultManagedChannelConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.channels">GrpcDefaultManagedChannelConfiguration</a></li>
@@ -82,12 +88,16 @@ loadScripts(document, 'script');</script>
 </ul>
 </li>
 <li class="circle">io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelFactory.html" class="type-name-link" title="class in io.micronaut.grpc.channels">GrpcManagedChannelFactory</a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AutoCloseable.html" title="class or interface in java.lang" class="external-link">AutoCloseable</a>)</li>
+<li class="circle">io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcProxyController.html" class="type-name-link" title="class in io.micronaut.protobuf.json">GrpcProxyController</a></li>
+<li class="circle">io.micronaut.protobuf.json.grpc.<a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html" class="type-name-link" title="class in io.micronaut.protobuf.json.grpc">GrpcProxyService</a></li>
 <li class="circle">io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerBuilder.html" class="type-name-link" title="class in io.micronaut.grpc.server">GrpcServerBuilder</a></li>
 <li class="circle">io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerChannel.html" class="type-name-link" title="class in io.micronaut.grpc.server">GrpcServerChannel</a></li>
 <li class="circle">io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></li>
 <li class="circle">io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcServerHealthIndicator.html" class="type-name-link" title="class in io.micronaut.grpc.server.health">GrpcServerHealthIndicator</a> (implements io.micronaut.management.health.indicator.HealthIndicator)</li>
 <li class="circle">io.micronaut.grpc.server.tracing.<a href="io/micronaut/grpc/server/tracing/GrpcServerTracingInterceptorConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.server.tracing">GrpcServerTracingInterceptorConfiguration</a></li>
 <li class="circle">io.micronaut.grpc.server.tracing.<a href="io/micronaut/grpc/server/tracing/GrpcServerTracingInterceptorFactory.html" class="type-name-link" title="class in io.micronaut.grpc.server.tracing">GrpcServerTracingInterceptorFactory</a></li>
+<li class="circle">io.micronaut.protobuf.json.registry.<a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistrar.html" class="type-name-link" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistrar</a> (implements io.micronaut.context.processor.ExecutableMethodProcessor&lt;A&gt;)</li>
+<li class="circle">io.micronaut.protobuf.json.registry.<a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html" class="type-name-link" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a></li>
 <li class="circle">io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></li>
 <li class="circle">io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html" class="type-name-link" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a></li>
 <li class="circle">io.grpc.NameResolver.Factory
@@ -102,7 +112,33 @@ loadScripts(document, 'script');</script>
 <li class="circle">io.micronaut.grpc.server.interceptor.<a href="io/micronaut/grpc/server/interceptor/OrderedServerInterceptor.html" class="type-name-link" title="class in io.micronaut.grpc.server.interceptor">OrderedServerInterceptor</a> (implements io.micronaut.core.order.Ordered, io.grpc.ServerInterceptor)</li>
 <li class="circle">io.micronaut.protobuf.handler.<a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html" class="type-name-link" title="class in io.micronaut.protobuf.handler">ProtobufBodyHandler</a>&lt;T&gt; (implements io.micronaut.http.body.MessageBodyHandler&lt;T&gt;)</li>
 <li class="circle">io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" class="type-name-link" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a> (implements io.micronaut.http.codec.MediaTypeCodec)</li>
+<li class="circle">io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html" class="type-name-link" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a></li>
 <li class="circle">io.micronaut.protobuf.convert.<a href="io/micronaut/protobuf/convert/ProtoMessageToByteBufConverter.html" class="type-name-link" title="class in io.micronaut.protobuf.convert">ProtoMessageToByteBufConverter</a> (implements io.micronaut.core.convert.TypeConverter&lt;S,<wbr>T&gt;)</li>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" class="type-name-link external-link" title="class or interface in java.lang">Throwable</a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" class="type-name-link external-link" title="class or interface in java.lang">Exception</a>
+<ul>
+<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" class="type-name-link external-link" title="class or interface in java.lang">RuntimeException</a>
+<ul>
+<li class="circle">io.micronaut.http.exceptions.HttpException
+<ul>
+<li class="circle">io.micronaut.http.exceptions.HttpStatusException
+<ul>
+<li class="circle">io.micronaut.protobuf.json.exception.<a href="io/micronaut/protobuf/json/exception/GrpcInvocationException.html" class="type-name-link" title="class in io.micronaut.protobuf.json.exception">GrpcInvocationException</a></li>
+<li class="circle">io.micronaut.protobuf.json.exception.<a href="io/micronaut/protobuf/json/exception/MalformedGrpcJsonException.html" class="type-name-link" title="class in io.micronaut.protobuf.json.exception">MalformedGrpcJsonException</a></li>
+<li class="circle">io.micronaut.protobuf.json.exception.<a href="io/micronaut/protobuf/json/exception/MethodNotFoundException.html" class="type-name-link" title="class in io.micronaut.protobuf.json.exception">MethodNotFoundException</a></li>
+<li class="circle">io.micronaut.protobuf.json.exception.<a href="io/micronaut/protobuf/json/exception/ProtobufTranscodingException.html" class="type-name-link" title="class in io.micronaut.protobuf.json.exception">ProtobufTranscodingException</a></li>
+<li class="circle">io.micronaut.protobuf.json.exception.<a href="io/micronaut/protobuf/json/exception/ServiceNotFoundException.html" class="type-name-link" title="class in io.micronaut.protobuf.json.exception">ServiceNotFoundException</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -111,6 +147,7 @@ loadScripts(document, 'script');</script>
 <h2 title="Annotation Interface Hierarchy">Annotation Interface Hierarchy</h2>
 <ul>
 <li class="circle">io.micronaut.grpc.annotation.<a href="io/micronaut/grpc/annotation/GrpcChannel.html" class="type-name-link" title="annotation interface in io.micronaut.grpc.annotation">GrpcChannel</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
+<li class="circle">io.micronaut.grpc.annotation.<a href="io/micronaut/grpc/annotation/GrpcRestJsonExposed.html" class="type-name-link" title="annotation interface in io.micronaut.grpc.annotation">GrpcRestJsonExposed</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">io.micronaut.grpc.annotation.<a href="io/micronaut/grpc/annotation/GrpcService.html" class="type-name-link" title="annotation interface in io.micronaut.grpc.annotation">GrpcService</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 </ul>
 </section>

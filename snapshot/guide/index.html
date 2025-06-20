@@ -60,7 +60,9 @@
                                 
                                 <div class="toc-item" style="margin-left:0"><a href="#protocolBuffers"><strong>8</strong><span>Protocol Buffers Support</span></a></div>
                                 
-                                <div class="toc-item" style="margin-left:0"><a href="#repository"><strong>9</strong><span>Repository</span></a></div>
+                                <div class="toc-item" style="margin-left:0"><a href="#protocolBuffersJsonSupport"><strong>9</strong><span>Protocol Buffers Json Support (Experimental)</span></a></div>
+                                
+                                <div class="toc-item" style="margin-left:0"><a href="#repository"><strong>10</strong><span>Repository</span></a></div>
                                 
                             </div>
                         </div>
@@ -107,7 +109,9 @@
         
         <div class="toc-item" style="margin-left:0px" id="toc-item-protocolBuffers"><a href="#protocolBuffers"><strong>8</strong><span>Protocol Buffers Support</span></a></div>
         
-        <div class="toc-item" style="margin-left:0px" id="toc-item-repository"><a href="#repository"><strong>9</strong><span>Repository</span></a></div>
+        <div class="toc-item" style="margin-left:0px" id="toc-item-protocolBuffersJsonSupport"><a href="#protocolBuffersJsonSupport"><strong>9</strong><span>Protocol Buffers Json Support (Experimental)</span></a></div>
+        
+        <div class="toc-item" style="margin-left:0px" id="toc-item-repository"><a href="#repository"><strong>10</strong><span>Repository</span></a></div>
         
         </div>
     </div>
@@ -1313,7 +1317,192 @@ GreeterGrpc.GreeterStub greeterStub(
 <p>Micronaut will now support the encoding and decoding requests / responses of type <code>application/x-protobuf</code>.</p>
 </div>
 
-<h1 id="repository"><a class="anchor" href="#repository"></a>9 Repository</h1>
+<h1 id="protocolBuffersJsonSupport"><a class="anchor" href="#protocolBuffersJsonSupport"></a>9 Protocol Buffers Json Support (Experimental)</h1>
+
+<div class='contribute-btn'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.10.x/src/main/docs/guide/protocolBuffersJsonSupport.adoc"'>
+        <i class='fa fa-pencil-square-o'></i> Improve this doc
+    </button>
+</div>
+
+
+<div class="paragraph">
+<p>This project also includes a module that adds the ability to send json-serialized messages via a POST HTTP 1.1 call with the Micronaut HTTP
+server.</p>
+</div>
+<div class="paragraph">
+<p>To use this add the <code>micronaut-protobuff-json-support</code> dependency:</p>
+</div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-json-support")</span></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-protobuff-json-support&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div></p>
+</div>
+<div class="paragraph">
+<p><code>grpc.rest.json.exposed=true</code></p>
+</div>
+<div class="paragraph">
+<p>And then include the <code>@GrpcRestJsonExposed</code> annotation on your gRPC service definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example.services;
+
+import io.grpc.stub.StreamObserver;
+import io.micronaut.grpc.annotation.GrpcRestJsonExposed;
+import jakarta.inject.Singleton;
+import org.example.grpc.GreeterGrpc;
+import org.example.grpc.HelloRequest;
+import org.example.grpc.HelloResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Singleton
+public class GreeterService extends GreeterGrpc.GreeterImplBase {
+    private static final Logger log = LoggerFactory.getLogger(GreeterService.class);
+
+    @GrpcRestJsonExposed
+    @Override
+    public void sayHello(HelloRequest request, StreamObserver&lt;HelloResponse&gt; responseObserver) {
+        log.debug("Received request: {}", request);
+        String name = request.getName();
+        String greeting = "Hello, " + name;
+
+        HelloResponse reply = HelloResponse.newBuilder()
+                .setGreeting(greeting)
+                .build();
+
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Micronaut will now support the encoding and decoding requests / responses of type <code>application/json</code> via http 1.1.</p>
+</div>
+<div class="sect1">
+<h2 id="_how_this_works">How this works</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_controller_creation">Controller Creation</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>After the controller is created, the post creation annotation will traverse the beans created with the <code>@GrpcRestJsonExposed</code>
+annotation on the service method.</p>
+</li>
+<li>
+<p>For each bean, peek into the gRPC allocated methods created.</p>
+</li>
+<li>
+<p>Register the bean in a cache</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The controller endpoint will use google&#8217;s built-in JSON/ProtocolBuffer serialization. Unfortunately, there is not yet a way to print a
+full API schema for a request. However, to create a json request output one can take any gRPC request protocol buffer and convert it to
+json using the <code>io.micronaut.protobuf.json.ProtobufJsonTranscoder</code> class.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_usage">Usage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Request comes in and matches as:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">/grpc-json/{serviceName}/{method}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where the <code>serviceName</code> is the name of the gRPC service and the <code>method</code> is the name of the method.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s an example of a gRPC service definition.</p>
+</div>
+<div class="paragraph">
+<p>For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-protobuf hljs" data-lang="protobuf">syntax = "proto3";
+package helloworld;
+
+option java_package = "org.example.grpc";
+option java_outer_classname = "HelloworldProto";
+option java_multiple_files = true;
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string greeting = 1;
+}
+
+service Greeter {
+  rpc sayHello (HelloRequest) returns (HelloResponse);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Mapping this to a grpc service, the request would look like this:</p>
+</div>
+<div class="paragraph">
+<p><code><a href="http://localhost:8080/grpc-json/GreeterService/sayHello" class="bare">http://localhost:8080/grpc-json/GreeterService/sayHello</a></code></p>
+</div>
+<div class="paragraph">
+<p>Where <code>GreeterService</code> is the service name and <code>sayHello</code> is the method name.</p>
+</div>
+<div class="paragraph">
+<p>The payload would look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json hljs" data-lang="json">{"name": "YourName"}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Take in a <code>POST</code> as <code>application/json</code> and the request should cleanly map as a grpc response.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example_client_usage_with_curl">Example client usage with <code>cURL</code></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you run the <code>test-suite-java-rpc-json-demo</code> project and issue the following cURL call:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">curl -X POST http://localhost:8080/grpc-json/GreeterService/sayHello \
+-H "Content-Type: application/json" \
+-d '{"name": "YourName"}'</code></pre>
+</div>
+</div>
+</div>
+</div>
+
+<h1 id="repository"><a class="anchor" href="#repository"></a>10 Repository</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.10.x/src/main/docs/guide/repository.adoc"'>

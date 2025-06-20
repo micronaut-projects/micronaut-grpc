@@ -54,7 +54,7 @@ loadScripts(document, 'script');</script>
 <h1 title="All Classes and Interfaces" class="title">All Classes and Interfaces</h1>
 </div>
 <div id="all-classes-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab7" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab7', 2)" class="table-tab">Annotation Interfaces</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab5" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab5', 2)" class="table-tab">Exceptions</button><button id="all-classes-table-tab7" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab7', 2)" class="table-tab">Annotation Interfaces</button></div>
 <div id="all-classes-table.tabpanel" role="tabpanel">
 <div class="summary-table two-column-summary" aria-labelledby="all-classes-table-tab0">
 <div class="table-header col-first">Class</div>
@@ -92,24 +92,48 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Implementation of the <code>EmbeddedServer</code> interface for GRPC.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" title="class in io.micronaut.grpc.server.health">GrpcHealthFactory</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/json/GrpcExposedMethodValidator.html" title="class in io.micronaut.protobuf.json">GrpcExposedMethodValidator</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Validates beans that implement gRPC services and have methods annotated with <code>@GrpcRestJsonExposed</code>.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/health/GrpcHealthFactory.html" title="class in io.micronaut.grpc.server.health">GrpcHealthFactory</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="io/micronaut/protobuf/json/exception/GrpcInvocationException.html" title="class in io.micronaut.protobuf.json.exception">GrpcInvocationException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="block">Exception indicating a failure during the invocation of a gRPC method.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Configuration properties for enabling and configuring the gRPC JSON proxy feature in a Micronaut application.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A managed channel configuration.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/channels/GrpcManagedChannelFactory.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelFactory</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/channels/GrpcManagedChannelFactory.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelFactory</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Factory bean for creating <code>ManagedChannel</code> instances.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/channels/GrpcNamedManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcNamedManagedChannelConfiguration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/channels/GrpcNamedManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcNamedManagedChannelConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Constructs a named channel configuration for each property specified in <a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#PREFIX"><code>GrpcManagedChannelConfiguration.PREFIX</code></a>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Implementation of <code>NameResolverProvider</code> that allows using Micronaut's <code>DiscoveryClient</code>
  to perform service discovery.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/json/GrpcProxyController.html" title="class in io.micronaut.protobuf.json">GrpcProxyController</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Controller handling gRPC method invocations via HTTP requests.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html" title="class in io.micronaut.protobuf.json.grpc">GrpcProxyService</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">A service responsible for enabling interaction with gRPC methods through a JSON-based interface.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab7"><a href="io/micronaut/grpc/annotation/GrpcRestJsonExposed.html" title="annotation interface in io.micronaut.grpc.annotation">GrpcRestJsonExposed</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab7">
+<div class="block">Annotation used to expose a gRPC method for handling JSON over REST requests.</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/GrpcServerBuilder.html" title="class in io.micronaut.grpc.server">GrpcServerBuilder</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
@@ -140,6 +164,17 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab7">
 <div class="block">A meta annotation for annotation GRPC services.</div>
 </div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistrar.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistrar</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">The <code>GrpcServiceRegistrar</code> is responsible for processing methods annotated with
+ <code>@GrpcRestJsonExposed</code> during application startup and registering them with the
+ <a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry"><code>GrpcServiceRegistry</code></a>.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">A class responsible for maintaining a registry of gRPC service methods, enabling them
+ to be exposed and invoked via JSON over REST.</div>
+</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Configuration for the SSL properties of GRPC.</div>
@@ -147,6 +182,15 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A container for the <code>HealthStatusManager</code>.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="io/micronaut/protobuf/json/exception/MalformedGrpcJsonException.html" title="class in io.micronaut.protobuf.json.exception">MalformedGrpcJsonException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="block">Exception thrown to indicate that a gRPC JSON payload is malformed or invalid.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="io/micronaut/protobuf/json/exception/MethodNotFoundException.html" title="class in io.micronaut.protobuf.json.exception">MethodNotFoundException</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
+<div class="block">Exception thrown to indicate that a specified method could not be found within
+ a given context, such as a gRPC service.</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/interceptor/OrderedServerInterceptor.html" title="class in io.micronaut.grpc.server.interceptor">OrderedServerInterceptor</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -161,9 +205,21 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Protocol buffers codec.</div>
 </div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Utility class for handling Protobuf message serialization and deserialization to/from JSON.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="io/micronaut/protobuf/json/exception/ProtobufTranscodingException.html" title="class in io.micronaut.protobuf.json.exception">ProtobufTranscodingException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="block">Custom exception for Protobuf transcoding errors.</div>
+</div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/convert/ProtoMessageToByteBufConverter.html" title="class in io.micronaut.protobuf.convert">ProtoMessageToByteBufConverter</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Converts Protocol buffer messages to Netty <code>ByteBuf</code>.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="io/micronaut/protobuf/json/exception/ServiceNotFoundException.html" title="class in io.micronaut.protobuf.json.exception">ServiceNotFoundException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="block">Exception thrown when a requested service cannot be found.</div>
 </div>
 </div>
 </div>
