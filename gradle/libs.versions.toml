@@ -10,6 +10,7 @@ opentracing-grpc = '0.2.3'
 opentracing-mock = '0.33.0'
 graal-svm = '24.2.1'
 javax-annotation-api = '1.3.2'
+gson = "2.13.2"
 
 micronaut-docs = '2.0.0'
 micronaut-gradle-plugin = '4.5.3'
@@ -59,6 +60,7 @@ micronaut-test = { module = 'io.micronaut.test:micronaut-test-bom', version.ref 
 micronaut-gradle-plugin = { module = 'io.micronaut.gradle:micronaut-gradle-plugin', version.ref = 'micronaut-gradle-plugin' }
 
 # Other
+gson = { module = 'com.google.code.gson:gson', version.ref = 'gson' }
 graal-svm = { module = 'org.graalvm.nativeimage:svm', version.ref = 'graal-svm' }
 grpc-netty = { module = 'io.grpc:grpc-netty' }
 

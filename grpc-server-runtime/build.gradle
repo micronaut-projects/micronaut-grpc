@@ -12,6 +12,8 @@ dependencies {
     api libs.managed.grpc.core
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
+    // workaround vulnerability in 2.11.0
+    runtimeOnly libs.gson
 
     compileOnly libs.managed.grpc.services
     compileOnly mn.micronaut.management
