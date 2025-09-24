@@ -60,7 +60,7 @@ micronaut-test = { module = 'io.micronaut.test:micronaut-test-bom', version.ref 
 micronaut-gradle-plugin = { module = 'io.micronaut.gradle:micronaut-gradle-plugin', version.ref = 'micronaut-gradle-plugin' }
 
 # Other
-gson = { module = 'com.google.code.gson:gson', version.ref = 'gson' }
+managed-gson = { module = 'com.google.code.gson:gson', version.ref = 'gson' }
 graal-svm = { module = 'org.graalvm.nativeimage:svm', version.ref = 'graal-svm' }
 grpc-netty = { module = 'io.grpc:grpc-netty' }
 
