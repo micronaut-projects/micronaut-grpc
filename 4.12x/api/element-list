@@ -1,0 +1,15 @@
+io.micronaut.grpc.annotation
+io.micronaut.grpc.channels
+io.micronaut.grpc.client.tracing
+io.micronaut.grpc.discovery
+io.micronaut.grpc.server
+io.micronaut.grpc.server.health
+io.micronaut.grpc.server.interceptor
+io.micronaut.grpc.server.tracing
+io.micronaut.protobuf.codec
+io.micronaut.protobuf.convert
+io.micronaut.protobuf.handler
+io.micronaut.protobuf.json
+io.micronaut.protobuf.json.exception
+io.micronaut.protobuf.json.grpc
+io.micronaut.protobuf.json.registry
