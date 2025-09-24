@@ -13,7 +13,7 @@ dependencies {
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
     // workaround vulnerability in 2.11.0
-    runtimeOnly libs.managed.gson
+    implementation libs.gson
 
     // change these to "api" dependencies when this module
     // is removed as a dependency of "grpc-server-runtime"

@@ -13,7 +13,7 @@ dependencies {
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
     // workaround vulnerability in 2.11.0
-    runtimeOnly libs.managed.gson
+    implementation libs.gson
 
     compileOnly mn.micronaut.discovery.core
 
