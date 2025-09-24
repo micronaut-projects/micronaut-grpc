@@ -27,6 +27,10 @@ dependencies {
     api libs.managed.grpc.protobuf
     api projects.micronautGrpcAnnotation
 
+    implementation(libs.gson) {
+        because("Vulnerability in 2.11.0")
+    }
+
     testCompileOnly libs.javax.annotation.api
     testCompileOnly libs.managed.protobuf.java
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-json

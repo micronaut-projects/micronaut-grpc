@@ -9,13 +9,12 @@ dependencies {
     api projects.micronautGrpcAnnotation
     api projects.micronautGrpcHealth
     api projects.micronautGrpcOpentracing
-    api(libs.managed.grpc.core) {
-        exclude(group:" com.google.code.gson", module:"gson")
-    }
+    api(libs.managed.grpc.core)
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
-    // workaround vulnerability in 2.11.0
-    implementation libs.gson
+    implementation(libs.gson) {
+        because("Vulnerability in 2.11.0")
+    }
 
     compileOnly libs.managed.grpc.services
     compileOnly mn.micronaut.management

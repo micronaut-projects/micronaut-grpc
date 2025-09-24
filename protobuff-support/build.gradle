@@ -10,7 +10,9 @@ dependencies {
     //protobuf
     api libs.managed.protobuf.java
     api libs.managed.protobuf.java.util
-
+    implementation(libs.gson) {
+        because("Vulnerability in 2.11.0")
+    }
     testImplementation mn.micronaut.http.server.netty
     testImplementation mnReactor.micronaut.reactor.http.client
     testImplementation mn.micronaut.jackson.databind
