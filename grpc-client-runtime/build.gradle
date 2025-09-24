@@ -7,9 +7,12 @@ dependencies {
     api platform(libs.boms.grpc)
     api projects.micronautGrpcAnnotation
     api projects.micronautGrpcOpentracing
-    api libs.managed.grpc.core
+    api(libs.managed.grpc.core)
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
+    implementation(libs.gson) {
+        because("Vulnerability in 2.11.0")
+    }
 
     compileOnly mn.micronaut.discovery.core
 
@@ -56,4 +59,3 @@ micronautBuild {
         acceptedRegressionsFile = file("config/accepted-api-changes.json")
     }
 }
-

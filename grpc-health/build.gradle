@@ -7,9 +7,13 @@ dependencies {
 
     api platform(libs.boms.grpc)
     api projects.micronautGrpcAnnotation
-    api libs.managed.grpc.core
+    api(libs.managed.grpc.core)
     api libs.managed.grpc.protobuf
     api libs.managed.grpc.stub
+
+    implementation(libs.gson) {
+        because("Vulnerability in 2.11.0")
+    }
 
     // change these to "api" dependencies when this module
     // is removed as a dependency of "grpc-server-runtime"
