@@ -24,7 +24,6 @@ micronaut-validation = "4.11.0"
 micronaut-kotlin = "4.7.0"
 micronaut-logging = "1.7.0"
 micronaut-test = "4.8.1"
-sonatype-scan = "3.1.4"
 
 [libraries]
 # Managed
@@ -73,6 +72,5 @@ netty-tcnative-boringssl-static = { module = 'io.netty:netty-tcnative-boringssl-
 
 opentracing-grpc = { module = 'io.opentracing.contrib:opentracing-grpc', version.ref = 'opentracing-grpc' }
 opentracing-mock = { module = 'io.opentracing:opentracing-mock', version.ref = 'opentracing-mock' }
-sonatype-scan = { module = "org.sonatype.gradle.plugins:scan-gradle-plugin", version.ref = "sonatype-scan" }
 [plugins]
 protobuf = { id = 'com.google.protobuf', version.ref = 'managed-protobuf-gradle' }
