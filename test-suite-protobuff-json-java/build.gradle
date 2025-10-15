@@ -1,7 +1,7 @@
 plugins {
     id "groovy"
     id "java-library"
-    id("io.micronaut.minimal.application") version "4.4.5"
+    id("io.micronaut.minimal.application") version "4.5.5"
     alias(libs.plugins.protobuf)
 }
 
