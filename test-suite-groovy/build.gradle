@@ -11,7 +11,9 @@ ext {
 }
 // end::variables[]
 
-mainClassName = "helloworld.Application"
+application {
+    mainClass.set("helloworld.Application")
+}
 micronaut {
     version.set(libs.versions.micronaut.platform.get())
     coreVersion.set(libs.versions.micronaut.asProvider().get())
