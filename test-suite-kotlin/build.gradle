@@ -4,12 +4,7 @@ plugins {
     alias(mn.plugins.kotlin.allopen)
     alias(libs.plugins.protobuf)
     id "io.micronaut.build.internal.grpc-minimal-test"
-}
-
-kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
+    id "io.micronaut.build.internal.java-base"
 }
 
 // tag::variables[]
