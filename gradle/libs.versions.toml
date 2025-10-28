@@ -24,6 +24,7 @@ micronaut-validation = "4.11.0"
 micronaut-kotlin = "4.7.0"
 micronaut-logging = "1.7.1"
 micronaut-test = "4.10.1"
+kotlin = "2.2.20"
 
 [libraries]
 # Managed
@@ -72,5 +73,8 @@ netty-tcnative-boringssl-static = { module = 'io.netty:netty-tcnative-boringssl-
 
 opentracing-grpc = { module = 'io.opentracing.contrib:opentracing-grpc', version.ref = 'opentracing-grpc' }
 opentracing-mock = { module = 'io.opentracing:opentracing-mock', version.ref = 'opentracing-mock' }
+
+kotlin-jvm = { module = 'org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin', version.ref = 'kotlin' }
+kotlin-kapt = { module = 'org.jetbrains.kotlin.kapt:org.jetbrains.kotlin.kapt.gradle.plugin', version.ref = 'kotlin' }
 [plugins]
 protobuf = { id = 'com.google.protobuf', version.ref = 'managed-protobuf-gradle' }

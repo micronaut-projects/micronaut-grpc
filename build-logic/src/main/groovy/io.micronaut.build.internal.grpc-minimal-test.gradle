@@ -1,4 +1,7 @@
 plugins {
     id 'io.micronaut.build.internal.grpc-base'
     id 'io.micronaut.minimal.application'
+    id "org.jetbrains.kotlin.jvm"
+    id "org.jetbrains.kotlin.kapt"
+    id "io.micronaut.build.internal.kotlin-base"
 }
