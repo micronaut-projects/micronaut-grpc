@@ -46,6 +46,7 @@ dependencies {
     testImplementation mn.micronaut.jackson.databind
     testImplementation projects.micronautGrpcServerRuntime
     testImplementation projects.micronautGrpcRuntime
+    testImplementation("net.bytebuddy:byte-buddy:1.17.8")
 
     testImplementation mn.micronaut.inject.java
     testImplementation mn.micronaut.inject.groovy

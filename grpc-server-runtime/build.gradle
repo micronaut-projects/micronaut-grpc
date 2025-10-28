@@ -32,7 +32,8 @@ dependencies {
     testImplementation mnReactor.micronaut.reactor.http.client
     testImplementation mn.micronaut.management
     testImplementation projects.micronautGrpcClientRuntime
-
+    testImplementation("net.bytebuddy:byte-buddy:1.17.8")
+    testImplementation("org.objenesis:objenesis:3.4")
     testRuntimeOnly libs.netty.tcnative.boringssl.static
 }
 
