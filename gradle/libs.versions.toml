@@ -74,7 +74,7 @@ netty-tcnative-boringssl-static = { module = 'io.netty:netty-tcnative-boringssl-
 opentracing-grpc = { module = 'io.opentracing.contrib:opentracing-grpc', version.ref = 'opentracing-grpc' }
 opentracing-mock = { module = 'io.opentracing:opentracing-mock', version.ref = 'opentracing-mock' }
 
-kotlin-jvm = { module = 'org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin', version.ref = 'kotlin' }
-kotlin-kapt = { module = 'org.jetbrains.kotlin.kapt:org.jetbrains.kotlin.kapt.gradle.plugin', version.ref = 'kotlin' }
 [plugins]
 protobuf = { id = 'com.google.protobuf', version.ref = 'managed-protobuf-gradle' }
+kotlin-jvm = { id = 'org.jetbrains.kotlin.jvm', version.ref = 'kotlin' }
+kotlin-kapt = { id = 'org.jetbrains.kotlin.kapt', version.ref = 'kotlin' }
