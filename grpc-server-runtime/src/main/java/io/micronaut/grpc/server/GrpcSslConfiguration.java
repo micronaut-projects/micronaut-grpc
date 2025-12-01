@@ -18,7 +18,7 @@ package io.micronaut.grpc.server;
 import java.util.Optional;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
-import io.micronaut.core.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Configuration for the SSL properties of GRPC.

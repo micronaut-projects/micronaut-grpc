@@ -19,7 +19,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
 import io.micronaut.core.annotation.Experimental;
-import io.micronaut.core.annotation.NonNull;
+import org.jspecify.annotations.NonNull;
 import io.micronaut.http.HttpStatus;
 import io.micronaut.protobuf.json.exception.MalformedGrpcJsonException;
 import io.micronaut.protobuf.json.exception.ProtobufTranscodingException;
