@@ -17,8 +17,8 @@ package io.micronaut.grpc.client.tracing;
 
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.annotation.ConfigurationProperties;
-import io.micronaut.core.annotation.NonNull;
-import io.micronaut.core.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.grpc.ClientCloseDecorator;
 import io.opentracing.contrib.grpc.ClientSpanDecorator;

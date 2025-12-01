@@ -19,7 +19,7 @@ import io.grpc.ClientInterceptor;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
-import io.micronaut.core.annotation.NonNull;
+import org.jspecify.annotations.NonNull;
 
 import jakarta.inject.Singleton;
 
