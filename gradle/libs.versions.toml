@@ -23,7 +23,7 @@ micronaut-tracing = "7.2.0"
 micronaut-validation = "5.0.0-M1"
 micronaut-kotlin = "4.7.0"
 micronaut-logging = "1.7.1"
-micronaut-test = "4.10.2"
+micronaut-test = "5.0.0-M3"
 
 [libraries]
 # Managed
