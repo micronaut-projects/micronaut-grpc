@@ -5,3 +5,8 @@ plugins {
 ossIndexAudit {
     excludeCompileOnly = true
 }
+micronautBuild {
+    descriptor {
+        parentModuleId = "io.micronaut.grpc:micronaut-grpc-annotation"
+    }
+}
