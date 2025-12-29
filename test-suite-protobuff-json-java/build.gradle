@@ -6,8 +6,9 @@ plugins {
 }
 
 group = "com.example.services"
-mainClassName = "com.example.services.Application"
-
+application {
+    mainClass = "com.example.services.Application"
+}
 // tag::variables[]
 ext {
     grpcVersion = libs.versions.managed.grpc.asProvider().get()
