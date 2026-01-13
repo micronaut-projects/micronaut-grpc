@@ -1,21 +1,13 @@
 plugins {
-    alias(mn.plugins.kotlin.jvm)
-    alias(mn.plugins.kotlin.kapt)
-    alias(mn.plugins.kotlin.allopen)
+    id("io.micronaut.build.internal.kotlin-kapt")
     alias(libs.plugins.protobuf)
     id "io.micronaut.build.internal.grpc-minimal-test"
 }
 
-kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
 
 // tag::variables[]
 ext {
     grpcVersion = libs.versions.managed.grpc.asProvider().get()
-    grpcKotlinVersion = libs.versions.managed.grpc.kotlin.get()
     protobufVersion = libs.versions.managed.protobuf.asProvider().get()
 }
 // end::variables[]
