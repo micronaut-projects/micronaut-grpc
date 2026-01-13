@@ -51,8 +51,6 @@ micronaut-tracing = { module = 'io.micronaut.tracing:micronaut-tracing-bom', ver
 micronaut-discovery-client = { module = "io.micronaut.discovery:micronaut-discovery-client", version.ref = "micronaut-discovery-client" }
 micronaut-validation = { module = 'io.micronaut.validation:micronaut-validation-bom', version.ref = 'micronaut-validation' }
 micronaut-kotlin = { module = 'io.micronaut.kotlin:micronaut-kotlin-bom', version.ref = 'micronaut-kotlin' }
-micronaut-logging = { module = 'io.micronaut.logging:micronaut-logging-bom', version.ref = 'micronaut-logging' }
-micronaut-test = { module = 'io.micronaut.test:micronaut-test-bom', version.ref = 'micronaut-test' }
 micronaut-gradle-plugin = { module = 'io.micronaut.gradle:micronaut-gradle-plugin', version.ref = 'micronaut-gradle-plugin' }
 
 # Other
