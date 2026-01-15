@@ -31,12 +31,13 @@ dependencies {
     compileOnly mn.micronaut.http.client
     api projects.micronautGrpcRuntime
     api libs.managed.protobuf.java.util
-    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    implementation(libs.micronaut.serde.jackson)
     api projects.micronautProtobuffJsonSupport
     api projects.micronautGrpcAnnotation
     testImplementation  mn.micronaut.http.client
     testImplementation projects.micronautGrpcClientRuntime
     testImplementation projects.micronautGrpcServerRuntime
+    testImplementation mn.micronaut.jackson.databind
     api libs.javax.annotation.api
 }
 
