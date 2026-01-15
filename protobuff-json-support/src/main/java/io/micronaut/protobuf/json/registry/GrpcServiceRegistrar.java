@@ -71,7 +71,7 @@ public class GrpcServiceRegistrar implements ExecutableMethodProcessor<GrpcRestJ
      * @param method the executable method annotated with {@code @GrpcRestJsonExposed} to be registered
      */
     @Override
-    public void process(BeanDefinition<?> beanDefinition, ExecutableMethod<?, ?> method) {
+    public <B> void process(BeanDefinition<B> beanDefinition, ExecutableMethod<B, ?> method) {
         LOG.info("Registering gRPC JSON-exposed method '{}' from bean '{}'",
                  method.getMethodName(), beanDefinition.getBeanType().getSimpleName());
         registry.register(beanDefinition.getBeanType(), method.getMethodName(), method);
