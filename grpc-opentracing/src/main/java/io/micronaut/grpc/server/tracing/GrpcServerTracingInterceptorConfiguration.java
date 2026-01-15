@@ -53,7 +53,7 @@ public class GrpcServerTracingInterceptorConfiguration {
     /**
      * @return The {@link TracingServerInterceptor.Builder}
      */
-    public @NonNull TracingServerInterceptor.Builder getBuilder() {
+    public TracingServerInterceptor.@NonNull Builder getBuilder() {
         return builder;
     }
 
