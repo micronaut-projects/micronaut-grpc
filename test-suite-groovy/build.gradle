@@ -45,6 +45,7 @@ dependencies {
     testCompileOnly libs.javax.annotation.api
 
     testImplementation mn.groovy
+    testImplementation mnTest.micronaut.test.spock
 
     testCompileOnly libs.managed.protobuf.java
     testRuntimeOnly mnLogging.logback.classic
@@ -75,4 +76,8 @@ protobuf {
     generateProtoTasks {
         all()*.plugins { grpc {} }
     }
+}
+
+test {
+    useJUnitPlatform()
 }
