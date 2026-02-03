@@ -1,14 +1,16 @@
 plugins {
     id "groovy"
     id "java-library"
-    id("io.micronaut.minimal.application") version "4.6.1"
+    id("io.micronaut.minimal.application")
     alias(libs.plugins.protobuf)
 }
 
 group = "com.example.services"
+
 application {
     mainClass = "com.example.services.Application"
 }
+
 // tag::variables[]
 ext {
     grpcVersion = libs.versions.managed.grpc.asProvider().get()
@@ -29,12 +31,13 @@ dependencies {
     compileOnly mn.micronaut.http.client
     api projects.micronautGrpcRuntime
     api libs.managed.protobuf.java.util
-    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    implementation(libs.micronaut.serde.jackson)
     api projects.micronautProtobuffJsonSupport
     api projects.micronautGrpcAnnotation
     testImplementation  mn.micronaut.http.client
     testImplementation projects.micronautGrpcClientRuntime
     testImplementation projects.micronautGrpcServerRuntime
+    testImplementation mn.micronaut.jackson.databind
     api libs.javax.annotation.api
 }
 
@@ -87,3 +90,8 @@ protobuf {
 }
 
 
+configurations.all {
+    resolutionStrategy {
+        force("org.spockframework:spock-core:2.4-groovy-5.0")
+    }
+}

@@ -1,20 +1,9 @@
 plugins {
-    alias(mn.plugins.kotlin.jvm)
-    alias(mn.plugins.kotlin.kapt)
-    alias(mn.plugins.kotlin.allopen)
+    id("io.micronaut.build.internal.kotlin-kapt")
     alias(libs.plugins.protobuf)
     id "io.micronaut.build.internal.grpc-minimal-test"
 }
 
-java {
-    sourceCompatibility = JavaVersion.toVersion("21")
-    targetCompatibility = JavaVersion.toVersion("21")
-}
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21
-    }
-}
 
 // tag::variables[]
 ext {
@@ -27,6 +16,7 @@ ext {
 application {
     mainClass = "helloworld.Application"
 }
+
 micronaut {
     version.set(libs.versions.micronaut.platform.get())
     coreVersion.set(libs.versions.micronaut.asProvider().get())

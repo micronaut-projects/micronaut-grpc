@@ -19,7 +19,7 @@ public class HealthService {
         this.healthStatusManager = healthStatusManager;
     }
 
-    public void setStatus(@NonNull String serviceName, @NonNull HealthCheckResponse.ServingStatus status) {
+    public void setStatus(@NonNull String serviceName, HealthCheckResponse.@NonNull ServingStatus status) {
         if (healthStatusManager != null) {
             healthStatusManager.setStatus(serviceName, status);
         }

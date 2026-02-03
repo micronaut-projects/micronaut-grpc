@@ -14,6 +14,7 @@ ext {
 application {
     mainClass = "helloworld.Application"
 }
+
 micronaut {
     version.set(libs.versions.micronaut.platform.get())
     coreVersion.set(libs.versions.micronaut.asProvider().get())
@@ -44,6 +45,7 @@ dependencies {
     testCompileOnly libs.javax.annotation.api
 
     testImplementation mn.groovy
+    testImplementation mnTest.micronaut.test.spock
 
     testCompileOnly libs.managed.protobuf.java
     testRuntimeOnly mnLogging.logback.classic
@@ -73,5 +75,15 @@ protobuf {
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
+
+configurations.all {
+    resolutionStrategy {
+        force("org.spockframework:spock-core:2.4-groovy-5.0")
     }
 }
