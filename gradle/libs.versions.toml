@@ -20,7 +20,7 @@ micronaut-serde = "3.0.0-M2"
 micronaut-platform = "4.10.8"
 micronaut-discovery-client = "5.0.0-M1"
 micronaut-reactor = "4.0.0-M1"
-micronaut-tracing = "7.2.0"
+micronaut-tracing = "8.0.0-M1"
 micronaut-validation = "5.0.0-M1"
 micronaut-kotlin = "4.7.0"
 [libraries]
