@@ -45,7 +45,6 @@ boms-grpc = { module = 'io.grpc:grpc-bom', version.ref = 'managed-grpc' }
 
 # Micronaut
 micronaut-core = { module = 'io.micronaut:micronaut-core-bom', version.ref = 'micronaut' }
-micronaut-docs-asciidoc-config-props = { module = 'io.micronaut.docs:micronaut-docs-asciidoc-config-props', version.ref = 'micronaut-docs' }
 micronaut-tracing-legacy = { module = 'io.micronaut:micronaut-tracing', version.ref = 'micronaut-tracing-legacy' }
 micronaut-reactor = { module = 'io.micronaut.reactor:micronaut-reactor-bom', version.ref = 'micronaut-reactor' }
 micronaut-tracing = { module = 'io.micronaut.tracing:micronaut-tracing-bom', version.ref = 'micronaut-tracing' }
