@@ -1,7 +1,6 @@
 package com.example.services
 
 import io.micronaut.http.HttpRequest
-import io.micronaut.http.HttpResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.MediaType
 import io.micronaut.http.client.HttpClient
@@ -38,60 +37,84 @@ class GreeterServiceHttpSpec extends Specification {
     void "test custom endpoint override"() {
         given: "a JSON request body"
         def requestBody = [name: "CustomEndpoint"]
+        def exception
 
         when: "we call the custom endpoint"
-        def response = client.toBlocking().exchange(
-                HttpRequest.POST("/custom-endpoint/GreeterService/sayHello", requestBody)
-                        .header("Content-Type", MediaType.APPLICATION_JSON),
-                Map
-        )
+        try {
+            client.toBlocking().exchange(
+                    HttpRequest.POST("/custom-endpoint/GreeterService/sayHello", requestBody)
+                            .header("Content-Type", MediaType.APPLICATION_JSON),
+                    Map
+            )
+        } catch (HttpClientResponseException e) {
+            exception = e
+        }
 
         then: "the request should fail with 404"
-        HttpClientResponseException e = thrown()
-        e.status == HttpStatus.NOT_FOUND
+        exception != null
+        exception.status == HttpStatus.NOT_FOUND
     }
 
     void "test non-JSON request fails"() {
+        given: "an exception tracker"
+        def exception
+
         when: "we send a non-JSON request"
-        client.toBlocking().exchange(
-                HttpRequest.POST("/grpc-json/GreeterService/sayHello", "plain text content")
-                        .header("Content-Type", MediaType.TEXT_PLAIN),
-                Map
-        )
+        try {
+            client.toBlocking().exchange(
+                    HttpRequest.POST("/grpc-json/GreeterService/sayHello", "plain text content")
+                            .header("Content-Type", MediaType.TEXT_PLAIN),
+                    Map
+            )
+        } catch (HttpClientResponseException e) {
+            exception = e
+        }
 
         then: "request should fail with unsupported media type"
-        HttpClientResponseException e = thrown()
-        e.status == HttpStatus.UNSUPPORTED_MEDIA_TYPE
+        exception != null
+        exception.status == HttpStatus.UNSUPPORTED_MEDIA_TYPE
     }
 
     void "test malformed JSON request"() {
         given: "an invalid JSON request body"
         def requestBody = [wrongField: "value"]
+        def exception
 
         when: "we call the endpoint with invalid JSON"
-        client.toBlocking().exchange(
-                HttpRequest.POST("/grpc-json/GreeterService/sayHello", requestBody)
-                        .header("Content-Type", MediaType.APPLICATION_JSON),
-                Map
-        )
+        try {
+            client.toBlocking().exchange(
+                    HttpRequest.POST("/grpc-json/GreeterService/sayHello", requestBody)
+                            .header("Content-Type", MediaType.APPLICATION_JSON),
+                    Map
+            )
+        } catch (HttpClientResponseException e) {
+            exception = e
+        }
 
         then: "request should fail with bad request"
-        HttpClientResponseException e = thrown()
-        e.status == HttpStatus.BAD_REQUEST
+        exception != null
+        exception.status == HttpStatus.BAD_REQUEST
     }
 
     @Unroll
     void "test invalid URL patterns: #scenario"() {
+        given:
+        def exception
+
         when: "we call with invalid URL"
-        client.toBlocking().exchange(
-                HttpRequest.POST(url, [name: "test"])
-                        .header("Content-Type", MediaType.APPLICATION_JSON),
-                Map
-        )
+        try {
+            client.toBlocking().exchange(
+                    HttpRequest.POST(url, [name: "test"])
+                            .header("Content-Type", MediaType.APPLICATION_JSON),
+                    Map
+            )
+        } catch (HttpClientResponseException e) {
+            exception = e
+        }
 
         then: "request should fail with not found"
-        HttpClientResponseException e = thrown()
-        e.status == HttpStatus.NOT_FOUND
+        exception != null
+        exception.status == HttpStatus.NOT_FOUND
 
         where:
         scenario           | url
@@ -101,27 +124,41 @@ class GreeterServiceHttpSpec extends Specification {
     }
 
     void "test empty POST body"() {
+        given:
+        def exception
+
         when: "we send an empty POST body"
-        client.toBlocking().exchange(
-                HttpRequest.POST("/grpc-json/GreeterService/sayHello", "")
-                        .header("Content-Type", MediaType.APPLICATION_JSON),
-                Map
-        )
+        try {
+            client.toBlocking().exchange(
+                    HttpRequest.POST("/grpc-json/GreeterService/sayHello", "")
+                            .header("Content-Type", MediaType.APPLICATION_JSON),
+                    Map
+            )
+        } catch (HttpClientResponseException e) {
+            exception = e
+        }
 
         then: "request should fail with bad request"
-        HttpClientResponseException e = thrown()
-        e.status == HttpStatus.BAD_REQUEST
+        exception != null
+        exception.status == HttpStatus.BAD_REQUEST
     }
 
     void "test GET method not allowed"() {
+        given:
+        def exception
+
         when: "we try to use GET instead of POST"
-        client.toBlocking().exchange(
-                HttpRequest.GET("/grpc-json/GreeterService/sayHello"),
-                Map
-        )
+        try {
+            client.toBlocking().exchange(
+                    HttpRequest.GET("/grpc-json/GreeterService/sayHello"),
+                    Map
+            )
+        } catch (HttpClientResponseException e) {
+            exception = e
+        }
 
         then: "request should fail with method not allowed"
-        HttpClientResponseException e = thrown()
-        e.status == HttpStatus.METHOD_NOT_ALLOWED
+        exception != null
+        exception.status == HttpStatus.METHOD_NOT_ALLOWED
     }
 }
