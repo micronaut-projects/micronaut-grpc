@@ -35,6 +35,7 @@ dependencies {
     compileOnly libs.managed.grpc.stub
     compileOnly libs.javax.annotation.api
 
+    implementation platform(libs.micronaut.test)
     implementation mnValidation.micronaut.validation
     implementation mn.micronaut.runtime
     implementation projects.micronautGrpcServerRuntime
