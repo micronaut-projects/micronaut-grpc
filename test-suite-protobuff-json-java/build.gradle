@@ -36,6 +36,7 @@ dependencies {
     api projects.micronautGrpcAnnotation
     testImplementation  mn.micronaut.http.client
     testImplementation projects.micronautGrpcClientRuntime
+    testImplementation(mnTest.micronaut.test.spock)
     testImplementation projects.micronautGrpcServerRuntime
     testImplementation mn.micronaut.jackson.databind
     api libs.javax.annotation.api
@@ -47,8 +48,8 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.toVersion("21")
-    targetCompatibility = JavaVersion.toVersion("21")
+    sourceCompatibility = JavaVersion.toVersion("25")
+    targetCompatibility = JavaVersion.toVersion("25")
 }
 micronaut {
     version.set(libs.versions.micronaut.platform.get())
@@ -86,12 +87,5 @@ protobuf {
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
-    }
-}
-
-
-configurations.all {
-    resolutionStrategy {
-        force("org.spockframework:spock-core:2.4-groovy-5.0")
     }
 }
