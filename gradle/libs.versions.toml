@@ -2,7 +2,7 @@
 managed-grpc = '1.79.0'
 managed-protobuf = '3.25.8'
 managed-protobuf-gradle = '0.9.6'
-managed-grpc-kotlin = '1.4.3'
+managed-grpc-kotlin = '1.5.0'
 
 jackson-datatype-protobuf = '0.9.18'
 jaeger-core = '1.8.1'
