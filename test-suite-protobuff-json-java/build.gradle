@@ -36,6 +36,7 @@ dependencies {
     api projects.micronautGrpcAnnotation
     testImplementation  mn.micronaut.http.client
     testImplementation projects.micronautGrpcClientRuntime
+    testImplementation(mnTest.micronaut.test.spock)
     testImplementation projects.micronautGrpcServerRuntime
     testImplementation mn.micronaut.jackson.databind
     api libs.javax.annotation.api
