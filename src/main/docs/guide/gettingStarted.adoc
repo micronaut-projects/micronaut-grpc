@@ -43,6 +43,8 @@ Then configure the gRPC and protobuf plugins:
 
 [source,groovy]
 ----
+include::test-suite-java/build.gradle[tags=variables]
+
 include::test-suite-java/build.gradle[tags=config]
 ----
 NOTE: If you are using JDK9 or above, in order to avoid issues javax packages, provide the following compiler option to the grpc plugin to skip these stubs: `option '@generated=omit'` (added on link:https://github.com/grpc/grpc-java/releases/tag/v1.64.0[grpc-kava v1.64.0]) See discussion here: link:https://github.com/grpc/grpc-java/issues/9179[issue 9179]
@@ -71,6 +73,27 @@ include::test-suite-kotlin/build.gradle[tags=dependencies]
 
 include::test-suite-kotlin/build.gradle[tags=config]
 
+----
+
+If you want to generate Reactor-based stubs with https://github.com/salesforce/reactive-grpc[reactive-grpc], add the generator plugin and stub dependency alongside the standard gRPC code generation:
+
+[source,groovy]
+----
+include::test-suite-java/build.gradle[tags=reactive-variables]
+
+dependencies {
+...
+include::test-suite-java/build.gradle[tags=reactive-dependencies]
+}
+
+include::test-suite-java/build.gradle[tags=reactive-source-set]
+
+protobuf {
+...
+include::test-suite-java/build.gradle[tags=reactive-plugin]
+...
+include::test-suite-java/build.gradle[tags=reactive-config]
+}
 ----
 
 Finally, add the following dependencies to your build:

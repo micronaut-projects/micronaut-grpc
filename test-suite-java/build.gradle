@@ -13,6 +13,12 @@ ext {
 }
 // end::variables[]
 
+// tag::reactive-variables[]
+ext {
+    reactiveGrpcVersion = libs.versions.reactive.grpc.get()
+}
+// end::reactive-variables[]
+
 application {
     mainClass = "helloworld.Application"
 }
@@ -41,6 +47,11 @@ dependencies {
     implementation projects.micronautGrpcServerRuntime
     implementation libs.micronaut.discovery.client
     implementation libs.managed.grpc.services
+    // tag::reactive-dependencies[]
+    implementation platform(libs.micronaut.reactor)
+    implementation libs.reactive.grpc.stub
+    implementation "io.projectreactor:reactor-core"
+    // end::reactive-dependencies[]
     implementation mn.snakeyaml
 
     runtimeOnly mnLogging.logback.classic
@@ -66,14 +77,46 @@ sourceSets {
         }
     }
 }
+// end::config[]
 
+// tag::reactive-source-set[]
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/reactor'
+        }
+    }
+}
+// end::reactive-source-set[]
+
+// tag::config[]
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
     }
     generateProtoTasks {
-        all()*.plugins { grpc {} }
+        all()*.plugins {
+            grpc {}
+        }
     }
 }
 // end::config[]
+
+// tag::reactive-plugin[]
+protobuf {
+    plugins {
+        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
+    }
+}
+// end::reactive-plugin[]
+
+// tag::reactive-config[]
+protobuf {
+    generateProtoTasks {
+        all()*.plugins {
+            reactor {}
+        }
+    }
+}
+// end::reactive-config[]

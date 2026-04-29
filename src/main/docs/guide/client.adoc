@@ -85,3 +85,17 @@ GreeterGrpc.GreeterStub reactiveStub(
 The ID `greeter` is used to reference the configuration for `grpc.channels.greeter`.
 
 Using service IDs in this way is the preferred way to set up gRPC clients, because it works nicely with Service Discovery (see the next section).
+
+If you generate Reactor bindings with `reactive-grpc`, define the generated Reactor stub in the same kind of factory and inject the `ManagedChannel` with `@GrpcChannel`:
+
+[source,java]
+----
+include::test-suite-java/src/test/java/helloworld/ReactiveGreetingEndpointTest.java[tags=reactive-client]
+----
+
+The resulting stub can then be injected into your application or tests and used directly with Reactor operators:
+
+[source,java]
+----
+include::test-suite-java/src/test/java/helloworld/ReactiveGreetingEndpointTest.java[tags=reactive-test]
+----
