@@ -15,17 +15,11 @@
  */
 package helloworld
 
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
-import io.micronaut.test.extensions.kotest5.annotation.MicronautTest
+import io.kotest.core.config.AbstractProjectConfig
+import io.kotest.core.extensions.Extension
+import io.micronaut.test.extensions.kotest5.MicronautKotest5Extension
 
-@MicronautTest
-class GreetingServiceTest(
-    private val greetingClient: GreeterGrpcKt.GreeterCoroutineStub,
-) : StringSpec({
-    "returns a greeting response" {
-        greetingClient.sayHello(
-            HelloRequest.newBuilder().setName("John").build(),
-        ).message shouldBe "Hello John"
-    }
-})
+class ProjectConfig : AbstractProjectConfig() {
+
+    override val extensions: List<Extension> = listOf(MicronautKotest5Extension)
+}
