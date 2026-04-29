@@ -29,6 +29,7 @@ dependencies {
     annotationProcessor "io.micronaut.serde:micronaut-serde-processor"
     runtimeOnly "ch.qos.logback:logback-classic"
     compileOnly mn.micronaut.http.client
+    api platform(libs.boms.protobuf)
     api projects.micronautGrpcRuntime
     api libs.managed.protobuf.java.util
     implementation(libs.micronaut.serde.jackson)

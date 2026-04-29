@@ -2,3 +2,7 @@ plugins {
     id 'io.micronaut.build.internal.grpc-base'
     id 'io.micronaut.minimal.application'
 }
+
+dependencies {
+    implementation platform(libs.boms.protobuf)
+}
