@@ -1,3 +1,5 @@
+include::build/generated/docs/guide-version-attributes.adoc[]
+
 To get started you need first create a Micronaut project. The easiest way to do this is with the Micronaut Launch:
 
 * Go to https://micronaut.io/launch/[Micronaut Launch]
@@ -28,51 +30,46 @@ Then follow the below steps depending on the build system chosen.
 
 === Configuring Gradle
 
-To configure Gradle, first apply the `com.google.protobuf` plugin:
+To configure Gradle for Java or Groovy projects, add the `com.google.protobuf` plugin to your existing `plugins` block:
 
-[source,groovy]
+[source,groovy,subs="attributes+"]
 ----
 plugins {
     ...
-include::test-suite-java/build.gradle[tags=plugin]
+include::src/main/docs/guide/snippets/gradle-java-setup.gradle[tags=plugin]
+}
+----
+
+Then configure protobuf source generation:
+
+[source,groovy,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/gradle-java-setup.gradle[tags=config]
+----
+NOTE: If you are using JDK 9 or above, provide the following compiler option to the gRPC plugin to skip `javax.annotation.Generated` stubs: `option '@generated=omit'` (added in link:https://github.com/grpc/grpc-java/releases/tag/v1.64.0[gRPC Java v1.64.0]). See link:https://github.com/grpc/grpc-java/issues/9179[issue 9179] for background.
+
+[source,groovy,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/gradle-java-setup.gradle[tags=omit-generated]
+----
+
+Use this Gradle configuration for Kotlin projects:
+
+[source,groovy,subs="attributes+"]
+----
+plugins {
+    ...
+include::src/main/docs/guide/snippets/gradle-kotlin-setup.gradle[tags=plugin]
 }
 
-----
-
-Then configure the gRPC and protobuf plugins:
-
-[source,groovy]
-----
-include::test-suite-java/build.gradle[tags=variables]
-
-include::test-suite-java/build.gradle[tags=config]
-----
-NOTE: If you are using JDK9 or above, in order to avoid issues javax packages, provide the following compiler option to the grpc plugin to skip these stubs: `option '@generated=omit'` (added on link:https://github.com/grpc/grpc-java/releases/tag/v1.64.0[grpc-kava v1.64.0]) See discussion here: link:https://github.com/grpc/grpc-java/issues/9179[issue 9179]
-
-[source,groovy]
-----
-    ...
-    generateProtoTasks {
-        all()*.plugins {
-            grpc {
-                option '@generated=omit'
-            } }
-    }
-----
-
-Use this configuration for Kotlin projects:
-
-[source,groovy]
-----
-include::test-suite-kotlin/build.gradle[tags=variables]
+include::src/main/docs/guide/snippets/gradle-kotlin-setup.gradle[tags=variables]
 
 dependencies {
-...
-include::test-suite-kotlin/build.gradle[tags=dependencies]
+    ...
+include::src/main/docs/guide/snippets/gradle-kotlin-setup.gradle[tags=dependencies]
 }
 
-include::test-suite-kotlin/build.gradle[tags=config]
-
+include::src/main/docs/guide/snippets/gradle-kotlin-setup.gradle[tags=config]
 ----
 
 If you want to generate Reactor-based stubs with https://github.com/salesforce/reactive-grpc[reactive-grpc], add the generator plugin and stub dependency alongside the standard gRPC code generation:
@@ -117,9 +114,13 @@ NOTE: If you wish to use gRPC standalone without the Micronaut HTTP server you s
 You can then run:
 
 [source,bash]
+----
 $ ./gradlew generateProto
+----
 
 To generate the Java sources from protobuf definitions in `src/main/proto`.
+
+The generated sources are the service stubs, not the server implementation. Before starting the application, create a bean that extends the generated `*ImplBase` type (or `*CoroutineImplBase` for Kotlin) as shown in the next section.
 
 === Configuring Maven
 
@@ -140,7 +141,9 @@ include::test-suite-java/pom.xml[tags=plugin, indent=0]
 You can then run:
 
 [source,bash]
+----
 $ ./mvnw generate-sources
+----
 
 To generate the Java sources from protobuf definitions in `src/main/proto`.
 

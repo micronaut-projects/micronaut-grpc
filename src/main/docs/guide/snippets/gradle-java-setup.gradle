@@ -1,0 +1,40 @@
+plugins {
+    ...
+    // tag::plugin[]
+    id 'com.google.protobuf' version '{protobuf-gradle-plugin-version}'
+    // end::plugin[]
+}
+
+// tag::config[]
+def grpcVersion = '{grpc-version}'
+def protobufVersion = '{protobuf-version}'
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+// end::config[]
+
+// tag::omit-generated[]
+generateProtoTasks {
+    all()*.plugins {
+        grpc {
+            option '@generated=omit'
+        }
+    }
+}
+// end::omit-generated[]

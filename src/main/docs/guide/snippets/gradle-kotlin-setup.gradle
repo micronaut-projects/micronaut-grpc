@@ -1,0 +1,48 @@
+plugins {
+    ...
+    // tag::plugin[]
+    id 'com.google.protobuf' version '{protobuf-gradle-plugin-version}'
+    // end::plugin[]
+}
+
+// tag::variables[]
+def grpcVersion = '{grpc-version}'
+def grpcKotlinVersion = '{grpc-kotlin-version}'
+def protobufVersion = '{protobuf-version}'
+// end::variables[]
+
+dependencies {
+    // tag::dependencies[]
+    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
+    implementation("io.grpc:grpc-services:$grpcVersion")
+    compileOnly("io.grpc:grpc-stub:$grpcVersion")
+    compileOnly("com.google.protobuf:protobuf-java:$protobufVersion")
+    compileOnly("javax.annotation:javax.annotation-api:{javax-annotation-api-version}")
+    // end::dependencies[]
+}
+
+// tag::config[]
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/grpckt'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
+        grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:$grpcKotlinVersion:jdk8@jar" }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+            grpckt {}
+        }
+    }
+}
+// end::config[]
