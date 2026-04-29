@@ -7,6 +7,7 @@ import io.grpc.ServerCallHandler
 import io.grpc.ServerInterceptor
 import io.grpc.internal.ServerImpl
 import io.grpc.netty.NettyServerBuilder
+import io.micronaut.context.BeanContext
 import io.micronaut.grpc.server.interceptor.OrderedServerInterceptor
 import spock.lang.Specification
 
@@ -14,7 +15,7 @@ class GrpcServerBuilderSpec extends Specification {
 
     def "test interceptor order - all implement Ordered"() {
         given:
-        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null)
+        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null, Mock(BeanContext))
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
@@ -30,6 +31,7 @@ class GrpcServerBuilderSpec extends Specification {
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)
+        1 * mockGrpcConfiguration.getExecutor() >> Optional.empty()
         0 * _
 
         and:
@@ -53,7 +55,7 @@ class GrpcServerBuilderSpec extends Specification {
 
     def "test interceptor order - some implement Ordered"() {
         given:
-        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null)
+        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null, Mock(BeanContext))
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
@@ -69,6 +71,7 @@ class GrpcServerBuilderSpec extends Specification {
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)
+        1 * mockGrpcConfiguration.getExecutor() >> Optional.empty()
         0 * _
 
         and:
@@ -92,7 +95,7 @@ class GrpcServerBuilderSpec extends Specification {
 
     def "test interceptor order - none implement Ordered"() {
         given:
-        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null)
+        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null, Mock(BeanContext))
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
@@ -108,6 +111,7 @@ class GrpcServerBuilderSpec extends Specification {
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)
+        1 * mockGrpcConfiguration.getExecutor() >> Optional.empty()
         0 * _
 
         and:

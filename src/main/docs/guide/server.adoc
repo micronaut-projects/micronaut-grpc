@@ -57,6 +57,7 @@ By default, the server will automatically be dependency injected with beans of t
 * `io.grpc.ServerTransportFilter` - Any transport filters declared as beans
 
 In addition, by default the server will be setup to use Micronaut's I/O executor service.
+Set `grpc.server.executor` to the name of an `Executor` bean to override that default from configuration.
 
 ==== Server Interceptor Ordering
 To produce a consistent and predictable order of execution for server interceptors, it is required
