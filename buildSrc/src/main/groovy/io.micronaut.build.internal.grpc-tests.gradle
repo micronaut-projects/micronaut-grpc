@@ -4,6 +4,10 @@ plugins {
     id "io.micronaut.application"
 }
 
+dependencies {
+    implementation platform(libs.boms.protobuf)
+}
+
 tasks.named("test") {
     useJUnitPlatform()
 }

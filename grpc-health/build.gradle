@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
 
+    api platform(libs.boms.protobuf)
     api platform(libs.boms.grpc)
     api projects.micronautGrpcAnnotation
     api(libs.managed.grpc.core)
