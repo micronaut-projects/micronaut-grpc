@@ -1247,38 +1247,43 @@ GreeterGrpc.GreeterStub greeterStub(
 
 
 <div class="paragraph">
-<p>gRPC includes tracing based on OpenCensus, however if you wish to use Micronaut&#8217;s integration with Jaeger or Zipkin you can do so by adding the following dependencies:</p>
+<p>Micronaut gRPC includes legacy OpenTracing-based tracing support. For new applications using Micronaut Tracing, add the OpenTelemetry gRPC integration:</p>
 </div>
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.tracing:micronaut-tracing-brave-http")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.tracing:micronaut-tracing-opentelemetry-grpc")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.tracing&lt;/groupId&gt;
-    &lt;artifactId&gt;micronaut-tracing-brave-http&lt;/artifactId&gt;
+    &lt;artifactId&gt;micronaut-tracing-opentelemetry-grpc&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
 </p>
 </div>
 <div class="paragraph">
+<p>Micronaut Tracing will then create spans for gRPC client requests, server requests, client responses, and server responses.</p>
+</div>
+<div class="paragraph">
+<p>To export traces to Google Cloud Trace, add the Google Cloud OpenTelemetry exporter:</p>
+</div>
+<div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">runtimeOnly(<span class="hljs-string">"io.opentracing.contrib:opentracing-grpc:0.2.1")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">runtimeOnly(<span class="hljs-string">"com.google.cloud.opentelemetry:exporter-auto")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
-    &lt;groupId&gt;io.opentracing.contrib&lt;/groupId&gt;
-    &lt;artifactId&gt;opentracing-grpc&lt;/artifactId&gt;
-    &lt;version&gt;0.2.1&lt;/version&gt;
+    &lt;groupId&gt;com.google.cloud.opentelemetry&lt;/groupId&gt;
+    &lt;artifactId&gt;exporter-auto&lt;/artifactId&gt;
     &lt;scope&gt;runtime&lt;/scope&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
@@ -1286,7 +1291,67 @@ GreeterGrpc.GreeterStub greeterStub(
 </p>
 </div>
 <div class="paragraph">
-<p>You then need to <a href="https://micronaut-projects.github.io/micronaut-tracing/latest/guide/#jaeger">configure either Jaeger or Zipkin</a> appropriately.</p>
+<p>Then configure OpenTelemetry to use the <code>google_cloud_trace</code> exporter:</p>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">otel.traces.exporter=google_cloud_trace</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">otel:
+  traces:
+    exporter: google_cloud_trace</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[otel]
+  [otel.traces]
+    exporter="google_cloud_trace"</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">otel {
+  traces {
+    exporter = "google_cloud_trace"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  otel {
+    traces {
+      exporter = "google_cloud_trace"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "otel": {
+    "traces": {
+      "exporter": "google_cloud_trace"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>When running outside Google Cloud, provide Application Default Credentials with the <code>GOOGLE_APPLICATION_CREDENTIALS</code> environment variable (or <code>gcloud auth application-default login</code>) and set <code>GOOGLE_CLOUD_PROJECT</code> if the project cannot be detected automatically.</p>
+</div>
+<div class="paragraph">
+<p>For additional exporter options and authentication details, see the <a href="https://micronaut-projects.github.io/micronaut-tracing/latest/guide/#exporters">Micronaut Tracing OpenTelemetry exporter documentation</a>.</p>
 </div>
 
 <h1 id="protocolBuffers"><a class="anchor" href="#protocolBuffers"></a>8 Protocol Buffers Support</h1>
