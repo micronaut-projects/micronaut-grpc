@@ -15,23 +15,17 @@ syntax = "proto3";
 
 option java_multiple_files = true;
 option java_package = "helloworld";
-option java_outer_classname = "HelloWorldProto";
-option objc_class_prefix = "HLW";
+option java_outer_classname = "ReactiveHelloWorldProto";
+option objc_class_prefix = "RHLW";
 
 package helloworld;
 
-// The greeting service definition.
-service Greeter {
+import "helloworld.proto";
+
+// A separate service definition used only to avoid registering two implementations of the
+// same service name in this test application. reactive-grpc generates Reactor bindings for
+// any standard gRPC service; a separate service definition is not required.
+service ReactiveGreeter {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {}
-}
-
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
-}
-
-// The response message containing the greetings
-message HelloReply {
-  string message = 1;
 }
