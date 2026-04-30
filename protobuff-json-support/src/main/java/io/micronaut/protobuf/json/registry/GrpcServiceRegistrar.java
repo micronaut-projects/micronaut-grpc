@@ -81,7 +81,13 @@ public class GrpcServiceRegistrar implements ExecutableMethodProcessor<GrpcRestJ
      */
     @Override
     public <B> void process(BeanDefinition<B> beanDefinition, ExecutableMethod<B, ?> method) {
-        BindableService service = (BindableService) applicationContext.getBean(beanDefinition.getBeanType());
+        Object bean = applicationContext.getBean(beanDefinition.getBeanType());
+        if (!(bean instanceof BindableService service)) {
+            throw new IllegalStateException(
+                "Bean " + beanDefinition.getBeanType().getSimpleName() +
+                    " must implement BindableService to use @GrpcRestJsonExposed"
+            );
+        }
         MethodDescriptor<?, ?> methodDescriptor = service.bindService()
             .getMethods()
             .stream()

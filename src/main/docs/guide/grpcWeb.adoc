@@ -37,12 +37,12 @@ For the sample `GreeterService#sayHello` method this becomes:
 
 The path prefix defaults to `grpc-web` and can be changed with:
 
-[configuration]
+[source,yaml]
 ----
 micronaut:
-  grpc:
-    web:
-      path: custom-grpc-web
+    grpc:
+        web:
+            path: custom-grpc-web
 ----
 
 == Supported Content Types
