@@ -143,7 +143,9 @@ public class GrpcProxyService {
             return (Message) registeredMethod.methodDescriptor().getRequestMarshaller()
                 .parse(new ByteArrayInputStream(requestBytes));
         } catch (RuntimeException e) {
-            throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Failed to parse protobuf request: " + e.getMessage());
+            var hse = new HttpStatusException(HttpStatus.BAD_REQUEST, "Failed to parse protobuf request: " + e.getMessage());
+            hse.initCause(e);
+            throw hse;
         }
     }
 
