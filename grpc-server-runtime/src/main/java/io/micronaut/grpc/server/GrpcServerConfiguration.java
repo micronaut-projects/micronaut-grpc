@@ -280,12 +280,12 @@ public class GrpcServerConfiguration {
     }
 
     @Nullable
-    Integer getMaxInboundMessageSize() {
+    final Integer getMaxInboundMessageSize() {
         return maxInboundMessageSize;
     }
 
     @Nullable
-    Integer getMaxInboundMetadataSize() {
+    final Integer getMaxInboundMetadataSize() {
         return maxInboundMetadataSize;
     }
 

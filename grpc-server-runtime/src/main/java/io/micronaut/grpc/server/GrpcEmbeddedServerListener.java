@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 original authors
+ * Copyright 2017-2026 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ import jakarta.inject.Singleton;
 @Internal
 @Singleton
 @Requires(beans = GrpcEmbeddedServer.class)
-class GrpcEmbeddedServerListener implements AutoCloseable{
+class GrpcEmbeddedServerListener implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(GrpcEmbeddedServerListener.class);
 
