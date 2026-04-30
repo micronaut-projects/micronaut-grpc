@@ -16,7 +16,11 @@
 package io.micronaut.grpc
 
 import io.grpc.Channel
+import io.grpc.CallOptions
+import io.grpc.ClientCall
+import io.grpc.ClientInterceptor
 import io.grpc.Metadata
+import io.grpc.MethodDescriptor
 import io.grpc.ServerCall
 import io.grpc.ServerCallHandler
 import io.grpc.ServerInterceptor
@@ -46,6 +50,9 @@ class InProcessHelloWordGrpcSpec extends Specification {
     MyInterceptor myInterceptor
 
     @Inject
+    MyClientInterceptor myClientInterceptor
+
+    @Inject
     GrpcEmbeddedServer embeddedServer
 
     void "test hello world grpc over an in-process server"() {
@@ -54,6 +61,14 @@ class InProcessHelloWordGrpcSpec extends Specification {
         embeddedServer.port == -1
         testBean.sayHello("Fred") == "Hello Fred"
         myInterceptor.intercepted
+        myClientInterceptor.intercepted
+
+        when:
+        embeddedServer.getURL()
+
+        then:
+        def e = thrown(UnsupportedOperationException)
+        e.message == 'In-process gRPC server does not expose a URL'
     }
 
     @Factory
@@ -74,6 +89,18 @@ class InProcessHelloWordGrpcSpec extends Specification {
         <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
             intercepted = true
             return next.startCall(call, headers)
+        }
+    }
+
+    @Singleton
+    static class MyClientInterceptor implements ClientInterceptor {
+
+        boolean intercepted = false
+
+        @Override
+        <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
+            intercepted = true
+            return next.newCall(method, callOptions)
         }
     }
 

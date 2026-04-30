@@ -72,7 +72,7 @@ public class InProcessGrpcEmbeddedServer extends GrpcEmbeddedServer {
                                 @NonNull GrpcServerConfiguration grpcServerConfiguration,
                                 @NonNull GrpcInProcessServerConfiguration inProcessConfiguration,
                                 @NonNull ServerBuilder<?> serverBuilder,
-                                @NonNull ApplicationEventPublisher eventPublisher,
+                                @NonNull ApplicationEventPublisher<Object> eventPublisher,
                                 @Nullable ComputeInstanceMetadataResolver computeInstanceMetadataResolver,
                                 @Nullable List<ServiceInstanceMetadataContributor> metadataContributors) {
         super(

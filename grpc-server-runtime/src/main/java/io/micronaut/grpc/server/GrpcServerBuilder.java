@@ -77,13 +77,9 @@ public class GrpcServerBuilder {
                                              @Nullable List<ServerInterceptor> interceptors,
                                              @Nullable List<ServerTransportFilter> serverTransportFilters,
                                              @Nullable List<ServerServiceDefinition> serverServiceDefinitions) {
-        return configureServerBuilder(
-            configuration.getServerBuilder(),
-            serviceList,
-            interceptors,
-            serverTransportFilters,
-            serverServiceDefinitions
-        );
+        ServerBuilder<?> serverBuilder = configuration.getServerBuilder();
+        configureServerBuilder(serverBuilder, serviceList, interceptors, serverTransportFilters, serverServiceDefinitions);
+        return serverBuilder;
     }
 
     /**
@@ -94,13 +90,12 @@ public class GrpcServerBuilder {
      * @param interceptors The server interceptors
      * @param serverTransportFilters The server transport filters
      * @param serverServiceDefinitions The server service definitions
-     * @return The configured builder
      */
-    protected ServerBuilder<?> configureServerBuilder(ServerBuilder<?> serverBuilder,
-                                                      @Nullable List<BindableService> serviceList,
-                                                      @Nullable List<ServerInterceptor> interceptors,
-                                                      @Nullable List<ServerTransportFilter> serverTransportFilters,
-                                                      @Nullable List<ServerServiceDefinition> serverServiceDefinitions) {
+    protected void configureServerBuilder(ServerBuilder<?> serverBuilder,
+                                          @Nullable List<BindableService> serviceList,
+                                          @Nullable List<ServerInterceptor> interceptors,
+                                          @Nullable List<ServerTransportFilter> serverTransportFilters,
+                                          @Nullable List<ServerServiceDefinition> serverServiceDefinitions) {
         if (healthStatusManagerContainer != null) {
             HealthStatusManager healthStatusManager = healthStatusManagerContainer.getHealthStatusManager();
             if (LOG.isDebugEnabled()) {
@@ -129,7 +124,5 @@ public class GrpcServerBuilder {
         if (CollectionUtils.isNotEmpty(serverServiceDefinitions)) {
             serverBuilder.addServices(serverServiceDefinitions);
         }
-
-        return serverBuilder;
     }
 }
