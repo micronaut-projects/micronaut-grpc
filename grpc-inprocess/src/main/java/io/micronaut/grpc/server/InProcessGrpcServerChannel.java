@@ -61,7 +61,8 @@ public class InProcessGrpcServerChannel {
                                            @Named(TaskExecutors.IO) ExecutorService executorService,
                                            List<ClientInterceptor> clientInterceptors) {
         ManagedChannelBuilder<?> builder = InProcessChannelBuilder.forName(
-            inProcessConfiguration.getInProcessName().orElseThrow(IllegalStateException::new)
+            inProcessConfiguration.getInProcessName().orElseThrow(() ->
+                new IllegalStateException("grpc.server.in-process-name must be configured to use the in-process channel"))
         ).executor(executorService);
         if (CollectionUtils.isNotEmpty(clientInterceptors)) {
             Collections.reverse(clientInterceptors);

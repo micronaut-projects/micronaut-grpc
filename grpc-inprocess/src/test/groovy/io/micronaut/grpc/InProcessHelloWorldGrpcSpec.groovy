@@ -41,7 +41,7 @@ import spock.lang.Specification
 
 @MicronautTest
 @Property(name = "grpc.server.in-process-name", value = "test-in-process")
-class InProcessHelloWordGrpcSpec extends Specification {
+class InProcessHelloWorldGrpcSpec extends Specification {
 
     @Inject
     TestBean testBean
