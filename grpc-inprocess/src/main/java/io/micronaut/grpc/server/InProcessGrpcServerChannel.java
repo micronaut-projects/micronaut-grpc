@@ -22,9 +22,12 @@ import java.util.concurrent.ExecutorService;
 import io.grpc.ClientInterceptor;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.inprocess.InProcessChannelBuilder;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.context.annotation.Replaces;
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.scheduling.TaskExecutors;
 
@@ -32,41 +35,34 @@ import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 
 /**
- * A factory that returns a {@link ManagedChannel} allowing communication with the embedded server.
- * Primarily used for testing.
+ * Provides an in-process managed channel for the embedded gRPC server.
  *
- * @author graemerocher
- * @since 1.0
+ * @since 5.0.0
  */
 @Factory
-public class GrpcServerChannel {
-
-    public static final String NAME = "grpc-server";
+@Requires(property = GrpcServerConfiguration.IN_PROCESS_NAME)
+@Internal
+public class InProcessGrpcServerChannel {
 
     /**
-     * Constructs a managed server channel.
+     * Constructs a managed in-process server channel.
      *
-     * @param server The server
+     * @param inProcessConfiguration The in-process server configuration
      * @param executorService The executor service
      * @param clientInterceptors The client interceptors
-     *
      * @return The channel
      */
     @Singleton
-    @Named(NAME)
+    @Named(GrpcServerChannel.NAME)
     @Requires(beans = GrpcEmbeddedServer.class)
     @Bean(preDestroy = "shutdown")
-    protected ManagedChannel serverChannel(
-        GrpcEmbeddedServer server,
-        @Named(TaskExecutors.IO) ExecutorService executorService,
-        List<ClientInterceptor> clientInterceptors) {
-        final ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forAddress(
-            server.getHost(),
-            server.getPort()
+    @Replaces(value = ManagedChannel.class, factory = GrpcServerChannel.class, named = GrpcServerChannel.NAME)
+    protected ManagedChannel serverChannel(GrpcInProcessServerConfiguration inProcessConfiguration,
+                                           @Named(TaskExecutors.IO) ExecutorService executorService,
+                                           List<ClientInterceptor> clientInterceptors) {
+        ManagedChannelBuilder<?> builder = InProcessChannelBuilder.forName(
+            inProcessConfiguration.getInProcessName().orElseThrow(IllegalStateException::new)
         ).executor(executorService);
-        if (!server.getServerConfiguration().isSecure()) {
-            builder.usePlaintext();
-        }
         if (CollectionUtils.isNotEmpty(clientInterceptors)) {
             Collections.reverse(clientInterceptors);
             builder.intercept(clientInterceptors);

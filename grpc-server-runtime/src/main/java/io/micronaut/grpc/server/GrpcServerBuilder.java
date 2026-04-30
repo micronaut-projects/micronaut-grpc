@@ -77,7 +77,30 @@ public class GrpcServerBuilder {
                                              @Nullable List<ServerInterceptor> interceptors,
                                              @Nullable List<ServerTransportFilter> serverTransportFilters,
                                              @Nullable List<ServerServiceDefinition> serverServiceDefinitions) {
-        final ServerBuilder<?> serverBuilder = configuration.getServerBuilder();
+        return configureServerBuilder(
+            configuration.getServerBuilder(),
+            serviceList,
+            interceptors,
+            serverTransportFilters,
+            serverServiceDefinitions
+        );
+    }
+
+    /**
+     * Configures the server builder with the service beans declared in the context.
+     *
+     * @param serverBuilder The server builder
+     * @param serviceList The bindable services
+     * @param interceptors The server interceptors
+     * @param serverTransportFilters The server transport filters
+     * @param serverServiceDefinitions The server service definitions
+     * @return The configured builder
+     */
+    protected ServerBuilder<?> configureServerBuilder(ServerBuilder<?> serverBuilder,
+                                                      @Nullable List<BindableService> serviceList,
+                                                      @Nullable List<ServerInterceptor> interceptors,
+                                                      @Nullable List<ServerTransportFilter> serverTransportFilters,
+                                                      @Nullable List<ServerServiceDefinition> serverServiceDefinitions) {
         if (healthStatusManagerContainer != null) {
             HealthStatusManager healthStatusManager = healthStatusManagerContainer.getHealthStatusManager();
             if (LOG.isDebugEnabled()) {
