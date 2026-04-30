@@ -17,6 +17,8 @@ package io.micronaut.grpc
 
 import io.grpc.ServerBuilder
 import io.micronaut.context.ApplicationContext
+import io.micronaut.context.env.Environment
+import io.micronaut.core.io.ResourceResolver
 import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.server.GrpcServerConfiguration
 import io.micronaut.test.extensions.spock.annotation.MicronautTest
@@ -70,5 +72,49 @@ class GrpcServerConfigurationSpec extends Specification {
         cleanup:
         server.shutdown().awaitTermination()
         ctx.close()
+    }
+
+    void "test GRPC server provides resource resolver without micronaut http resource factory"() {
+        given:
+        def port = SocketUtils.findAvailableTcpPort()
+        def ctx = ApplicationContext.builder(new DenyingClassLoader(getClass().classLoader, 'io.micronaut.http.resource.'))
+                .environments(Environment.TEST)
+                .properties([
+                        'grpc.server.port'           : port,
+                        'grpc.server.ssl.cert-chain' : 'classpath:example.crt',
+                        'grpc.server.ssl.private-key': 'classpath:example.key',
+                ])
+                .start()
+
+        when:
+        ResourceResolver resourceResolver = ctx.getBean(ResourceResolver)
+        GrpcServerConfiguration configuration = ctx.getBean(GrpcServerConfiguration)
+        def server = configuration.getServerBuilder().build()
+        server.start()
+
+        then:
+        resourceResolver.getResourceAsStream('classpath:example.crt').present
+        configuration.secure
+
+        cleanup:
+        server.shutdown().awaitTermination()
+        ctx.close()
+    }
+
+    private static final class DenyingClassLoader extends ClassLoader {
+        private final List<String> deniedPrefixes
+
+        DenyingClassLoader(ClassLoader parent, String... deniedPrefixes) {
+            super(parent)
+            this.deniedPrefixes = deniedPrefixes.toList()
+        }
+
+        @Override
+        protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+            if (deniedPrefixes.any { name.startsWith(it) }) {
+                throw new ClassNotFoundException(name)
+            }
+            return super.loadClass(name, resolve)
+        }
     }
 }
