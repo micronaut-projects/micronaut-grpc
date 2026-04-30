@@ -26,7 +26,9 @@ service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply) {}
 }
 
-// The greeting service definition using reactive-grpc generated bindings.
+// A separate service definition used only to avoid registering two implementations of the
+// same service name in this test application. reactive-grpc generates Reactor bindings for
+// any standard gRPC service; a separate service definition is not required.
 service ReactiveGreeter {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {}

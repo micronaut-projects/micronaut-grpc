@@ -25,6 +25,8 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // tag::reactive-test[]
@@ -39,7 +41,7 @@ class ReactiveGreetingEndpointTest {
         String message = Mono.just(HelloRequest.newBuilder().setName("Fred").build())
             .transform(reactiveStub::sayHello)
             .map(HelloReply::getMessage)
-            .block();
+            .block(Duration.ofSeconds(5));
 
         assertEquals("Hello Fred", message);
     }

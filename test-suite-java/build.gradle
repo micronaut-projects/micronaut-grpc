@@ -74,49 +74,36 @@ sourceSets {
         java {
             srcDirs 'build/generated/source/proto/main/grpc'
             srcDirs 'build/generated/source/proto/main/java'
+// end::config[]
+// tag::reactive-source-set[]
+            srcDirs 'build/generated/source/proto/main/reactor'
+// end::reactive-source-set[]
+// tag::config[]
         }
     }
 }
 // end::config[]
-
-// tag::reactive-source-set[]
-sourceSets {
-    main {
-        java {
-            srcDirs 'build/generated/source/proto/main/reactor'
-        }
-    }
-}
-// end::reactive-source-set[]
 
 // tag::config[]
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
+// end::config[]
+// tag::reactive-plugin[]
+        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
+// end::reactive-plugin[]
+// tag::config[]
     }
     generateProtoTasks {
         all()*.plugins {
             grpc {}
+// end::config[]
+// tag::reactive-config[]
+            reactor {}
+// end::reactive-config[]
+// tag::config[]
         }
     }
 }
 // end::config[]
-
-// tag::reactive-plugin[]
-protobuf {
-    plugins {
-        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
-    }
-}
-// end::reactive-plugin[]
-
-// tag::reactive-config[]
-protobuf {
-    generateProtoTasks {
-        all()*.plugins {
-            reactor {}
-        }
-    }
-}
-// end::reactive-config[]

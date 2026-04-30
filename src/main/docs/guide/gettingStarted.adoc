@@ -86,7 +86,13 @@ dependencies {
 include::test-suite-java/build.gradle[tags=reactive-dependencies]
 }
 
+sourceSets {
+    main {
+        java {
 include::test-suite-java/build.gradle[tags=reactive-source-set]
+        }
+    }
+}
 
 protobuf {
 ...
