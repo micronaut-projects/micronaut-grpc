@@ -18,6 +18,7 @@ package io.micronaut.grpc.channels;
 import io.grpc.netty.NettyChannelBuilder;
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.env.Environment;
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.convert.format.MapFormat;
 import io.micronaut.core.naming.Named;
 import io.micronaut.core.naming.conventions.StringConvention;
@@ -55,12 +56,27 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
     private final Duration connectionTimeout;
 
     /**
-     * Constructors a new managed channel configuration.
+     * Constructs a new managed channel configuration.
      *
      * @param name            The name
      * @param env             The environment
      * @param executorService The executor service to use
+     * @deprecated Use {@link #GrpcManagedChannelConfiguration(String, String, Environment, ExecutorService)} instead
      */
+    @Deprecated(since = "4.9.0", forRemoval = true)
+    protected GrpcManagedChannelConfiguration(String name, Environment env, ExecutorService executorService) {
+        this(name, PREFIX + '.' + name, env, executorService);
+    }
+
+    /**
+     * Constructs a new managed channel configuration.
+     *
+     * @param name            The name
+     * @param propertyPrefix  The property prefix for reading environment configuration
+     * @param env             The environment
+     * @param executorService The executor service to use
+     */
+    @Internal
     protected GrpcManagedChannelConfiguration(String name, String propertyPrefix, Environment env, ExecutorService executorService) {
         this.name = name;
         this.connectOnStartup = env.getProperty(propertyPrefix + CONNECT_ON_STARTUP, Boolean.class).isPresent();
