@@ -34,7 +34,6 @@ import io.micronaut.protobuf.json.exception.ServiceNotFoundException;
 import io.micronaut.protobuf.json.grpc.GrpcProxyService;
 import jakarta.inject.Singleton;
 
-import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -180,6 +179,18 @@ public final class GrpcWebController {
         if (value == null) {
             return "";
         }
-        return URLEncoder.encode(value, StandardCharsets.UTF_8).replace("+", "%20");
+        // gRPC grpc-message percent-encoding per the gRPC HTTP/2 spec:
+        // allow printable ASCII 0x20–0x7E except '%' (0x25) unencoded; encode everything else.
+        var bytes = value.getBytes(StandardCharsets.UTF_8);
+        var sb = new StringBuilder(bytes.length * 3);
+        for (byte b : bytes) {
+            int c = b & 0xFF;
+            if (c >= 0x20 && c <= 0x7E && c != '%') {
+                sb.append((char) c);
+            } else {
+                sb.append(String.format("%%%02X", c));
+            }
+        }
+        return sb.toString();
     }
 }
