@@ -18,6 +18,8 @@ package io.micronaut.protobuf.json.grpc;
 import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
 import io.micronaut.context.ApplicationContext;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.inject.ExecutableMethod;
 import io.micronaut.protobuf.json.ProtobufJsonTranscoder;
 import io.micronaut.protobuf.json.exception.GrpcInvocationException;
@@ -137,8 +139,12 @@ public class GrpcProxyService {
      */
     public Message parseRequestMessage(String serviceName, String methodName, byte[] requestBytes) {
         GrpcServiceRegistry.RegisteredMethod registeredMethod = resolveRegisteredMethod(serviceName, methodName);
-        return (Message) registeredMethod.methodDescriptor().getRequestMarshaller()
-            .parse(new ByteArrayInputStream(requestBytes));
+        try {
+            return (Message) registeredMethod.methodDescriptor().getRequestMarshaller()
+                .parse(new ByteArrayInputStream(requestBytes));
+        } catch (RuntimeException e) {
+            throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Failed to parse protobuf request: " + e.getMessage());
+        }
     }
 
     private String toJson(List<Message> responseMessages) {

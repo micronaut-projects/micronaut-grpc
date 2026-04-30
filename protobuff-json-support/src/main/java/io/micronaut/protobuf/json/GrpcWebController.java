@@ -34,6 +34,7 @@ import io.micronaut.protobuf.json.exception.ServiceNotFoundException;
 import io.micronaut.protobuf.json.grpc.GrpcProxyService;
 import jakarta.inject.Singleton;
 
+import java.net.URLEncoder;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -90,7 +91,7 @@ public final class GrpcWebController {
     private MutableHttpResponse<byte[]> errorResponse(boolean textEncoded, int grpcStatus, String grpcMessage) {
         return baseResponse(encodeResponseBody(List.of(), grpcStatus, grpcMessage, textEncoded), textEncoded)
             .header("grpc-status", Integer.toString(grpcStatus))
-            .header("grpc-message", sanitizeHeaderValue(grpcMessage));
+            .header("grpc-message", percentEncodeMessage(grpcMessage));
     }
 
     private MutableHttpResponse<byte[]> baseResponse(byte[] body, boolean textEncoded) {
@@ -161,7 +162,7 @@ public final class GrpcWebController {
     private byte[] trailerFrame(int grpcStatus, String grpcMessage) {
         StringBuilder trailers = new StringBuilder("grpc-status:").append(grpcStatus).append("\r\n");
         if (grpcMessage != null && !grpcMessage.isBlank()) {
-            trailers.append("grpc-message:").append(sanitizeHeaderValue(grpcMessage)).append("\r\n");
+            trailers.append("grpc-message:").append(percentEncodeMessage(grpcMessage)).append("\r\n");
         }
         byte[] payload = trailers.toString().getBytes(StandardCharsets.US_ASCII);
         ByteBuffer buffer = ByteBuffer.allocate(5 + payload.length);
@@ -175,7 +176,10 @@ public final class GrpcWebController {
         return contentType != null && contentType.startsWith(GRPC_WEB_TEXT_PROTO);
     }
 
-    private String sanitizeHeaderValue(String value) {
-        return value == null ? "" : value.replace('\r', ' ').replace('\n', ' ');
+    private static String percentEncodeMessage(String value) {
+        if (value == null) {
+            return "";
+        }
+        return URLEncoder.encode(value, StandardCharsets.UTF_8).replace("+", "%20");
     }
 }
