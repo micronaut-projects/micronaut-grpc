@@ -8,7 +8,7 @@ The channel can be configured using properties defined under `grpc.client` by de
 
 For example, if you wish to disable secure communication:
 
-[source,yaml]
+[configuration]
 ----
 grpc:
     client:
@@ -38,6 +38,32 @@ grpc:
 ----
 
 When a client is disabled, optional or nullable `@GrpcChannel` injection points resolve to an empty value, while required injection points fail with a dependency injection error.
+
+For gRPC service-config based retry and resiliency features, you can configure `default-service-config` as a nested map. The map is bound using Micronaut's nested/raw map binding so gRPC service config keys such as `methodConfig`, `retryPolicy`, and `hedgingPolicy` are preserved as-is.
+
+[configuration]
+----
+grpc:
+    client:
+        plaintext: true
+        enable-retry: true
+        max-retry-attempts: 4
+        default-service-config:
+            methodConfig:
+                -
+                    name:
+                        -
+                            service: helloworld.Greeter
+                    retryPolicy:
+                        maxAttempts: 4
+                        initialBackoff: 0.1s
+                        maxBackoff: 1s
+                        backoffMultiplier: 2
+                        retryableStatusCodes:
+                            - UNAVAILABLE
+----
+
+The same structure can be defined per channel under `grpc.channels.<name>.default-service-config`.
 
 Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
 
@@ -77,14 +103,28 @@ The above example requires that `my.server` and `my.port` are specified in `appl
 
 For example given the following configuration:
 
-[source,yaml]
+[configuration]
 ----
 grpc:
     channels:
         greeter:
             address: '${my.server}:${my.port}'
             plaintext: true
+            enable-retry: true
             max-retry-attempts: 10
+            default-service-config:
+                methodConfig:
+                    -
+                        name:
+                            -
+                                service: helloworld.Greeter
+                        retryPolicy:
+                            maxAttempts: 4
+                            initialBackoff: 0.1s
+                            maxBackoff: 1s
+                            backoffMultiplier: 2
+                            retryableStatusCodes:
+                                - UNAVAILABLE
 ----
 
 You can then define the `@GrpcChannel` annotation as follows:
