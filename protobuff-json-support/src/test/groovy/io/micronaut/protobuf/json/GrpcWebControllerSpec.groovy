@@ -60,13 +60,13 @@ class GrpcWebControllerSpec extends Specification {
 
         and:
         response.header("grpc-status") == "13"
-        response.header("grpc-message") == "bad  message"
+        response.header("grpc-message") == "bad%0D%0Amessage"
 
         and:
         def frames = readFrames(response.body())
         frames*.trailer == [true]
         new String(frames[0].payload, StandardCharsets.US_ASCII).contains("grpc-status:13")
-        new String(frames[0].payload, StandardCharsets.US_ASCII).contains("grpc-message:bad  message")
+        new String(frames[0].payload, StandardCharsets.US_ASCII).contains("grpc-message:bad%0D%0Amessage")
     }
 
     @Unroll
