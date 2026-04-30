@@ -85,13 +85,17 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
 
     private NettyChannelBuilder getChannelBuilder(SocketAddress serverAddress) {
         if (serverAddress instanceof InetSocketAddress isa) {
-            if (isa.isUnresolved()) {
-                isa = new InetSocketAddress(isa.getHostString(), isa.getPort());
-            }
-            return NettyChannelBuilder.forAddress(isa.getHostName(), isa.getPort());
+            return NettyChannelBuilder.forTarget(formatTarget(isa.getHostString(), isa.getPort()));
         } else {
             return NettyChannelBuilder.forAddress(serverAddress);
         }
+    }
+
+    private String formatTarget(String host, int port) {
+        if (host.indexOf(':') > -1 && !(host.startsWith("[") && host.endsWith("]"))) {
+            return '[' + host + "]:" + port;
+        }
+        return host + ':' + port;
     }
 
     /**
