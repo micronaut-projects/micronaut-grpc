@@ -19,6 +19,8 @@ import jakarta.inject.Singleton
 import spock.lang.Retry
 import spock.lang.Specification
 
+import java.net.InetSocketAddress
+
 class GrpcNamedChannelSpec extends Specification {
 
     void "test named client address uses target syntax"() {
@@ -32,6 +34,22 @@ class GrpcNamedChannelSpec extends Specification {
 
         then:
         extractTarget(config.channelBuilder) == 'greeter-service:8443'
+
+        cleanup:
+        context.close()
+    }
+
+    void "test named client ipv6 address uses bracketed target syntax"() {
+        given:
+        def context = ApplicationContext.run([
+                'grpc.channels.greeter.address': InetSocketAddress.createUnresolved('::1', 8443)
+        ])
+
+        when:
+        def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
+
+        then:
+        extractTarget(config.channelBuilder) == '[::1]:8443'
 
         cleanup:
         context.close()
