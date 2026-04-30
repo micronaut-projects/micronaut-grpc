@@ -253,7 +253,13 @@ cd demo</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">sourceSets {
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
+    grpcVersion = libs.versions.managed.grpc.asProvider().get()
+    protobufVersion = libs.versions.managed.protobuf.asProvider().get()
+}
+
+
+sourceSets {
     main {
         java {
             srcDirs 'build/generated/source/proto/main/grpc'
@@ -261,14 +267,15 @@ cd demo</code></pre>
         }
     }
 }
-
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
     }
     generateProtoTasks {
-        all()*.plugins { grpc {} }
+        all()*.plugins {
+            grpc {}
+        }
     }
 }</code></pre>
 </div>
@@ -339,6 +346,38 @@ protobuf {
             grpckt {}
         }
     }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to generate Reactor-based stubs with <a href="https://github.com/salesforce/reactive-grpc">reactive-grpc</a>, add the generator plugin and stub dependency alongside the standard gRPC code generation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
+    reactiveGrpcVersion = libs.versions.reactive.grpc.get()
+}
+
+dependencies {
+...
+    implementation platform(libs.micronaut.reactor)
+    implementation libs.reactive.grpc.stub
+    implementation "io.projectreactor:reactor-core"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/reactor'
+        }
+    }
+}
+
+protobuf {
+...
+        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
+...
+            reactor {}
 }</code></pre>
 </div>
 </div>
@@ -602,6 +641,31 @@ class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { // <b class="conum"
 <td>The <code>StreamObserver</code> is used to send a response to the client.</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>If you generate Reactor bindings with <code>reactive-grpc</code>, Micronaut can register the generated <code>BindableService</code> implementation in exactly the same way. Implement the generated Reactor base class as a singleton bean:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton
+public class ReactiveGreetingEndpoint extends ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase {
+
+    private final GreetingService greetingService;
+
+    public ReactiveGreetingEndpoint(GreetingService greetingService) {
+        this.greetingService = greetingService;
+    }
+
+    @Override
+    public Mono&lt;HelloReply&gt; sayHello(Mono&lt;HelloRequest&gt; request) {
+        return request.map(helloRequest -&gt;
+            HelloReply.newBuilder()
+                .setMessage(greetingService.sayHello(helloRequest.getName()))
+                .build()
+        );
+    }
+}</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1099,6 +1163,41 @@ GreeterGrpc.GreeterStub reactiveStub(
 </div>
 <div class="paragraph">
 <p>Using service IDs in this way is the preferred way to set up gRPC clients, because it works nicely with Service Discovery (see the next section).</p>
+</div>
+<div class="paragraph">
+<p>If you generate Reactor bindings with <code>reactive-grpc</code>, define the generated Reactor stub in the same kind of factory and inject the <code>ManagedChannel</code> with <code>@GrpcChannel</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @Bean
+    ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub reactiveStub(
+        @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) {
+        return ReactorReactiveGreeterGrpc.newReactorStub(channel);
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The resulting stub can then be injected into your application or tests and used directly with Reactor operators:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MicronautTest
+class ReactiveGreetingEndpointTest {
+
+    @Inject
+    ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub reactiveStub;
+
+    @Test
+    void testReactiveHelloWorld() {
+        String message = Mono.just(HelloRequest.newBuilder().setName("Fred").build())
+            .transform(reactiveStub::sayHello)
+            .map(HelloReply::getMessage)
+            .block(Duration.ofSeconds(5));
+
+        assertEquals("Hello Fred", message);
+    }
+}</code></pre>
+</div>
 </div>
 </div>
 
