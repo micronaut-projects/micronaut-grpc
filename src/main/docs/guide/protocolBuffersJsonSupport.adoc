@@ -15,6 +15,7 @@ include::test-suite-protobuff-json-java/src/main/java/com/example/services/Greet
 ----
 
 Micronaut will now support the encoding and decoding requests / responses of type `application/json` via http 1.1.
+For browser-oriented gRPC-Web support, see the dedicated guide section at xref:grpcWeb.adoc[gRPC-Web].
 
 == How this works
 
@@ -75,7 +76,4 @@ curl -X POST http://localhost:8080/grpc-json/GreeterService/sayHello \
 -H "Content-Type: application/json" \
 -d '{"name": "YourName"}'
 ----
-
-
-
 

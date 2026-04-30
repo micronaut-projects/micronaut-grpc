@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2025 original authors
+ * Copyright 2017-2026 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,9 @@
  */
 package io.micronaut.protobuf.json.registry;
 
+import io.grpc.BindableService;
+import io.grpc.MethodDescriptor;
+import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.processor.ExecutableMethodProcessor;
 import io.micronaut.core.annotation.Experimental;
 import io.micronaut.grpc.annotation.GrpcRestJsonExposed;
@@ -23,6 +26,8 @@ import io.micronaut.inject.ExecutableMethod;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.beans.Introspector;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -57,9 +62,12 @@ public class GrpcServiceRegistrar implements ExecutableMethodProcessor<GrpcRestJ
 
     private static final Logger LOG = LoggerFactory.getLogger(GrpcServiceRegistrar.class);
     private final GrpcServiceRegistry registry;
+    private final ApplicationContext applicationContext;
 
-    public GrpcServiceRegistrar(GrpcServiceRegistry registry) {
+    public GrpcServiceRegistrar(GrpcServiceRegistry registry,
+                                ApplicationContext applicationContext) {
         this.registry = checkNotNull(registry, "GrpcServiceRegistry cannot be null");
+        this.applicationContext = checkNotNull(applicationContext, "ApplicationContext cannot be null");
     }
 
     /**
@@ -73,8 +81,22 @@ public class GrpcServiceRegistrar implements ExecutableMethodProcessor<GrpcRestJ
      */
     @Override
     public <B> void process(BeanDefinition<B> beanDefinition, ExecutableMethod<B, ?> method) {
+        BindableService service = (BindableService) applicationContext.getBean(beanDefinition.getBeanType());
+        MethodDescriptor<?, ?> methodDescriptor = service.bindService()
+            .getMethods()
+            .stream()
+            .map(definition -> definition.getMethodDescriptor())
+            .filter(descriptor -> matchesMethodName(method.getMethodName(), descriptor))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("No gRPC MethodDescriptor found for " +
+                beanDefinition.getBeanType().getSimpleName() + "." + method.getMethodName()));
         LOG.info("Registering gRPC JSON-exposed method '{}' from bean '{}'",
             method.getMethodName(), beanDefinition.getBeanType().getSimpleName());
-        registry.register(beanDefinition.getBeanType(), method.getMethodName(), method);
+        registry.register(beanDefinition.getBeanType(), method.getMethodName(), method, methodDescriptor);
+    }
+
+    private boolean matchesMethodName(String executableMethodName, MethodDescriptor<?, ?> descriptor) {
+        return executableMethodName.equals(descriptor.getBareMethodName()) ||
+            executableMethodName.equals(Introspector.decapitalize(descriptor.getBareMethodName()));
     }
 }
