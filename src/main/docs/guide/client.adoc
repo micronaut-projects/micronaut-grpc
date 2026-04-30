@@ -111,7 +111,7 @@ grpc:
             address: '${my.server}:${my.port}'
             plaintext: true
             enable-retry: true
-            max-retry-attempts: 10
+            max-retry-attempts: 4
             default-service-config:
                 methodConfig:
                     -

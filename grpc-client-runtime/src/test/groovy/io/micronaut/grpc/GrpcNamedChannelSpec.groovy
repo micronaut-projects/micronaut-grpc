@@ -323,8 +323,16 @@ class GrpcNamedChannelSpec extends Specification {
     }
 
     private static Object getFieldValue(Object target, String fieldName) {
-        def field = target.class.getDeclaredField(fieldName)
-        field.accessible = true
-        field.get(target)
+        Class<?> currentClass = target.class
+        while (currentClass != null) {
+            try {
+                def field = currentClass.getDeclaredField(fieldName)
+                field.setAccessible(true)
+                return field.get(target)
+            } catch (NoSuchFieldException ignored) {
+                currentClass = currentClass.getSuperclass()
+            }
+        }
+        throw new NoSuchFieldException("Field '${fieldName}' not found on ${target.class.name} or its superclasses")
     }
 }
