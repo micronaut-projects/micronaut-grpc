@@ -39,7 +39,7 @@ import jakarta.inject.Singleton;
 @Internal
 @Singleton
 @Requires(beans = GrpcEmbeddedServer.class)
-class GrpcEmbeddedServerListener implements AutoCloseable{
+class GrpcEmbeddedServerListener implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(GrpcEmbeddedServerListener.class);
 

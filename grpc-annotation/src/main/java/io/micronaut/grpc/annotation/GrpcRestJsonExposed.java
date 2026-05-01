@@ -18,7 +18,11 @@ package io.micronaut.grpc.annotation;
 import io.micronaut.context.annotation.Executable;
 import io.micronaut.core.annotation.Experimental;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Annotation used to expose a gRPC method for handling JSON over REST requests.
