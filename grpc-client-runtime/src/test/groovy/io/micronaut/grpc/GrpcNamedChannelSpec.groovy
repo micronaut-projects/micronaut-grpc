@@ -9,6 +9,7 @@ import io.micronaut.context.ApplicationContext
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.exceptions.BeanInstantiationException
 import io.micronaut.context.exceptions.DependencyInjectionException
+import io.micronaut.context.exceptions.DisabledBeanException
 import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.channels.GrpcManagedChannelConfiguration
@@ -117,7 +118,8 @@ class GrpcNamedChannelSpec extends Specification {
 
         then:
         def ex = thrown(DependencyInjectionException)
-        ex.message.contains("GRPC client [greeter] is disabled via configuration")
+        ex.cause instanceof DisabledBeanException
+        ex.cause.message.contains("GRPC client [greeter] is disabled via configuration")
 
         cleanup:
         embeddedServer.close()
@@ -142,7 +144,8 @@ class GrpcNamedChannelSpec extends Specification {
 
         then:
         def ex = thrown(DependencyInjectionException)
-        ex.message.contains("GRPC client [greeter] is disabled via configuration")
+        ex.cause instanceof DisabledBeanException
+        ex.cause.message.contains("GRPC client [greeter] is disabled via configuration")
 
         cleanup:
         embeddedServer.close()
