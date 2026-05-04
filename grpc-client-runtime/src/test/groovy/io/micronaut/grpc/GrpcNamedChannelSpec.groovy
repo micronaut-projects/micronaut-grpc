@@ -55,6 +55,22 @@ class GrpcNamedChannelSpec extends Specification {
         context.close()
     }
 
+    void "test named client preserves bracketed ipv6 target syntax"() {
+        given:
+        def context = ApplicationContext.run([
+                'grpc.channels.greeter.address': InetSocketAddress.createUnresolved('[::1]', 8443)
+        ])
+
+        when:
+        def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
+
+        then:
+        extractTarget(config.channelBuilder) == '[::1]:8443'
+
+        cleanup:
+        context.close()
+    }
+
     // retry because on Cloud CI you may have a race condition regarding port availability and binding
     @Retry
     void "test named client"() {
