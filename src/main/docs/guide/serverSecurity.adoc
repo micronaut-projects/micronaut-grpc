@@ -1,0 +1,54 @@
+=== gRPC Server Security
+
+Micronaut gRPC can integrate with Micronaut Security on the server side through `io.grpc.ServerInterceptor` beans.
+
+For JWT-based authentication, add both dependencies:
+
+- `dependency:io.micronaut.grpc:micronaut-grpc-server-security-jwt[]`
+- `dependency:io.micronaut.security:micronaut-security-jwt[]`
+
+The JWT module reads a token from gRPC metadata, validates it with Micronaut Security token validators, and then evaluates the configured Micronaut Security `intercept-url-map` rules against the gRPC method name.
+
+==== JWT Metadata
+
+By default, the token is read from the `JWT` metadata key.
+
+[configuration]
+----
+grpc:
+  server:
+    security:
+      token:
+        jwt:
+          enabled: true
+          metadata-key-name: JWT
+----
+
+If you want to use an `Authorization` metadata key instead, set `metadata-key-name` accordingly. The interceptor accepts both a raw token value and a `Bearer <token>` value.
+
+==== Authorization Rules
+
+Authorization uses Micronaut Security's `intercept-url-map`. For gRPC calls, the `pattern` is matched against the fully qualified gRPC method name, for example `helloworld.Greeter/SayHello`.
+
+[configuration]
+----
+micronaut:
+  security:
+    intercept-url-map:
+      - pattern: helloworld.Greeter/SayHello
+        access:
+          - isAuthenticated()
+      - pattern: helloworld.Admin/.*
+        access:
+          - ROLE_ADMIN
+----
+
+If a rule requires authentication and no token is provided, the server responds with `UNAUTHENTICATED`. If a token is provided but validation fails, or the authenticated principal does not satisfy the configured access rules, the server responds with `PERMISSION_DENIED`.
+
+With Micronaut Security's default `micronaut.security.reject-not-found=true`, unmatched gRPC methods are rejected as well. Define explicit `intercept-url-map` patterns for the methods you want to secure, or set `reject-not-found` to `false` if unmatched methods should remain accessible.
+
+==== Configuration Reference
+
+include::{includedir}configurationProperties/io.micronaut.grpc.server.security.GrpcServerSecurityConfiguration.adoc[]
+
+include::{includedir}configurationProperties/io.micronaut.grpc.server.security.jwt.GrpcServerSecurityJwtConfiguration.adoc[]
