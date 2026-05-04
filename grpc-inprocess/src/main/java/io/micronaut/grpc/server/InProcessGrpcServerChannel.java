@@ -47,7 +47,7 @@ public class InProcessGrpcServerChannel {
     /**
      * Constructs a managed in-process server channel.
      *
-     * @param inProcessConfiguration The in-process server configuration
+     * @param server The embedded gRPC server
      * @param executorService The executor service
      * @param clientInterceptors The client interceptors
      * @return The channel
@@ -57,12 +57,12 @@ public class InProcessGrpcServerChannel {
     @Requires(beans = GrpcEmbeddedServer.class)
     @Bean(preDestroy = "shutdown")
     @Replaces(value = ManagedChannel.class, factory = GrpcServerChannel.class, named = GrpcServerChannel.NAME)
-    protected ManagedChannel serverChannel(GrpcInProcessServerConfiguration inProcessConfiguration,
+    protected ManagedChannel serverChannel(GrpcEmbeddedServer server,
                                            @Named(TaskExecutors.IO) ExecutorService executorService,
                                            List<ClientInterceptor> clientInterceptors) {
+        server.start();
         ManagedChannelBuilder<?> builder = InProcessChannelBuilder.forName(
-            inProcessConfiguration.getInProcessName().orElseThrow(() ->
-                new IllegalStateException("grpc.server.in-process-name must be configured to use the in-process channel"))
+            server.getHost()
         ).executor(executorService);
         if (CollectionUtils.isNotEmpty(clientInterceptors)) {
             Collections.reverse(clientInterceptors);
