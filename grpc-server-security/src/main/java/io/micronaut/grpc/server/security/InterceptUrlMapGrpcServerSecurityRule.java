@@ -25,7 +25,9 @@ import io.micronaut.security.rules.SecurityRuleResult;
 import io.micronaut.security.token.RolesFinder;
 import jakarta.inject.Singleton;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * Evaluates Micronaut security intercept-url-map rules against gRPC method names.
@@ -35,7 +37,7 @@ import java.util.Optional;
 @Singleton
 public final class InterceptUrlMapGrpcServerSecurityRule extends AbstractGrpcServerSecurityRule {
 
-    private final SecurityConfiguration securityConfiguration;
+    private final List<CompiledInterceptUrlMapPattern> compiledPatterns;
 
     /**
      * @param securityConfiguration The Micronaut security configuration
@@ -43,19 +45,32 @@ public final class InterceptUrlMapGrpcServerSecurityRule extends AbstractGrpcSer
      */
     public InterceptUrlMapGrpcServerSecurityRule(SecurityConfiguration securityConfiguration, RolesFinder rolesFinder) {
         super(rolesFinder);
-        this.securityConfiguration = securityConfiguration;
+        this.compiledPatterns = securityConfiguration.getInterceptUrlMap().stream()
+            .map(CompiledInterceptUrlMapPattern::new)
+            .toList();
     }
 
     @Override
     public <T, S> SecurityRuleResult check(ServerCall<T, S> serverCall,
                                            Metadata metadata,
                                            @Nullable Authentication authentication) {
-        Optional<InterceptUrlMapPattern> matchedPattern = securityConfiguration.getInterceptUrlMap().stream()
-            .filter(interceptUrlMapPattern -> serverCall.getMethodDescriptor().getFullMethodName().matches(interceptUrlMapPattern.getPattern()))
+        Optional<CompiledInterceptUrlMapPattern> matchedPattern = compiledPatterns.stream()
+            .filter(interceptUrlMapPattern -> interceptUrlMapPattern.matches(serverCall.getMethodDescriptor().getFullMethodName()))
             .findFirst();
         if (matchedPattern.isEmpty()) {
             return SecurityRuleResult.UNKNOWN;
         }
-        return compareRoles(matchedPattern.get().getAccess(), getRoles(authentication));
+        return compareRoles(matchedPattern.get().interceptUrlMapPattern().getAccess(), getRoles(authentication));
+    }
+
+    private record CompiledInterceptUrlMapPattern(InterceptUrlMapPattern interceptUrlMapPattern, Pattern pattern) {
+
+        private CompiledInterceptUrlMapPattern(InterceptUrlMapPattern interceptUrlMapPattern) {
+            this(interceptUrlMapPattern, Pattern.compile(interceptUrlMapPattern.getPattern()));
+        }
+
+        private boolean matches(String methodName) {
+            return pattern.matcher(methodName).matches();
+        }
     }
 }
