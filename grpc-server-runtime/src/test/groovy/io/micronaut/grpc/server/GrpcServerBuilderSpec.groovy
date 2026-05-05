@@ -7,7 +7,6 @@ import io.grpc.ServerCallHandler
 import io.grpc.ServerInterceptor
 import io.grpc.internal.ServerImpl
 import io.grpc.netty.NettyServerBuilder
-import io.micronaut.context.BeanContext
 import io.micronaut.grpc.server.interceptor.OrderedServerInterceptor
 import spock.lang.Specification
 
@@ -15,7 +14,7 @@ class GrpcServerBuilderSpec extends Specification {
 
     def "test interceptor order - all implement Ordered"() {
         given:
-        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null, Mock(BeanContext))
+        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null)
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
@@ -55,7 +54,7 @@ class GrpcServerBuilderSpec extends Specification {
 
     def "test interceptor order - some implement Ordered"() {
         given:
-        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null, Mock(BeanContext))
+        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null)
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [
@@ -95,7 +94,7 @@ class GrpcServerBuilderSpec extends Specification {
 
     def "test interceptor order - none implement Ordered"() {
         given:
-        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null, Mock(BeanContext))
+        GrpcServerBuilder grpcServerBuilder = new GrpcServerBuilder(null)
 
         GrpcServerConfiguration mockGrpcConfiguration = Mock()
         List<ServerInterceptor> interceptors = [

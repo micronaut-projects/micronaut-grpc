@@ -52,7 +52,17 @@ public class GrpcServerBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(GrpcServerBuilder.class);
     @Nullable
     private final HealthStatusManagerContainer healthStatusManagerContainer;
+    @Nullable
     private final BeanContext beanContext;
+
+    /**
+     * Constructs the {@link ServerBuilder} instance.
+     *
+     * @param healthStatusManagerContainer if enabled, inject a GRPC health status manager.
+     */
+    public GrpcServerBuilder(@Nullable HealthStatusManagerContainer healthStatusManagerContainer) {
+        this(healthStatusManagerContainer, null);
+    }
 
     /**
      * Constructs the {@link ServerBuilder} instance.
@@ -87,6 +97,9 @@ public class GrpcServerBuilder {
                                              @Nullable List<ServerServiceDefinition> serverServiceDefinitions) {
         final ServerBuilder<?> serverBuilder = configuration.getServerBuilder();
         configuration.getExecutor().ifPresent(executorName -> {
+            if (beanContext == null) {
+                throw new ConfigurationException("A BeanContext is required to resolve the executor bean named [" + executorName + "]");
+            }
             Executor executor = beanContext.findBean(Executor.class, Qualifiers.byName(executorName))
                 .orElseThrow(() -> new ConfigurationException("No executor bean named [" + executorName + "] is available"));
             serverBuilder.executor(executor);
