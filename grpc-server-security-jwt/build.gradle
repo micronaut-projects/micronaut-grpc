@@ -16,6 +16,7 @@ dependencies {
     testImplementation mn.micronaut.runtime
     testImplementation mnLogging.logback.classic
     testImplementation mnTest.micronaut.test.spock
+    testCompileOnly libs.javax.annotation.api
 }
 
 sourceSets {
