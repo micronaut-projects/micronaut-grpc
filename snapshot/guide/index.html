@@ -1065,6 +1065,27 @@ class Clients {
 <p>Any property of the <code>io.grpc.netty.NettyChannelBuilder</code> type can be configured.</p>
 </div>
 <div class="paragraph">
+<p>You can also disable all gRPC client channel injection, or disable a specific named client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+    client:
+        enabled: false</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+    client:
+        greeter:
+            enabled: false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When a client is disabled, optional or nullable <code>@GrpcChannel</code> injection points resolve to an empty value, while required injection points fail with a dependency injection error.</p>
+</div>
+<div class="paragraph">
 <p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreationListener</code> for example:</p>
 </div>
 <div class="listingblock">
