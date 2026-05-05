@@ -50,6 +50,7 @@ dependencies {
     runtimeOnly mn.jackson.module.kotlin
 
     testCompileOnly libs.javax.annotation.api
+    testImplementation mnTest.micronaut.test.kotest5
 
     testRuntimeOnly mnLogging.logback.classic
     testRuntimeOnly mn.jackson.module.kotlin

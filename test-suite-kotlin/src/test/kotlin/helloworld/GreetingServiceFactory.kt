@@ -15,17 +15,16 @@
  */
 package helloworld
 
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
-import io.micronaut.test.extensions.kotest5.annotation.MicronautTest
+import io.grpc.ManagedChannel
+import io.micronaut.context.annotation.Factory
+import io.micronaut.grpc.annotation.GrpcChannel
+import io.micronaut.grpc.server.GrpcServerChannel
+import jakarta.inject.Singleton
 
-@MicronautTest
-class GreetingServiceTest(
-    private val greetingClient: GreeterGrpcKt.GreeterCoroutineStub,
-) : StringSpec({
-    "returns a greeting response" {
-        greetingClient.sayHello(
-            HelloRequest.newBuilder().setName("John").build(),
-        ).message shouldBe "Hello John"
-    }
-})
+@Factory
+class GreetingServiceFactory {
+
+    @Singleton
+    fun greetingClient(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): GreeterGrpcKt.GreeterCoroutineStub =
+        GreeterGrpcKt.GreeterCoroutineStub(channel)
+}

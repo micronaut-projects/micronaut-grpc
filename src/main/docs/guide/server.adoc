@@ -168,7 +168,7 @@ If you wish to disable the Micronaut gRPC server health check while still using 
 
 To test the server it is recommended that you use https://github.com/micronaut-projects/micronaut-test[Micronaut Test].
 
-TIP: For detailed instructions on how to set up Micronaut Test for either Spock or JUnit 5 see the https://micronaut-projects.github.io/micronaut-test/latest/guide/index.html[documentation] on the subject.
+TIP: For detailed instructions on how to set up Micronaut Test for Spock, JUnit 5, or Kotest see the https://micronaut-projects.github.io/micronaut-test/latest/guide/index.html[documentation] on the subject.
 
 
 You can then define a blocking stub bean in `src/test/java`. For example:
