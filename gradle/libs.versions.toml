@@ -27,6 +27,7 @@ micronaut-kotlin = "4.7.0"
 [libraries]
 # Managed
 managed-grpc-core = { module = 'io.grpc:grpc-core', version.ref = 'managed-grpc' }
+managed-grpc-inprocess = { module = 'io.grpc:grpc-inprocess', version.ref = 'managed-grpc' }
 managed-grpc-protobuf = { module = 'io.grpc:grpc-protobuf', version.ref = 'managed-grpc' }
 managed-grpc-stub = { module = 'io.grpc:grpc-stub', version.ref = 'managed-grpc' }
 managed-grpc-services = { module = 'io.grpc:grpc-services', version.ref = 'managed-grpc' }

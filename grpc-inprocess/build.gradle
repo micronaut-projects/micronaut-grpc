@@ -1,0 +1,44 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+    alias libs.plugins.protobuf
+}
+
+dependencies {
+    api projects.micronautGrpcServerRuntime
+
+    implementation libs.managed.grpc.inprocess
+    implementation mn.micronaut.discovery.core
+    implementation mn.micronaut.runtime
+
+    testCompileOnly libs.javax.annotation.api
+    testCompileOnly libs.managed.protobuf.java
+
+    testImplementation libs.managed.grpc.services
+    testImplementation mn.micronaut.discovery.core
+    testImplementation mnReactor.micronaut.reactor.http.client
+    testImplementation mn.micronaut.management
+    testImplementation projects.micronautGrpcClientRuntime
+}
+
+sourceSets {
+    test {
+        java {
+            srcDirs 'build/generated/source/proto/test/grpc'
+            srcDirs 'build/generated/source/proto/test/java'
+        }
+    }
+}
+
+protobuf {
+    protoc { artifact = libs.managed.protoc.asProvider().get() }
+    plugins {
+        grpc { artifact = libs.managed.protoc.grpc.get() }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+
+micronautBuild {
+    binaryCompatibility.enabledAfter("5.0.0")
+}

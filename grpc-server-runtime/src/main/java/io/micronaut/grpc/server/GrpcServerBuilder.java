@@ -95,7 +95,27 @@ public class GrpcServerBuilder {
                                              @Nullable List<ServerInterceptor> interceptors,
                                              @Nullable List<ServerTransportFilter> serverTransportFilters,
                                              @Nullable List<ServerServiceDefinition> serverServiceDefinitions) {
-        final ServerBuilder<?> serverBuilder = configuration.getServerBuilder();
+        ServerBuilder<?> serverBuilder = configuration.getServerBuilder();
+        configureServerBuilder(serverBuilder, configuration, serviceList, interceptors, serverTransportFilters, serverServiceDefinitions);
+        return serverBuilder;
+    }
+
+    /**
+     * Configures the server builder with the service beans declared in the context.
+     *
+     * @param serverBuilder The server builder
+     * @param configuration The server configuration
+     * @param serviceList The bindable services
+     * @param interceptors The server interceptors
+     * @param serverTransportFilters The server transport filters
+     * @param serverServiceDefinitions The server service definitions
+     */
+    protected void configureServerBuilder(ServerBuilder<?> serverBuilder,
+                                          GrpcServerConfiguration configuration,
+                                          @Nullable List<BindableService> serviceList,
+                                          @Nullable List<ServerInterceptor> interceptors,
+                                          @Nullable List<ServerTransportFilter> serverTransportFilters,
+                                          @Nullable List<ServerServiceDefinition> serverServiceDefinitions) {
         configuration.getExecutor().ifPresent(executorName -> {
             if (beanContext == null) {
                 throw new ConfigurationException("A BeanContext is required to resolve the executor bean named [" + executorName + "]");
@@ -132,7 +152,5 @@ public class GrpcServerBuilder {
         if (CollectionUtils.isNotEmpty(serverServiceDefinitions)) {
             serverBuilder.addServices(serverServiceDefinitions);
         }
-
-        return serverBuilder;
     }
 }

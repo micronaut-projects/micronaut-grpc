@@ -26,7 +26,7 @@ The server by default runs on port 50051, however you can configure which port t
 
 === Configuring the gRPC Server
 
-The server can be be configured in a number of different ways. You can use the `io.micronaut.grpc.server.GrpcServerConfiguration` type to configure any property of gRPC's `NettyServerBuilder` class via `application.yml`.
+The server can be configured in a number of different ways. By default, Micronaut configures gRPC's `NettyServerBuilder` via `application.yml`.
 
 For example:
 
@@ -46,6 +46,18 @@ grpc:
 <2> Load the private key from the classpath. The file should be in `src/main/resources/my.key`.
 
 By default, the gRPC server will be enabled. To disable the gRPC server, set `grpc.server.enabled` to false.
+
+For tests, add the `io.micronaut.grpc:micronaut-grpc-inprocess` module and set `grpc.server.in-process-name` to switch the embedded server and the injected `@GrpcChannel("grpc-server")` test channel to gRPC's in-process transport instead of opening a TCP port.
+
+.Using the in-process server for tests
+[source,yaml]
+----
+grpc:
+    server:
+        in-process-name: test-grpc
+----
+
+The in-process transport avoids port management and is managed by the Micronaut application lifecycle. SSL is not supported in this mode, and the support lives in the optional `micronaut-grpc-inprocess` module so the Netty-based server runtime does not require the extra dependency.
 
 Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
 

@@ -54,6 +54,7 @@ public class GrpcServerConfiguration {
     public static final String PREFIX = "grpc.server";
     public static final String PORT = PREFIX + ".port";
     public static final String HOST = PREFIX + ".host";
+    public static final String IN_PROCESS_NAME = PREFIX + ".in-process-name";
     public static final String ENABLED = PREFIX + ".enabled";
     public static final int DEFAULT_PORT = 50051;
     public static final Duration DEFAULT_AWAIT_TERMINATION = Duration.ofSeconds(30);
@@ -69,6 +70,10 @@ public class GrpcServerConfiguration {
     @Nullable
     private String executor;
     private Duration awaitTermination = DEFAULT_AWAIT_TERMINATION;
+    @Nullable
+    private Integer maxInboundMessageSize;
+    @Nullable
+    private Integer maxInboundMetadataSize;
 
     /**
      * Default constructor.
@@ -190,6 +195,7 @@ public class GrpcServerConfiguration {
     public void setMaxInboundMessageSize(@ReadableBytes int bytes) {
         // intentional noop rather than throw, this method is only advisory.
         Preconditions.checkArgument(bytes >= 0, "bytes must be >= 0");
+        maxInboundMessageSize = bytes;
         serverBuilder.maxInboundMessageSize(bytes);
     }
 
@@ -211,6 +217,7 @@ public class GrpcServerConfiguration {
      */
     public void setMaxInboundMetadataSize(@ReadableBytes int bytes) {
         Preconditions.checkArgument(bytes > 0, "maxInboundMetadataSize must be > 0");
+        maxInboundMetadataSize = bytes;
         serverBuilder.maxInboundMetadataSize(bytes);
     }
 
@@ -290,6 +297,16 @@ public class GrpcServerConfiguration {
                 }
             }
         }
+    }
+
+    @Nullable
+    final Integer getMaxInboundMessageSize() {
+        return maxInboundMessageSize;
+    }
+
+    @Nullable
+    final Integer getMaxInboundMetadataSize() {
+        return maxInboundMetadataSize;
     }
 
 }
