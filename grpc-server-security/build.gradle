@@ -8,6 +8,4 @@ dependencies {
     api platform("io.micronaut.platform:micronaut-platform:${libs.versions.micronaut.platform.get()}")
     api projects.micronautGrpcServerRuntime
     api libs.micronaut.security
-
-    implementation "io.projectreactor:reactor-core"
 }

@@ -21,7 +21,6 @@ import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.order.Ordered;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRuleResult;
-import org.reactivestreams.Publisher;
 
 /**
  * A security rule for a gRPC server call.
@@ -38,9 +37,9 @@ public interface GrpcServerSecurityRule extends Ordered {
      * @param authentication The authentication, if available
      * @param <T> The request type
      * @param <S> The response type
-     * @return A publisher that emits the rule result
+     * @return The rule result, or {@link SecurityRuleResult#UNKNOWN} when the rule does not apply
      */
-    <T, S> Publisher<SecurityRuleResult> check(ServerCall<T, S> serverCall,
-                                               Metadata metadata,
-                                               @Nullable Authentication authentication);
+    <T, S> SecurityRuleResult check(ServerCall<T, S> serverCall,
+                                    Metadata metadata,
+                                    @Nullable Authentication authentication);
 }

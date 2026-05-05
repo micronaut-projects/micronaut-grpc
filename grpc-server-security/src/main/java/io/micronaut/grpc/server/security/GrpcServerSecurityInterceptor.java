@@ -28,13 +28,10 @@ import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.config.SecurityConfiguration;
 import io.micronaut.security.rules.SecurityRuleResult;
 import jakarta.inject.Singleton;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Intercepts gRPC calls and applies Micronaut security rules.
@@ -86,11 +83,13 @@ public final class GrpcServerSecurityInterceptor implements ServerInterceptor, O
     }
 
     private <T, S> @Nullable Authentication fetchAuthentication(ServerCall<T, S> serverCall, Metadata metadata) {
-        return Flux.fromIterable(grpcServerAuthenticationFetchers)
-            .concatMap(authenticationFetcher -> authenticationFetcher.fetchAuthentication(serverCall, metadata))
-            .next()
-            .blockOptional()
-            .orElse(null);
+        for (GrpcServerAuthenticationFetcher authenticationFetcher : grpcServerAuthenticationFetchers) {
+            Authentication authentication = authenticationFetcher.fetchAuthentication(serverCall, metadata);
+            if (authentication != null) {
+                return authentication;
+            }
+        }
+        return null;
     }
 
     private <T, S> ServerCall.Listener<T> checkRules(ServerCall<T, S> serverCall,
@@ -98,15 +97,12 @@ public final class GrpcServerSecurityInterceptor implements ServerInterceptor, O
                                                      ServerCallHandler<T, S> next,
                                                      @Nullable Authentication authentication) {
         boolean authenticated = authentication != null;
-        Optional<SecurityRuleResult> result = Flux.fromIterable(grpcServerSecurityRules)
-            .concatMap(rule -> Mono.from(rule.check(serverCall, metadata, authentication))
-                .defaultIfEmpty(SecurityRuleResult.UNKNOWN)
-                .filter(securityRuleResult -> securityRuleResult != SecurityRuleResult.UNKNOWN))
-            .next()
-            .blockOptional();
-
-        if (result.isPresent()) {
-            if (result.get() == SecurityRuleResult.ALLOWED) {
+        for (GrpcServerSecurityRule rule : grpcServerSecurityRules) {
+            SecurityRuleResult result = rule.check(serverCall, metadata, authentication);
+            if (result == SecurityRuleResult.UNKNOWN) {
+                continue;
+            }
+            if (result == SecurityRuleResult.ALLOWED) {
                 return next.startCall(serverCall, metadata);
             }
             throw status(authenticated

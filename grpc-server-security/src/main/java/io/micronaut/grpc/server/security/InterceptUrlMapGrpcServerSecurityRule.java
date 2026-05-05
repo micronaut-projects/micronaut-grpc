@@ -24,8 +24,6 @@ import io.micronaut.security.config.SecurityConfiguration;
 import io.micronaut.security.rules.SecurityRuleResult;
 import io.micronaut.security.token.RolesFinder;
 import jakarta.inject.Singleton;
-import org.reactivestreams.Publisher;
-import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
@@ -49,15 +47,15 @@ public final class InterceptUrlMapGrpcServerSecurityRule extends AbstractGrpcSer
     }
 
     @Override
-    public <T, S> Publisher<SecurityRuleResult> check(ServerCall<T, S> serverCall,
-                                                      Metadata metadata,
-                                                      @Nullable Authentication authentication) {
+    public <T, S> SecurityRuleResult check(ServerCall<T, S> serverCall,
+                                           Metadata metadata,
+                                           @Nullable Authentication authentication) {
         Optional<InterceptUrlMapPattern> matchedPattern = securityConfiguration.getInterceptUrlMap().stream()
             .filter(interceptUrlMapPattern -> serverCall.getMethodDescriptor().getFullMethodName().matches(interceptUrlMapPattern.getPattern()))
             .findFirst();
         if (matchedPattern.isEmpty()) {
-            return Mono.empty();
+            return SecurityRuleResult.UNKNOWN;
         }
-        return Mono.just(compareRoles(matchedPattern.get().getAccess(), getRoles(authentication)));
+        return compareRoles(matchedPattern.get().getAccess(), getRoles(authentication));
     }
 }
