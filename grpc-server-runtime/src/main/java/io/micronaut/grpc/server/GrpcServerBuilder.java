@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 original authors
+ * Copyright 2017-2026 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package io.micronaut.grpc.server;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import io.grpc.BindableService;
 import io.grpc.ServerBuilder;
@@ -23,12 +24,15 @@ import io.grpc.ServerInterceptor;
 import io.grpc.ServerServiceDefinition;
 import io.grpc.ServerTransportFilter;
 import io.grpc.protobuf.services.HealthStatusManager;
+import io.micronaut.context.BeanContext;
 import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
+import io.micronaut.context.exceptions.ConfigurationException;
 import org.jspecify.annotations.Nullable;
 import io.micronaut.core.order.OrderUtil;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.grpc.server.health.HealthStatusManagerContainer;
+import io.micronaut.inject.qualifiers.Qualifiers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,15 +52,29 @@ public class GrpcServerBuilder {
     private static final Logger LOG = LoggerFactory.getLogger(GrpcServerBuilder.class);
     @Nullable
     private final HealthStatusManagerContainer healthStatusManagerContainer;
+    @Nullable
+    private final BeanContext beanContext;
 
     /**
      * Constructs the {@link ServerBuilder} instance.
      *
      * @param healthStatusManagerContainer if enabled, inject a GRPC health status manager.
      */
-    @Inject
     public GrpcServerBuilder(@Nullable HealthStatusManagerContainer healthStatusManagerContainer) {
+        this(healthStatusManagerContainer, null);
+    }
+
+    /**
+     * Constructs the {@link ServerBuilder} instance.
+     *
+     * @param healthStatusManagerContainer if enabled, inject a GRPC health status manager.
+     * @param beanContext The bean context
+     */
+    @Inject
+    public GrpcServerBuilder(@Nullable HealthStatusManagerContainer healthStatusManagerContainer,
+                             BeanContext beanContext) {
         this.healthStatusManagerContainer = healthStatusManagerContainer;
+        this.beanContext = beanContext;
     }
 
     /**
@@ -78,6 +96,14 @@ public class GrpcServerBuilder {
                                              @Nullable List<ServerTransportFilter> serverTransportFilters,
                                              @Nullable List<ServerServiceDefinition> serverServiceDefinitions) {
         final ServerBuilder<?> serverBuilder = configuration.getServerBuilder();
+        configuration.getExecutor().ifPresent(executorName -> {
+            if (beanContext == null) {
+                throw new ConfigurationException("A BeanContext is required to resolve the executor bean named [" + executorName + "]");
+            }
+            Executor executor = beanContext.findBean(Executor.class, Qualifiers.byName(executorName))
+                .orElseThrow(() -> new ConfigurationException("No executor bean named [" + executorName + "] is available"));
+            serverBuilder.executor(executor);
+        });
         if (healthStatusManagerContainer != null) {
             HealthStatusManager healthStatusManager = healthStatusManagerContainer.getHealthStatusManager();
             if (LOG.isDebugEnabled()) {

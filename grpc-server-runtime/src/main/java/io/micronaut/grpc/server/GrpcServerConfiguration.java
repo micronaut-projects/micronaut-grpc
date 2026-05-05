@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 original authors
+ * Copyright 2017-2026 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ public class GrpcServerConfiguration {
     public static final int DEFAULT_PORT = 50051;
     public static final Duration DEFAULT_AWAIT_TERMINATION = Duration.ofSeconds(30);
 
-    @ConfigurationBuilder(prefixes = "", excludes = "protocolNegotiator")
+    @ConfigurationBuilder(prefixes = "", excludes = {"protocolNegotiator", "executor"})
     protected final NettyServerBuilder serverBuilder;
     private final int serverPort;
     private final String serverHost;
@@ -66,6 +66,8 @@ public class GrpcServerConfiguration {
     private GrpcSslConfiguration serverConfiguration = new GrpcSslConfiguration();
     private boolean secure;
     private String instanceId = "";
+    @Nullable
+    private String executor;
     private Duration awaitTermination = DEFAULT_AWAIT_TERMINATION;
 
     /**
@@ -113,6 +115,24 @@ public class GrpcServerConfiguration {
      */
     public @NonNull ServerBuilder<?> getServerBuilder() {
         return serverBuilder;
+    }
+
+    /**
+     * The executor bean name.
+     *
+     * @return The executor bean name
+     */
+    public Optional<String> getExecutor() {
+        return Optional.ofNullable(executor);
+    }
+
+    /**
+     * Sets the executor bean name.
+     *
+     * @param executor The executor bean name
+     */
+    public void setExecutor(@Nullable String executor) {
+        this.executor = executor;
     }
 
     /**
