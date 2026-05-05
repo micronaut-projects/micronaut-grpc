@@ -8,6 +8,8 @@ import io.grpc.stub.StreamObserver
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.annotation.Factory
 import io.micronaut.context.exceptions.BeanInstantiationException
+import io.micronaut.context.exceptions.DependencyInjectionException
+import io.micronaut.context.exceptions.DisabledBeanException
 import io.micronaut.core.io.socket.SocketUtils
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.channels.GrpcManagedChannelConfiguration
@@ -17,6 +19,8 @@ import jakarta.inject.Inject
 import jakarta.inject.Singleton
 import spock.lang.Retry
 import spock.lang.Specification
+
+import java.util.Optional
 
 class GrpcNamedChannelSpec extends Specification {
 
@@ -95,6 +99,58 @@ class GrpcNamedChannelSpec extends Specification {
         embeddedServer.close()
     }
 
+    void "test disabled named client"() {
+        given:
+        def port = SocketUtils.findAvailableTcpPort()
+        EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, [
+                'grpc.server.port'               : port,
+                'grpc.channels.greeter.address'  : "localhost:$port",
+                'grpc.channels.greeter.plaintext': true,
+                'grpc.client.greeter.enabled'    : false
+        ])
+        def context = embeddedServer.applicationContext
+
+        expect:
+        context.getBean(OptionalChannelBean).channel.empty
+
+        when:
+        context.getBean(RequiredChannelBean)
+
+        then:
+        def ex = thrown(DependencyInjectionException)
+        ex.cause instanceof DisabledBeanException
+        ex.cause.message.contains("GRPC client [greeter] is disabled via configuration")
+
+        cleanup:
+        embeddedServer.close()
+    }
+
+    void "test disabled all clients"() {
+        given:
+        def port = SocketUtils.findAvailableTcpPort()
+        EmbeddedServer embeddedServer = ApplicationContext.run(EmbeddedServer, [
+                'grpc.server.port'               : port,
+                'grpc.channels.greeter.address'  : "localhost:$port",
+                'grpc.channels.greeter.plaintext': true,
+                'grpc.client.enabled'            : false
+        ])
+        def context = embeddedServer.applicationContext
+
+        expect:
+        context.getBean(OptionalChannelBean).channel.empty
+
+        when:
+        context.getBean(RequiredChannelBean)
+
+        then:
+        def ex = thrown(DependencyInjectionException)
+        ex.cause instanceof DisabledBeanException
+        ex.cause.message.contains("GRPC client [greeter] is disabled via configuration")
+
+        cleanup:
+        embeddedServer.close()
+    }
+
     @Retry
     void "test named client - eager init"() {
         given:
@@ -134,6 +190,20 @@ class GrpcNamedChannelSpec extends Specification {
                     HelloRequest.newBuilder().setName(message).build()
             ).message
         }
+    }
+
+    @Singleton
+    static class OptionalChannelBean {
+        @Inject
+        @GrpcChannel("greeter")
+        Optional<Channel> channel
+    }
+
+    @Singleton
+    static class RequiredChannelBean {
+        @Inject
+        @GrpcChannel("greeter")
+        Channel channel
     }
 
 

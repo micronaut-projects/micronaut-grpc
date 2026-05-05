@@ -20,6 +20,25 @@ Properties under `grpc.client` are global properties and are the defaults used u
 
 Any property of the `io.grpc.netty.NettyChannelBuilder` type can be configured.
 
+You can also disable all gRPC client channel injection, or disable a specific named client:
+
+[source,yaml]
+----
+grpc:
+    client:
+        enabled: false
+----
+
+[source,yaml]
+----
+grpc:
+    client:
+        greeter:
+            enabled: false
+----
+
+When a client is disabled, optional or nullable `@GrpcChannel` injection points resolve to an empty value, while required injection points fail with a dependency injection error.
+
 Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
 
 .Configuring the NettyChannelBuilder
