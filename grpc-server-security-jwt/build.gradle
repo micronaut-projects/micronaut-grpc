@@ -28,3 +28,9 @@ protobuf {
         all()*.plugins { grpc {} }
     }
 }
+
+micronautBuild {
+    binaryCompatibility {
+        enabledAfter("5.0.0")
+    }
+}
