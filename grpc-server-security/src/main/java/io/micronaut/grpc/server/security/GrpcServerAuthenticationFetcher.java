@@ -17,9 +17,9 @@ package io.micronaut.grpc.server.security;
 
 import io.grpc.Metadata;
 import io.grpc.ServerCall;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.order.Ordered;
 import io.micronaut.security.authentication.Authentication;
-import org.reactivestreams.Publisher;
 
 /**
  * Reads an {@link Authentication} from a gRPC server call.
@@ -35,7 +35,7 @@ public interface GrpcServerAuthenticationFetcher extends Ordered {
      * @param metadata The gRPC metadata
      * @param <T> The request type
      * @param <S> The response type
-     * @return A publisher that emits an authentication when one is available
+     * @return The authentication when one is available
      */
-    <T, S> Publisher<Authentication> fetchAuthentication(ServerCall<T, S> serverCall, Metadata metadata);
+    <T, S> @Nullable Authentication fetchAuthentication(ServerCall<T, S> serverCall, Metadata metadata);
 }

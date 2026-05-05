@@ -19,12 +19,12 @@ import io.grpc.Metadata;
 import io.grpc.ServerCall;
 import io.grpc.Status;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.order.OrderUtil;
 import io.micronaut.grpc.server.security.GrpcServerAuthenticationFetcher;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.token.validator.TokenValidator;
 import jakarta.inject.Singleton;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
@@ -58,18 +58,26 @@ public final class JwtGrpcServerAuthenticationFetcher implements GrpcServerAuthe
     }
 
     @Override
-    public <T, S> org.reactivestreams.Publisher<Authentication> fetchAuthentication(ServerCall<T, S> serverCall, Metadata metadata) {
+    public <T, S> @Nullable Authentication fetchAuthentication(ServerCall<T, S> serverCall, Metadata metadata) {
         String token = metadata.get(jwtMetadataKey);
         if (token == null || token.isBlank()) {
-            return Mono.empty();
+            return null;
         }
         String normalizedToken = token.startsWith(BEARER_PREFIX) ? token.substring(BEARER_PREFIX.length()) : token;
-        return Flux.fromIterable(tokenValidators)
-            .concatMap(tokenValidator -> Mono.from(tokenValidator.validateToken(normalizedToken, null)))
-            .next()
-            .switchIfEmpty(Mono.error(Status.PERMISSION_DENIED.withDescription("JWT validation failed").asRuntimeException()))
-            .onErrorMap(throwable -> throwable instanceof RuntimeException runtimeException
-                ? runtimeException
-                : Status.PERMISSION_DENIED.withDescription("JWT validation failed").withCause(throwable).asRuntimeException());
+        for (TokenValidator<?> tokenValidator : tokenValidators) {
+            try {
+                Authentication authentication = Mono.from(tokenValidator.validateToken(normalizedToken, null))
+                    .blockOptional()
+                    .orElse(null);
+                if (authentication != null) {
+                    return authentication;
+                }
+            } catch (RuntimeException e) {
+                throw e;
+            } catch (Exception e) {
+                throw Status.PERMISSION_DENIED.withDescription("JWT validation failed").withCause(e).asRuntimeException();
+            }
+        }
+        throw Status.PERMISSION_DENIED.withDescription("JWT validation failed").asRuntimeException();
     }
 }
