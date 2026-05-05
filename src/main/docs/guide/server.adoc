@@ -10,6 +10,13 @@ snippet::helloworld.GreetingEndpoint[tags="imports,clazz", source="main"]
 <2> You can dependency inject other beans into the implementation. In this case `GreetingService` is dependency injected.
 <3> The `StreamObserver` is used to send a response to the client.
 
+If you generate Reactor bindings with `reactive-grpc`, Micronaut can register the generated `BindableService` implementation in exactly the same way. Implement the generated Reactor base class as a singleton bean:
+
+[source,java]
+----
+include::test-suite-java/src/main/java/helloworld/ReactiveGreetingEndpoint.java[tags=reactive-service]
+----
+
 === Running the gRPC Server
 
 To run the server use the `Application` class or run `./gradlew run` for Gradle or `./mvnw compile exec:exec` for Maven.
@@ -69,6 +76,7 @@ By default, the server will automatically be dependency injected with beans of t
 * `io.grpc.ServerTransportFilter` - Any transport filters declared as beans
 
 In addition, by default the server will be setup to use Micronaut's I/O executor service.
+Set `grpc.server.executor` to the name of an `Executor` bean to override that default from configuration.
 
 ==== Server Interceptor Ordering
 To produce a consistent and predictable order of execution for server interceptors, it is required

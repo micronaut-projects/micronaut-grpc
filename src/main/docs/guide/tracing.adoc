@@ -1,7 +1,22 @@
-gRPC includes tracing based on OpenCensus, however if you wish to use Micronaut's integration with Jaeger or Zipkin you can do so by adding the following dependencies:
+Micronaut gRPC includes legacy OpenTracing-based tracing support. For new applications using Micronaut Tracing, add the OpenTelemetry gRPC integration:
 
-dependency:micronaut-tracing-brave-http[scope="compile", groupId="io.micronaut.tracing"]
+dependency:micronaut-tracing-opentelemetry-grpc[scope="compile", groupId="io.micronaut.tracing"]
 
-dependency:opentracing-grpc[scope="runtime", version="0.2.1", groupId="io.opentracing.contrib"]
+Micronaut Tracing will then create spans for gRPC client requests, server requests, client responses, and server responses.
 
-You then need to https://micronaut-projects.github.io/micronaut-tracing/latest/guide/#jaeger[configure either Jaeger or Zipkin] appropriately.
+To export traces to Google Cloud Trace, add the Google Cloud OpenTelemetry exporter:
+
+dependency:exporter-auto[scope="runtime", groupId="com.google.cloud.opentelemetry"]
+
+Then configure OpenTelemetry to use the `google_cloud_trace` exporter:
+
+[configuration]
+----
+otel:
+  traces:
+    exporter: google_cloud_trace
+----
+
+When running outside Google Cloud, provide Application Default Credentials with the `GOOGLE_APPLICATION_CREDENTIALS` environment variable (or `gcloud auth application-default login`) and set `GOOGLE_CLOUD_PROJECT` if the project cannot be detected automatically.
+
+For additional exporter options and authentication details, see the https://micronaut-projects.github.io/micronaut-tracing/latest/guide/#exporters[Micronaut Tracing OpenTelemetry exporter documentation].

@@ -88,7 +88,7 @@ public class InProcessGrpcServerBuilder extends GrpcServerBuilder {
         if (configuration.getMaxInboundMetadataSize() != null) {
             serverBuilder.maxInboundMetadataSize(configuration.getMaxInboundMetadataSize());
         }
-        configureServerBuilder(serverBuilder, serviceList, interceptors, serverTransportFilters, serverServiceDefinitions);
+        configureServerBuilder(serverBuilder, configuration, serviceList, interceptors, serverTransportFilters, serverServiceDefinitions);
         return serverBuilder;
     }
 }

@@ -59,7 +59,7 @@ public class GrpcServerConfiguration {
     public static final int DEFAULT_PORT = 50051;
     public static final Duration DEFAULT_AWAIT_TERMINATION = Duration.ofSeconds(30);
 
-    @ConfigurationBuilder(prefixes = "", excludes = "protocolNegotiator")
+    @ConfigurationBuilder(prefixes = "", excludes = {"protocolNegotiator", "executor"})
     protected final NettyServerBuilder serverBuilder;
     private final int serverPort;
     private final String serverHost;
@@ -67,6 +67,8 @@ public class GrpcServerConfiguration {
     private GrpcSslConfiguration serverConfiguration = new GrpcSslConfiguration();
     private boolean secure;
     private String instanceId = "";
+    @Nullable
+    private String executor;
     private Duration awaitTermination = DEFAULT_AWAIT_TERMINATION;
     @Nullable
     private Integer maxInboundMessageSize;
@@ -118,6 +120,24 @@ public class GrpcServerConfiguration {
      */
     public @NonNull ServerBuilder<?> getServerBuilder() {
         return serverBuilder;
+    }
+
+    /**
+     * The executor bean name.
+     *
+     * @return The executor bean name
+     */
+    public Optional<String> getExecutor() {
+        return Optional.ofNullable(executor);
+    }
+
+    /**
+     * Sets the executor bean name.
+     *
+     * @param executor The executor bean name
+     */
+    public void setExecutor(@Nullable String executor) {
+        this.executor = executor;
     }
 
     /**
