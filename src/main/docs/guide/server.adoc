@@ -31,7 +31,7 @@ The server can be configured in a number of different ways. By default, Micronau
 For example:
 
 .Configuring the gRPC server
-[source,yaml]
+[configuration]
 ----
 grpc:
     server:
@@ -50,7 +50,7 @@ By default, the gRPC server will be enabled. To disable the gRPC server, set `gr
 For tests, add the `io.micronaut.grpc:micronaut-grpc-inprocess` module and set `grpc.server.in-process-name` to switch the embedded server and the injected `@GrpcChannel("grpc-server")` test channel to gRPC's in-process transport instead of opening a TCP port.
 
 .Using the in-process server for tests
-[source,yaml]
+[configuration]
 ----
 grpc:
     server:
