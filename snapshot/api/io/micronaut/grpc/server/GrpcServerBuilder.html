@@ -58,6 +58,7 @@ loadScripts(document, 'script');</script>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
 <li><a href="#%3Cinit%3E(io.micronaut.grpc.server.health.HealthStatusManagerContainer)" tabindex="0">GrpcServerBuilder(HealthStatusManagerContainer)</a></li>
+<li><a href="#%3Cinit%3E(io.micronaut.grpc.server.health.HealthStatusManagerContainer,io.micronaut.context.BeanContext)" tabindex="0">GrpcServerBuilder(HealthStatusManagerContainer, BeanContext)</a></li>
 </ol>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
@@ -104,6 +105,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Constructs the <code>ServerBuilder</code> instance.</div>
 </div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(io.micronaut.grpc.server.health.HealthStatusManagerContainer,io.micronaut.context.BeanContext)" class="member-name-link">GrpcServerBuilder</a><wbr>(@Nullable <a href="health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a>&nbsp;healthStatusManagerContainer,
+ io.micronaut.context.BeanContext&nbsp;beanContext)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Constructs the <code>ServerBuilder</code> instance.</div>
+</div>
 </div>
 </section>
 </li>
@@ -148,12 +154,27 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;(io.micronaut.grpc.server.health.HealthStatusManagerContainer)">
 <h3>GrpcServerBuilder</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="annotations">@Inject
-</span><span class="modifiers">public</span>&nbsp;<span class="element-name">GrpcServerBuilder</span><wbr><span class="parameters">(@Nullable <a href="health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a>&nbsp;healthStatusManagerContainer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">GrpcServerBuilder</span><wbr><span class="parameters">(@Nullable <a href="health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a>&nbsp;healthStatusManagerContainer)</span></div>
 <div class="block">Constructs the <code>ServerBuilder</code> instance.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>healthStatusManagerContainer</code> - if enabled, inject a GRPC health status manager.</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="&lt;init&gt;(io.micronaut.grpc.server.health.HealthStatusManagerContainer,io.micronaut.context.BeanContext)">
+<h3>GrpcServerBuilder</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="annotations">@Inject
+</span><span class="modifiers">public</span>&nbsp;<span class="element-name">GrpcServerBuilder</span><wbr><span class="parameters">(@Nullable <a href="health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a>&nbsp;healthStatusManagerContainer,
+ io.micronaut.context.BeanContext&nbsp;beanContext)</span></div>
+<div class="block">Constructs the <code>ServerBuilder</code> instance.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>healthStatusManagerContainer</code> - if enabled, inject a GRPC health status manager.</dd>
+<dd><code>beanContext</code> - The bean context</dd>
 </dl>
 </div>
 </section>

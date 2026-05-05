@@ -774,7 +774,8 @@ public class ServerBuilderListener implements BeanCreatedEventListener&lt;Server
 </ul>
 </div>
 <div class="paragraph">
-<p>In addition, by default the server will be setup to use Micronaut&#8217;s I/O executor service.</p>
+<p>In addition, by default the server will be setup to use Micronaut&#8217;s I/O executor service.
+Set <code>grpc.server.executor</code> to the name of an <code>Executor</code> bean to override that default from configuration.</p>
 </div>
 <div class="sect3">
 <h4 id="_server_interceptor_ordering">Server Interceptor Ordering</h4>
