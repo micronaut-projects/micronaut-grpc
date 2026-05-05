@@ -47,6 +47,20 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         stopContext(context)
     }
 
+    void "accepts bearer jwt with surrounding whitespace and lowercase scheme"() {
+        given:
+        ApplicationContext context = startContext([
+            "micronaut.security.intercept-url-map": [[pattern: ".*", access: ["isAuthenticated()"]]]
+        ])
+        TestBean testBean = context.getBean(TestBean)
+
+        expect:
+        testBean.sayHelloWithBearerJwt("Brian") == "Hello Brian"
+
+        cleanup:
+        stopContext(context)
+    }
+
     void "rejects missing jwt for authenticated method"() {
         given:
         ApplicationContext context = startContext([
@@ -101,6 +115,38 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         stopContext(context)
     }
 
+    void "matches the fully qualified gRPC method name in intercept-url-map"() {
+        given:
+        ApplicationContext context = startContext([
+            "micronaut.security.intercept-url-map": [[pattern: "helloworld\\.Greeter/SayHello", access: ["isAuthenticated()"]]]
+        ])
+        TestBean testBean = context.getBean(TestBean)
+
+        expect:
+        testBean.sayHelloWithJwt("Brian") == "Hello Brian"
+
+        cleanup:
+        stopContext(context)
+    }
+
+    void "rejects when intercept-url-map does not match the gRPC method name"() {
+        given:
+        ApplicationContext context = startContext([
+            "micronaut.security.intercept-url-map": [[pattern: "helloworld\\.Greeter/OtherMethod", access: ["isAuthenticated()"]]]
+        ])
+        TestBean testBean = context.getBean(TestBean)
+
+        when:
+        testBean.sayHelloWithJwt("Brian")
+
+        then:
+        StatusRuntimeException e = thrown()
+        e.status.code == Status.Code.PERMISSION_DENIED
+
+        cleanup:
+        stopContext(context)
+    }
+
     private static ApplicationContext startContext(Map<String, Object> config) {
         ApplicationContext context = ApplicationContext.run(new LinkedHashMap<>(DEFAULT_CONFIGURATION + config), REQUIRED_ENV, Environment.TEST)
         context.getBean(GrpcEmbeddedServer).start()
@@ -139,22 +185,29 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         String sayHelloWithJwt(String message, List<String> roles = []) {
             Authentication authentication = Authentication.build("micronaut", roles)
             String jwt = jwtTokenGenerator.generateToken(authentication, 60).orElseThrow()
-            Metadata metadata = new Metadata()
-            metadata.put(Metadata.Key.of("JWT", Metadata.ASCII_STRING_MARSHALLER), jwt)
-            HelloRequest request = HelloRequest.newBuilder().setName(message).build()
-            blockingStub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata)).sayHello(request).message
+            return sayHelloWithMetadata(message, jwt)
+        }
+
+        String sayHelloWithBearerJwt(String message, List<String> roles = []) {
+            Authentication authentication = Authentication.build("micronaut", roles)
+            String jwt = jwtTokenGenerator.generateToken(authentication, 60).orElseThrow()
+            return sayHelloWithMetadata(message, "  bearer ${jwt}  ")
         }
 
         String sayHelloWithInvalidJwt(String message) {
-            Metadata metadata = new Metadata()
-            metadata.put(Metadata.Key.of("JWT", Metadata.ASCII_STRING_MARSHALLER), "invalid.jwt")
-            HelloRequest request = HelloRequest.newBuilder().setName(message).build()
-            blockingStub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata)).sayHello(request).message
+            sayHelloWithMetadata(message, "invalid.jwt")
         }
 
         String sayHelloWithoutJwt(String message) {
             HelloRequest request = HelloRequest.newBuilder().setName(message).build()
             blockingStub.sayHello(request).message
+        }
+
+        private String sayHelloWithMetadata(String message, String token) {
+            Metadata metadata = new Metadata()
+            metadata.put(Metadata.Key.of("JWT", Metadata.ASCII_STRING_MARSHALLER), token)
+            HelloRequest request = HelloRequest.newBuilder().setName(message).build()
+            blockingStub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata)).sayHello(request).message
         }
     }
 

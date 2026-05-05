@@ -41,7 +41,6 @@ import java.util.List;
 @Singleton
 @Requires(beans = {
     GrpcServerSecurityConfiguration.class,
-    GrpcServerAuthenticationFetcher.class,
     GrpcServerSecurityRule.class
 })
 public final class GrpcServerSecurityInterceptor implements ServerInterceptor, Ordered {

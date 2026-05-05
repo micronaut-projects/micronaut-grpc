@@ -30,6 +30,7 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Reads a JWT from gRPC metadata and authenticates it with Micronaut Security token validators.
@@ -41,7 +42,7 @@ import java.util.List;
 @Requires(beans = GrpcServerSecurityJwtConfiguration.class)
 public final class JwtGrpcServerAuthenticationFetcher implements GrpcServerAuthenticationFetcher {
 
-    private static final String BEARER_PREFIX = "Bearer ";
+    private static final String BEARER_SCHEME = "bearer";
 
     private final Metadata.Key<String> jwtMetadataKey;
     private final List<TokenValidator<?>> tokenValidators;
@@ -63,7 +64,7 @@ public final class JwtGrpcServerAuthenticationFetcher implements GrpcServerAuthe
         if (token == null || token.isBlank()) {
             return null;
         }
-        String normalizedToken = token.startsWith(BEARER_PREFIX) ? token.substring(BEARER_PREFIX.length()) : token;
+        String normalizedToken = normalizeToken(token);
         for (TokenValidator<?> tokenValidator : tokenValidators) {
             try {
                 Authentication authentication = Mono.from(tokenValidator.validateToken(normalizedToken, null))
@@ -79,5 +80,15 @@ public final class JwtGrpcServerAuthenticationFetcher implements GrpcServerAuthe
             }
         }
         throw Status.PERMISSION_DENIED.withDescription("JWT validation failed").asRuntimeException();
+    }
+
+    private static String normalizeToken(String token) {
+        String trimmed = token.trim();
+        int separatorIndex = trimmed.indexOf(' ');
+        if (separatorIndex > 0
+            && BEARER_SCHEME.equals(trimmed.substring(0, separatorIndex).toLowerCase(Locale.ENGLISH))) {
+            return trimmed.substring(separatorIndex + 1).trim();
+        }
+        return trimmed;
     }
 }
