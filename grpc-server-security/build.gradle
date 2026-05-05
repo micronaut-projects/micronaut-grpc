@@ -9,3 +9,9 @@ dependencies {
     api projects.micronautGrpcServerRuntime
     api libs.micronaut.security
 }
+
+micronautBuild {
+    binaryCompatibility {
+        enabledAfter("5.0.0")
+    }
+}
