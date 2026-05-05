@@ -91,7 +91,7 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
         }
     }
 
-    private String formatTarget(String host, int port) {
+    static String formatTarget(String host, int port) {
         if (host.indexOf(':') > -1 && !(host.startsWith("[") && host.endsWith("]"))) {
             return '[' + host + "]:" + port;
         }

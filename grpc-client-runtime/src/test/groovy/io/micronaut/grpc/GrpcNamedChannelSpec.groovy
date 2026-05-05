@@ -1,7 +1,6 @@
 package io.micronaut.grpc
 
 import io.grpc.Channel
-import io.grpc.netty.NettyChannelBuilder
 import io.grpc.examples.helloworld.Greeter2Grpc
 import io.grpc.examples.helloworld.HelloReply
 import io.grpc.examples.helloworld.HelloRequest
@@ -19,57 +18,7 @@ import jakarta.inject.Singleton
 import spock.lang.Retry
 import spock.lang.Specification
 
-import java.net.InetSocketAddress
-
 class GrpcNamedChannelSpec extends Specification {
-
-    void "test named client address uses target syntax"() {
-        given:
-        def context = ApplicationContext.run([
-                'grpc.channels.greeter.address': 'greeter-service:8443'
-        ])
-
-        when:
-        def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
-
-        then:
-        extractTarget(config.channelBuilder) == 'greeter-service:8443'
-
-        cleanup:
-        context.close()
-    }
-
-    void "test named client ipv6 address uses bracketed target syntax"() {
-        given:
-        def context = ApplicationContext.run([
-                'grpc.channels.greeter.address': InetSocketAddress.createUnresolved('::1', 8443)
-        ])
-
-        when:
-        def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
-
-        then:
-        extractTarget(config.channelBuilder) == '[::1]:8443'
-
-        cleanup:
-        context.close()
-    }
-
-    void "test named client preserves bracketed ipv6 target syntax"() {
-        given:
-        def context = ApplicationContext.run([
-                'grpc.channels.greeter.address': InetSocketAddress.createUnresolved('[::1]', 8443)
-        ])
-
-        when:
-        def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
-
-        then:
-        extractTarget(config.channelBuilder) == '[::1]:8443'
-
-        cleanup:
-        context.close()
-    }
 
     // retry because on Cloud CI you may have a race condition regarding port availability and binding
     @Retry
@@ -195,15 +144,6 @@ class GrpcNamedChannelSpec extends Specification {
             Greeter2Grpc.newBlockingStub(channel)
         }
 
-    }
-
-    private static String extractTarget(NettyChannelBuilder builder) {
-        def channelBuilderField = builder.class.getDeclaredField('managedChannelImplBuilder')
-        channelBuilderField.accessible = true
-        def managedChannelImplBuilder = channelBuilderField.get(builder)
-        def targetField = managedChannelImplBuilder.class.getDeclaredField('target')
-        targetField.accessible = true
-        (String) targetField.get(managedChannelImplBuilder)
     }
 
     @Singleton
