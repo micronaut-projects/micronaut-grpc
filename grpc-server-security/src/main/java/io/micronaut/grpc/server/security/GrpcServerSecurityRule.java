@@ -17,10 +17,10 @@ package io.micronaut.grpc.server.security;
 
 import io.grpc.Metadata;
 import io.grpc.ServerCall;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.order.Ordered;
 import io.micronaut.security.authentication.Authentication;
 import io.micronaut.security.rules.SecurityRuleResult;
-import org.jspecify.annotations.Nullable;
 import org.reactivestreams.Publisher;
 
 /**
