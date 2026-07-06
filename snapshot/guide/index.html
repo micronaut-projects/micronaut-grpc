@@ -711,14 +711,7 @@ grpc.server.ssl.private-key=classpath:my.key</code></pre>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc]
-  [grpc.server]
-    port=8080
-    keep-alive-time="3h"
-    max-inbound-message-size=1024
-    [grpc.server.ssl]
-      cert-chain="file://path/to/my.cert"
-      private-key="classpath:my.key"</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {server = {port = 8080, keep-alive-time = "3h", max-inbound-message-size = 1024, ssl = {cert-chain = "file://path/to/my.cert", private-key = "classpath:my.key"}}}</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -807,9 +800,7 @@ grpc.server.ssl.private-key=classpath:my.key</code></pre>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc]
-  [grpc.server]
-    in-process-name="test-grpc"</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {server = {in-process-name = "test-grpc"}}</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1189,10 +1180,7 @@ grpc.client.max-retry-attempts=10</code></pre>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc]
-  [grpc.client]
-    plaintext=true
-    max-retry-attempts=10</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {client = {plaintext = true, max-retry-attempts = 10}}</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1363,12 +1351,7 @@ grpc.channels.greeter.max-retry-attempts=10</code></pre>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc]
-  [grpc.channels]
-    [grpc.channels.greeter]
-      address="${my.server}:${my.port}"
-      plaintext=true
-      max-retry-attempts=10</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {channels = {greeter = {address = "${my.server}:${my.port}", plaintext = true, max-retry-attempts = 10}}}</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1557,14 +1540,8 @@ consul:
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[micronaut]
-  [micronaut.application]
-    name="greeter"
-[consul]
-  [consul.client]
-    defaultZone="${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
-    [consul.client.registration]
-      enabled=true</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">micronaut = {application = {name = "greeter"}}
+consul = {client = {registration = {enabled = true}, defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"}}</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1649,12 +1626,8 @@ grpc:
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[micronaut]
-  [micronaut.application]
-    name="greeter"
-[grpc]
-  [grpc.server]
-    instance-id="hello-grpc"</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">micronaut = {application = {name = "greeter"}}
+grpc = {server = {instance-id = "hello-grpc"}}</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1744,13 +1717,8 @@ consul:
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc]
-  [grpc.client]
-    [grpc.client.discovery]
-      enabled=true
-[consul]
-  [consul.client]
-    defaultZone="${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {client = {discovery = {enabled = true}}}
+consul = {client = {defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"}}</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1898,9 +1866,7 @@ GreeterGrpc.GreeterStub greeterStub(
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[otel]
-  [otel.traces]
-    exporter="google_cloud_trace"</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">otel = {traces = {exporter = "google_cloud_trace"}}</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
