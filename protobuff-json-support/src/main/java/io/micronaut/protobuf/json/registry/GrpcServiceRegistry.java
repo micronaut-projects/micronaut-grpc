@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2025 original authors
+ * Copyright 2017-2026 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package io.micronaut.protobuf.json.registry;
 
+import io.grpc.MethodDescriptor;
 import io.micronaut.core.annotation.Experimental;
 import io.micronaut.inject.ExecutableMethod;
 import jakarta.inject.Singleton;
@@ -45,7 +46,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Experimental
 public class GrpcServiceRegistry {
 
-    private final Map<String, Map<String, ExecutableMethod<?, ?>>> methods = new ConcurrentHashMap<>();
+    private final Map<String, Map<String, RegisteredMethod>> methods = new ConcurrentHashMap<>();
 
     /**
      * Registers a gRPC service method with the internal registry, allowing it to be exposed
@@ -55,10 +56,14 @@ public class GrpcServiceRegistry {
      * @param serviceBeanType The class type of the gRPC service bean being registered. Must not be null.
      * @param methodName The name of the method in the gRPC service being registered. Must not be null or empty.
      * @param method The {@code ExecutableMethod} representing the method's metadata and logic. Must not be null.
+     * @param methodDescriptor The gRPC {@link MethodDescriptor} for the method. Must not be null.
      */
-    public void register(Class<?> serviceBeanType, String methodName, ExecutableMethod<?, ?> method) {
+    public void register(Class<?> serviceBeanType,
+                         String methodName,
+                         ExecutableMethod<?, ?> method,
+                         MethodDescriptor<?, ?> methodDescriptor) {
         methods.computeIfAbsent(serviceBeanType.getSimpleName(), key -> new ConcurrentHashMap<>())
-            .put(methodName, method);
+            .put(methodName, new RegisteredMethod(method, methodDescriptor));
     }
 
     /**
@@ -71,8 +76,27 @@ public class GrpcServiceRegistry {
      *         if no matching service or method is registered.
      */
     public Optional<ExecutableMethod<?, ?>> getExecutableMethod(String serviceName, String methodName) {
+        return getRegisteredMethod(serviceName, methodName).map(RegisteredMethod::executableMethod);
+    }
+
+    /**
+     * Retrieves a registered gRPC method entry based on the specified service and method name.
+     *
+     * @param serviceName The gRPC service containing the method.
+     * @param methodName The gRPC method name.
+     * @return The registered method entry if present.
+     */
+    public Optional<RegisteredMethod> getRegisteredMethod(String serviceName, String methodName) {
         return Optional.ofNullable(methods.getOrDefault(serviceName, Map.of()).get(methodName));
     }
 
+    /**
+     * Registered gRPC method metadata.
+     *
+     * @param executableMethod The Micronaut executable method.
+     * @param methodDescriptor The gRPC method descriptor.
+     */
+    public record RegisteredMethod(ExecutableMethod<?, ?> executableMethod,
+                                   MethodDescriptor<?, ?> methodDescriptor) {
+    }
 }
-

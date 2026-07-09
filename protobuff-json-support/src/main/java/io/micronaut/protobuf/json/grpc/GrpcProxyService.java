@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2025 original authors
+ * Copyright 2017-2026 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package io.micronaut.protobuf.json.grpc;
 import com.google.protobuf.Message;
 import io.grpc.stub.StreamObserver;
 import io.micronaut.context.ApplicationContext;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.exceptions.HttpStatusException;
 import io.micronaut.inject.ExecutableMethod;
 import io.micronaut.protobuf.json.ProtobufJsonTranscoder;
 import io.micronaut.protobuf.json.exception.GrpcInvocationException;
@@ -29,7 +31,7 @@ import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// Added imports
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -101,57 +103,89 @@ public class GrpcProxyService {
      * @throws GrpcInvocationException If the invocation of the gRPC method fails or times out.
      */
     public String invokeGrpcMethod(String serviceName, String methodName, String jsonRequest) {
-        // Obtain the executable method
-        ExecutableMethod<?, ?> grpcMethod = registry.getExecutableMethod(serviceName, methodName)
+        ExecutableMethod<?, ?> grpcMethod = resolveGrpcMethod(serviceName, methodName);
+        Message requestMessage = transcoder.fromJson(jsonRequest, resolveRequestType(grpcMethod));
+        return toJson(invokeGrpcMethod(serviceName, methodName, requestMessage));
+    }
+
+    /**
+     * Invokes a specified gRPC method on a service using a protobuf request.
+     *
+     * @param serviceName The gRPC service name.
+     * @param methodName The gRPC method name.
+     * @param requestMessage The protobuf request.
+     * @return The protobuf responses emitted by the method.
+     */
+    public List<Message> invokeGrpcMethod(String serviceName, String methodName, Message requestMessage) {
+        ExecutableMethod<?, ?> grpcMethod = resolveGrpcMethod(serviceName, methodName);
+        Object beanInstance = resolveBeanInstance(serviceName, grpcMethod);
+        final List<Message> responseMessages;
+        try {
+            responseMessages = invokeGrpcMethodReflectively(beanInstance, (ExecutableMethod<Object, Object>) grpcMethod, requestMessage);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new GrpcInvocationException("gRPC method invocation was interrupted: " + e.getMessage(), e);
+        }
+        return responseMessages;
+    }
+
+    /**
+     * Parses a protobuf request payload for the given gRPC method.
+     *
+     * @param serviceName The gRPC service name.
+     * @param methodName The gRPC method name.
+     * @param requestBytes The protobuf request bytes.
+     * @return The decoded request message.
+     */
+    public Message parseRequestMessage(String serviceName, String methodName, byte[] requestBytes) {
+        GrpcServiceRegistry.RegisteredMethod registeredMethod = resolveRegisteredMethod(serviceName, methodName);
+        try {
+            return (Message) registeredMethod.methodDescriptor().getRequestMarshaller()
+                .parse(new ByteArrayInputStream(requestBytes));
+        } catch (RuntimeException e) {
+            var hse = new HttpStatusException(HttpStatus.BAD_REQUEST, "Failed to parse protobuf request: " + e.getMessage());
+            hse.initCause(e);
+            throw hse;
+        }
+    }
+
+    private String toJson(List<Message> responseMessages) {
+        if (responseMessages.isEmpty()) {
+            return "[]";
+        } else if (responseMessages.size() == 1) {
+            return transcoder.toJson(responseMessages.get(0));
+        } else {
+            List<String> jsonResponses = responseMessages.stream()
+                .map(transcoder::toJson)
+                .collect(Collectors.toList());
+            return "[" + String.join(",", jsonResponses) + "]";
+        }
+    }
+
+    private ExecutableMethod<?, ?> resolveGrpcMethod(String serviceName, String methodName) {
+        return resolveRegisteredMethod(serviceName, methodName).executableMethod();
+    }
+
+    private GrpcServiceRegistry.RegisteredMethod resolveRegisteredMethod(String serviceName, String methodName) {
+        return registry.getRegisteredMethod(serviceName, methodName)
             .orElseThrow(() -> {
                 LOG.warn("Method '{}' not found in service '{}'", methodName, serviceName);
                 return new MethodNotFoundException(methodName);
             });
+    }
 
-        // Retrieve the bean instance from context
-        Object beanInstance;
+    private Object resolveBeanInstance(String serviceName, ExecutableMethod<?, ?> grpcMethod) {
         try {
-            beanInstance = context.getBean(grpcMethod.getDeclaringType());
+            return context.getBean(grpcMethod.getDeclaringType());
         } catch (Exception e) {
-            // Catching generic Exception might be too broad, consider specific Micronaut exceptions if applicable
             LOG.warn("Service '{}' not found via context for type {}", serviceName, grpcMethod.getDeclaringType().getName(), e);
             throw new ServiceNotFoundException(serviceName);
         }
+    }
 
-        // Transform JSON to Protobuf request
-        // Assuming the request is always the first argument and is a Message
-        @SuppressWarnings("unchecked") Class<? extends Message> requestType = (Class<? extends Message>) grpcMethod.getArguments()[0].getType();
-        Message requestMessage = transcoder.fromJson(jsonRequest, requestType);
-
-        // Invoke method and get potentially multiple Protobuf responses
-        final List<Message> responseMessages;
-        try {
-            //noinspection unchecked
-            responseMessages = invokeGrpcMethodReflectively(beanInstance, (ExecutableMethod<Object, Object>) grpcMethod, requestMessage);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Re-interrupt the thread
-            throw new GrpcInvocationException("gRPC method invocation was interrupted: " + e.getMessage(), e);
-        }
-
-        // Transform Protobuf responses to JSON
-        if (responseMessages.isEmpty()) {
-            // Handle cases where the stream completes without sending messages
-            // Or potentially unary methods that return void/Empty (though Protobuf usually uses google.protobuf.Empty)
-            // Returning an empty JSON array is consistent for streams.
-            // For unary expecting a response, this might indicate an issue, but we return "[]" for now.
-            return "[]";
-        } else if (responseMessages.size() == 1) {
-            // If only one message was received, return it as a single JSON object
-            // This preserves behavior for standard unary calls.
-            return transcoder.toJson(responseMessages.get(0));
-        } else {
-            // If multiple messages were received (streaming), format as a JSON array
-            List<String> jsonResponses = responseMessages.stream()
-                .map(transcoder::toJson)
-                .collect(Collectors.toList());
-            // Construct the JSON array string
-            return "[" + String.join(",", jsonResponses) + "]";
-        }
+    @SuppressWarnings("unchecked")
+    private Class<? extends Message> resolveRequestType(ExecutableMethod<?, ?> grpcMethod) {
+        return (Class<? extends Message>) grpcMethod.getArguments()[0].getType();
     }
 
     /**

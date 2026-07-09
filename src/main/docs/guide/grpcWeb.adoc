@@ -1,0 +1,89 @@
+= gRPC-Web
+
+Micronaut can also expose `@GrpcRestJsonExposed` methods through the gRPC-Web wire protocol over HTTP/1.1.
+
+This is useful when a browser or browser-facing proxy needs protobuf-native unary calls instead of the JSON transcoding endpoint described in xref:protocolBuffersJsonSupport.adoc[Protocol Buffers Json Support].
+
+== Setup
+
+Add the JSON support module:
+
+dependency:micronaut-protobuff-json-support[groupId="io.micronaut.grpc"]
+
+Then annotate the gRPC service method you want to expose:
+
+[source,java]
+----
+include::test-suite-protobuff-json-java/src/main/java/com/example/services/GreeterService.java[]
+----
+
+The same annotation enables both:
+
+- the JSON endpoint at `/grpc-json/{serviceName}/{method}`
+- the gRPC-Web endpoint at `/grpc-web/{serviceName}/{method}`
+
+== Endpoint Shape
+
+Unary gRPC-Web requests are served from:
+
+[source]
+----
+/grpc-web/{serviceName}/{method}
+----
+
+For the sample `GreeterService#sayHello` method this becomes:
+
+`http://localhost:8080/grpc-web/GreeterService/sayHello`
+
+The path prefix defaults to `grpc-web` and can be changed with:
+
+[source,yaml]
+----
+micronaut:
+    grpc:
+        web:
+            path: custom-grpc-web
+----
+
+== Supported Content Types
+
+The endpoint accepts and returns:
+
+- `application/grpc-web+proto`
+- `application/grpc-web-text+proto`
+
+Binary requests use the standard gRPC-Web frame format.
+Text requests use the same frames, base64-encoded for browser compatibility.
+
+== Request Format
+
+Each request body must contain a framed protobuf message:
+
+1. One byte of flags.
+2. Four bytes of message length.
+3. The serialized protobuf payload.
+
+The current implementation supports unary requests with an uncompressed data frame.
+Compressed request frames are rejected.
+
+== Response Format
+
+Successful responses include:
+
+- one protobuf data frame containing the unary response message
+- one trailers frame containing `grpc-status: 0`
+
+Error responses are still returned using gRPC-Web framing and include trailer metadata such as `grpc-status` and `grpc-message`.
+
+== Example Flow
+
+With this proto definition:
+
+[source,protobuf]
+----
+include::test-suite-protobuff-json-java/src/main/proto/greeter.proto[]
+----
+
+the gRPC-Web endpoint expects a framed `HelloRequest` protobuf payload and returns a framed `HelloResponse` protobuf payload.
+
+In practice, a browser application will usually rely on a gRPC-Web client library or proxy to construct these frames rather than building them manually.
