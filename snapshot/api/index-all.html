@@ -29,6 +29,7 @@ loadScripts(document, 'script');</script>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="index.html">Overview</a></li>
 <li><a href="overview-tree.html">Tree</a></li>
+<li><a href="deprecated-list.html">Deprecated</a></li>
 <li class="nav-bar-cell1-rev">Index</li>
 <li><a href="search.html">Search</a></li>
 <li><a href="help-doc.html#index">Help</a></li>
@@ -251,6 +252,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The instance id.</div>
 </dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html#getMaxResponseBytes()" class="member-name-link">getMaxResponseBytes()</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html#getMaxResponseMessages()" class="member-name-link">getMaxResponseMessages()</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#getMediaTypes()" class="member-name-link">getMediaTypes()</a> - Method in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="helloworld/HelloReply.Builder.html#getMessage()" class="member-name-link">getMessage()</a> - Method in class helloworld.<a href="helloworld/HelloReply.Builder.html" title="class in helloworld">HelloReply.Builder</a></dt>
@@ -518,7 +523,15 @@ to perform service discovery.</div>
 <div class="block">A service responsible for enabling interaction with gRPC methods through a JSON-based interface.</div>
 </dd>
 <dt><a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html#%3Cinit%3E(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder)" class="member-name-link">GrpcProxyService(GrpcServiceRegistry, ApplicationContext, ProtobufJsonTranscoder)</a> - Constructor for class io.micronaut.protobuf.json.grpc.<a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html" title="class in io.micronaut.protobuf.json.grpc">GrpcProxyService</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html#%3Cinit%3E(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder,io.micronaut.protobuf.json.GrpcJsonConfiguration)"><code>GrpcProxyService(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder,io.micronaut.protobuf.json.GrpcJsonConfiguration)</code></a> instead.</div>
+</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html#%3Cinit%3E(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder,io.micronaut.protobuf.json.GrpcJsonConfiguration)" class="member-name-link">GrpcProxyService(GrpcServiceRegistry, ApplicationContext, ProtobufJsonTranscoder, GrpcJsonConfiguration)</a> - Constructor for class io.micronaut.protobuf.json.grpc.<a href="io/micronaut/protobuf/json/grpc/GrpcProxyService.html" title="class in io.micronaut.protobuf.json.grpc">GrpcProxyService</a></dt>
+<dd>
+<div class="block">Creates a proxy service using the configured streaming response limits.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcResourceLoaderFactory.html" class="type-name-link" title="class in io.micronaut.grpc.server">GrpcResourceLoaderFactory</a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
 <dd>
 <div class="block">Provides core resource loading support when the HTTP module is not present.</div>
@@ -1145,6 +1158,14 @@ indicating the service that could not be found.</div>
 <dt><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#setMaxInboundMetadataSize(int)" class="member-name-link">setMaxInboundMetadataSize(int)</a> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
 <dd>
 <div class="block">Sets the maximum size of metadata allowed to be received.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html#setMaxResponseBytes(long)" class="member-name-link">setMaxResponseBytes(long)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a></dt>
+<dd>
+<div class="block">Sets the maximum estimated serialized response size in bytes.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html#setMaxResponseMessages(int)" class="member-name-link">setMaxResponseMessages(int)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a></dt>
+<dd>
+<div class="block">Sets the maximum number of messages collected from a streaming response.</div>
 </dd>
 <dt><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#setMediaTypes(java.util.List)" class="member-name-link">setMediaTypes(List)</a> - Method in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
 <dd>

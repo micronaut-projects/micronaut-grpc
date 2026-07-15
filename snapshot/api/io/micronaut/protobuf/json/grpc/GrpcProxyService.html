@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="../../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../search.html">Search</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
@@ -57,6 +58,7 @@ loadScripts(document, 'script');</script>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
+<li><a href="#%3Cinit%3E(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder,io.micronaut.protobuf.json.GrpcJsonConfiguration)" tabindex="0">GrpcProxyService(GrpcServiceRegistry, ApplicationContext, ProtobufJsonTranscoder, GrpcJsonConfiguration)</a></li>
 <li><a href="#%3Cinit%3E(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder)" tabindex="0">GrpcProxyService(GrpcServiceRegistry, ApplicationContext, ProtobufJsonTranscoder)</a></li>
 </ol>
 </li>
@@ -121,7 +123,18 @@ Exceptions:
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder)" class="member-name-link">GrpcProxyService</a><wbr>(<a href="../registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a>&nbsp;registry,
  io.micronaut.context.ApplicationContext&nbsp;context,
  <a href="../ProtobufJsonTranscoder.html" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a>&nbsp;transcoder)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <a href="#%3Cinit%3E(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder,io.micronaut.protobuf.json.GrpcJsonConfiguration)"><code>GrpcProxyService(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder,io.micronaut.protobuf.json.GrpcJsonConfiguration)</code></a> instead.</div>
+</div>
+</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder,io.micronaut.protobuf.json.GrpcJsonConfiguration)" class="member-name-link">GrpcProxyService</a><wbr>(<a href="../registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a>&nbsp;registry,
+ io.micronaut.context.ApplicationContext&nbsp;context,
+ <a href="../ProtobufJsonTranscoder.html" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a>&nbsp;transcoder,
+ <a href="../GrpcJsonConfiguration.html" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a>&nbsp;configuration)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Creates a proxy service using the configured streaming response limits.</div>
+</div>
 </div>
 </section>
 </li>
@@ -161,12 +174,45 @@ Exceptions:
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="&lt;init&gt;(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder,io.micronaut.protobuf.json.GrpcJsonConfiguration)">
+<h3>GrpcProxyService</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="annotations">@Inject
+</span><span class="modifiers">public</span>&nbsp;<span class="element-name">GrpcProxyService</span><wbr><span class="parameters">(<a href="../registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a>&nbsp;registry,
+ io.micronaut.context.ApplicationContext&nbsp;context,
+ <a href="../ProtobufJsonTranscoder.html" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a>&nbsp;transcoder,
+ <a href="../GrpcJsonConfiguration.html" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a>&nbsp;configuration)</span></div>
+<div class="block">Creates a proxy service using the configured streaming response limits.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>registry</code> - gRPC service registry</dd>
+<dd><code>context</code> - application context</dd>
+<dd><code>transcoder</code> - protobuf JSON transcoder</dd>
+<dd><code>configuration</code> - JSON proxy configuration</dd>
+<dt>Since:</dt>
+<dd>5.1.0</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="&lt;init&gt;(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder)">
 <h3>GrpcProxyService</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">GrpcProxyService</span><wbr><span class="parameters">(<a href="../registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a>&nbsp;registry,
+<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Deprecated.html#forRemoval()" title="class or interface in java.lang" class="external-link">forRemoval</a>=true,
+            <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Deprecated.html#since()" title="class or interface in java.lang" class="external-link">since</a>="5.1.0")
+</span><span class="modifiers">public</span>&nbsp;<span class="element-name">GrpcProxyService</span><wbr><span class="parameters">(<a href="../registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a>&nbsp;registry,
  io.micronaut.context.ApplicationContext&nbsp;context,
  <a href="../ProtobufJsonTranscoder.html" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a>&nbsp;transcoder)</span></div>
+<div class="deprecation-block"><span class="deprecated-label">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecation-comment">Use <a href="#%3Cinit%3E(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder,io.micronaut.protobuf.json.GrpcJsonConfiguration)"><code>GrpcProxyService(io.micronaut.protobuf.json.registry.GrpcServiceRegistry,io.micronaut.context.ApplicationContext,io.micronaut.protobuf.json.ProtobufJsonTranscoder,io.micronaut.protobuf.json.GrpcJsonConfiguration)</code></a> instead.</div>
+</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>registry</code> - gRPC service registry</dd>
+<dd><code>context</code> - application context</dd>
+<dd><code>transcoder</code> - protobuf JSON transcoder</dd>
+</dl>
 </div>
 </section>
 </li>
