@@ -34,4 +34,47 @@ import io.micronaut.core.annotation.Experimental;
 public class GrpcJsonConfiguration {
     public static final String PREFIX = "micronaut.grpc.json";
 
+    private int maxResponseMessages = 10_000;
+    private long maxResponseBytes = 16L * 1024 * 1024;
+
+    /**
+     * @return The maximum number of messages collected from a streaming response
+     * @since 5.1.0
+     */
+    public int getMaxResponseMessages() {
+        return maxResponseMessages;
+    }
+
+    /**
+     * Sets the maximum number of messages collected from a streaming response.
+     * @param maxResponseMessages The maximum message count
+     * @since 5.1.0
+     */
+    public void setMaxResponseMessages(int maxResponseMessages) {
+        if (maxResponseMessages < 1) {
+            throw new IllegalArgumentException("maxResponseMessages must be greater than zero");
+        }
+        this.maxResponseMessages = maxResponseMessages;
+    }
+
+    /**
+     * @return The maximum estimated serialized response size in bytes
+     * @since 5.1.0
+     */
+    public long getMaxResponseBytes() {
+        return maxResponseBytes;
+    }
+
+    /**
+     * Sets the maximum estimated serialized response size in bytes.
+     * @param maxResponseBytes The maximum response size
+     * @since 5.1.0
+     */
+    public void setMaxResponseBytes(long maxResponseBytes) {
+        if (maxResponseBytes < 1) {
+            throw new IllegalArgumentException("maxResponseBytes must be greater than zero");
+        }
+        this.maxResponseBytes = maxResponseBytes;
+    }
+
 }
