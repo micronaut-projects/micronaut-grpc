@@ -1,0 +1,17 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+}
+
+dependencies {
+    annotationProcessor mn.micronaut.inject.java
+
+    api platform("io.micronaut.platform:micronaut-platform:${libs.versions.micronaut.platform.get()}")
+    api projects.micronautGrpcServerRuntime
+    api libs.micronaut.security
+}
+
+micronautBuild {
+    binaryCompatibility {
+        enabledAfter("5.0.0")
+    }
+}

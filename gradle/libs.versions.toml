@@ -40,6 +40,8 @@ managed-protobuf-kotlin = { module = 'com.google.protobuf:protobuf-kotlin', vers
 managed-protobuf-kotlin-lite = { module = 'com.google.protobuf:protobuf-kotlin-lite', version.ref = 'managed-protobuf' }
 managed-protobuf-java-util = { module = 'com.google.protobuf:protobuf-java-util', version.ref = 'managed-protobuf' }
 managed-protoc = { module = 'com.google.protobuf:protoc', version.ref = 'managed-protobuf' }
+micronaut-security = { module = "io.micronaut.security:micronaut-security" }
+micronaut-security-jwt = { module = "io.micronaut.security:micronaut-security-jwt" }
 
 ## BOMs
 boms-protobuf = { module = 'com.google.protobuf:protobuf-bom', version.ref = 'managed-protobuf' }
