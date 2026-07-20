@@ -4,6 +4,7 @@ import io.grpc.Channel
 import io.grpc.examples.helloworld.Greeter2Grpc
 import io.grpc.examples.helloworld.HelloReply
 import io.grpc.examples.helloworld.HelloRequest
+import io.grpc.netty.NettyChannelBuilder
 import io.grpc.stub.StreamObserver
 import io.micronaut.context.ApplicationContext
 import io.micronaut.context.annotation.Factory
@@ -151,6 +152,101 @@ class GrpcNamedChannelSpec extends Specification {
         embeddedServer.close()
     }
 
+    void "test named client configures retry service config"() {
+        given:
+        def context = ApplicationContext.run([
+                'grpc.channels.greeter.address'               : "localhost:${SocketUtils.findAvailableTcpPort()}",
+                'grpc.channels.greeter.plaintext'             : true,
+                'grpc.channels.greeter.enable-retry'          : true,
+                'grpc.channels.greeter.max-retry-attempts'    : 4,
+                'grpc.channels.greeter.max-hedged-attempts'   : 3,
+                'grpc.channels.greeter.retry-buffer-size'     : 1024,
+                'grpc.channels.greeter.per-rpc-buffer-limit'  : 512,
+                'grpc.channels.greeter.default-service-config': [
+                        methodConfig: [[
+                                name       : [[service: 'helloworld.Greeter']],
+                                retryPolicy: [
+                                        maxAttempts         : 4,
+                                        initialBackoff      : '0.1s',
+                                        maxBackoff          : '1s',
+                                        backoffMultiplier   : 2,
+                                        retryableStatusCodes: ['UNAVAILABLE']
+                                ]
+                        ]]
+                ]
+        ])
+
+        when:
+        def config = context.getBean(GrpcManagedChannelConfiguration, Qualifiers.byName("greeter"))
+        def managedChannelBuilder = getFieldValue(config.channelBuilder, "managedChannelImplBuilder")
+
+        then:
+        getFieldValue(managedChannelBuilder, "retryEnabled")
+        getFieldValue(managedChannelBuilder, "maxRetryAttempts") == 4
+        getFieldValue(managedChannelBuilder, "maxHedgedAttempts") == 3
+        getFieldValue(managedChannelBuilder, "retryBufferSize") == 1024L
+        getFieldValue(managedChannelBuilder, "perRpcBufferLimit") == 512L
+        getFieldValue(managedChannelBuilder, "defaultServiceConfig") == [
+                methodConfig: [[
+                        name       : [[service: 'helloworld.Greeter']],
+                        retryPolicy: [
+                                maxAttempts         : 4d,
+                                initialBackoff      : '0.1s',
+                                maxBackoff          : '1s',
+                                backoffMultiplier   : 2d,
+                                retryableStatusCodes: ['UNAVAILABLE']
+                        ]
+                ]]
+        ]
+
+        cleanup:
+        context.close()
+    }
+
+    void "test default client configures retry service config"() {
+        given:
+        def context = ApplicationContext.run([
+                'grpc.client.plaintext'             : true,
+                'grpc.client.enable-retry'          : true,
+                'grpc.client.max-retry-attempts'    : 4,
+                'grpc.client.default-service-config': [
+                        methodConfig: [[
+                                name       : [[service: 'helloworld.Greeter']],
+                                retryPolicy: [
+                                        maxAttempts         : 4,
+                                        initialBackoff      : '0.1s',
+                                        maxBackoff          : '1s',
+                                        backoffMultiplier   : 2,
+                                        retryableStatusCodes: ['UNAVAILABLE']
+                                ]
+                        ]]
+                ]
+        ])
+
+        when:
+        def channelBuilder = context.createBean(NettyChannelBuilder, "http://localhost:${SocketUtils.findAvailableTcpPort()}")
+        def managedChannelBuilder = getFieldValue(channelBuilder, "managedChannelImplBuilder")
+
+        then:
+        getFieldValue(managedChannelBuilder, "retryEnabled")
+        getFieldValue(managedChannelBuilder, "maxRetryAttempts") == 4
+        getFieldValue(managedChannelBuilder, "defaultServiceConfig") == [
+                methodConfig: [[
+                        name       : [[service: 'helloworld.Greeter']],
+                        retryPolicy: [
+                                maxAttempts         : 4d,
+                                initialBackoff      : '0.1s',
+                                maxBackoff          : '1s',
+                                backoffMultiplier   : 2d,
+                                retryableStatusCodes: ['UNAVAILABLE']
+                        ]
+                ]]
+        ]
+
+        cleanup:
+        context.close()
+    }
+
     @Retry
     void "test named client - eager init"() {
         given:
@@ -224,5 +320,19 @@ class GrpcNamedChannelSpec extends Specification {
             responseObserver.onNext(reply)
             responseObserver.onCompleted()
         }
+    }
+
+    private static Object getFieldValue(Object target, String fieldName) {
+        Class<?> currentClass = target.class
+        while (currentClass != null) {
+            try {
+                def field = currentClass.getDeclaredField(fieldName)
+                field.setAccessible(true)
+                return field.get(target)
+            } catch (NoSuchFieldException ignored) {
+                currentClass = currentClass.getSuperclass()
+            }
+        }
+        throw new NoSuchFieldException("Field '${fieldName}' not found on ${target.class.name} or its superclasses")
     }
 }

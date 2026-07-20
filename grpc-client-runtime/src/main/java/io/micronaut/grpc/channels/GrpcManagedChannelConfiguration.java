@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 original authors
+ * Copyright 2017-2026 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,15 @@ package io.micronaut.grpc.channels;
 import io.grpc.netty.NettyChannelBuilder;
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.env.Environment;
+import io.micronaut.core.annotation.Internal;
+import io.micronaut.core.convert.format.MapFormat;
 import io.micronaut.core.naming.Named;
+import io.micronaut.core.naming.conventions.StringConvention;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.URI;
@@ -42,30 +49,45 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
     private static final Duration DEFAULT_CONNECTION_TIMEOUT = Duration.ofSeconds(20);
     protected final String name;
 
-    @ConfigurationBuilder(prefixes = {"use", ""}, allowZeroArgs = true)
+    @ConfigurationBuilder(prefixes = {"use", ""}, allowZeroArgs = true, excludes = {"defaultServiceConfig"})
     protected final NettyChannelBuilder channelBuilder;
 
     private final boolean connectOnStartup;
     private final Duration connectionTimeout;
 
     /**
-     * Constructors a new managed channel configuration.
+     * Constructs a new managed channel configuration.
      *
      * @param name            The name
      * @param env             The environment
      * @param executorService The executor service to use
+     * @deprecated Use {@link #GrpcManagedChannelConfiguration(String, String, Environment, ExecutorService)} instead
      */
+    @Deprecated(since = "4.9.0", forRemoval = true)
     protected GrpcManagedChannelConfiguration(String name, Environment env, ExecutorService executorService) {
+        this(name, PREFIX + '.' + name, env, executorService);
+    }
+
+    /**
+     * Constructs a new managed channel configuration.
+     *
+     * @param name            The name
+     * @param propertyPrefix  The property prefix for reading environment configuration
+     * @param env             The environment
+     * @param executorService The executor service to use
+     */
+    @Internal
+    protected GrpcManagedChannelConfiguration(String name, String propertyPrefix, Environment env, ExecutorService executorService) {
         this.name = name;
-        this.connectOnStartup = env.getProperty(PREFIX + '.' + name + CONNECT_ON_STARTUP, Boolean.class).isPresent();
-        this.connectionTimeout = env.getProperty(PREFIX + '.' + name + CONNECTION_TIMEOUT, Long.class)
+        this.connectOnStartup = env.getProperty(propertyPrefix + CONNECT_ON_STARTUP, Boolean.class).isPresent();
+        this.connectionTimeout = env.getProperty(propertyPrefix + CONNECTION_TIMEOUT, Long.class)
             .filter(t -> t > 0)
             .map(Duration::ofSeconds)
             .orElse(DEFAULT_CONNECTION_TIMEOUT);
 
-        this.channelBuilder = env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class)
+        this.channelBuilder = env.getProperty(propertyPrefix + SETTING_URL, SocketAddress.class)
             .map(this::getChannelBuilder)
-            .orElseGet(() -> env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class)
+            .orElseGet(() -> env.getProperty(propertyPrefix + SETTING_TARGET, String.class)
                 .map(NettyChannelBuilder::forTarget)
                 .orElseGet(() -> {
                     final URI uri = name.contains("//") ? URI.create(name) : null;
@@ -127,5 +149,47 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
      */
     public NettyChannelBuilder getChannelBuilder() {
         return channelBuilder;
+    }
+
+    /**
+     * Applies the gRPC default service config using Micronaut's nested/raw map binding.
+     *
+     * @param serviceConfig The service config map
+     */
+    public void setDefaultServiceConfig(
+        @MapFormat(transformation = MapFormat.MapTransformation.NESTED, keyFormat = StringConvention.RAW)
+        Map<String, Object> serviceConfig) {
+        if (serviceConfig != null) {
+            channelBuilder.defaultServiceConfig(normalizeServiceConfig(serviceConfig));
+        }
+    }
+
+    private Map<String, ?> normalizeServiceConfig(Map<String, Object> serviceConfig) {
+        Map<String, Object> normalized = new LinkedHashMap<>(serviceConfig.size());
+        for (Map.Entry<String, Object> entry : serviceConfig.entrySet()) {
+            normalized.put(entry.getKey(), normalizeServiceConfigValue(entry.getValue()));
+        }
+        return normalized;
+    }
+
+    private Object normalizeServiceConfigValue(Object value) {
+        if (value instanceof Map<?, ?> map) {
+            Map<String, Object> normalized = new LinkedHashMap<>(map.size());
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                normalized.put(String.valueOf(entry.getKey()), normalizeServiceConfigValue(entry.getValue()));
+            }
+            return normalized;
+        }
+        if (value instanceof List<?> list) {
+            List<Object> normalized = new ArrayList<>(list.size());
+            for (Object entry : list) {
+                normalized.add(normalizeServiceConfigValue(entry));
+            }
+            return normalized;
+        }
+        if (value instanceof Number number && !(value instanceof Double)) {
+            return number.doubleValue();
+        }
+        return value;
     }
 }

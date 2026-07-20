@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 original authors
+ * Copyright 2017-2026 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class GrpcDefaultManagedChannelConfiguration extends GrpcManagedChannelCo
     public GrpcDefaultManagedChannelConfiguration(
         Environment env,
         @Named(TaskExecutors.IO) ExecutorService executorService) {
-        super(NAME, env, executorService);
+        super(NAME, PREFIX, env, executorService);
     }
 
     /**
@@ -58,6 +58,6 @@ public class GrpcDefaultManagedChannelConfiguration extends GrpcManagedChannelCo
         String target,
         Environment env,
         @Named(TaskExecutors.IO) ExecutorService executorService) {
-        super(target, env, executorService);
+        super(target, PREFIX, env, executorService);
     }
 }
