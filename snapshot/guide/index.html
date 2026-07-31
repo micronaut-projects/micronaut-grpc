@@ -15,7 +15,7 @@
     <script>hljs.initHighlightingOnLoad();</script>
     <link rel="stylesheet" href="../css/multi-language-sample.css"/>
     <script src="../js/docs.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.13/clipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
     <script type="text/javascript">
         function addJsClass(el) {
             var classes = document.body.className.split(" ");
@@ -23,7 +23,9 @@
             document.body.className = classes.join(" ");
         }
     </script>
-
+    <style type="text/css">
+        .lang-java { display: block }; .lang-python { display: block }; .lang-kotlin { display: block }; .lang-groovy { display: block }; 
+    </style>
 </head>
 
 <body class="body" id="docs" onload="addJsClass();" onhashchange="highlightMenu()">
@@ -121,13 +123,13 @@
         <h1>Micronaut gRPC</h1>
         <p></p>
         <p>Integration between Micronaut and gRPC</p>
-        <p><strong>Version:</strong> 4.13.1-SNAPSHOT </p>
+        <p><strong>Version:</strong> 5.1.1-SNAPSHOT </p>
     </div>
     
 <h1 id="introduction"><a class="anchor" href="#introduction"></a>1 Introduction</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.13.x/src/main/docs/guide/introduction.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/introduction.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -159,7 +161,7 @@
 <h1 id="releaseHistory"><a class="anchor" href="#releaseHistory"></a>2 Release History</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.13.x/src/main/docs/guide/releaseHistory.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/releaseHistory.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -175,7 +177,7 @@
 <h1 id="gettingStarted"><a class="anchor" href="#gettingStarted"></a>3 Getting Started</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.13.x/src/main/docs/guide/gettingStarted.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/gettingStarted.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -251,7 +253,13 @@ cd demo</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">sourceSets {
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
+    grpcVersion = libs.versions.managed.grpc.asProvider().get()
+    protobufVersion = libs.versions.managed.protobuf.asProvider().get()
+}
+
+
+sourceSets {
     main {
         java {
             srcDirs 'build/generated/source/proto/main/grpc'
@@ -259,14 +267,15 @@ cd demo</code></pre>
         }
     }
 }
-
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
     }
     generateProtoTasks {
-        all()*.plugins { grpc {} }
+        all()*.plugins {
+            grpc {}
+        }
     }
 }</code></pre>
 </div>
@@ -341,6 +350,38 @@ protobuf {
 </div>
 </div>
 <div class="paragraph">
+<p>If you want to generate Reactor-based stubs with <a href="https://github.com/salesforce/reactive-grpc">reactive-grpc</a>, add the generator plugin and stub dependency alongside the standard gRPC code generation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
+    reactiveGrpcVersion = libs.versions.reactive.grpc.get()
+}
+
+dependencies {
+...
+    implementation platform(libs.micronaut.reactor)
+    implementation libs.reactive.grpc.stub
+    implementation "io.projectreactor:reactor-core"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/reactor'
+        }
+    }
+}
+
+protobuf {
+...
+        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
+...
+            reactor {}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Finally, add the following dependencies to your build:</p>
 </div>
 <div class="paragraph">
@@ -360,7 +401,8 @@ protobuf {
     &lt;artifactId&gt;micronaut-grpc-server-runtime&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
-</div></p>
+</div>
+</p>
 </div>
 <div class="paragraph">
 <p>For gRPC clients:</p>
@@ -379,7 +421,8 @@ protobuf {
     &lt;artifactId&gt;micronaut-grpc-client-runtime&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
-</div></p>
+</div>
+</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -524,7 +567,7 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 <h1 id="server"><a class="anchor" href="#server"></a>4 gRPC Server</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.13.x/src/main/docs/guide/server.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/server.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -537,6 +580,21 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 </div>
 <div class="paragraph">
 <p>For example:</p>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import jakarta.inject.Singleton
+
+@Singleton // <b class="conum">(1)</b>
+class GreetingEndpoint(val greetingService: GreetingService) : GreeterGrpcKt.GreeterCoroutineImplBase() { // <b class="conum">(2)</b>
+    override suspend fun sayHello(request: HelloRequest): HelloReply {
+        // <b class="conum">(3)</b>
+        val message = greetingService.sayHello(request.name)
+        val reply = HelloReply.newBuilder().setMessage(message).build()
+        return reply
+    }
+}</code></pre>
+</div>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
@@ -568,21 +626,6 @@ class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { // <b class="conum"
 }</code></pre>
 </div>
 </div>
-<div class="listingblock multi-language-sample">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import jakarta.inject.Singleton
-
-@Singleton // <b class="conum">(1)</b>
-class GreetingEndpoint(val greetingService: GreetingService) : GreeterGrpcKt.GreeterCoroutineImplBase() { // <b class="conum">(2)</b>
-    override suspend fun sayHello(request: HelloRequest): HelloReply {
-        // <b class="conum">(3)</b>
-        val message = greetingService.sayHello(request.name)
-        val reply = HelloReply.newBuilder().setMessage(message).build()
-        return reply
-    }
-}</code></pre>
-</div>
-</div>
 <div class="colist arabic">
 <table>
 <tr>
@@ -599,6 +642,31 @@ class GreetingEndpoint(val greetingService: GreetingService) : GreeterGrpcKt.Gre
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>If you generate Reactor bindings with <code>reactive-grpc</code>, Micronaut can register the generated <code>BindableService</code> implementation in exactly the same way. Implement the generated Reactor base class as a singleton bean:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton
+public class ReactiveGreetingEndpoint extends ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase {
+
+    private final GreetingService greetingService;
+
+    public ReactiveGreetingEndpoint(GreetingService greetingService) {
+        this.greetingService = greetingService;
+    }
+
+    @Override
+    public Mono&lt;HelloReply&gt; sayHello(Mono&lt;HelloRequest&gt; request) {
+        return request.map(helloRequest -&gt;
+            HelloReply.newBuilder()
+                .setMessage(greetingService.sayHello(helloRequest.getName()))
+                .build()
+        );
+    }
+}</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_running_the_grpc_server">Running the gRPC Server</h3>
@@ -612,13 +680,24 @@ class GreetingEndpoint(val greetingService: GreetingService) : GreeterGrpcKt.Gre
 <div class="sect2">
 <h3 id="_configuring_the_grpc_server">Configuring the gRPC Server</h3>
 <div class="paragraph">
-<p>The server can be be configured in a number of different ways. You can use the <code>io.micronaut.grpc.server.GrpcServerConfiguration</code> type to configure any property of gRPC&#8217;s <code>NettyServerBuilder</code> class via <code>application.yml</code>.</p>
+<p>The server can be configured in a number of different ways. By default, Micronaut configures gRPC&#8217;s <code>NettyServerBuilder</code> via <code>application.yml</code>.</p>
 </div>
 <div class="paragraph">
 <p>For example:</p>
 </div>
-<div class="listingblock">
+<div class="openblock">
 <div class="title">Configuring the gRPC server</div>
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.server.port=8080
+grpc.server.keep-alive-time=3h
+grpc.server.max-inbound-message-size=1024
+grpc.server.ssl.cert-chain=file://path/to/my.cert
+grpc.server.ssl.private-key=classpath:my.key</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     server:
@@ -626,8 +705,64 @@ class GreetingEndpoint(val greetingService: GreetingService) : GreeterGrpcKt.Gre
         keep-alive-time: 3h
         max-inbound-message-size: 1024
         ssl:
-            cert-chain: 'file://path/to/my.cert' <i class="conum" data-value="1"></i><b>(1)</b>
-            private-key: 'classpath:my.key' <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+            cert-chain: 'file://path/to/my.cert' # <b class="conum">(1)</b>
+            private-key: 'classpath:my.key' # <b class="conum">(2)</b></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {server = {port = 8080, keep-alive-time = "3h", max-inbound-message-size = 1024, ssl = {cert-chain = "file://path/to/my.cert", private-key = "classpath:my.key"}}}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  server {
+    port = 8080
+    keepAliveTime = "3h"
+    maxInboundMessageSize = 1024
+    ssl {
+      certChain = "file://path/to/my.cert"
+      privateKey = "classpath:my.key"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    server {
+      port = 8080
+      keep-alive-time = "3h"
+      max-inbound-message-size = 1024
+      ssl {
+        cert-chain = "file://path/to/my.cert"
+        private-key = "classpath:my.key"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "server": {
+      "port": 8080,
+      "keep-alive-time": "3h",
+      "max-inbound-message-size": 1024,
+      "ssl": {
+        "cert-chain": "file://path/to/my.cert",
+        "private-key": "classpath:my.key"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -644,6 +779,65 @@ class GreetingEndpoint(val greetingService: GreetingService) : GreeterGrpcKt.Gre
 </div>
 <div class="paragraph">
 <p>By default, the gRPC server will be enabled. To disable the gRPC server, set <code>grpc.server.enabled</code> to false.</p>
+</div>
+<div class="paragraph">
+<p>For tests, add the <code>io.micronaut.grpc:micronaut-grpc-inprocess</code> module and set <code>grpc.server.in-process-name</code> to switch the embedded server and the injected <code>@GrpcChannel("grpc-server")</code> test channel to gRPC&#8217;s in-process transport instead of opening a TCP port.</p>
+</div>
+<div class="openblock">
+<div class="title">Using the in-process server for tests</div>
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.server.in-process-name=test-grpc</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+    server:
+        in-process-name: test-grpc</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {server = {in-process-name = "test-grpc"}}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  server {
+    inProcessName = "test-grpc"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    server {
+      in-process-name = "test-grpc"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "server": {
+      "in-process-name": "test-grpc"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The in-process transport avoids port management and is managed by the Micronaut application lifecycle. SSL is not supported in this mode, and the support lives in the optional <code>micronaut-grpc-inprocess</code> module so the Netty-based server runtime does not require the extra dependency.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreationListener</code> for example:</p>
@@ -706,7 +900,8 @@ public class ServerBuilderListener implements BeanCreatedEventListener&lt;Server
 </ul>
 </div>
 <div class="paragraph">
-<p>In addition, by default the server will be setup to use Micronaut&#8217;s I/O executor service.</p>
+<p>In addition, by default the server will be setup to use Micronaut&#8217;s I/O executor service.
+Set <code>grpc.server.executor</code> to the name of an <code>Executor</code> bean to override that default from configuration.</p>
 </div>
 <div class="sect3">
 <h4 id="_server_interceptor_ordering">Server Interceptor Ordering</h4>
@@ -800,6 +995,21 @@ and then the order will be reversed when sending the response message.</p>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import io.grpc.health.v1.HealthCheckResponse.ServingStatus
+import io.grpc.protobuf.services.HealthStatusManager
+import jakarta.inject.Singleton
+
+@Singleton
+class HealthService(private val healthStatusManager: HealthStatusManager?) {
+
+    fun setStatus(serviceName: String, status: ServingStatus) {
+        healthStatusManager?.setStatus(serviceName, status)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
 <pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">import io.grpc.health.v1.HealthCheckResponse
 import io.grpc.protobuf.services.HealthStatusManager
 import io.micronaut.core.annotation.NonNull
@@ -817,21 +1027,6 @@ class HealthService {
     }
 
     void setStatus(@NonNull String serviceName, @NonNull HealthCheckResponse.ServingStatus status) {
-        healthStatusManager?.setStatus(serviceName, status)
-    }
-}</code></pre>
-</div>
-</div>
-<div class="listingblock multi-language-sample">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import io.grpc.health.v1.HealthCheckResponse.ServingStatus
-import io.grpc.protobuf.services.HealthStatusManager
-import jakarta.inject.Singleton
-
-@Singleton
-class HealthService(private val healthStatusManager: HealthStatusManager?) {
-
-    fun setStatus(serviceName: String, status: ServingStatus) {
         healthStatusManager?.setStatus(serviceName, status)
     }
 }</code></pre>
@@ -884,7 +1079,7 @@ class HealthService(private val healthStatusManager: HealthStatusManager?) {
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-For detailed instructions on how to set up Micronaut Test for either Spock or JUnit 5 see the <a href="https://micronaut-projects.github.io/micronaut-test/latest/guide/index.html">documentation</a> on the subject.
+For detailed instructions on how to set up Micronaut Test for Spock, JUnit 5, or Kotest see the <a href="https://micronaut-projects.github.io/micronaut-test/latest/guide/index.html">documentation</a> on the subject.
 </td>
 </tr>
 </table>
@@ -947,7 +1142,7 @@ class Clients {
 <h1 id="client"><a class="anchor" href="#client"></a>5 gRPC Clients</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.13.x/src/main/docs/guide/client.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/client.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -967,7 +1162,15 @@ class Clients {
 <div class="paragraph">
 <p>For example, if you wish to disable secure communication:</p>
 </div>
-<div class="listingblock">
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.client.plaintext=true
+grpc.client.max-retry-attempts=10</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     client:
@@ -975,11 +1178,73 @@ class Clients {
         max-retry-attempts: 10</code></pre>
 </div>
 </div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {client = {plaintext = true, max-retry-attempts = 10}}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  client {
+    plaintext = true
+    maxRetryAttempts = 10
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    client {
+      plaintext = true
+      max-retry-attempts = 10
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "client": {
+      "plaintext": true,
+      "max-retry-attempts": 10
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 <div class="paragraph">
 <p>Properties under <code>grpc.client</code> are global properties and are the defaults used unless named configuration exists under <code>grpc.channels.[NAME]</code>.</p>
 </div>
 <div class="paragraph">
 <p>Any property of the <code>io.grpc.netty.NettyChannelBuilder</code> type can be configured.</p>
+</div>
+<div class="paragraph">
+<p>You can also disable all gRPC client channel injection, or disable a specific named client:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+    client:
+        enabled: false</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+    client:
+        greeter:
+            enabled: false</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When a client is disabled, optional or nullable <code>@GrpcChannel</code> injection points resolve to an empty value, while required injection points fail with a dependency injection error.</p>
 </div>
 <div class="paragraph">
 <p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreationListener</code> for example:</p>
@@ -1065,7 +1330,16 @@ class Clients {
 <div class="paragraph">
 <p>For example given the following configuration:</p>
 </div>
-<div class="listingblock">
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.channels.greeter.address=${my.server}:${my.port}
+grpc.channels.greeter.plaintext=true
+grpc.channels.greeter.max-retry-attempts=10</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     channels:
@@ -1073,6 +1347,56 @@ class Clients {
             address: '${my.server}:${my.port}'
             plaintext: true
             max-retry-attempts: 10</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {channels = {greeter = {address = "${my.server}:${my.port}", plaintext = true, max-retry-attempts = 10}}}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  channels {
+    greeter {
+      address = "${my.server}:${my.port}"
+      plaintext = true
+      maxRetryAttempts = 10
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    channels {
+      greeter {
+        address = "${my.server}:${my.port}"
+        plaintext = true
+        max-retry-attempts = 10
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "channels": {
+      "greeter": {
+        "address": "${my.server}:${my.port}",
+        "plaintext": true,
+        "max-retry-attempts": 10
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="paragraph">
@@ -1096,12 +1420,47 @@ GreeterGrpc.GreeterStub reactiveStub(
 <div class="paragraph">
 <p>Using service IDs in this way is the preferred way to set up gRPC clients, because it works nicely with Service Discovery (see the next section).</p>
 </div>
+<div class="paragraph">
+<p>If you generate Reactor bindings with <code>reactive-grpc</code>, define the generated Reactor stub in the same kind of factory and inject the <code>ManagedChannel</code> with <code>@GrpcChannel</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @Bean
+    ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub reactiveStub(
+        @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) {
+        return ReactorReactiveGreeterGrpc.newReactorStub(channel);
+    }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The resulting stub can then be injected into your application or tests and used directly with Reactor operators:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MicronautTest
+class ReactiveGreetingEndpointTest {
+
+    @Inject
+    ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub reactiveStub;
+
+    @Test
+    void testReactiveHelloWorld() {
+        String message = Mono.just(HelloRequest.newBuilder().setName("Fred").build())
+            .transform(reactiveStub::sayHello)
+            .map(HelloReply::getMessage)
+            .block(Duration.ofSeconds(5));
+
+        assertEquals("Hello Fred", message);
+    }
+}</code></pre>
+</div>
+</div>
 </div>
 
 <h1 id="serviceDiscovery"><a class="anchor" href="#serviceDiscovery"></a>6 Service Discovery</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.13.x/src/main/docs/guide/serviceDiscovery.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/serviceDiscovery.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1152,12 +1511,22 @@ GreeterGrpc.GreeterStub reactiveStub(
     &lt;scope&gt;runtime&lt;/scope&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
-</div></p>
+</div>
+</p>
 </div>
 <div class="paragraph">
 <p>Then setup Consul correctly:</p>
 </div>
-<div class="listingblock">
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">micronaut.application.name=greeter
+consul.client.registration.enabled=true
+consul.client.defaultZone=${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">micronaut:
     application:
@@ -1169,19 +1538,144 @@ consul:
         defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"</code></pre>
 </div>
 </div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">micronaut = {application = {name = "greeter"}}
+consul = {client = {registration = {enabled = true}, defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"}}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">micronaut {
+  application {
+    name = "greeter"
+  }
+}
+consul {
+  client {
+    registration {
+      enabled = true
+    }
+    defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  micronaut {
+    application {
+      name = "greeter"
+    }
+  }
+  consul {
+    client {
+      registration {
+        enabled = true
+      }
+      defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "micronaut": {
+    "application": {
+      "name": "greeter"
+    }
+  },
+  "consul": {
+    "client": {
+      "registration": {
+        "enabled": true
+      },
+      "defaultZone": "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 <div class="paragraph">
 <p>When using Service Discovery, Micronaut will register the service in Consul using the name defined in <code>micronaut.application.name</code>.
 If the application also uses an HTTP Server (Netty, Tomcat,&#8230;&#8203;), Micronaut will register the application with the same
 name and a different port in Consul. In case you want to use a different name for the gRPC service in Consul:</p>
 </div>
-<div class="listingblock">
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">micronaut.application.name=greeter
+grpc.server.instance-id=hello-grpc</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">micronaut:
     application:
-        name: greeter <i class="conum" data-value="1"></i><b>(1)</b>
+        name: greeter # <b class="conum">(1)</b>
 grpc:
     server:
-        instance-id: 'hello-grpc' <i class="conum" data-value="2"></i><b>(2)</b></code></pre>
+        instance-id: 'hello-grpc' # <b class="conum">(2)</b></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">micronaut = {application = {name = "greeter"}}
+grpc = {server = {instance-id = "hello-grpc"}}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">micronaut {
+  application {
+    name = "greeter"
+  }
+}
+grpc {
+  server {
+    instanceId = "hello-grpc"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  micronaut {
+    application {
+      name = "greeter"
+    }
+  }
+  grpc {
+    server {
+      instance-id = "hello-grpc"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "micronaut": {
+    "application": {
+      "name": "greeter"
+    }
+  },
+  "grpc": {
+    "server": {
+      "instance-id": "hello-grpc"
+    }
+  }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="colist arabic">
@@ -1202,7 +1696,15 @@ grpc:
 <div class="paragraph">
 <p>To discovery services via Consul and the Micronaut <code>DiscoveryClient</code> abstraction enable Consul and gRPC service discovery:</p>
 </div>
-<div class="listingblock">
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.client.discovery.enabled=true
+consul.client.defaultZone=${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     client:
@@ -1211,6 +1713,66 @@ grpc:
 consul:
     client:
         defaultZone: "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {client = {discovery = {enabled = true}}}
+consul = {client = {defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"}}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  client {
+    discovery {
+      enabled = true
+    }
+  }
+}
+consul {
+  client {
+    defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    client {
+      discovery {
+        enabled = true
+      }
+    }
+  }
+  consul {
+    client {
+      defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "client": {
+      "discovery": {
+        "enabled": true
+      }
+    }
+  },
+  "consul": {
+    "client": {
+      "defaultZone": "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+    }
+  }
+}</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="paragraph">
@@ -1235,57 +1797,122 @@ GreeterGrpc.GreeterStub greeterStub(
 <h1 id="tracing"><a class="anchor" href="#tracing"></a>7 Distributed Tracing</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.13.x/src/main/docs/guide/tracing.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/tracing.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
 
 
 <div class="paragraph">
-<p>gRPC includes tracing based on OpenCensus, however if you wish to use Micronaut&#8217;s integration with Jaeger or Zipkin you can do so by adding the following dependencies:</p>
+<p>Micronaut gRPC includes legacy OpenTracing-based tracing support. For new applications using Micronaut Tracing, add the OpenTelemetry gRPC integration:</p>
 </div>
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.tracing:micronaut-tracing-brave-http")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.tracing:micronaut-tracing-opentelemetry-grpc")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
     &lt;groupId&gt;io.micronaut.tracing&lt;/groupId&gt;
-    &lt;artifactId&gt;micronaut-tracing-brave-http&lt;/artifactId&gt;
+    &lt;artifactId&gt;micronaut-tracing-opentelemetry-grpc&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
-</div></p>
+</div>
+</p>
+</div>
+<div class="paragraph">
+<p>Micronaut Tracing will then create spans for gRPC client requests, server requests, client responses, and server responses.</p>
+</div>
+<div class="paragraph">
+<p>To export traces to Google Cloud Trace, add the Google Cloud OpenTelemetry exporter:</p>
 </div>
 <div class="paragraph">
 <p>        <div class="listingblock multi-language-sample">
 <div class="title"></div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">runtimeOnly(<span class="hljs-string">"io.opentracing.contrib:opentracing-grpc:0.2.1")</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">runtimeOnly(<span class="hljs-string">"com.google.cloud.opentelemetry:exporter-auto")</span></code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
-    &lt;groupId&gt;io.opentracing.contrib&lt;/groupId&gt;
-    &lt;artifactId&gt;opentracing-grpc&lt;/artifactId&gt;
-    &lt;version&gt;0.2.1&lt;/version&gt;
+    &lt;groupId&gt;com.google.cloud.opentelemetry&lt;/groupId&gt;
+    &lt;artifactId&gt;exporter-auto&lt;/artifactId&gt;
     &lt;scope&gt;runtime&lt;/scope&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
-</div></p>
+</div>
+</p>
 </div>
 <div class="paragraph">
-<p>You then need to <a href="https://micronaut-projects.github.io/micronaut-tracing/latest/guide/#jaeger">configure either Jaeger or Zipkin</a> appropriately.</p>
+<p>Then configure OpenTelemetry to use the <code>google_cloud_trace</code> exporter:</p>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">otel.traces.exporter=google_cloud_trace</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">otel:
+  traces:
+    exporter: google_cloud_trace</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">otel = {traces = {exporter = "google_cloud_trace"}}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">otel {
+  traces {
+    exporter = "google_cloud_trace"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  otel {
+    traces {
+      exporter = "google_cloud_trace"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "otel": {
+    "traces": {
+      "exporter": "google_cloud_trace"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>When running outside Google Cloud, provide Application Default Credentials with the <code>GOOGLE_APPLICATION_CREDENTIALS</code> environment variable (or <code>gcloud auth application-default login</code>) and set <code>GOOGLE_CLOUD_PROJECT</code> if the project cannot be detected automatically.</p>
+</div>
+<div class="paragraph">
+<p>For additional exporter options and authentication details, see the <a href="https://micronaut-projects.github.io/micronaut-tracing/latest/guide/#exporters">Micronaut Tracing OpenTelemetry exporter documentation</a>.</p>
 </div>
 
 <h1 id="protocolBuffers"><a class="anchor" href="#protocolBuffers"></a>8 Protocol Buffers Support</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.13.x/src/main/docs/guide/protocolBuffers.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/protocolBuffers.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1311,7 +1938,8 @@ GreeterGrpc.GreeterStub greeterStub(
     &lt;artifactId&gt;micronaut-protobuff-support&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
-</div></p>
+</div>
+</p>
 </div>
 <div class="paragraph">
 <p>Micronaut will now support the encoding and decoding requests / responses of type <code>application/x-protobuf</code>.</p>
@@ -1320,7 +1948,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <h1 id="protocolBuffersJsonSupport"><a class="anchor" href="#protocolBuffersJsonSupport"></a>9 Protocol Buffers Json Support (Experimental)</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.13.x/src/main/docs/guide/protocolBuffersJsonSupport.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/protocolBuffersJsonSupport.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1347,7 +1975,8 @@ server.</p>
     &lt;artifactId&gt;micronaut-protobuff-json-support&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
 </div>
-</div></p>
+</div>
+</p>
 </div>
 <div class="paragraph">
 <p><code>grpc.rest.json.exposed=true</code></p>
@@ -1505,7 +2134,7 @@ service Greeter {
 <h1 id="repository"><a class="anchor" href="#repository"></a>10 Repository</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/4.13.x/src/main/docs/guide/repository.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/repository.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
