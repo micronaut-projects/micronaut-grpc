@@ -11,3 +11,33 @@ configurations.all {
         preferProjectModules()
     }
 }
+
+def guideVersionAttributes = layout.buildDirectory.file("generated/docs/guide-version-attributes.adoc")
+
+tasks.register("generateGuideVersionAttributes") {
+    outputs.file(guideVersionAttributes)
+    doLast {
+        def versionCatalog = file("gradle/libs.versions.toml").text
+        def findVersion = { String key ->
+            def matcher = versionCatalog =~ /(?m)^${java.util.regex.Pattern.quote(key)}\s*=\s*['"]([^'"]+)['"]\s*$/
+            if (!matcher.find()) {
+                throw new GradleException("Unable to find version '${key}' in gradle/libs.versions.toml")
+            }
+            matcher.group(1)
+        }
+        def attrs = [
+            "grpc-version"                   : findVersion("managed-grpc"),
+            "grpc-kotlin-version"            : findVersion("managed-grpc-kotlin"),
+            "protobuf-version"               : findVersion("managed-protobuf"),
+            "protobuf-gradle-plugin-version" : findVersion("managed-protobuf-gradle"),
+            "javax-annotation-api-version"   : findVersion("javax-annotation-api"),
+        ]
+        def output = guideVersionAttributes.get().asFile
+        output.parentFile.mkdirs()
+        output.text = attrs.collect { key, value -> ":${key}: ${value}" }.join(System.lineSeparator()) + System.lineSeparator()
+    }
+}
+
+tasks.matching { it.name in ["publishGuide", "docs"] }.configureEach {
+    dependsOn(tasks.named("generateGuideVersionAttributes"))
+}
