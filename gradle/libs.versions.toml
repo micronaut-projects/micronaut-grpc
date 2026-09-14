@@ -15,7 +15,7 @@ reactive-grpc = "1.2.4"
 
 micronaut-gradle-plugin = '5.0.2'
 micronaut-tracing-legacy = '3.2.7'
-micronaut = "5.2.1"
+micronaut = "5.2.2"
 micronaut-test = "5.1.1"
 micronaut-serde = "3.1.1"
 micronaut-platform = "5.1.5"
