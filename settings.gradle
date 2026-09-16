@@ -6,7 +6,7 @@ pluginManagement {
 }
 
 plugins {
-    id 'io.micronaut.build.shared.settings' version '8.0.2'
+    id 'io.micronaut.build.shared.settings' version '8.1.1'
 }
 
 enableFeaturePreview 'TYPESAFE_PROJECT_ACCESSORS'
@@ -23,9 +23,10 @@ include 'protobuff-support'
 include 'protobuff-json-support'
 
 // documentation samples
-include 'test-suite-java'
+include 'test-suite'
 include 'test-suite-groovy'
 include 'test-suite-kotlin'
+include 'test-suite-python'
 include 'test-suite-protobuff-json-java'
 include 'grpc-health'
 include 'grpc-opentracing'

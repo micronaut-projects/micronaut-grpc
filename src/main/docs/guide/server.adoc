@@ -1,21 +1,42 @@
 === Writing a Simple gRPC Server
 
+[.lang-java.lang-kotlin.lang-groovy]
+--
 To implement a gRPC server for the previously defined `helloworld.proto` definition you first need to generate the Java stubs using Gradle or Maven then create a class that extends from `GreeterGrpc.GreeterImplBase`.
+--
+
+[.lang-python]
+--
+To implement a gRPC server for the previously defined `helloworld.proto` definition you first need to generate the Java stubs using Gradle or Maven then create a class that implements `io.grpc.BindableService`. A Python class cannot extend the generated `GreeterGrpc.GreeterImplBase` class, instead it implements the methods of the generated `GreeterGrpc.AsyncService` interface and binds itself with `GreeterGrpc.bindService(self)`.
+--
 
 For example:
 
 snippet::helloworld.GreetingEndpoint[tags="imports,clazz", source="main"]
 
+[.lang-java.lang-kotlin.lang-groovy]
+--
 <1> The class extends from `GreeterGrpc.GreeterImplBase` and is annotated with `jakarta.inject.Singleton`
 <2> You can dependency inject other beans into the implementation. In this case `GreetingService` is dependency injected.
 <3> The `StreamObserver` is used to send a response to the client.
+--
+
+[.lang-python]
+--
+<1> The class implements `io.grpc.BindableService` and is annotated with `jakarta.inject.Singleton`
+<2> You can dependency inject other beans into the implementation. In this case `GreetingService` is dependency injected.
+<3> The `StreamObserver` is used to send a response to the client.
+<4> `GreeterGrpc.bindService(self)` builds the `ServerServiceDefinition` of the service from the methods of the generated `GreeterGrpc.AsyncService` interface implemented by the class.
+--
 
 If you generate Reactor bindings with `reactive-grpc`, Micronaut can register the generated `BindableService` implementation in exactly the same way. Implement the generated Reactor base class as a singleton bean:
 
-[source,java]
-----
-include::test-suite-java/src/main/java/helloworld/ReactiveGreetingEndpoint.java[tags=reactive-service]
-----
+snippet::helloworld.ReactiveGreetingEndpoint[tags="reactive-service", source="main", languages="java,kotlin,groovy"]
+
+[.lang-python]
+--
+NOTE: A Python class cannot extend the generated Reactor base class (`ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase`), so a Reactor gRPC service must be written in Java, Kotlin or Groovy. The generated Reactor client stub can be used from Python, see <<client, gRPC Clients>>.
+--
 
 === Running the gRPC Server
 
@@ -59,13 +80,14 @@ grpc:
 
 The in-process transport avoids port management and is managed by the Micronaut application lifecycle. SSL is not supported in this mode, and the support lives in the optional `micronaut-grpc-inprocess` module so the Netty-based server runtime does not require the extra dependency.
 
-Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
+Alternatively if you prefer programmatic configuration you can write a `BeanCreatedEventListener` for example:
 
-.Configuring the ServerBuilder
-[source,java]
-----
-include::grpc-server-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderListener.java[]
-----
+snippet::helloworld.ServerBuilderListener[tags="imports,clazz", source="main", title="Configuring the ServerBuilder"]
+
+[.lang-python]
+--
+NOTE: The Python listener customizes the `ServerBuilder` of the `GrpcServerConfiguration` bean, from which the `ServerBuilder` bean is created: the self-referencing generic type `ServerBuilder<T extends ServerBuilder<T>>` cannot be used as the type argument of a `BeanCreatedEventListener` implemented in Python.
+--
 
 === Auto Injected Types
 
@@ -82,38 +104,22 @@ Set `grpc.server.executor` to the name of an `Executor` bean to override that de
 To produce a consistent and predictable order of execution for server interceptors, it is required
 for the `io.grpc.ServerInterceptor` implementation to do one of the following:
 
-.Implement `io.micronaut.core.order.Ordered` interface
-[source,java,opts=novalidate]
-----
-@Singleton // <1>
-public class CustomInterceptor implements ServerInterceptor, Ordered { // <2>
-    ...
+snippet::helloworld.CustomInterceptor[tags="imports,clazz", source="main", languages="java,kotlin,groovy", title="Implement the io.micronaut.core.order.Ordered interface"]
 
-    @Override
-    public int getOrder() {
-        return 10; // <3>
-    }
-
-}
-----
+[.lang-java.lang-kotlin.lang-groovy]
+--
 <1> Declare the server interceptor as a bean to have it registered automatically
 <2> Implement `Ordered` in addition to `ServerInterceptor`
 <3> Provide the specified order of execution in the server interceptor chain
+--
 
-.Wrap with `io.micronaut.grpc.server.interceptor.OrderedServerInterceptor`
-[source,java]
-----
-@Factory // <1>
-public class ServerInterceptorFactory {
+[.lang-python]
+--
+NOTE: A Python class cannot implement `io.grpc.ServerInterceptor` directly (the `interceptCall` method is generic), so a Python interceptor is a plain object with an `interceptCall(call, headers, next)` method that is registered by wrapping it with `OrderedServerInterceptor` in a factory, as shown next.
+--
 
-    @Bean // <2>
-    @Singleton
-    public ServerInterceptor customServerInterceptor() {
-        return new OrderedServerInterceptor(new CustomInterceptor(), 10); // <3>
-    }
+snippet::helloworld.ServerInterceptorFactory[tags="imports,clazz", source="main", title="Wrap with io.micronaut.grpc.server.interceptor.OrderedServerInterceptor"]
 
-}
-----
 <1> Use a `@Factory` to create an instance of `ServerInterceptor` bean
 <2> Register the created sever interceptor as a bean
 <3> Wrap the `CustomInterceptor` with `OrderedServerInterceptor` and provide the `order` of execution
@@ -171,13 +177,9 @@ To test the server it is recommended that you use https://github.com/micronaut-p
 TIP: For detailed instructions on how to set up Micronaut Test for Spock, JUnit 5, or Kotest see the https://micronaut-projects.github.io/micronaut-test/latest/guide/index.html[documentation] on the subject.
 
 
-You can then define a blocking stub bean in `src/test/java`. For example:
+You can then define a blocking stub bean in your test sources. For example:
 
-.Defining Test Clients
-[source,java]
-----
-include::test-suite-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=clients]
-----
+snippet::helloworld.GreetingEndpointTest[tags="clients", title="Defining Test Clients"]
 
 <1> A `ManagedChannel` is injected that can communicate with the server.
 <2> The generated gRPC client blocking stub is created.
