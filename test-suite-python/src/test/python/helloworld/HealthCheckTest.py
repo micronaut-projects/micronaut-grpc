@@ -1,5 +1,8 @@
 from typing import Annotated
 
+from io.grpc import ManagedChannel
+from io.grpc.health.v1 import HealthCheckRequest, HealthCheckResponse, HealthGrpc
+from io.grpc.protobuf.services import HealthStatusManager
 from jakarta.inject import Inject
 from micronaut.context.annotation import Bean, Factory
 from micronaut.grpc.annotation import GrpcChannel
@@ -8,15 +11,6 @@ from micronaut.test.extensions.junit5.annotation import MicronautTest
 from org.junit.jupiter.api import Test
 
 from .HealthService import HealthService
-
-try:
-    from io.grpc import ManagedChannel
-    from io.grpc.health.v1 import HealthCheckRequest, HealthCheckResponse, HealthGrpc
-    from io.grpc.protobuf.services import HealthStatusManager
-except ImportError:  # TODO(python): packages under `io.` other than `io.micronaut` cannot be imported at runtime
-    from grpc import ManagedChannel
-    from grpc.health.v1 import HealthCheckRequest, HealthCheckResponse, HealthGrpc
-    from grpc.protobuf.services import HealthStatusManager
 
 
 @MicronautTest

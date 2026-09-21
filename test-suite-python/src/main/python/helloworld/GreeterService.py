@@ -1,16 +1,10 @@
 # tag::imports[]
 import logging
 
+from io.grpc.stub import StreamObserver
 from jakarta.inject import Singleton
 from micronaut.grpc.annotation import GrpcRestJsonExposed
 from org.example.grpc import GreeterGrpc, HelloRequest, HelloResponse
-
-try:
-    from io.grpc import BindableService, ServerServiceDefinition
-    from io.grpc.stub import StreamObserver
-except ImportError:  # TODO(python): packages under `io.` other than `io.micronaut` cannot be imported at runtime
-    from grpc import BindableService, ServerServiceDefinition
-    from grpc.stub import StreamObserver
 
 LOG = logging.getLogger(__name__)
 # end::imports[]
@@ -18,7 +12,7 @@ LOG = logging.getLogger(__name__)
 
 # tag::clazz[]
 @Singleton
-class GreeterService(BindableService):
+class GreeterService(GreeterGrpc.GreeterImplBase):
 
     @GrpcRestJsonExposed
     def sayHello(self, request: HelloRequest, response_observer: StreamObserver[HelloResponse]) -> None:
@@ -30,7 +24,4 @@ class GreeterService(BindableService):
 
         response_observer.onNext(reply)
         response_observer.onCompleted()
-
-    def bindService(self) -> ServerServiceDefinition:
-        return GreeterGrpc.bindService(self)
 # end::clazz[]

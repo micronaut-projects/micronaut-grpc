@@ -11,11 +11,6 @@ And then include the `@GrpcRestJsonExposed` annotation on your gRPC service defi
 
 snippet::helloworld.GreeterService[tags="imports,clazz", source="main"]
 
-[.lang-python]
---
-NOTE: A Python class cannot extend the generated `GreeterGrpc.GreeterImplBase` class: it implements `io.grpc.BindableService` and binds itself with `GreeterGrpc.bindService(self)`, see <<server, gRPC Server>>.
---
-
 Micronaut will now support the encoding and decoding requests / responses of type `application/json` via http 1.1.
 
 == How this works

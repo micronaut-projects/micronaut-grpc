@@ -1,15 +1,10 @@
 # tag::imports[]
 import java
+
+from io.grpc.stub import StreamObserver
 from jakarta.inject import Singleton
 
 from .GreetingService import GreetingService
-
-try:
-    from io.grpc import BindableService, ServerServiceDefinition
-    from io.grpc.stub import StreamObserver
-except ImportError:  # TODO(python): packages under `io.` other than `io.micronaut` cannot be imported at runtime
-    from grpc import BindableService, ServerServiceDefinition
-    from grpc.stub import StreamObserver
 
 # TODO(python): java.type needed because `helloworld` is both the Java package of the generated gRPC classes and the package of these Python sources
 GreeterGrpc = java.type("helloworld.GreeterGrpc")
@@ -20,7 +15,7 @@ HelloRequest = java.type("helloworld.HelloRequest")
 
 # tag::clazz[]
 @Singleton
-class GreetingEndpoint(BindableService):  # <1>
+class GreetingEndpoint(GreeterGrpc.GreeterImplBase):  # <1>
 
     # <2>
     def __init__(self, greeting_service: GreetingService):
@@ -32,7 +27,4 @@ class GreetingEndpoint(BindableService):  # <1>
         reply = HelloReply.newBuilder().setMessage(message).build()
         response_observer.onNext(reply)
         response_observer.onCompleted()
-
-    def bindService(self) -> ServerServiceDefinition:  # <4>
-        return GreeterGrpc.bindService(self)
 # end::clazz[]

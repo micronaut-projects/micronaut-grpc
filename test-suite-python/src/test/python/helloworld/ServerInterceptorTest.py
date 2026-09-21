@@ -23,6 +23,5 @@ class ServerInterceptorTest:
     def test_interceptors_are_registered(self):
         request = HelloRequest.newBuilder().setName("Fred").build()
         assert self.blocking_stub.sayHello(request).getMessage() == "Hello Fred"
-        # the interceptor wrapped by the factory intercepts the call
-        # (TODO(python): a Python class cannot implement `ServerInterceptor` and `Ordered` itself, see CustomInterceptor)
-        assert INTERCEPTED == ["helloworld.Greeter/SayHello"]
+        # the ordered bean and the interceptor wrapped by the factory both intercept the call
+        assert INTERCEPTED == ["helloworld.Greeter/SayHello", "helloworld.Greeter/SayHello"]

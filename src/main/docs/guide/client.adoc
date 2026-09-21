@@ -43,11 +43,6 @@ Alternatively if you prefer programmatic configuration you can write a `BeanCrea
 
 snippet::helloworld.ManagedChannelBuilderListener[tags="imports,clazz", source="main", title="Configuring the NettyChannelBuilder"]
 
-[.lang-python]
---
-NOTE: The Python listener customizes the `NettyChannelBuilder` of the `GrpcManagedChannelConfiguration` beans of the channels configured under `grpc.channels.[NAME]`: the self-referencing generic type `ManagedChannelBuilder<T extends ManagedChannelBuilder<T>>` cannot be used as the type argument of a `BeanCreatedEventListener` implemented in Python.
---
-
 === Auto Injected Types
 
 By default, each channel will automatically be dependency injected with beans of the following types:

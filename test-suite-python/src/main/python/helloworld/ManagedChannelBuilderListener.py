@@ -1,7 +1,7 @@
 # tag::imports[]
+from io.grpc import ManagedChannelBuilder
 from jakarta.inject import Singleton
 from micronaut.context.event import BeanCreatedEvent, BeanCreatedEventListener
-from micronaut.grpc.channels import GrpcManagedChannelConfiguration
 # end::imports[]
 from micronaut.context.annotation import Requires
 
@@ -9,10 +9,10 @@ from micronaut.context.annotation import Requires
 @Requires(property="spec.name", value="ManagedChannelBuilderListenerTest")
 # tag::clazz[]
 @Singleton
-class ManagedChannelBuilderListener(BeanCreatedEventListener[GrpcManagedChannelConfiguration]):
+class ManagedChannelBuilderListener(BeanCreatedEventListener[ManagedChannelBuilder]):
 
-    def onCreated(self, event: BeanCreatedEvent[GrpcManagedChannelConfiguration]) -> GrpcManagedChannelConfiguration:
-        configuration = event.getBean()
-        configuration.getChannelBuilder().maxInboundMessageSize(1024)
-        return configuration
+    def onCreated(self, event: BeanCreatedEvent[ManagedChannelBuilder]) -> ManagedChannelBuilder:
+        channel_builder = event.getBean()
+        channel_builder.maxInboundMessageSize(1024)
+        return channel_builder
 # end::clazz[]

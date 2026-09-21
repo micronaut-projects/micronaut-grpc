@@ -1,14 +1,10 @@
 # tag::imports[]
+from io.grpc import ServerInterceptor
 from jakarta.inject import Singleton
 from micronaut.context.annotation import Bean, Factory
 from micronaut.grpc.server.interceptor import OrderedServerInterceptor
 
 from .CustomInterceptor import CustomInterceptor
-
-try:
-    from io.grpc import ServerInterceptor
-except ImportError:  # TODO(python): packages under `io.` other than `io.micronaut` cannot be imported at runtime
-    from grpc import ServerInterceptor
 # end::imports[]
 from micronaut.context.annotation import Requires
 

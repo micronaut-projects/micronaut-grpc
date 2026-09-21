@@ -1,19 +1,16 @@
 import java
+
+from java.time import Duration
 from typing import Annotated
 
+from io.grpc import ManagedChannel
 from jakarta.inject import Inject
-from java.time import Duration
 from micronaut.context.annotation import Bean, Factory
 from micronaut.grpc.annotation import GrpcChannel
 from micronaut.grpc.server import GrpcServerChannel
 from micronaut.test.extensions.junit5.annotation import MicronautTest
 from org.junit.jupiter.api import Test
 from reactor.core.publisher import Mono
-
-try:
-    from io.grpc import ManagedChannel
-except ImportError:  # TODO(python): packages under `io.` other than `io.micronaut` cannot be imported at runtime
-    from grpc import ManagedChannel
 
 # TODO(python): java.type needed because `helloworld` is both the Java package of the generated gRPC classes and the package of these Python sources
 HelloRequest = java.type("helloworld.HelloRequest")

@@ -1,22 +1,29 @@
 # tag::imports[]
-try:
-    from io.grpc import Metadata, ServerCall, ServerCallHandler
-except ImportError:  # TODO(python): packages under `io.` other than `io.micronaut` cannot be imported at runtime
-    from grpc import Metadata, ServerCall, ServerCallHandler
+from io.grpc import Metadata, ServerCall, ServerCallHandler, ServerInterceptor
+from jakarta.inject import Singleton
+from micronaut.core.order import Ordered
 # end::imports[]
+from micronaut.context.annotation import Requires
 
 INTERCEPTED: list[str] = []
 
 
-# TODO(python): a Python class cannot implement `io.grpc.ServerInterceptor` (the stub generated for the generic
-# `<ReqT, RespT> interceptCall(...)` method erases the type variables), so the interceptor is a plain Python object
-# registered with the `OrderedServerInterceptor` of `ServerInterceptorFactory`.
+@Requires(property="spec.name", value="ServerInterceptorTest")
 # tag::clazz[]
-class CustomInterceptor:
+@Singleton  # <1>
+class CustomInterceptor(ServerInterceptor, Ordered):  # <2>
 
-    def interceptCall(self, call: ServerCall, headers: Metadata, next: ServerCallHandler) -> ServerCall.Listener:
+    def interceptCall[ReqT, RespT](
+        self,
+        call: ServerCall[ReqT, RespT],
+        headers: Metadata,
+        next: ServerCallHandler[ReqT, RespT],
+    ) -> ServerCall.Listener[ReqT]:
         # end::clazz[]
         INTERCEPTED.append(call.getMethodDescriptor().getFullMethodName())
         # tag::clazz[]
         return next.startCall(call, headers)
+
+    def getOrder(self) -> int:
+        return 10  # <3>
 # end::clazz[]

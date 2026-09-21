@@ -72,25 +72,6 @@ protobuf {
     }
 }
 
-// TODO(python): the documentation classes live in src/main/python (the `source="main"` snippets) and the
-// tests in src/test/python. Compiling them separately yields two GraalPy VFS roots whose generated shim
-// modules shadow each other at test time, and the Python compiler resolves the imports of a source file
-// only within its own source root, so both roots are merged into one directory compiled with the tests.
-def mergedPythonSources = tasks.register("mergePythonSources", Sync) {
-    from(layout.projectDirectory.dir("src/main/python"))
-    from(layout.projectDirectory.dir("src/test/python"))
-    into(layout.buildDirectory.dir("merged-python-sources"))
-}
-tasks.named("compilePython") {
-    enabled = false
-}
-tasks.named("compileTestPython") {
-    dependsOn(mergedPythonSources)
-    source.setFrom(mergedPythonSources.map { it.destinationDir })
-    // The Python sources use the gRPC stubs generated from src/main/proto into the main Java output
-    classpath.from(sourceSets.main.output)
-}
-
 tasks.withType(Test).configureEach {
     useJUnitPlatform()
     systemProperty "micronaut.python.pool.enabled", "false"

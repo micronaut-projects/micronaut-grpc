@@ -1,33 +1,14 @@
 === Writing a Simple gRPC Server
 
-[.lang-java.lang-kotlin.lang-groovy]
---
 To implement a gRPC server for the previously defined `helloworld.proto` definition you first need to generate the Java stubs using Gradle or Maven then create a class that extends from `GreeterGrpc.GreeterImplBase`.
---
-
-[.lang-python]
---
-To implement a gRPC server for the previously defined `helloworld.proto` definition you first need to generate the Java stubs using Gradle or Maven then create a class that implements `io.grpc.BindableService`. A Python class cannot extend the generated `GreeterGrpc.GreeterImplBase` class, instead it implements the methods of the generated `GreeterGrpc.AsyncService` interface and binds itself with `GreeterGrpc.bindService(self)`.
---
 
 For example:
 
 snippet::helloworld.GreetingEndpoint[tags="imports,clazz", source="main"]
 
-[.lang-java.lang-kotlin.lang-groovy]
---
 <1> The class extends from `GreeterGrpc.GreeterImplBase` and is annotated with `jakarta.inject.Singleton`
 <2> You can dependency inject other beans into the implementation. In this case `GreetingService` is dependency injected.
 <3> The `StreamObserver` is used to send a response to the client.
---
-
-[.lang-python]
---
-<1> The class implements `io.grpc.BindableService` and is annotated with `jakarta.inject.Singleton`
-<2> You can dependency inject other beans into the implementation. In this case `GreetingService` is dependency injected.
-<3> The `StreamObserver` is used to send a response to the client.
-<4> `GreeterGrpc.bindService(self)` builds the `ServerServiceDefinition` of the service from the methods of the generated `GreeterGrpc.AsyncService` interface implemented by the class.
---
 
 If you generate Reactor bindings with `reactive-grpc`, Micronaut can register the generated `BindableService` implementation in exactly the same way. Implement the generated Reactor base class as a singleton bean:
 
@@ -35,7 +16,7 @@ snippet::helloworld.ReactiveGreetingEndpoint[tags="reactive-service", source="ma
 
 [.lang-python]
 --
-NOTE: A Python class cannot extend the generated Reactor base class (`ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase`), so a Reactor gRPC service must be written in Java, Kotlin or Groovy. The generated Reactor client stub can be used from Python, see <<client, gRPC Clients>>.
+NOTE: The generated Reactor base class declares the unary method twice (`sayHello(HelloRequest)` and `sayHello(Mono<HelloRequest>)`) and a Python method overrides every overload of its name, so a Reactor gRPC service is currently written in Java, Kotlin or Groovy. The generated Reactor client stub can be used from Python, see <<client, gRPC Clients>>.
 --
 
 === Running the gRPC Server
@@ -84,11 +65,6 @@ Alternatively if you prefer programmatic configuration you can write a `BeanCrea
 
 snippet::helloworld.ServerBuilderListener[tags="imports,clazz", source="main", title="Configuring the ServerBuilder"]
 
-[.lang-python]
---
-NOTE: The Python listener customizes the `ServerBuilder` of the `GrpcServerConfiguration` bean, from which the `ServerBuilder` bean is created: the self-referencing generic type `ServerBuilder<T extends ServerBuilder<T>>` cannot be used as the type argument of a `BeanCreatedEventListener` implemented in Python.
---
-
 === Auto Injected Types
 
 By default, the server will automatically be dependency injected with beans of the following types:
@@ -104,19 +80,11 @@ Set `grpc.server.executor` to the name of an `Executor` bean to override that de
 To produce a consistent and predictable order of execution for server interceptors, it is required
 for the `io.grpc.ServerInterceptor` implementation to do one of the following:
 
-snippet::helloworld.CustomInterceptor[tags="imports,clazz", source="main", languages="java,kotlin,groovy", title="Implement the io.micronaut.core.order.Ordered interface"]
+snippet::helloworld.CustomInterceptor[tags="imports,clazz", source="main", title="Implement the io.micronaut.core.order.Ordered interface"]
 
-[.lang-java.lang-kotlin.lang-groovy]
---
 <1> Declare the server interceptor as a bean to have it registered automatically
 <2> Implement `Ordered` in addition to `ServerInterceptor`
 <3> Provide the specified order of execution in the server interceptor chain
---
-
-[.lang-python]
---
-NOTE: A Python class cannot implement `io.grpc.ServerInterceptor` directly (the `interceptCall` method is generic), so a Python interceptor is a plain object with an `interceptCall(call, headers, next)` method that is registered by wrapping it with `OrderedServerInterceptor` in a factory, as shown next.
---
 
 snippet::helloworld.ServerInterceptorFactory[tags="imports,clazz", source="main", title="Wrap with io.micronaut.grpc.server.interceptor.OrderedServerInterceptor"]
 

@@ -1,12 +1,7 @@
 # tag::imports[]
+from io.grpc.health.v1 import HealthCheckResponse
+from io.grpc.protobuf.services import HealthStatusManager
 from jakarta.inject import Singleton
-
-try:
-    from io.grpc.health.v1 import HealthCheckResponse
-    from io.grpc.protobuf.services import HealthStatusManager
-except ImportError:  # TODO(python): packages under `io.` other than `io.micronaut` cannot be imported at runtime
-    from grpc.health.v1 import HealthCheckResponse
-    from grpc.protobuf.services import HealthStatusManager
 # end::imports[]
 
 
