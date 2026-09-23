@@ -12,10 +12,12 @@ snippet::helloworld.GreetingEndpoint[tags="imports,clazz", source="main"]
 
 If you generate Reactor bindings with `reactive-grpc`, Micronaut can register the generated `BindableService` implementation in exactly the same way. Implement the generated Reactor base class as a singleton bean:
 
-[source,java]
-----
-include::test-suite-java/src/main/java/helloworld/ReactiveGreetingEndpoint.java[tags=reactive-service]
-----
+snippet::helloworld.ReactiveGreetingEndpoint[tags="reactive-service", source="main", languages="java,kotlin,groovy"]
+
+[.lang-python]
+--
+NOTE: The generated Reactor base class declares the unary method twice (`sayHello(HelloRequest)` and `sayHello(Mono<HelloRequest>)`) and a Python method overrides every overload of its name, so a Reactor gRPC service is currently written in Java, Kotlin or Groovy. The generated Reactor client stub can be used from Python, see <<client, gRPC Clients>>.
+--
 
 === Running the gRPC Server
 
@@ -59,13 +61,9 @@ grpc:
 
 The in-process transport avoids port management and is managed by the Micronaut application lifecycle. SSL is not supported in this mode, and the support lives in the optional `micronaut-grpc-inprocess` module so the Netty-based server runtime does not require the extra dependency.
 
-Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
+Alternatively if you prefer programmatic configuration you can write a `BeanCreatedEventListener` for example:
 
-.Configuring the ServerBuilder
-[source,java]
-----
-include::grpc-server-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderListener.java[]
-----
+snippet::helloworld.ServerBuilderListener[tags="imports,clazz", source="main", title="Configuring the ServerBuilder"]
 
 === Auto Injected Types
 
@@ -82,38 +80,14 @@ Set `grpc.server.executor` to the name of an `Executor` bean to override that de
 To produce a consistent and predictable order of execution for server interceptors, it is required
 for the `io.grpc.ServerInterceptor` implementation to do one of the following:
 
-.Implement `io.micronaut.core.order.Ordered` interface
-[source,java,opts=novalidate]
-----
-@Singleton // <1>
-public class CustomInterceptor implements ServerInterceptor, Ordered { // <2>
-    ...
+snippet::helloworld.CustomInterceptor[tags="imports,clazz", source="main", title="Implement the io.micronaut.core.order.Ordered interface"]
 
-    @Override
-    public int getOrder() {
-        return 10; // <3>
-    }
-
-}
-----
 <1> Declare the server interceptor as a bean to have it registered automatically
 <2> Implement `Ordered` in addition to `ServerInterceptor`
 <3> Provide the specified order of execution in the server interceptor chain
 
-.Wrap with `io.micronaut.grpc.server.interceptor.OrderedServerInterceptor`
-[source,java]
-----
-@Factory // <1>
-public class ServerInterceptorFactory {
+snippet::helloworld.ServerInterceptorFactory[tags="imports,clazz", source="main", title="Wrap with io.micronaut.grpc.server.interceptor.OrderedServerInterceptor"]
 
-    @Bean // <2>
-    @Singleton
-    public ServerInterceptor customServerInterceptor() {
-        return new OrderedServerInterceptor(new CustomInterceptor(), 10); // <3>
-    }
-
-}
-----
 <1> Use a `@Factory` to create an instance of `ServerInterceptor` bean
 <2> Register the created sever interceptor as a bean
 <3> Wrap the `CustomInterceptor` with `OrderedServerInterceptor` and provide the `order` of execution
@@ -171,13 +145,9 @@ To test the server it is recommended that you use https://github.com/micronaut-p
 TIP: For detailed instructions on how to set up Micronaut Test for Spock, JUnit 5, or Kotest see the https://micronaut-projects.github.io/micronaut-test/latest/guide/index.html[documentation] on the subject.
 
 
-You can then define a blocking stub bean in `src/test/java`. For example:
+You can then define a blocking stub bean in your test sources. For example:
 
-.Defining Test Clients
-[source,java]
-----
-include::test-suite-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=clients]
-----
+snippet::helloworld.GreetingEndpointTest[tags="clients", title="Defining Test Clients"]
 
 <1> A `ManagedChannel` is injected that can communicate with the server.
 <2> The generated gRPC client blocking stub is created.

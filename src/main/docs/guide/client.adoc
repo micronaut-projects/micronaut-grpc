@@ -39,13 +39,9 @@ grpc:
 
 When a client is disabled, optional or nullable `@GrpcChannel` injection points resolve to an empty value, while required injection points fail with a dependency injection error.
 
-Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
+Alternatively if you prefer programmatic configuration you can write a `BeanCreatedEventListener` for example:
 
-.Configuring the NettyChannelBuilder
-[source,java]
-----
-include::grpc-server-runtime/src/test/groovy/io/micronaut/grpc/ManagedChannelBuilderListener.java[]
-----
+snippet::helloworld.ManagedChannelBuilderListener[tags="imports,clazz", source="main", title="Configuring the NettyChannelBuilder"]
 
 === Auto Injected Types
 
@@ -58,20 +54,7 @@ By default, each channel will automatically be dependency injected with beans of
 
 The value of the `@GrpcChannel` annotation can be used to specify the target server, the configuration for which can also be externalized:
 
-[source,java]
-----
-@Factory
-class Clients {
-    @Singleton
-    GreeterGrpc.GreeterStub reactiveStub(
-        @GrpcChannel("https://${my.server}:${my.port}")
-        ManagedChannel channel) {
-        return GreeterGrpc.newStub(
-                channel
-        );
-    }
-}
-----
+snippet::helloworld.ExternalizedClients[tags="clazz", source="main"]
 
 The above example requires that `my.server` and `my.port` are specified in `application.yml` (or via environment variables `MY_SERVER` and `MY_PORT`). You can also externalize this further into configuration and provide channel specific configuration.
 
@@ -89,17 +72,7 @@ grpc:
 
 You can then define the `@GrpcChannel` annotation as follows:
 
-[source,java]
-----
-@Singleton
-GreeterGrpc.GreeterStub reactiveStub(
-    @GrpcChannel("greeter")
-    ManagedChannel channel) {
-    return GreeterGrpc.newStub(
-            channel
-    );
-}
-----
+snippet::helloworld.NamedChannelClients[tags="clazz", source="main"]
 
 The ID `greeter` is used to reference the configuration for `grpc.channels.greeter`.
 
@@ -107,14 +80,8 @@ Using service IDs in this way is the preferred way to set up gRPC clients, becau
 
 If you generate Reactor bindings with `reactive-grpc`, define the generated Reactor stub in the same kind of factory and inject the `ManagedChannel` with `@GrpcChannel`:
 
-[source,java]
-----
-include::test-suite-java/src/test/java/helloworld/ReactiveGreetingEndpointTest.java[tags=reactive-client]
-----
+snippet::helloworld.ReactiveGreetingEndpointTest[tags="reactive-client", indent=0]
 
 The resulting stub can then be injected into your application or tests and used directly with Reactor operators:
 
-[source,java]
-----
-include::test-suite-java/src/test/java/helloworld/ReactiveGreetingEndpointTest.java[tags=reactive-test]
-----
+snippet::helloworld.ReactiveGreetingEndpointTest[tags="reactive-test"]
