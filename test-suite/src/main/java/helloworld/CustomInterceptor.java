@@ -23,9 +23,9 @@ public class CustomInterceptor implements ServerInterceptor, Ordered { // <2>
 
     // tag::clazz[]
     @Override
-    public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call,
-                                                                 Metadata headers,
-                                                                 ServerCallHandler<ReqT, RespT> next) {
+    public <T, R> ServerCall.Listener<T> interceptCall(ServerCall<T, R> call,
+                                                       Metadata headers,
+                                                       ServerCallHandler<T, R> next) {
         // end::clazz[]
         INTERCEPTED.add(call.getMethodDescriptor().getFullMethodName());
         // tag::clazz[]

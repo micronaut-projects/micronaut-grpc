@@ -37,6 +37,7 @@ class NamedChannelClientsTest extends Specification {
 
             @Override
             void onCompleted() {
+                // the reply is already published by onNext; nothing to do on completion
             }
         })
 

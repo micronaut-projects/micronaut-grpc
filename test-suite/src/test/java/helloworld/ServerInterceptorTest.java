@@ -23,7 +23,7 @@ class ServerInterceptorTest {
         // the ordered bean and the interceptor wrapped by the factory both intercept the call
         assertEquals(
             List.of("helloworld.Greeter/SayHello", "helloworld.Greeter/SayHello"),
-            CustomInterceptor.INTERCEPTED
+            List.copyOf(CustomInterceptor.INTERCEPTED)
         );
     }
 }

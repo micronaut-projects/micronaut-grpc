@@ -22,11 +22,11 @@ class CustomInterceptor : ServerInterceptor, Ordered { // <2>
     }
 
     // tag::clazz[]
-    override fun <ReqT, RespT> interceptCall(
-        call: ServerCall<ReqT, RespT>,
+    override fun <T, R> interceptCall(
+        call: ServerCall<T, R>,
         headers: Metadata,
-        next: ServerCallHandler<ReqT, RespT>,
-    ): ServerCall.Listener<ReqT> {
+        next: ServerCallHandler<T, R>,
+    ): ServerCall.Listener<T> {
         // end::clazz[]
         INTERCEPTED.add(call.methodDescriptor.fullMethodName)
         // tag::clazz[]

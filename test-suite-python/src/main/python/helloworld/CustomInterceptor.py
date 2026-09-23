@@ -13,12 +13,12 @@ INTERCEPTED: list[str] = []
 @Singleton  # <1>
 class CustomInterceptor(ServerInterceptor, Ordered):  # <2>
 
-    def interceptCall[ReqT, RespT](
+    def interceptCall[T, R](
         self,
-        call: ServerCall[ReqT, RespT],
+        call: ServerCall[T, R],
         headers: Metadata,
-        next: ServerCallHandler[ReqT, RespT],
-    ) -> ServerCall.Listener[ReqT]:
+        next: ServerCallHandler[T, R],
+    ) -> ServerCall.Listener[T]:
         # end::clazz[]
         INTERCEPTED.append(call.getMethodDescriptor().getFullMethodName())
         # tag::clazz[]

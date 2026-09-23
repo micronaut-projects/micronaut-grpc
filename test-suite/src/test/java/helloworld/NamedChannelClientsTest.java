@@ -37,6 +37,7 @@ class NamedChannelClientsTest {
 
             @Override
             public void onCompleted() {
+                // the reply is already published by onNext; nothing to do on completion
             }
         });
         assertEquals("Hello Fred", message.get(10, TimeUnit.SECONDS));
