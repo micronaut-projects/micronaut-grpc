@@ -68,7 +68,8 @@ loadScripts(document, 'script');</script>
 <li><a href="io/micronaut/protobuf/json/package-tree.html">io.micronaut.protobuf.json</a>, </li>
 <li><a href="io/micronaut/protobuf/json/exception/package-tree.html">io.micronaut.protobuf.json.exception</a>, </li>
 <li><a href="io/micronaut/protobuf/json/grpc/package-tree.html">io.micronaut.protobuf.json.grpc</a>, </li>
-<li><a href="io/micronaut/protobuf/json/registry/package-tree.html">io.micronaut.protobuf.json.registry</a></li>
+<li><a href="io/micronaut/protobuf/json/registry/package-tree.html">io.micronaut.protobuf.json.registry</a>, </li>
+<li><a href="org/example/grpc/package-tree.html">org.example.grpc</a></li>
 </ul>
 <section class="hierarchy">
 <h2 title="Class Hierarchy">Class Hierarchy</h2>
@@ -83,6 +84,8 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">helloworld.<a href="helloworld/HelloReply.html" class="type-name-link" title="class in helloworld">HelloReply</a> (implements helloworld.<a href="helloworld/HelloReplyOrBuilder.html" title="interface in helloworld">HelloReplyOrBuilder</a>)</li>
 <li class="circle">helloworld.<a href="helloworld/HelloRequest.html" class="type-name-link" title="class in helloworld">HelloRequest</a> (implements helloworld.<a href="helloworld/HelloRequestOrBuilder.html" title="interface in helloworld">HelloRequestOrBuilder</a>)</li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/HelloRequest.html" class="type-name-link" title="class in org.example.grpc">HelloRequest</a> (implements org.example.grpc.<a href="org/example/grpc/HelloRequestOrBuilder.html" title="interface in org.example.grpc">HelloRequestOrBuilder</a>)</li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/HelloResponse.html" class="type-name-link" title="class in org.example.grpc">HelloResponse</a> (implements org.example.grpc.<a href="org/example/grpc/HelloResponseOrBuilder.html" title="interface in org.example.grpc">HelloResponseOrBuilder</a>)</li>
 </ul>
 </li>
 </ul>
@@ -97,6 +100,8 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">helloworld.<a href="helloworld/HelloReply.Builder.html" class="type-name-link" title="class in helloworld">HelloReply.Builder</a> (implements helloworld.<a href="helloworld/HelloReplyOrBuilder.html" title="interface in helloworld">HelloReplyOrBuilder</a>)</li>
 <li class="circle">helloworld.<a href="helloworld/HelloRequest.Builder.html" class="type-name-link" title="class in helloworld">HelloRequest.Builder</a> (implements helloworld.<a href="helloworld/HelloRequestOrBuilder.html" title="interface in helloworld">HelloRequestOrBuilder</a>)</li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/HelloRequest.Builder.html" class="type-name-link" title="class in org.example.grpc">HelloRequest.Builder</a> (implements org.example.grpc.<a href="org/example/grpc/HelloRequestOrBuilder.html" title="interface in org.example.grpc">HelloRequestOrBuilder</a>)</li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/HelloResponse.Builder.html" class="type-name-link" title="class in org.example.grpc">HelloResponse.Builder</a> (implements org.example.grpc.<a href="org/example/grpc/HelloResponseOrBuilder.html" title="interface in org.example.grpc">HelloResponseOrBuilder</a>)</li>
 </ul>
 </li>
 </ul>
@@ -121,30 +126,45 @@ loadScripts(document, 'script');</script>
 <li class="circle">io.grpc.stub.AbstractAsyncStub&lt;S&gt;
 <ul>
 <li class="circle">helloworld.<a href="helloworld/GreeterGrpc.GreeterStub.html" class="type-name-link" title="class in helloworld">GreeterGrpc.GreeterStub</a></li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/GreeterGrpc.GreeterStub.html" class="type-name-link" title="class in org.example.grpc">GreeterGrpc.GreeterStub</a></li>
+<li class="circle">helloworld.<a href="helloworld/ReactiveGreeterGrpc.ReactiveGreeterStub.html" class="type-name-link" title="class in helloworld">ReactiveGreeterGrpc.ReactiveGreeterStub</a></li>
 </ul>
 </li>
 <li class="circle">io.grpc.stub.AbstractBlockingStub&lt;S&gt;
 <ul>
 <li class="circle">helloworld.<a href="helloworld/GreeterGrpc.GreeterBlockingStub.html" class="type-name-link" title="class in helloworld">GreeterGrpc.GreeterBlockingStub</a></li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/GreeterGrpc.GreeterBlockingStub.html" class="type-name-link" title="class in org.example.grpc">GreeterGrpc.GreeterBlockingStub</a></li>
 <li class="circle">helloworld.<a href="helloworld/GreeterGrpc.GreeterBlockingV2Stub.html" class="type-name-link" title="class in helloworld">GreeterGrpc.GreeterBlockingV2Stub</a></li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/GreeterGrpc.GreeterBlockingV2Stub.html" class="type-name-link" title="class in org.example.grpc">GreeterGrpc.GreeterBlockingV2Stub</a></li>
+<li class="circle">helloworld.<a href="helloworld/ReactiveGreeterGrpc.ReactiveGreeterBlockingStub.html" class="type-name-link" title="class in helloworld">ReactiveGreeterGrpc.ReactiveGreeterBlockingStub</a></li>
+<li class="circle">helloworld.<a href="helloworld/ReactiveGreeterGrpc.ReactiveGreeterBlockingV2Stub.html" class="type-name-link" title="class in helloworld">ReactiveGreeterGrpc.ReactiveGreeterBlockingV2Stub</a></li>
 </ul>
 </li>
 <li class="circle">io.grpc.stub.AbstractFutureStub&lt;S&gt;
 <ul>
 <li class="circle">helloworld.<a href="helloworld/GreeterGrpc.GreeterFutureStub.html" class="type-name-link" title="class in helloworld">GreeterGrpc.GreeterFutureStub</a></li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/GreeterGrpc.GreeterFutureStub.html" class="type-name-link" title="class in org.example.grpc">GreeterGrpc.GreeterFutureStub</a></li>
+<li class="circle">helloworld.<a href="helloworld/ReactiveGreeterGrpc.ReactiveGreeterFutureStub.html" class="type-name-link" title="class in helloworld">ReactiveGreeterGrpc.ReactiveGreeterFutureStub</a></li>
 </ul>
 </li>
+<li class="circle">helloworld.<a href="helloworld/ReactorGreeterGrpc.ReactorGreeterStub.html" class="type-name-link" title="class in helloworld">ReactorGreeterGrpc.ReactorGreeterStub</a></li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/ReactorGreeterGrpc.ReactorGreeterStub.html" class="type-name-link" title="class in org.example.grpc">ReactorGreeterGrpc.ReactorGreeterStub</a></li>
+<li class="circle">helloworld.<a href="helloworld/ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub.html" class="type-name-link" title="class in helloworld">ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub</a></li>
 </ul>
 </li>
 <li class="circle">io.micronaut.protobuf.convert.<a href="io/micronaut/protobuf/convert/ByteBufToProtoMessageConverter.html" class="type-name-link" title="class in io.micronaut.protobuf.convert">ByteBufToProtoMessageConverter</a> (implements io.micronaut.core.convert.TypeConverter&lt;S,<wbr>T&gt;)</li>
 <li class="circle">io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ExtensionRegistryFactory.html" class="type-name-link" title="class in io.micronaut.protobuf.codec">ExtensionRegistryFactory</a></li>
 <li class="circle">com.google.protobuf.GeneratedFile
 <ul>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/GreeterProto.html" class="type-name-link" title="class in org.example.grpc">GreeterProto</a></li>
 <li class="circle">helloworld.<a href="helloworld/HelloWorldProto.html" class="type-name-link" title="class in helloworld">HelloWorldProto</a></li>
+<li class="circle">helloworld.<a href="helloworld/ReactiveHelloWorldProto.html" class="type-name-link" title="class in helloworld">ReactiveHelloWorldProto</a></li>
 </ul>
 </li>
 <li class="circle">helloworld.<a href="helloworld/GreeterGrpc.html" class="type-name-link" title="class in helloworld">GreeterGrpc</a></li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/GreeterGrpc.html" class="type-name-link" title="class in org.example.grpc">GreeterGrpc</a></li>
 <li class="circle">helloworld.<a href="helloworld/GreeterGrpc.GreeterImplBase.html" class="type-name-link" title="class in helloworld">GreeterGrpc.GreeterImplBase</a> (implements io.grpc.BindableService, helloworld.<a href="helloworld/GreeterGrpc.AsyncService.html" title="interface in helloworld">GreeterGrpc.AsyncService</a>)</li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/GreeterGrpc.GreeterImplBase.html" class="type-name-link" title="class in org.example.grpc">GreeterGrpc.GreeterImplBase</a> (implements io.grpc.BindableService, org.example.grpc.<a href="org/example/grpc/GreeterGrpc.AsyncService.html" title="interface in org.example.grpc">GreeterGrpc.AsyncService</a>)</li>
 <li class="circle">io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcChannelBuilderFactory.html" class="type-name-link" title="class in io.micronaut.grpc.channels">GrpcChannelBuilderFactory</a></li>
 <li class="circle">io.micronaut.grpc.client.tracing.<a href="io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.client.tracing">GrpcClientTracingInterceptorConfiguration</a></li>
 <li class="circle">io.micronaut.grpc.client.tracing.<a href="io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorFactory.html" class="type-name-link" title="class in io.micronaut.grpc.client.tracing">GrpcClientTracingInterceptorFactory</a></li>
@@ -196,6 +216,14 @@ loadScripts(document, 'script');</script>
 <li class="circle">io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" class="type-name-link" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a> (implements io.micronaut.http.codec.MediaTypeCodec)</li>
 <li class="circle">io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html" class="type-name-link" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a></li>
 <li class="circle">io.micronaut.protobuf.convert.<a href="io/micronaut/protobuf/convert/ProtoMessageToByteBufConverter.html" class="type-name-link" title="class in io.micronaut.protobuf.convert">ProtoMessageToByteBufConverter</a> (implements io.micronaut.core.convert.TypeConverter&lt;S,<wbr>T&gt;)</li>
+<li class="circle">helloworld.<a href="helloworld/ReactiveGreeterGrpc.html" class="type-name-link" title="class in helloworld">ReactiveGreeterGrpc</a></li>
+<li class="circle">helloworld.<a href="helloworld/ReactiveGreeterGrpc.ReactiveGreeterImplBase.html" class="type-name-link" title="class in helloworld">ReactiveGreeterGrpc.ReactiveGreeterImplBase</a> (implements io.grpc.BindableService, helloworld.<a href="helloworld/ReactiveGreeterGrpc.AsyncService.html" title="interface in helloworld">ReactiveGreeterGrpc.AsyncService</a>)</li>
+<li class="circle">helloworld.<a href="helloworld/ReactorGreeterGrpc.html" class="type-name-link" title="class in helloworld">ReactorGreeterGrpc</a></li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/ReactorGreeterGrpc.html" class="type-name-link" title="class in org.example.grpc">ReactorGreeterGrpc</a></li>
+<li class="circle">helloworld.<a href="helloworld/ReactorGreeterGrpc.GreeterImplBase.html" class="type-name-link" title="class in helloworld">ReactorGreeterGrpc.GreeterImplBase</a> (implements io.grpc.BindableService)</li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/ReactorGreeterGrpc.GreeterImplBase.html" class="type-name-link" title="class in org.example.grpc">ReactorGreeterGrpc.GreeterImplBase</a> (implements io.grpc.BindableService)</li>
+<li class="circle">helloworld.<a href="helloworld/ReactorReactiveGreeterGrpc.html" class="type-name-link" title="class in helloworld">ReactorReactiveGreeterGrpc</a></li>
+<li class="circle">helloworld.<a href="helloworld/ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase.html" class="type-name-link" title="class in helloworld">ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase</a> (implements io.grpc.BindableService)</li>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Throwable.html" class="type-name-link external-link" title="class or interface in java.lang">Throwable</a> (implements java.io.<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Exception.html" class="type-name-link external-link" title="class or interface in java.lang">Exception</a>
@@ -229,16 +257,20 @@ loadScripts(document, 'script');</script>
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
 <li class="circle">helloworld.<a href="helloworld/GreeterGrpc.AsyncService.html" class="type-name-link" title="interface in helloworld">GreeterGrpc.AsyncService</a></li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/GreeterGrpc.AsyncService.html" class="type-name-link" title="interface in org.example.grpc">GreeterGrpc.AsyncService</a></li>
 <li class="circle">com.google.protobuf.MessageLiteOrBuilder
 <ul>
 <li class="circle">com.google.protobuf.MessageOrBuilder
 <ul>
 <li class="circle">helloworld.<a href="helloworld/HelloReplyOrBuilder.html" class="type-name-link" title="interface in helloworld">HelloReplyOrBuilder</a></li>
 <li class="circle">helloworld.<a href="helloworld/HelloRequestOrBuilder.html" class="type-name-link" title="interface in helloworld">HelloRequestOrBuilder</a></li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/HelloRequestOrBuilder.html" class="type-name-link" title="interface in org.example.grpc">HelloRequestOrBuilder</a></li>
+<li class="circle">org.example.grpc.<a href="org/example/grpc/HelloResponseOrBuilder.html" class="type-name-link" title="interface in org.example.grpc">HelloResponseOrBuilder</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="circle">helloworld.<a href="helloworld/ReactiveGreeterGrpc.AsyncService.html" class="type-name-link" title="interface in helloworld">ReactiveGreeterGrpc.AsyncService</a></li>
 </ul>
 </section>
 <section class="hierarchy">
