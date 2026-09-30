@@ -6,7 +6,8 @@ from jakarta.inject import Singleton
 
 from .GreetingService import GreetingService
 
-# TODO(python): java.type needed because `helloworld` is both the Java package of the generated gRPC classes and the package of these Python sources
+# `helloworld` is both the Java package of the generated gRPC classes and the package of these
+# Python sources, so the generated types are looked up by name instead of imported.
 GreeterGrpc = java.type("helloworld.GreeterGrpc")
 HelloReply = java.type("helloworld.HelloReply")
 HelloRequest = java.type("helloworld.HelloRequest")

@@ -7,7 +7,8 @@ from jakarta.inject import Singleton
 from micronaut.context.annotation import Bean, Factory
 from micronaut.grpc.annotation import GrpcChannel
 
-# TODO(python): java.type needed because `helloworld` is both the Java package of the generated gRPC classes and the package of these Python sources
+# `helloworld` is both the Java package of the generated gRPC classes and the package of these
+# Python sources, so the generated types are looked up by name instead of imported.
 GreeterGrpc = java.type("helloworld.GreeterGrpc")
 # end::imports[]
 from micronaut.context.annotation import Requires

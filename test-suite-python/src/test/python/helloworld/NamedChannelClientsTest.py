@@ -8,7 +8,8 @@ from micronaut.context.annotation import Property
 from micronaut.test.extensions.junit5.annotation import MicronautTest
 from org.junit.jupiter.api import Test
 
-# TODO(python): java.type needed because `helloworld` is both the Java package of the generated gRPC classes and the package of these Python sources
+# `helloworld` is both the Java package of the generated gRPC classes and the package of these
+# Python sources, so the generated types are looked up by name instead of imported.
 GreeterGrpc = java.type("helloworld.GreeterGrpc")
 HelloRequest = java.type("helloworld.HelloRequest")
 

@@ -8,7 +8,8 @@ from org.junit.jupiter.api import Test
 
 from .CustomInterceptor import INTERCEPTED
 
-# TODO(python): java.type needed because `helloworld` is both the Java package of the generated gRPC classes and the package of these Python sources
+# `helloworld` is both the Java package of the generated gRPC classes and the package of these
+# Python sources, so the generated types are looked up by name instead of imported.
 GreeterGrpc = java.type("helloworld.GreeterGrpc")
 HelloRequest = java.type("helloworld.HelloRequest")
 

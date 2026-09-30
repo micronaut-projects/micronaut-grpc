@@ -12,12 +12,7 @@ snippet::helloworld.GreetingEndpoint[tags="imports,clazz", source="main"]
 
 If you generate Reactor bindings with `reactive-grpc`, Micronaut can register the generated `BindableService` implementation in exactly the same way. Implement the generated Reactor base class as a singleton bean:
 
-snippet::helloworld.ReactiveGreetingEndpoint[tags="reactive-service", source="main", languages="java,kotlin,groovy"]
-
-[.lang-python]
---
-NOTE: The generated Reactor base class declares the unary method twice (`sayHello(HelloRequest)` and `sayHello(Mono<HelloRequest>)`) and a Python method overrides every overload of its name, so a Reactor gRPC service is currently written in Java, Kotlin or Groovy. The generated Reactor client stub can be used from Python, see <<client, gRPC Clients>>.
---
+snippet::helloworld.ReactiveGreetingEndpoint[tags="reactive-service", source="main"]
 
 === Running the gRPC Server
 
