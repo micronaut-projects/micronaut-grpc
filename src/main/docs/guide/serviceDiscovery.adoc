@@ -2,10 +2,7 @@ When using `@GrpcChannel` with a service ID without explicitly configuring the a
 
 The default strategy for this is to use DNS based discovery. So for example you can do:
 
-[source,java]
-----
-@GrpcChannel("dns://greeter")
-----
+snippet::helloworld.DnsClients[tags="clazz", source="main"]
 
 Where DNS has been configured to know the address of the `greeter` service.
 
@@ -71,15 +68,4 @@ consul:
 
 Then use the value `greeter` to discover the service when injecting the channel:
 
-[source,java]
-----
-@Singleton
-@Bean
-GreeterGrpc.GreeterStub greeterStub(
-    @GrpcChannel("greeter")
-    ManagedChannel channel) {
-    return GreeterGrpc.newStub(
-            channel
-    );
-}
-----
+snippet::helloworld.DiscoveryClients[tags="clazz", source="main"]

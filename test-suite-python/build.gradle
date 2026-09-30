@@ -1,0 +1,78 @@
+plugins {
+    id "java"
+    alias(libs.plugins.protobuf)
+    id "io.micronaut.build.internal.grpc-minimal-test"
+    id "io.micronaut.build.internal.python"
+}
+
+ext {
+    grpcVersion = libs.versions.managed.grpc.asProvider().get()
+    protobufVersion = libs.versions.managed.protobuf.asProvider().get()
+    reactiveGrpcVersion = libs.versions.reactive.grpc.get()
+}
+
+micronaut {
+    version.set(libs.versions.micronaut.platform.get())
+    coreVersion.set(libs.versions.micronaut.asProvider().get())
+    testRuntime "junit5"
+    enableNativeImage false
+}
+
+dependencies {
+    compileOnly libs.managed.grpc.stub
+    compileOnly libs.javax.annotation.api
+
+    implementation mn.micronaut.runtime
+    implementation projects.micronautGrpcServerRuntime
+    implementation projects.micronautGrpcClientRuntime
+    implementation projects.micronautProtobuffJsonSupport
+    implementation libs.managed.grpc.services
+    implementation libs.managed.grpc.protobuf
+    implementation libs.managed.protobuf.java.util
+    implementation platform(libs.micronaut.reactor)
+    implementation libs.reactive.grpc.stub
+    implementation "io.projectreactor:reactor-core"
+    implementation mn.snakeyaml
+
+    runtimeOnly mnLogging.logback.classic
+    runtimeOnly mn.micronaut.jackson.databind
+
+    // The Python compiler (micronaut-inject-python) takes the (jar-resolved) compile classpath as its annotation processor path,
+    // so the Micronaut processors of the Python sources are testImplementation (not testAnnotationProcessor).
+    testImplementation mn.micronaut.inject.python.test
+    testImplementation mn.micronaut.context.python
+    testImplementation libs.managed.grpc.stub
+    testImplementation libs.managed.protobuf.java
+    testImplementation mnTest.micronaut.test.junit5
+    testRuntimeOnly mnTest.junit.jupiter.engine
+    testRuntimeOnly mnLogging.logback.classic
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+            srcDirs 'build/generated/source/proto/main/reactor'
+        }
+    }
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
+        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+            reactor {}
+        }
+    }
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    systemProperty "micronaut.python.pool.enabled", "false"
+}

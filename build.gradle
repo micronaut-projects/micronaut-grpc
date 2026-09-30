@@ -11,3 +11,18 @@ configurations.all {
         preferProjectModules()
     }
 }
+
+if (System.getenv("SONAR_TOKEN") != null) {
+    // The `test-suite*` projects hold the documentation snippets. Their tests run in CI, but the
+    // projects contribute no JaCoCo report to the aggregate (the Python suite runs in its own
+    // workflow, on a GraalVM JDK, and none of the sample projects is a library), so Sonar sees
+    // every snippet line as uncovered. They stay in the analysis for issues, just not for coverage.
+    def docsSampleCoverageExcludes = subprojects
+            .findAll { it.projectDir.name.startsWith("test-suite") }
+            .collect { "${it.projectDir.name}/**/*" }
+    sonarqube {
+        properties {
+            property "sonar.coverage.exclusions", docsSampleCoverageExcludes.join(",")
+        }
+    }
+}

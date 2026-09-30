@@ -1,0 +1,30 @@
+# tag::imports[]
+import java
+from typing import Annotated
+
+from io.grpc import ManagedChannel
+from jakarta.inject import Singleton
+from micronaut.context.annotation import Factory
+from micronaut.grpc.annotation import GrpcChannel
+
+# `helloworld` is both the Java package of the generated gRPC classes and the package of these
+# Python sources, so the generated types are looked up by name instead of imported.
+GreeterGrpc = java.type("helloworld.GreeterGrpc")
+# end::imports[]
+from micronaut.context.annotation import Requires
+
+
+@Requires(property="spec.name", value="ExternalizedClientsTest")
+# tag::clazz[]
+@Factory
+class ExternalizedClients:
+
+    @Singleton
+    def greeter_stub(
+        self,
+        channel: Annotated[ManagedChannel, GrpcChannel("https://${my.server}:${my.port}")]
+    ) -> GreeterGrpc.GreeterStub:
+        return GreeterGrpc.newStub(
+            channel
+        )
+# end::clazz[]
