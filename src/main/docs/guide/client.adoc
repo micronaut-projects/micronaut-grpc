@@ -22,14 +22,14 @@ Any property of the `io.grpc.netty.NettyChannelBuilder` type can be configured.
 
 You can also disable all gRPC client channel injection, or disable a specific named client:
 
-[source,yaml]
+[configuration]
 ----
 grpc:
     client:
         enabled: false
 ----
 
-[source,yaml]
+[configuration]
 ----
 grpc:
     client:
