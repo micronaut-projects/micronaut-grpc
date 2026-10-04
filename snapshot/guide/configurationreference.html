@@ -46,7 +46,7 @@
         <div class="docs-content">
             <div class="project">
                 <h1>Configuration Reference</h1>
-                <p><strong>Version:</strong>5.1.1-SNAPSHOT</p>
+                <p><strong>Version:</strong>5.2.1-SNAPSHOT</p>
                 <p></p>
             </div>
 <div class="sect2">
@@ -198,6 +198,12 @@
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.disable-service-config-look-up</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.child-channel-configurator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.ChannelConfigurator</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -414,6 +420,12 @@
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.disable-service-config-look-up</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.child-channel-configurator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.ChannelConfigurator</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -655,6 +667,12 @@
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.child-channel-configurator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.ChannelConfigurator</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.build</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -867,6 +885,12 @@
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.disable-service-config-look-up</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.child-channel-configurator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.ChannelConfigurator</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -1108,6 +1132,12 @@
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.child-channel-configurator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.ChannelConfigurator</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.build</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -1320,6 +1350,12 @@
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.disable-service-config-look-up</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.child-channel-configurator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.ChannelConfigurator</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -1561,6 +1597,12 @@
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.child-channel-configurator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.ChannelConfigurator</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.client.build</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
 <td class="tableblock halign-left valign-top"></td>
@@ -1773,6 +1815,12 @@
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.disable-service-config-look-up</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.channels.*.child-channel-configurator</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.ChannelConfigurator</p></td>
 <td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -2193,6 +2241,12 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.secure</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">True if SSL is used</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.executor</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>

@@ -24,7 +24,7 @@
         }
     </script>
     <style type="text/css">
-        .lang-java { display: block }; .lang-python { display: block }; .lang-kotlin { display: block }; .lang-groovy { display: block }; 
+        .lang-java { display: block }; .lang-python { display: block }; .lang-kotlin { display: block }; .lang-groovy { display: block }; .lang-scala { display: block }; 
     </style>
 </head>
 
@@ -123,13 +123,13 @@
         <h1>Micronaut gRPC</h1>
         <p></p>
         <p>Integration between Micronaut and gRPC</p>
-        <p><strong>Version:</strong> 5.1.1-SNAPSHOT </p>
+        <p><strong>Version:</strong> 5.2.1-SNAPSHOT </p>
     </div>
     
 <h1 id="introduction"><a class="anchor" href="#introduction"></a>1 Introduction</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/introduction.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/introduction.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -161,7 +161,7 @@
 <h1 id="releaseHistory"><a class="anchor" href="#releaseHistory"></a>2 Release History</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/releaseHistory.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/releaseHistory.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -177,7 +177,7 @@
 <h1 id="gettingStarted"><a class="anchor" href="#gettingStarted"></a>3 Getting Started</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/gettingStarted.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/gettingStarted.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -330,6 +330,7 @@ sourceSets {
             srcDirs 'build/generated/source/proto/main/grpc'
             srcDirs 'build/generated/source/proto/main/grpckt'
             srcDirs 'build/generated/source/proto/main/java'
+            srcDirs 'build/generated/source/proto/main/reactor'
         }
     }
 }
@@ -339,11 +340,13 @@ protobuf {
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
         grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk8@jar" }
+        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
     }
     generateProtoTasks {
         all()*.plugins {
             grpc {}
             grpckt {}
+            reactor {}
         }
     }
 }</code></pre>
@@ -402,6 +405,15 @@ protobuf {
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+runtime = [
+    <span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-server-runtime"</span>,
+]</code></pre>
+</div>
+</div>
 </p>
 </div>
 <div class="paragraph">
@@ -420,6 +432,15 @@ protobuf {
     &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-grpc-client-runtime&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+runtime = [
+    <span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-client-runtime"</span>,
+]</code></pre>
 </div>
 </div>
 </p>
@@ -567,7 +588,7 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 <h1 id="server"><a class="anchor" href="#server"></a>4 gRPC Server</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/server.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/server.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -580,6 +601,63 @@ With the Micronaut 1.1 or above CLI you can generate a service with <code>mn cre
 </div>
 <div class="paragraph">
 <p>For example:</p>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.grpc.stub.StreamObserver;
+
+import jakarta.inject.Singleton;
+
+@Singleton
+public class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { // <b class="conum">(1)</b>
+
+    private final GreetingService greetingService;
+
+    // <b class="conum">(2)</b>
+    public GreetingEndpoint(GreetingService greetingService) {
+        this.greetingService = greetingService;
+    }
+
+    @Override
+    public void sayHello(HelloRequest request, StreamObserver&lt;HelloReply&gt; responseObserver) {
+        // <b class="conum">(3)</b>
+        final String message = greetingService.sayHello(request.getName());
+        HelloReply reply = HelloReply.newBuilder().setMessage(message).build();
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">import java
+
+from io.grpc.stub import StreamObserver
+from jakarta.inject import Singleton
+
+from .GreetingService import GreetingService
+
+# `helloworld` is both the Java package of the generated gRPC classes and the package of these
+# Python sources, so the generated types are looked up by name instead of imported.
+GreeterGrpc = java.type("helloworld.GreeterGrpc")
+HelloReply = java.type("helloworld.HelloReply")
+HelloRequest = java.type("helloworld.HelloRequest")
+
+@Singleton
+class GreetingEndpoint(GreeterGrpc.GreeterImplBase):  # <b class="conum">(1)</b>
+
+    # <b class="conum">(2)</b>
+    def __init__(self, greeting_service: GreetingService):
+        self.greeting_service = greeting_service
+
+    def sayHello(self, request: HelloRequest, response_observer: StreamObserver[HelloReply]) -&gt; None:
+        # <b class="conum">(3)</b>
+        message = self.greeting_service.say_hello(request.getName())
+        reply = HelloReply.newBuilder().setMessage(message).build()
+        response_observer.onNext(reply)
+        response_observer.onCompleted()</code></pre>
+</div>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
@@ -645,7 +723,7 @@ class GreetingEndpoint extends GreeterGrpc.GreeterImplBase { // <b class="conum"
 <div class="paragraph">
 <p>If you generate Reactor bindings with <code>reactive-grpc</code>, Micronaut can register the generated <code>BindableService</code> implementation in exactly the same way. Implement the generated Reactor base class as a singleton bean:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton
 public class ReactiveGreetingEndpoint extends ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase {
@@ -663,6 +741,59 @@ public class ReactiveGreetingEndpoint extends ReactorReactiveGreeterGrpc.Reactiv
                 .setMessage(greetingService.sayHello(helloRequest.getName()))
                 .build()
         );
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">@Singleton
+class ReactiveGreetingEndpoint(ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase):
+
+    def __init__(self, greeting_service: GreetingService):
+        self.greeting_service = greeting_service
+
+    def sayHello(self, request: Mono[HelloRequest]) -&gt; Mono[HelloReply]:
+        return request.map(
+            lambda hello_request: HelloReply.newBuilder()
+                .setMessage(self.greeting_service.say_hello(hello_request.getName()))
+                .build()
+        )</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Singleton
+class ReactiveGreetingEndpoint(private val greetingService: GreetingService) : ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase() {
+
+    override fun sayHello(request: Mono&lt;HelloRequest&gt;): Mono&lt;HelloReply&gt; =
+        request.map { helloRequest -&gt;
+            HelloReply.newBuilder()
+                .setMessage(greetingService.sayHello(helloRequest.name))
+                .build()
+        }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@CompileStatic
+@Singleton
+class ReactiveGreetingEndpoint extends ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase {
+
+    private final GreetingService greetingService
+
+    ReactiveGreetingEndpoint(GreetingService greetingService) {
+        this.greetingService = greetingService
+    }
+
+    @Override
+    Mono&lt;HelloReply&gt; sayHello(Mono&lt;HelloRequest&gt; request) {
+        request.map(helloRequest -&gt;
+            HelloReply.newBuilder()
+                .setMessage(greetingService.sayHello(helloRequest.name))
+                .build()
+        )
     }
 }</code></pre>
 </div>
@@ -711,7 +842,14 @@ grpc.server.ssl.private-key=classpath:my.key</code></pre>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {server = {port = 8080, keep-alive-time = "3h", max-inbound-message-size = 1024, ssl = {cert-chain = "file://path/to/my.cert", private-key = "classpath:my.key"}}}</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.server]
+port = 8080
+keep-alive-time = "3h"
+max-inbound-message-size = 1024
+
+[grpc.server.ssl]
+cert-chain = "file://path/to/my.cert"
+private-key = "classpath:my.key"</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -800,7 +938,8 @@ grpc.server.ssl.private-key=classpath:my.key</code></pre>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {server = {in-process-name = "test-grpc"}}</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.server]
+in-process-name = "test-grpc"</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -840,32 +979,14 @@ grpc.server.ssl.private-key=classpath:my.key</code></pre>
 <p>The in-process transport avoids port management and is managed by the Micronaut application lifecycle. SSL is not supported in this mode, and the support lives in the optional <code>micronaut-grpc-inprocess</code> module so the Netty-based server runtime does not require the extra dependency.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreationListener</code> for example:</p>
+<p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreatedEventListener</code> for example:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="title">Configuring the ServerBuilder</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">/*
- * Copyright 2017-2019 original authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package io.micronaut.grpc;
-
-import io.grpc.ServerBuilder;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.grpc.ServerBuilder;
 import io.micronaut.context.event.BeanCreatedEvent;
 import io.micronaut.context.event.BeanCreatedEventListener;
-
 import jakarta.inject.Singleton;
 
 @Singleton
@@ -876,6 +997,63 @@ public class ServerBuilderListener implements BeanCreatedEventListener&lt;Server
         final ServerBuilder&lt;?&gt; builder = event.getBean();
         builder.maxInboundMessageSize(1024);
         return builder;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Configuring the ServerBuilder</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">from io.grpc import ServerBuilder
+from jakarta.inject import Singleton
+from micronaut.context.event import BeanCreatedEvent, BeanCreatedEventListener
+
+@Singleton
+class ServerBuilderListener(BeanCreatedEventListener[ServerBuilder]):
+
+    def onCreated(self, event: BeanCreatedEvent[ServerBuilder]) -&gt; ServerBuilder:
+        builder = event.getBean()
+        builder.maxInboundMessageSize(1024)
+        return builder</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Configuring the ServerBuilder</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import io.grpc.ServerBuilder
+import io.micronaut.context.event.BeanCreatedEvent
+import io.micronaut.context.event.BeanCreatedEventListener
+import jakarta.inject.Singleton
+
+@Singleton
+class ServerBuilderListener : BeanCreatedEventListener&lt;ServerBuilder&lt;*&gt;&gt; {
+
+    override fun onCreated(event: BeanCreatedEvent&lt;ServerBuilder&lt;*&gt;&gt;): ServerBuilder&lt;*&gt; {
+        val builder = event.bean
+        builder.maxInboundMessageSize(1024)
+        return builder
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Configuring the ServerBuilder</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">import groovy.transform.CompileStatic
+import io.grpc.ServerBuilder
+import io.micronaut.context.event.BeanCreatedEvent
+import io.micronaut.context.event.BeanCreatedEventListener
+import jakarta.inject.Singleton
+
+@CompileStatic
+@Singleton
+class ServerBuilderListener implements BeanCreatedEventListener&lt;ServerBuilder&lt;?&gt;&gt; {
+
+    @Override
+    ServerBuilder&lt;?&gt; onCreated(BeanCreatedEvent&lt;ServerBuilder&lt;?&gt;&gt; event) {
+        final ServerBuilder&lt;?&gt; builder = event.bean
+        builder.maxInboundMessageSize(1024)
+        builder
     }
 }</code></pre>
 </div>
@@ -909,18 +1087,105 @@ Set <code>grpc.server.executor</code> to the name of an <code>Executor</code> be
 <p>To produce a consistent and predictable order of execution for server interceptors, it is required
 for the <code>io.grpc.ServerInterceptor</code> implementation to do one of the following:</p>
 </div>
-<div class="listingblock">
-<div class="title">Implement <code>io.micronaut.core.order.Ordered</code> interface</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Implement the io.micronaut.core.order.Ordered interface</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton <i class="conum" data-value="1"></i><b>(1)</b>
-public class CustomInterceptor implements ServerInterceptor, Ordered { <i class="conum" data-value="2"></i><b>(2)</b>
-    ...
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.grpc.Metadata;
+import io.grpc.ServerCall;
+import io.grpc.ServerCallHandler;
+import io.grpc.ServerInterceptor;
+import io.micronaut.core.order.Ordered;
+import jakarta.inject.Singleton;
+
+@Singleton // <b class="conum">(1)</b>
+public class CustomInterceptor implements ServerInterceptor, Ordered { // <b class="conum">(2)</b>
+    @Override
+    public &lt;T, R&gt; ServerCall.Listener&lt;T&gt; interceptCall(ServerCall&lt;T, R&gt; call,
+                                                       Metadata headers,
+                                                       ServerCallHandler&lt;T, R&gt; next) {
+        return next.startCall(call, headers);
+    }
 
     @Override
     public int getOrder() {
-        return 10; <i class="conum" data-value="3"></i><b>(3)</b>
+        return 10; // <b class="conum">(3)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Implement the io.micronaut.core.order.Ordered interface</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">from io.grpc import Metadata, ServerCall, ServerCallHandler, ServerInterceptor
+from jakarta.inject import Singleton
+from micronaut.core.order import Ordered
+
+@Singleton  # <b class="conum">(1)</b>
+class CustomInterceptor(ServerInterceptor, Ordered):  # <b class="conum">(2)</b>
+
+    def interceptCall[T, R](
+        self,
+        call: ServerCall[T, R],
+        headers: Metadata,
+        next: ServerCallHandler[T, R],
+    ) -&gt; ServerCall.Listener[T]:
+        return next.startCall(call, headers)
+
+    def getOrder(self) -&gt; int:
+        return 10  # <b class="conum">(3)</b></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Implement the io.micronaut.core.order.Ordered interface</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import io.grpc.Metadata
+import io.grpc.ServerCall
+import io.grpc.ServerCallHandler
+import io.grpc.ServerInterceptor
+import io.micronaut.core.order.Ordered
+import jakarta.inject.Singleton
+
+@Singleton // <b class="conum">(1)</b>
+class CustomInterceptor : ServerInterceptor, Ordered { // <b class="conum">(2)</b>
+    override fun &lt;T, R&gt; interceptCall(
+        call: ServerCall&lt;T, R&gt;,
+        headers: Metadata,
+        next: ServerCallHandler&lt;T, R&gt;,
+    ): ServerCall.Listener&lt;T&gt; {
+        return next.startCall(call, headers)
     }
 
+    override fun getOrder(): Int {
+        return 10 // <b class="conum">(3)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Implement the io.micronaut.core.order.Ordered interface</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">import groovy.transform.CompileStatic
+import io.grpc.Metadata
+import io.grpc.ServerCall
+import io.grpc.ServerCallHandler
+import io.grpc.ServerInterceptor
+import io.micronaut.core.order.Ordered
+import jakarta.inject.Singleton
+
+@CompileStatic
+@Singleton // <b class="conum">(1)</b>
+class CustomInterceptor implements ServerInterceptor, Ordered { // <b class="conum">(2)</b>
+    @Override
+    &lt;T, R&gt; ServerCall.Listener&lt;T&gt; interceptCall(ServerCall&lt;T, R&gt; call,
+                                                Metadata headers,
+                                                ServerCallHandler&lt;T, R&gt; next) {
+        next.startCall(call, headers)
+    }
+
+    @Override
+    int getOrder() {
+        10 // <b class="conum">(3)</b>
+    }
 }</code></pre>
 </div>
 </div>
@@ -940,18 +1205,84 @@ public class CustomInterceptor implements ServerInterceptor, Ordered { <i class=
 </tr>
 </table>
 </div>
-<div class="listingblock">
-<div class="title">Wrap with <code>io.micronaut.grpc.server.interceptor.OrderedServerInterceptor</code></div>
+<div class="listingblock multi-language-sample">
+<div class="title">Wrap with io.micronaut.grpc.server.interceptor.OrderedServerInterceptor</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Factory <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.grpc.ServerInterceptor;
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.Factory;
+import io.micronaut.grpc.server.interceptor.OrderedServerInterceptor;
+import jakarta.inject.Singleton;
+
+@Factory // <b class="conum">(1)</b>
 public class ServerInterceptorFactory {
 
-    @Bean <i class="conum" data-value="2"></i><b>(2)</b>
+    @Bean // <b class="conum">(2)</b>
     @Singleton
     public ServerInterceptor customServerInterceptor() {
-        return new OrderedServerInterceptor(new CustomInterceptor(), 10); <i class="conum" data-value="3"></i><b>(3)</b>
+        return new OrderedServerInterceptor(new CustomInterceptor(), 10); // <b class="conum">(3)</b>
     }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Wrap with io.micronaut.grpc.server.interceptor.OrderedServerInterceptor</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">from io.grpc import ServerInterceptor
+from jakarta.inject import Singleton
+from micronaut.context.annotation import Bean, Factory
+from micronaut.grpc.server.interceptor import OrderedServerInterceptor
 
+from .CustomInterceptor import CustomInterceptor
+
+@Factory  # <b class="conum">(1)</b>
+class ServerInterceptorFactory:
+
+    @Bean  # <b class="conum">(2)</b>
+    @Singleton
+    def custom_server_interceptor(self) -&gt; ServerInterceptor:
+        return OrderedServerInterceptor(CustomInterceptor(), 10)  # <b class="conum">(3)</b></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Wrap with io.micronaut.grpc.server.interceptor.OrderedServerInterceptor</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import io.grpc.ServerInterceptor
+import io.micronaut.context.annotation.Bean
+import io.micronaut.context.annotation.Factory
+import io.micronaut.grpc.server.interceptor.OrderedServerInterceptor
+import jakarta.inject.Singleton
+
+@Factory // <b class="conum">(1)</b>
+class ServerInterceptorFactory {
+
+    @Bean // <b class="conum">(2)</b>
+    @Singleton
+    fun customServerInterceptor(): ServerInterceptor {
+        return OrderedServerInterceptor(CustomInterceptor(), 10) // <b class="conum">(3)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Wrap with io.micronaut.grpc.server.interceptor.OrderedServerInterceptor</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">import groovy.transform.CompileStatic
+import io.grpc.ServerInterceptor
+import io.micronaut.context.annotation.Bean
+import io.micronaut.context.annotation.Factory
+import io.micronaut.grpc.server.interceptor.OrderedServerInterceptor
+import jakarta.inject.Singleton
+
+@CompileStatic
+@Factory // <b class="conum">(1)</b>
+class ServerInterceptorFactory {
+
+    @Bean // <b class="conum">(2)</b>
+    @Singleton
+    ServerInterceptor customServerInterceptor() {
+        new OrderedServerInterceptor(new CustomInterceptor(), 10) // <b class="conum">(3)</b>
+    }
 }</code></pre>
 </div>
 </div>
@@ -992,6 +1323,49 @@ and then the order will be reversed when sending the response message.</p>
 </div>
 <div class="paragraph">
 <p>To modify the status of a service, call the <code>setStatus</code> method on an instance of <code>HealthServiceManager</code>, for example:</p>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.grpc.health.v1.HealthCheckResponse;
+import io.grpc.protobuf.services.HealthStatusManager;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
+import jakarta.inject.Singleton;
+
+@Singleton
+public class HealthService {
+
+    private final HealthStatusManager healthStatusManager;
+
+    public HealthService(@Nullable HealthStatusManager healthStatusManager) {
+        this.healthStatusManager = healthStatusManager;
+    }
+
+    public void setStatus(@NonNull String serviceName, HealthCheckResponse.@NonNull ServingStatus status) {
+        if (healthStatusManager != null) {
+            healthStatusManager.setStatus(serviceName, status);
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">from io.grpc.health.v1 import HealthCheckResponse
+from io.grpc.protobuf.services import HealthStatusManager
+from jakarta.inject import Singleton
+
+@Singleton
+class HealthService:
+
+    def __init__(self, health_status_manager: HealthStatusManager | None):
+        self.health_status_manager = health_status_manager
+
+    def set_status(self, service_name: str, status: HealthCheckResponse.ServingStatus) -&gt; None:
+        if self.health_status_manager is not None:
+            self.health_status_manager.setStatus(service_name, status)</code></pre>
+</div>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
@@ -1085,9 +1459,9 @@ For detailed instructions on how to set up Micronaut Test for Spock, JUnit 5, or
 </table>
 </div>
 <div class="paragraph">
-<p>You can then define a blocking stub bean in <code>src/test/java</code>. For example:</p>
+<p>You can then define a blocking stub bean in your test sources. For example:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="title">Defining Test Clients</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Factory
@@ -1095,10 +1469,49 @@ class Clients {
 
     @Bean
     GreeterGrpc.GreeterBlockingStub blockingStub(
-        @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) { <i class="conum" data-value="1"></i><b>(1)</b>
-        return GreeterGrpc.newBlockingStub( <i class="conum" data-value="2"></i><b>(2)</b>
+        @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) { // <b class="conum">(1)</b>
+        return GreeterGrpc.newBlockingStub( // <b class="conum">(2)</b>
             channel
         );
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Defining Test Clients</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">@Factory
+class Clients:
+
+    @Bean
+    def blocking_stub(self, channel: Annotated[ManagedChannel, GrpcChannel(GrpcServerChannel.NAME)]) -&gt; GreeterGrpc.GreeterBlockingStub:  # <b class="conum">(1)</b>
+        return GreeterGrpc.newBlockingStub(channel)  # <b class="conum">(2)</b></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Defining Test Clients</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Factory
+class Clients {
+
+    @Bean
+    fun greetingClient(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): GreeterGrpcKt.GreeterCoroutineStub = // <b class="conum">(1)</b>
+        GreeterGrpcKt.GreeterCoroutineStub(channel) // <b class="conum">(2)</b>
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Defining Test Clients</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@Factory
+class Clients {
+
+    @Bean
+    GreeterGrpc.GreeterBlockingStub blockingStub(
+            @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) { // <b class="conum">(1)</b>
+        GreeterGrpc.newBlockingStub( // <b class="conum">(2)</b>
+                channel
+        )
     }
 }</code></pre>
 </div>
@@ -1121,6 +1534,126 @@ class Clients {
 <div class="paragraph">
 <p>Now that you have a test client, writing the test becomes trivial:</p>
 </div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.grpc.ManagedChannel;
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.Factory;
+import io.micronaut.grpc.annotation.GrpcChannel;
+import io.micronaut.grpc.server.GrpcServerChannel;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+
+import org.junit.jupiter.api.Test;
+
+import jakarta.inject.Inject;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+@MicronautTest // <b class="conum">(1)</b>
+class GreetingEndpointTest {
+
+    @Inject
+    GreeterGrpc.GreeterBlockingStub blockingStub; // <b class="conum">(2)</b>
+
+    @Test
+    void testHelloWorld() {
+        final HelloRequest request = HelloRequest.newBuilder() // <b class="conum">(3)</b>
+            .setName("Fred")
+            .build();
+        assertEquals(
+            "Hello Fred",
+            blockingStub.sayHello(request)
+                .getMessage()
+        );
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">import java
+from typing import Annotated
+
+from io.grpc import ManagedChannel
+from jakarta.inject import Inject
+from micronaut.context.annotation import Bean, Factory
+from micronaut.grpc.annotation import GrpcChannel
+from micronaut.grpc.server import GrpcServerChannel
+from micronaut.test.extensions.junit5.annotation import MicronautTest
+from org.junit.jupiter.api import Test
+
+# `helloworld` is both the Java package of the generated gRPC classes and the package of these
+# Python sources, so the generated types are looked up by name instead of imported.
+GreeterGrpc = java.type("helloworld.GreeterGrpc")
+HelloRequest = java.type("helloworld.HelloRequest")
+
+@MicronautTest  # <b class="conum">(1)</b>
+class GreetingEndpointTest:
+
+    blocking_stub: Annotated[GreeterGrpc.GreeterBlockingStub, Inject]  # <b class="conum">(2)</b>
+
+    @Test
+    def test_hello_world(self):
+        request = HelloRequest.newBuilder().setName("Fred").build()  # <b class="conum">(3)</b>
+        assert self.blocking_stub.sayHello(request).getMessage() == "Hello Fred"</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import io.grpc.ManagedChannel
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.micronaut.context.annotation.Bean
+import io.micronaut.context.annotation.Factory
+import io.micronaut.grpc.annotation.GrpcChannel
+import io.micronaut.grpc.server.GrpcServerChannel
+import io.micronaut.test.extensions.kotest5.annotation.MicronautTest
+
+@MicronautTest // <b class="conum">(1)</b>
+class GreetingEndpointTest(
+    private val greetingClient: GreeterGrpcKt.GreeterCoroutineStub, // <b class="conum">(2)</b>
+) : StringSpec({
+    "returns a greeting response" {
+        greetingClient.sayHello( // <b class="conum">(3)</b>
+            HelloRequest.newBuilder().setName("Fred").build(),
+        ).message shouldBe "Hello Fred"
+    }
+})</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">import io.grpc.ManagedChannel
+import io.micronaut.context.annotation.Bean
+import io.micronaut.context.annotation.Factory
+import io.micronaut.grpc.annotation.GrpcChannel
+import io.micronaut.grpc.server.GrpcServerChannel
+import io.micronaut.test.extensions.spock.annotation.MicronautTest
+import jakarta.inject.Inject
+import spock.lang.Specification
+
+@MicronautTest // <b class="conum">(1)</b>
+class GreetingEndpointTest extends Specification {
+
+    @Inject
+    GreeterGrpc.GreeterBlockingStub blockingStub // <b class="conum">(2)</b>
+
+    void "test greeting endpoint"() {
+        given:
+        HelloRequest request = HelloRequest.newBuilder().with { // <b class="conum">(3)</b>
+            name = "Fred"
+            build()
+        }
+
+        expect:
+        blockingStub.sayHello(
+                request
+        ).message == 'Hello Fred'
+    }
+}</code></pre>
+</div>
+</div>
 <div class="colist arabic">
 <table>
 <tr>
@@ -1142,7 +1675,7 @@ class Clients {
 <h1 id="client"><a class="anchor" href="#client"></a>5 gRPC Clients</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/client.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/client.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1180,7 +1713,9 @@ grpc.client.max-retry-attempts=10</code></pre>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {client = {plaintext = true, max-retry-attempts = 10}}</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.client]
+plaintext = true
+max-retry-attempts = 10</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1228,14 +1763,67 @@ grpc.client.max-retry-attempts=10</code></pre>
 <div class="paragraph">
 <p>You can also disable all gRPC client channel injection, or disable a specific named client:</p>
 </div>
-<div class="listingblock">
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.client.enabled=false</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     client:
         enabled: false</code></pre>
 </div>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.client]
+enabled = false</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  client {
+    enabled = false
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    client {
+      enabled = false
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "client": {
+      "enabled": false
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.client.greeter.enabled=false</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
     client:
@@ -1243,36 +1831,63 @@ grpc.client.max-retry-attempts=10</code></pre>
             enabled: false</code></pre>
 </div>
 </div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.client.greeter]
+enabled = false</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  client {
+    greeter {
+      enabled = false
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    client {
+      greeter {
+        enabled = false
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "client": {
+      "greeter": {
+        "enabled": false
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
 <div class="paragraph">
 <p>When a client is disabled, optional or nullable <code>@GrpcChannel</code> injection points resolve to an empty value, while required injection points fail with a dependency injection error.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreationListener</code> for example:</p>
+<p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreatedEventListener</code> for example:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="title">Configuring the NettyChannelBuilder</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">/*
- * Copyright 2017-2019 original authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-package io.micronaut.grpc;
-
-import io.grpc.ManagedChannelBuilder;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.grpc.ManagedChannelBuilder;
 import io.micronaut.context.event.BeanCreatedEvent;
 import io.micronaut.context.event.BeanCreatedEventListener;
-
 import jakarta.inject.Singleton;
 
 @Singleton
@@ -1283,6 +1898,63 @@ public class ManagedChannelBuilderListener implements BeanCreatedEventListener&l
         final ManagedChannelBuilder&lt;?&gt; channelBuilder = event.getBean();
         channelBuilder.maxInboundMessageSize(1024);
         return channelBuilder;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Configuring the NettyChannelBuilder</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">from io.grpc import ManagedChannelBuilder
+from jakarta.inject import Singleton
+from micronaut.context.event import BeanCreatedEvent, BeanCreatedEventListener
+
+@Singleton
+class ManagedChannelBuilderListener(BeanCreatedEventListener[ManagedChannelBuilder]):
+
+    def onCreated(self, event: BeanCreatedEvent[ManagedChannelBuilder]) -&gt; ManagedChannelBuilder:
+        channel_builder = event.getBean()
+        channel_builder.maxInboundMessageSize(1024)
+        return channel_builder</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Configuring the NettyChannelBuilder</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import io.grpc.ManagedChannelBuilder
+import io.micronaut.context.event.BeanCreatedEvent
+import io.micronaut.context.event.BeanCreatedEventListener
+import jakarta.inject.Singleton
+
+@Singleton
+class ManagedChannelBuilderListener : BeanCreatedEventListener&lt;ManagedChannelBuilder&lt;*&gt;&gt; {
+
+    override fun onCreated(event: BeanCreatedEvent&lt;ManagedChannelBuilder&lt;*&gt;&gt;): ManagedChannelBuilder&lt;*&gt; {
+        val channelBuilder = event.bean
+        channelBuilder.maxInboundMessageSize(1024)
+        return channelBuilder
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title">Configuring the NettyChannelBuilder</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">import groovy.transform.CompileStatic
+import io.grpc.ManagedChannelBuilder
+import io.micronaut.context.event.BeanCreatedEvent
+import io.micronaut.context.event.BeanCreatedEventListener
+import jakarta.inject.Singleton
+
+@CompileStatic
+@Singleton
+class ManagedChannelBuilderListener implements BeanCreatedEventListener&lt;ManagedChannelBuilder&lt;?&gt;&gt; {
+
+    @Override
+    ManagedChannelBuilder&lt;?&gt; onCreated(BeanCreatedEvent&lt;ManagedChannelBuilder&lt;?&gt;&gt; event) {
+        final ManagedChannelBuilder&lt;?&gt; channelBuilder = event.bean
+        channelBuilder.maxInboundMessageSize(1024)
+        channelBuilder
     }
 }</code></pre>
 </div>
@@ -1309,17 +1981,67 @@ public class ManagedChannelBuilderListener implements BeanCreatedEventListener&l
 <div class="paragraph">
 <p>The value of the <code>@GrpcChannel</code> annotation can be used to specify the target server, the configuration for which can also be externalized:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Factory
-class Clients {
+class ExternalizedClients {
+
     @Singleton
-    GreeterGrpc.GreeterStub reactiveStub(
+    GreeterGrpc.GreeterStub greeterStub(
         @GrpcChannel("https://${my.server}:${my.port}")
         ManagedChannel channel) {
         return GreeterGrpc.newStub(
-                channel
+            channel
         );
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">@Factory
+class ExternalizedClients:
+
+    @Singleton
+    def greeter_stub(
+        self,
+        channel: Annotated[ManagedChannel, GrpcChannel("https://${my.server}:${my.port}")]
+    ) -&gt; GreeterGrpc.GreeterStub:
+        return GreeterGrpc.newStub(
+            channel
+        )</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Factory
+class ExternalizedClients {
+
+    @Singleton
+    fun greeterStub(
+        @GrpcChannel("https://\${my.server}:\${my.port}")
+        channel: ManagedChannel,
+    ): GreeterGrpc.GreeterStub {
+        return GreeterGrpc.newStub(
+            channel
+        )
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@CompileStatic
+@Factory
+class ExternalizedClients {
+
+    @Singleton
+    GreeterGrpc.GreeterStub greeterStub(
+            @GrpcChannel('https://${my.server}:${my.port}')
+            ManagedChannel channel) {
+        GreeterGrpc.newStub(
+                channel
+        )
     }
 }</code></pre>
 </div>
@@ -1351,7 +2073,10 @@ grpc.channels.greeter.max-retry-attempts=10</code></pre>
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {channels = {greeter = {address = "${my.server}:${my.port}", plaintext = true, max-retry-attempts = 10}}}</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.channels.greeter]
+address = "${my.server}:${my.port}"
+plaintext = true
+max-retry-attempts = 10</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1402,15 +2127,68 @@ grpc.channels.greeter.max-retry-attempts=10</code></pre>
 <div class="paragraph">
 <p>You can then define the <code>@GrpcChannel</code> annotation as follows:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton
-GreeterGrpc.GreeterStub reactiveStub(
-    @GrpcChannel("greeter")
-    ManagedChannel channel) {
-    return GreeterGrpc.newStub(
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Factory
+class NamedChannelClients {
+
+    @Singleton
+    GreeterGrpc.GreeterStub greeterStub(
+        @GrpcChannel("greeter")
+        ManagedChannel channel) {
+        return GreeterGrpc.newStub(
             channel
-    );
+        );
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">@Factory
+class NamedChannelClients:
+
+    @Singleton
+    def greeter_stub(
+        self,
+        channel: Annotated[ManagedChannel, GrpcChannel("greeter")]
+    ) -&gt; GreeterGrpc.GreeterStub:
+        return GreeterGrpc.newStub(
+            channel
+        )</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Factory
+class NamedChannelClients {
+
+    @Singleton
+    fun greeterStub(
+        @GrpcChannel("greeter")
+        channel: ManagedChannel,
+    ): GreeterGrpc.GreeterStub {
+        return GreeterGrpc.newStub(
+            channel
+        )
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@CompileStatic
+@Factory
+class NamedChannelClients {
+
+    @Singleton
+    GreeterGrpc.GreeterStub greeterStub(
+            @GrpcChannel("greeter")
+            ManagedChannel channel) {
+        GreeterGrpc.newStub(
+                channel
+        )
+    }
 }</code></pre>
 </div>
 </div>
@@ -1423,19 +2201,42 @@ GreeterGrpc.GreeterStub reactiveStub(
 <div class="paragraph">
 <p>If you generate Reactor bindings with <code>reactive-grpc</code>, define the generated Reactor stub in the same kind of factory and inject the <code>ManagedChannel</code> with <code>@GrpcChannel</code>:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">    @Bean
-    ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub reactiveStub(
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Bean
+ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub reactiveStub(
+    @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) {
+    return ReactorReactiveGreeterGrpc.newReactorStub(channel);
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">@Bean
+def reactive_stub(self, channel: Annotated[ManagedChannel, GrpcChannel(GrpcServerChannel.NAME)]) -&gt; ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub:
+    return ReactorReactiveGreeterGrpc.newReactorStub(channel)</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Bean
+fun reactiveStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel): ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub =
+    ReactorReactiveGreeterGrpc.newReactorStub(channel)</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@Bean
+ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub reactiveStub(
         @GrpcChannel(GrpcServerChannel.NAME) ManagedChannel channel) {
-        return ReactorReactiveGreeterGrpc.newReactorStub(channel);
-    }</code></pre>
+    ReactorReactiveGreeterGrpc.newReactorStub(channel)
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>The resulting stub can then be injected into your application or tests and used directly with Reactor operators:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@MicronautTest
 class ReactiveGreetingEndpointTest {
@@ -1455,12 +2256,69 @@ class ReactiveGreetingEndpointTest {
 }</code></pre>
 </div>
 </div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">@MicronautTest
+class ReactiveGreetingEndpointTest:
+
+    reactive_stub: Annotated[ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub, Inject]
+
+    @Test
+    def test_reactive_hello_world(self):
+        message = self.reactive_stub.sayHello(Mono.just(HelloRequest.newBuilder().setName("Fred").build())) \
+            .map(lambda reply: reply.getMessage()) \
+            .block(Duration.ofSeconds(5))
+
+        assert message == "Hello Fred"</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@MicronautTest
+class ReactiveGreetingEndpointTest {
+
+    @Inject
+    lateinit var reactiveStub: ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub
+
+    @Test
+    fun testReactiveHelloWorld() {
+        val message = Mono.just(HelloRequest.newBuilder().setName("Fred").build())
+            .transform(reactiveStub::sayHello)
+            .map(HelloReply::getMessage)
+            .block(Duration.ofSeconds(5))
+
+        assertEquals("Hello Fred", message)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@MicronautTest
+class ReactiveGreetingEndpointTest extends Specification {
+
+    @Inject
+    ReactorReactiveGreeterGrpc.ReactorReactiveGreeterStub reactiveStub
+
+    void "test reactive greeting endpoint"() {
+        when:
+        String message = Mono.just(HelloRequest.newBuilder().setName("Fred").build())
+            .transform(reactiveStub::sayHello)
+            .map(HelloReply::getMessage)
+            .block(Duration.ofSeconds(5))
+
+        then:
+        message == "Hello Fred"
+    }
+}</code></pre>
+</div>
+</div>
 </div>
 
 <h1 id="serviceDiscovery"><a class="anchor" href="#serviceDiscovery"></a>6 Service Discovery</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/serviceDiscovery.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/serviceDiscovery.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1472,9 +2330,69 @@ class ReactiveGreetingEndpointTest {
 <div class="paragraph">
 <p>The default strategy for this is to use DNS based discovery. So for example you can do:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@GrpcChannel("dns://greeter")</code></pre>
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Factory
+class DnsClients {
+
+    @Singleton
+    GreeterGrpc.GreeterStub greeterStub(
+        @GrpcChannel("dns:///greeter")
+        ManagedChannel channel) {
+        return GreeterGrpc.newStub(
+            channel
+        );
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">@Factory
+class DnsClients:
+
+    @Singleton
+    def greeter_stub(
+        self,
+        channel: Annotated[ManagedChannel, GrpcChannel("dns:///greeter")]
+    ) -&gt; GreeterGrpc.GreeterStub:
+        return GreeterGrpc.newStub(
+            channel
+        )</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Factory
+class DnsClients {
+
+    @Singleton
+    fun greeterStub(
+        @GrpcChannel("dns:///greeter")
+        channel: ManagedChannel,
+    ): GreeterGrpc.GreeterStub {
+        return GreeterGrpc.newStub(
+            channel
+        )
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@CompileStatic
+@Factory
+class DnsClients {
+
+    @Singleton
+    GreeterGrpc.GreeterStub greeterStub(
+            @GrpcChannel("dns:///greeter")
+            ManagedChannel channel) {
+        GreeterGrpc.newStub(
+                channel
+        )
+    }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1512,6 +2430,15 @@ class ReactiveGreetingEndpointTest {
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+runtime = [
+    <span class="hljs-string">"io.micronaut.discovery:micronaut-discovery-client"</span>,
+]</code></pre>
+</div>
+</div>
 </p>
 </div>
 <div class="paragraph">
@@ -1540,8 +2467,14 @@ consul:
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">micronaut = {application = {name = "greeter"}}
-consul = {client = {registration = {enabled = true}, defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"}}</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[micronaut.application]
+name = "greeter"
+
+[consul.client]
+defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"
+
+[consul.client.registration]
+enabled = true</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1626,8 +2559,11 @@ grpc:
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">micronaut = {application = {name = "greeter"}}
-grpc = {server = {instance-id = "hello-grpc"}}</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[micronaut.application]
+name = "greeter"
+
+[grpc.server]
+instance-id = "hello-grpc"</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1717,8 +2653,11 @@ consul:
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">grpc = {client = {discovery = {enabled = true}}}
-consul = {client = {defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"}}</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.client.discovery]
+enabled = true
+
+[consul.client]
+defaultZone = "${CONSUL_HOST:localhost}:${CONSUL_PORT:8500}"</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1778,16 +2717,72 @@ consul {
 <div class="paragraph">
 <p>Then use the value <code>greeter</code> to discover the service when injecting the channel:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton
-@Bean
-GreeterGrpc.GreeterStub greeterStub(
-    @GrpcChannel("greeter")
-    ManagedChannel channel) {
-    return GreeterGrpc.newStub(
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Factory
+class DiscoveryClients {
+
+    @Singleton
+    @Bean
+    GreeterGrpc.GreeterStub greeterStub(
+        @GrpcChannel("greeter")
+        ManagedChannel channel) {
+        return GreeterGrpc.newStub(
             channel
-    );
+        );
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">@Factory
+class DiscoveryClients:
+
+    @Singleton
+    @Bean
+    def greeter_stub(
+        self,
+        channel: Annotated[ManagedChannel, GrpcChannel("greeter")]
+    ) -&gt; GreeterGrpc.GreeterStub:
+        return GreeterGrpc.newStub(
+            channel
+        )</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">@Factory
+class DiscoveryClients {
+
+    @Singleton
+    @Bean
+    fun greeterStub(
+        @GrpcChannel("greeter")
+        channel: ManagedChannel,
+    ): GreeterGrpc.GreeterStub {
+        return GreeterGrpc.newStub(
+            channel
+        )
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">@CompileStatic
+@Factory
+class DiscoveryClients {
+
+    @Singleton
+    @Bean
+    GreeterGrpc.GreeterStub greeterStub(
+            @GrpcChannel("greeter")
+            ManagedChannel channel) {
+        GreeterGrpc.newStub(
+                channel
+        )
+    }
 }</code></pre>
 </div>
 </div>
@@ -1797,7 +2792,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <h1 id="tracing"><a class="anchor" href="#tracing"></a>7 Distributed Tracing</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/tracing.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/tracing.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1819,6 +2814,15 @@ GreeterGrpc.GreeterStub greeterStub(
     &lt;groupId&gt;io.micronaut.tracing&lt;/groupId&gt;
     &lt;artifactId&gt;micronaut-tracing-opentelemetry-grpc&lt;/artifactId&gt;
 &lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+runtime = [
+    <span class="hljs-string">"io.micronaut.tracing:micronaut-tracing-opentelemetry-grpc"</span>,
+]</code></pre>
 </div>
 </div>
 </p>
@@ -1845,6 +2849,15 @@ GreeterGrpc.GreeterStub greeterStub(
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+runtime = [
+    <span class="hljs-string">"com.google.cloud.opentelemetry:exporter-auto"</span>,
+]</code></pre>
+</div>
+</div>
 </p>
 </div>
 <div class="paragraph">
@@ -1866,7 +2879,8 @@ GreeterGrpc.GreeterStub greeterStub(
 </div>
 <div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">otel = {traces = {exporter = "google_cloud_trace"}}</code></pre>
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[otel.traces]
+exporter = "google_cloud_trace"</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -1912,7 +2926,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <h1 id="protocolBuffers"><a class="anchor" href="#protocolBuffers"></a>8 Protocol Buffers Support</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/protocolBuffers.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/protocolBuffers.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1939,6 +2953,15 @@ GreeterGrpc.GreeterStub greeterStub(
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+runtime = [
+    <span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-support"</span>,
+]</code></pre>
+</div>
+</div>
 </p>
 </div>
 <div class="paragraph">
@@ -1948,7 +2971,7 @@ GreeterGrpc.GreeterStub greeterStub(
 <h1 id="protocolBuffersJsonSupport"><a class="anchor" href="#protocolBuffersJsonSupport"></a>9 Protocol Buffers Json Support (Experimental)</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/protocolBuffersJsonSupport.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/protocolBuffersJsonSupport.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
@@ -1976,6 +2999,15 @@ server.</p>
 &lt;/dependency&gt;</code></pre>
 </div>
 </div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+runtime = [
+    <span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-json-support"</span>,
+]</code></pre>
+</div>
+</div>
 </p>
 </div>
 <div class="paragraph">
@@ -1984,11 +3016,9 @@ server.</p>
 <div class="paragraph">
 <p>And then include the <code>@GrpcRestJsonExposed</code> annotation on your gRPC service definition:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example.services;
-
-import io.grpc.stub.StreamObserver;
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import io.grpc.stub.StreamObserver;
 import io.micronaut.grpc.annotation.GrpcRestJsonExposed;
 import jakarta.inject.Singleton;
 import org.example.grpc.GreeterGrpc;
@@ -1999,21 +3029,114 @@ import org.slf4j.LoggerFactory;
 
 @Singleton
 public class GreeterService extends GreeterGrpc.GreeterImplBase {
-    private static final Logger log = LoggerFactory.getLogger(GreeterService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GreeterService.class);
 
     @GrpcRestJsonExposed
     @Override
     public void sayHello(HelloRequest request, StreamObserver&lt;HelloResponse&gt; responseObserver) {
-        log.debug("Received request: {}", request);
+        LOG.debug("Received request: {}", request);
         String name = request.getName();
         String greeting = "Hello, " + name;
 
         HelloResponse reply = HelloResponse.newBuilder()
-                .setGreeting(greeting)
-                .build();
+            .setGreeting(greeting)
+            .build();
 
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-python hljs" data-lang="python">import logging
+
+from io.grpc.stub import StreamObserver
+from jakarta.inject import Singleton
+from micronaut.grpc.annotation import GrpcRestJsonExposed
+from org.example.grpc import GreeterGrpc, HelloRequest, HelloResponse
+
+LOG = logging.getLogger(__name__)
+
+@Singleton
+class GreeterService(GreeterGrpc.GreeterImplBase):
+
+    @GrpcRestJsonExposed
+    def sayHello(self, request: HelloRequest, response_observer: StreamObserver[HelloResponse]) -&gt; None:
+        LOG.debug("Received request: %s", request)
+        name = request.getName()
+        greeting = "Hello, " + name
+
+        reply = HelloResponse.newBuilder().setGreeting(greeting).build()
+
+        response_observer.onNext(reply)
+        response_observer.onCompleted()</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="kotlin">import io.grpc.stub.StreamObserver
+import io.micronaut.grpc.annotation.GrpcRestJsonExposed
+import jakarta.inject.Singleton
+import org.example.grpc.GreeterGrpc
+import org.example.grpc.HelloRequest
+import org.example.grpc.HelloResponse
+import org.slf4j.LoggerFactory
+
+@Singleton
+class GreeterService : GreeterGrpc.GreeterImplBase() {
+
+    @GrpcRestJsonExposed
+    override fun sayHello(request: HelloRequest, responseObserver: StreamObserver&lt;HelloResponse&gt;) {
+        LOG.debug("Received request: {}", request)
+        val name = request.name
+        val greeting = "Hello, $name"
+
+        val reply = HelloResponse.newBuilder()
+            .setGreeting(greeting)
+            .build()
+
+        responseObserver.onNext(reply)
+        responseObserver.onCompleted()
+    }
+
+    companion object {
+        private val LOG = LoggerFactory.getLogger(GreeterService::class.java)
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">import groovy.transform.CompileStatic
+import io.grpc.stub.StreamObserver
+import io.micronaut.grpc.annotation.GrpcRestJsonExposed
+import jakarta.inject.Singleton
+import org.example.grpc.GreeterGrpc
+import org.example.grpc.HelloRequest
+import org.example.grpc.HelloResponse
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+@CompileStatic
+@Singleton
+class GreeterService extends GreeterGrpc.GreeterImplBase {
+    private static final Logger LOG = LoggerFactory.getLogger(GreeterService)
+
+    @GrpcRestJsonExposed
+    @Override
+    void sayHello(HelloRequest request, StreamObserver&lt;HelloResponse&gt; responseObserver) {
+        LOG.debug("Received request: {}", request)
+        String name = request.name
+        String greeting = "Hello, " + name
+
+        HelloResponse reply = HelloResponse.newBuilder()
+            .setGreeting(greeting)
+            .build()
+
+        responseObserver.onNext(reply)
+        responseObserver.onCompleted()
     }
 }</code></pre>
 </div>
@@ -2074,10 +3197,10 @@ json using the <code>io.micronaut.protobuf.json.ProtobufJsonTranscoder</code> cl
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-protobuf hljs" data-lang="protobuf">syntax = "proto3";
-package helloworld;
+package greeter;
 
 option java_package = "org.example.grpc";
-option java_outer_classname = "HelloworldProto";
+option java_outer_classname = "GreeterProto";
 option java_multiple_files = true;
 
 message HelloRequest {
@@ -2119,7 +3242,7 @@ service Greeter {
 <h2 id="_example_client_usage_with_curl">Example client usage with <code>cURL</code></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>If you run the <code>test-suite-java-rpc-json-demo</code> project and issue the following cURL call:</p>
+<p>If you run the <code>test-suite-protobuff-json-java</code> project and issue the following cURL call:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2134,7 +3257,7 @@ service Greeter {
 <h1 id="repository"><a class="anchor" href="#repository"></a>10 Repository</h1>
 
 <div class='contribute-btn'>
-    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.1.x/src/main/docs/guide/repository.adoc"'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/repository.adoc"'>
         <i class='fa fa-pencil-square-o'></i> Improve this doc
     </button>
 </div>
