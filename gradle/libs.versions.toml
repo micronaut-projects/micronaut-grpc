@@ -58,6 +58,7 @@ micronaut-gradle-plugin = { module = 'io.micronaut.gradle:micronaut-gradle-plugi
 micronaut-serde-jackson = { module = 'io.micronaut.serde:micronaut-serde-jackson', version.ref = 'micronaut-serde' }
 
 # Other
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 gson = { module = 'com.google.code.gson:gson', version.ref = 'gson' }
 reactive-grpc-stub = { module = 'com.salesforce.servicelibs:reactor-grpc-stub', version.ref = 'reactive-grpc' }
 graal-svm = { module = 'org.graalvm.nativeimage:svm', version.ref = 'graal-svm' }

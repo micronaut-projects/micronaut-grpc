@@ -59,6 +59,7 @@ include 'test-suite-groovy'
 include 'test-suite-kotlin'
 include 'test-suite-python'
 include 'test-suite-protobuff-json-java'
+include 'test-suite-dev-reload'
 include 'grpc-health'
 include 'grpc-opentracing'
 
