@@ -39,6 +39,7 @@ import io.micronaut.inject.ArgumentInjectionPoint;
 import io.micronaut.inject.FieldInjectionPoint;
 import io.micronaut.inject.InjectionPoint;
 import io.micronaut.inject.qualifiers.Qualifiers;
+import org.jspecify.annotations.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +60,10 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
     private static final String NAMED_ENABLED = GrpcDefaultManagedChannelConfiguration.PREFIX + '.';
     private final Map<ChannelKey, ManagedChannel> channels = new ConcurrentHashMap<>();
     private final ApplicationContext beanContext;
+    /**
+     * The channels kept across restarts, in development mode only.
+     */
+    private final @Nullable DevelopmentGrpcChannels developmentChannels;
 
     /**
      * Default constructor.
@@ -67,6 +72,7 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
      */
     public GrpcManagedChannelFactory(ApplicationContext beanContext) {
         this.beanContext = beanContext;
+        this.developmentChannels = beanContext.findBean(DevelopmentGrpcChannels.class).orElse(null);
     }
 
     /**
@@ -103,19 +109,24 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
 
 
         return channels.computeIfAbsent(new ChannelKey(argument, target), channelKey -> {
-            final NettyChannelBuilder nettyChannelBuilder = beanContext.createBean(NettyChannelBuilder.class, target);
-            ManagedChannel channel = nettyChannelBuilder.build();
+            // in development mode the channel may be the one kept across restarts
+            ManagedChannel channel = developmentChannels == null ? null : developmentChannels.channel(beanContext, target + '#' + argument.getName(), target);
+            if (channel == null) {
+                final NettyChannelBuilder nettyChannelBuilder = beanContext.createBean(NettyChannelBuilder.class, target);
+                channel = nettyChannelBuilder.build();
+            }
+            final ManagedChannel built = channel;
             beanContext.findBean(GrpcNamedManagedChannelConfiguration.class, Qualifiers.byName(target))
                 .ifPresent(channelConfig -> {
                     if (channelConfig.isConnectOnStartup()) {
                         LOG.debug("Connecting to the channel: {}", target);
-                        if (!connectOnStartup(channel, channelConfig.getConnectionTimeout())) {
+                        if (!connectOnStartup(built, channelConfig.getConnectionTimeout())) {
                             throw new IllegalStateException("Unable to connect to the channel: " + target);
                         }
                         LOG.debug("Successfully connected to the channel: {}", target);
                     }
                 });
-            return channel;
+            return built;
         });
     }
 
@@ -149,6 +160,10 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
     @PreDestroy
     public void close() {
         for (ManagedChannel channel : channels.values()) {
+            if (developmentChannels != null && developmentChannels.holds(channel)) {
+                // kept for the next generation
+                continue;
+            }
             if (!channel.isShutdown()) {
                 try {
                     channel.shutdown().awaitTermination(1, TimeUnit.SECONDS);
@@ -161,6 +176,9 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
             }
         }
         channels.clear();
+        if (developmentChannels != null) {
+            developmentChannels.generationEnded();
+        }
     }
 
     /**
