@@ -1,0 +1,11 @@
+In development mode, when the application restarts after a change, the gRPC server is kept for the next generation, with its port, its connections and its event loops. Clients stay connected across the restart, and the next generation's services answer on the same connections:
+
+* The server is built once, with a handler registry that looks each method up in the services of the running generation, with that generation's `ServerInterceptor` beans applied to each, in the order the server applies them otherwise, and with an executor that runs each call on the executor of the running generation.
+* A call that arrives while one generation stops and the next starts waits for the next generation, for up to `grpc.server.await-termination` and 30 seconds more, rather than failing with `UNAVAILABLE`.
+* The calls in flight on the stopping generation may finish, within `grpc.server.await-termination`. A call still running then, such as a stream left open, is closed with `UNAVAILABLE`, so that nothing of the stopped generation stays in use.
+
+A change of configuration under `grpc.server` restarts the application and releases the server: the next generation builds and binds its own from the new configuration. The server is not kept, and each generation builds its own as outside development mode, when the application defines a `ServerTransportFilter`, or a `BeanCreatedEventListener` of the server builder.
+
+The channels of `@GrpcChannel` clients are kept across the restart as well, with their connections, until a change under `grpc.client` or `grpc.channels` releases them. A channel is not kept, and is created again on each restart, when a `ClientInterceptor` bean applies to it, which belongs to the generation that created it, when the application defines a `BeanCreatedEventListener` of the channel builder, or when its name resolver is a bean of the application, such as the one of service discovery. The stubs, and any bean that receives a channel, are created again in each generation.
+
+Without a restart, a change of a `BindableService`, `ServerInterceptor` or `ServerServiceDefinition` bean applied in place recreates the bean and serves the services of the context on the same server.

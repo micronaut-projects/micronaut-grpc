@@ -77,6 +77,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
     private final AtomicBoolean running = new AtomicBoolean(false);
     private final ComputeInstanceMetadataResolver computeInstanceMetadataResolver;
     private final List<ServiceInstanceMetadataContributor> metadataContributors;
+    private final @Nullable DevelopmentGrpcReloader reloader;
     private ServiceInstance serviceInstance;
 
     /**
@@ -106,7 +107,9 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
         this.configuration = applicationConfiguration;
         this.grpcConfiguration = grpcServerConfiguration;
         this.eventPublisher = eventPublisher;
-        this.server = serverBuilder.build();
+        // the reloader exists in development mode only, where the server may be the one kept across restarts
+        this.reloader = applicationContext.findBean(DevelopmentGrpcReloader.class).orElse(null);
+        this.server = reloader == null ? serverBuilder.build() : reloader.build(serverBuilder);
         this.computeInstanceMetadataResolver = computeInstanceMetadataResolver;
         this.metadataContributors = metadataContributors;
     }
@@ -168,7 +171,11 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
         if (running.compareAndSet(false, true)) {
 
             try {
-                server.start();
+                if (reloader == null) {
+                    server.start();
+                } else {
+                    reloader.start(server);
+                }
                 eventPublisher.publishEvent(new ServerStartupEvent(this));
                 getApplicationConfiguration().getName().ifPresent(id -> {
 
@@ -209,11 +216,14 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
                     applicationContext.publishEvent(new ServiceStoppedEvent(serviceInstance));
                 }
             } finally {
-                server.shutdown();
-                try {
-                    server.awaitTermination(grpcConfiguration.getAwaitTermination().toMillis(), TimeUnit.MILLISECONDS);
-                } catch (InterruptedException ignored) {
-                    Thread.currentThread().interrupt();
+                // in development mode a retained server is left running for the next generation
+                if (reloader == null || !reloader.stop(server)) {
+                    server.shutdown();
+                    try {
+                        server.awaitTermination(grpcConfiguration.getAwaitTermination().toMillis(), TimeUnit.MILLISECONDS);
+                    } catch (InterruptedException ignored) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
 

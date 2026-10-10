@@ -15,7 +15,7 @@ reactive-grpc = "1.2.4"
 
 micronaut-gradle-plugin = '5.0.2'
 micronaut-tracing-legacy = '3.2.7'
-micronaut = "5.2.13"
+micronaut = "5.3.0-SNAPSHOT"
 micronaut-test = "5.2.0"
 micronaut-serde = "3.2.4"
 micronaut-platform = "5.2.1"
@@ -58,6 +58,7 @@ micronaut-gradle-plugin = { module = 'io.micronaut.gradle:micronaut-gradle-plugi
 micronaut-serde-jackson = { module = 'io.micronaut.serde:micronaut-serde-jackson', version.ref = 'micronaut-serde' }
 
 # Other
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 gson = { module = 'com.google.code.gson:gson', version.ref = 'gson' }
 reactive-grpc-stub = { module = 'com.salesforce.servicelibs:reactor-grpc-stub', version.ref = 'reactive-grpc' }
 graal-svm = { module = 'org.graalvm.nativeimage:svm', version.ref = 'graal-svm' }
