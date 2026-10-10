@@ -22,7 +22,7 @@ import io.grpc.NameResolverRegistry;
 import io.grpc.netty.NettyChannelBuilder;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.WatchableBeanContext;
-import io.micronaut.context.watch.ConfigurationWatcher;
+import io.micronaut.context.watch.ReloadingConfigurationWatcher;
 import io.micronaut.context.event.BeanCreatedEventListener;
 import io.micronaut.core.type.Argument;
 import io.micronaut.inject.BeanDefinition;
@@ -130,14 +130,14 @@ final class DevelopmentGrpcChannels {
         if (!(context instanceof WatchableBeanContext watchable)) {
             return;
         }
-        ConfigurationWatcher watcher = change -> {
+        ReloadingConfigurationWatcher watcher = change -> {
             if (change.initial() || change.all() || isEmpty()) {
-                return ConfigurationWatcher.Outcome.IGNORED;
+                return ReloadingConfigurationWatcher.Outcome.IGNORED;
             }
-            return ConfigurationWatcher.Outcome.REQUIRES_RESTART;
+            return ReloadingConfigurationWatcher.Outcome.REQUIRES_RESTART;
         };
-        watchable.watchConfiguration(GrpcDefaultManagedChannelConfiguration.PREFIX, watcher);
-        watchable.watchConfiguration(GrpcManagedChannelConfiguration.PREFIX, watcher);
+        watchable.configuration(GrpcDefaultManagedChannelConfiguration.PREFIX).watchReloading(watcher);
+        watchable.configuration(GrpcManagedChannelConfiguration.PREFIX).watchReloading(watcher);
     }
 
     private synchronized boolean isEmpty() {

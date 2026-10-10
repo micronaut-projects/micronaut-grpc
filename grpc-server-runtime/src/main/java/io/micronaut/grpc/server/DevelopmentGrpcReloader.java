@@ -36,7 +36,7 @@ import io.micronaut.context.watch.BeanDefinitionChange;
 import io.micronaut.context.watch.BeanDefinitionWatcher;
 import io.micronaut.context.watch.BeanWatch;
 import io.micronaut.context.watch.ClassChangeWatcher;
-import io.micronaut.context.watch.ConfigurationWatcher;
+import io.micronaut.context.watch.ReloadingConfigurationWatcher;
 import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.order.OrderUtil;
 import io.micronaut.core.order.Ordered;
@@ -127,15 +127,15 @@ final class DevelopmentGrpcReloader {
         this.server = server;
         if (beanContext instanceof WatchableBeanContext watchable) {
             for (Class<?> type : SERVED_TYPES) {
-                watches.add(watchable.watchDefinitions(type, null, new DefinitionsWatcher<>()));
+                watches.add(watchable.definitions(type).watch(new DefinitionsWatcher<>()));
             }
-            watches.add(watchable.watchClassChanges(new ClassWatcher()));
-            watches.add(watchable.watchConfiguration(GrpcServerConfiguration.PREFIX, change -> {
+            watches.add(watchable.classChanges().watch(new ClassWatcher()));
+            watches.add(watchable.configuration(GrpcServerConfiguration.PREFIX).watchReloading(change -> {
                 if (change.initial() || change.all() || !adopted) {
-                    return ConfigurationWatcher.Outcome.IGNORED;
+                    return ReloadingConfigurationWatcher.Outcome.IGNORED;
                 }
                 // the kept server was built from the previous values: the restart releases it
-                return ConfigurationWatcher.Outcome.REQUIRES_RESTART;
+                return ReloadingConfigurationWatcher.Outcome.REQUIRES_RESTART;
             }));
         }
     }
