@@ -1,5 +1,5 @@
 [versions]
-managed-grpc = "1.84.0"
+managed-grpc = "1.84.2"
 managed-protobuf = "4.36.2"
 managed-protobuf-gradle = '0.10.0'
 managed-grpc-kotlin = '1.5.0'
@@ -15,10 +15,10 @@ reactive-grpc = "1.2.4"
 
 micronaut-gradle-plugin = '5.0.2'
 micronaut-tracing-legacy = '3.2.7'
-micronaut = "5.2.13"
+micronaut = "5.2.15"
 micronaut-test = "5.2.0"
 micronaut-serde = "3.2.4"
-micronaut-platform = "5.2.1"
+micronaut-platform = "5.2.2"
 micronaut-discovery-client = "5.1.0"
 micronaut-reactor = "4.3.0"
 micronaut-tracing = "8.3.0"
