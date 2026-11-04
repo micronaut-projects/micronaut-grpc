@@ -32,6 +32,7 @@ import io.grpc.ServerServiceDefinition;
 import io.grpc.Status;
 import io.micronaut.context.annotation.Retain;
 import io.micronaut.context.env.DevelopmentActive;
+import io.micronaut.context.reload.RequestAdmission;
 import io.micronaut.core.annotation.Internal;
 import jakarta.annotation.PreDestroy;
 import jakarta.inject.Singleton;
@@ -66,12 +67,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  *     <li>its executor runs each task on the executor of the running generation.</li>
  * </ul>
  *
- * <p>While one generation stops and the next starts, a call that arrives waits for the next generation, for as long as
- * the stopping generation may wait for its calls, the server's await termination, and 30 seconds more, rather than
- * failing: the method is looked up, on a thread of this bean, once the next generation is running. A call of the
- * stopping generation, or of services it replaced in place, that is still running once the await termination
- * elapsed, such as a stream left open, is closed with {@code UNAVAILABLE}, so that nothing of that generation stays
- * reachable.</p>
+ * <p>While the development launcher compiles and applies a batch of changes, a call that arrives is held, as the
+ * launcher's {@link RequestAdmission} holds HTTP requests, for at most its hold timeout, after which it is answered
+ * with {@code UNAVAILABLE}. While one generation stops and the next starts, a call that arrives waits for the next
+ * generation, for as long as the stopping generation may wait for its calls, the server's await termination, and 30
+ * seconds more, rather than failing: the method is looked up, on a thread of this bean, once the next generation is
+ * running. A call of the stopping generation, or of services it replaced in place, that is still running once the
+ * await termination elapsed, such as a stream left open, is closed with {@code UNAVAILABLE}, so that nothing of that
+ * generation stays reachable.</p>
  *
  * <p>Retained across restarts until a change under {@value GrpcServerConfiguration#PREFIX}, which configures the
  * server: the next generation then builds its own server, and this one is shut down with the stopped context. It
@@ -128,11 +131,17 @@ final class DevelopmentGrpcServer {
      * Runs the tasks of the server while no generation runs, made on first use.
      */
     private @Nullable ExecutorService holdExecutor;
+    /**
+     * The admission of the development launcher, which holds the calls that arrive while it compiles and applies a
+     * batch of changes; null when no launcher runs the process.
+     */
+    private final @Nullable RequestAdmission admission;
 
     /**
      * Created once, as the first generation starts, and kept from then on.
      */
     DevelopmentGrpcServer() {
+        admission = RequestAdmission.current();
         initializeChannelReferences();
     }
 
@@ -332,6 +341,26 @@ final class DevelopmentGrpcServer {
                 }
             }
             return current;
+        }
+    }
+
+    /**
+     * Waits while the development launcher compiles and applies a batch of changes, so that a call is not answered by
+     * a generation about to be replaced, for at most the launcher's hold timeout. A restart grants admission as it
+     * drains the running generation: the call then waits for the next one in {@link #awaitGeneration()}.
+     *
+     * @return False when the hold timed out
+     */
+    private boolean awaitAdmission() {
+        RequestAdmission launcher = admission;
+        if (launcher == null || launcher.isAdmitted()) {
+            return true;
+        }
+        try {
+            return launcher.awaitAdmission(launcher.holdTimeout());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return true;
         }
     }
 
@@ -539,20 +568,23 @@ final class DevelopmentGrpcServer {
 
         @Override
         public @Nullable ServerMethodDefinition<?, ?> lookupMethod(String methodName, @Nullable String authority) {
+            if (!awaitAdmission()) {
+                return unavailable(methodName, "The application is reloading and did not finish in time; retry shortly");
+            }
             Generation running = awaitGeneration();
             if (running == null) {
-                return unavailable(methodName);
+                return unavailable(methodName, "The application is not running");
             }
             return running.methods.get(methodName);
         }
 
-        private ServerMethodDefinition<InputStream, InputStream> unavailable(String methodName) {
+        private ServerMethodDefinition<InputStream, InputStream> unavailable(String methodName, String description) {
             MethodDescriptor<InputStream, InputStream> method = MethodDescriptor.newBuilder(RAW, RAW)
                 .setFullMethodName(methodName)
                 .setType(MethodDescriptor.MethodType.UNKNOWN)
                 .build();
             return ServerMethodDefinition.create(method, (call, headers) -> {
-                call.close(Status.UNAVAILABLE.withDescription("The application is not running"), new Metadata());
+                call.close(Status.UNAVAILABLE.withDescription(description), new Metadata());
                 return new ServerCall.Listener<>() { };
             });
         }
