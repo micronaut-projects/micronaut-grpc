@@ -116,6 +116,12 @@ public class GrpcServerBuilder {
                                           @Nullable List<ServerInterceptor> interceptors,
                                           @Nullable List<ServerTransportFilter> serverTransportFilters,
                                           @Nullable List<ServerServiceDefinition> serverServiceDefinitions) {
+        // the reloader exists in development mode only: the server it keeps across restarts serves the services,
+        // interceptors and executor of each generation in turn, rather than being built with those of the first
+        DevelopmentGrpcReloader reloader = beanContext == null ? null : beanContext.findBean(DevelopmentGrpcReloader.class).orElse(null);
+        if (reloader != null && reloader.adopt(serverBuilder, configuration, serverTransportFilters)) {
+            return;
+        }
         configuration.getExecutor().ifPresent(executorName -> {
             if (beanContext == null) {
                 throw new ConfigurationException("A BeanContext is required to resolve the executor bean named [" + executorName + "]");

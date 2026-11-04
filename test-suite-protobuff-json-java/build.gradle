@@ -19,7 +19,6 @@ ext {
 // end::variables[]
 
 repositories {
-    mavenLocal()
     mavenCentral()
 }
 
