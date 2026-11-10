@@ -18,7 +18,6 @@ package io.micronaut.grpc.server;
 import io.grpc.ForwardingServerCall;
 import io.grpc.ForwardingServerCallListener;
 import io.grpc.HandlerRegistry;
-import io.grpc.ManagedChannel;
 import io.grpc.Metadata;
 import io.grpc.MethodDescriptor;
 import io.grpc.Server;
@@ -30,6 +29,7 @@ import io.grpc.ServerInterceptors;
 import io.grpc.ServerMethodDefinition;
 import io.grpc.ServerServiceDefinition;
 import io.grpc.Status;
+import io.grpc.netty.NettyChannelBuilder;
 import io.micronaut.context.annotation.Retain;
 import io.micronaut.context.env.DevelopmentActive;
 import io.micronaut.context.reload.RequestAdmission;
@@ -42,6 +42,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -384,16 +386,23 @@ final class DevelopmentGrpcServer {
     }
 
     /**
-     * Initializes the class gRPC tracks the channels that are not shut down with, on a thread of its own: as it is
-     * initialized it keeps the stack of the thread that initialized it, for the life of the process, and a stack
-     * through the classes of a generation, which builds the first channel, would keep that generation reachable.
+     * Builds a channel, and shuts it down at once, on a thread of its own, before any generation builds one. As the
+     * first channel of the process is built, gRPC initializes the class it tracks the channels that are not shut
+     * down with ({@code io.grpc.internal.ManagedChannelOrphanWrapper.ManagedChannelReference}), which creates an
+     * exception, and so keeps the stack of the thread that built that channel, for the life of the process: a stack
+     * through the classes of a generation would keep that generation reachable. Only public API is used, so that this
+     * holds whatever that class is named; the channel never connects. Should it fail, the generation that builds the
+     * first channel may stay reachable after it stops, which affects development mode only.
      */
     private static void initializeChannelReferences() {
         Thread thread = new Thread(() -> {
             try {
-                Class.forName("io.grpc.internal.ManagedChannelOrphanWrapper$ManagedChannelReference", true, ManagedChannel.class.getClassLoader());
-            } catch (ClassNotFoundException | LinkageError e) {
-                LOG.debug("Cannot initialize the gRPC channel references", e);
+                NettyChannelBuilder.forAddress(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0))
+                    .usePlaintext()
+                    .build()
+                    .shutdownNow();
+            } catch (RuntimeException | LinkageError e) {
+                LOG.debug("Cannot build the first gRPC channel on a thread of its own", e);
             }
         }, "grpc-dev-init");
         thread.setDaemon(true);
