@@ -188,6 +188,7 @@ class GrpcCircuitBreakerSpec extends Specification {
         GreeterGrpc.newStub(context.getBean(Client).channel).sayHello(request(), new StreamObserver<HelloReply>() {
             @Override
             void onNext(HelloReply value) {
+                // Nothing to do: only the error path matters to this test.
             }
 
             @Override
