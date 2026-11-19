@@ -133,6 +133,30 @@ For example, if gRPC is running then the `/health` endpoint will return:
 
 If you wish to disable the Micronaut gRPC server health check while still using the management dependency you can set the property `grpc.server.health.enabled` to `false` in your application configuration.
 
+=== Server Reflection
+
+The https://github.com/grpc/grpc/blob/master/doc/server-reflection.md[gRPC server reflection] service lets tools such as https://github.com/fullstorydev/grpcurl[grpcurl], Postman and grpcui discover the services, methods and message types exposed by the server without a copy of the `.proto` files.
+
+Reflection exposes your whole API surface, so it is disabled by default. To enable it, add the gRPC services dependency (`io.grpc:grpc-services`) and set `grpc.server.reflection.enabled` to `true`:
+
+.Enabling server reflection
+[configuration]
+----
+grpc:
+    server:
+        reflection:
+            enabled: true
+----
+
+Micronaut registers the `grpc.reflection.v1.ServerReflection` service, which reports every service registered with the server, including the health service. You can then list the services with:
+
+[source,bash]
+----
+grpcurl -plaintext localhost:50051 list
+----
+
+TIP: Consider enabling reflection only in development, for example in `application-dev.yml`.
+
 === Testing the Server
 
 To test the server it is recommended that you use https://github.com/micronaut-projects/micronaut-test[Micronaut Test].
