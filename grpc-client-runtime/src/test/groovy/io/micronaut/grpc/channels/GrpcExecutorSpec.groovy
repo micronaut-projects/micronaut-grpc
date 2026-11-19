@@ -54,6 +54,7 @@ class GrpcExecutorSpec extends Specification {
 
             @Override
             void onCompleted() {
+                // Nothing to do: the reply is handled in onNext.
             }
         })
 
@@ -92,6 +93,7 @@ class GrpcExecutorSpec extends Specification {
 
             @Override
             void onCompleted() {
+                // Nothing to do: the reply is handled in onNext.
             }
         })
 
