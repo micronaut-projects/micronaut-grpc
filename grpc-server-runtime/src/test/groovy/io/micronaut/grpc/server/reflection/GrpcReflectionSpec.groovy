@@ -83,6 +83,7 @@ class GrpcReflectionSpec extends Specification {
 
             @Override
             void onCompleted() {
+                // Nothing to do: the reply is handled in onNext.
             }
         })
         requests.onNext(request)
