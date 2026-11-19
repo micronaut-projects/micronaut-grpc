@@ -71,6 +71,18 @@ By default, the server will automatically be dependency injected with beans of t
 In addition, by default the server will be setup to use Micronaut's I/O executor service.
 Set `grpc.server.executor` to the name of an `Executor` bean to override that default from configuration.
 
+To run service methods on virtual threads, use Micronaut's `blocking` executor, which uses virtual threads when the JVM supports them:
+
+.Running gRPC service methods on virtual threads
+[configuration]
+----
+grpc:
+    server:
+        executor: blocking
+----
+
+Virtual threads suit blocking stubs and service methods that call databases or other services synchronously. Kotlin coroutine and Reactor services don't need them.
+
 ==== Server Interceptor Ordering
 To produce a consistent and predictable order of execution for server interceptors, it is required
 for the `io.grpc.ServerInterceptor` implementation to do one of the following:
