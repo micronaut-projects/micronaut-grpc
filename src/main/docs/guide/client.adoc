@@ -85,3 +85,61 @@ snippet::helloworld.ReactiveGreetingEndpointTest[tags="reactive-client", indent=
 The resulting stub can then be injected into your application or tests and used directly with Reactor operators:
 
 snippet::helloworld.ReactiveGreetingEndpointTest[tags="reactive-test"]
+
+=== Circuit Breakers
+
+A named channel can be guarded by a circuit breaker built on https://docs.micronaut.io/latest/guide/#retry[Micronaut Retry]. When the server keeps failing, the circuit opens and calls fail immediately with `UNAVAILABLE` instead of waiting for a connection or a deadline, which protects both the caller and the struggling server.
+
+To use it, add the Micronaut Retry dependency:
+
+dependency:micronaut-retry[groupId="io.micronaut"]
+
+Then enable the circuit breaker for the channel:
+
+.Enabling a circuit breaker
+[configuration]
+----
+grpc:
+    channels:
+        greeter:
+            address: 'greeter.internal:50051'
+            plaintext: true
+            circuit-breaker:
+                enabled: true
+                failure-threshold: 5
+                reset-timeout: 20s
+                failure-status-codes:
+                    - UNAVAILABLE
+                    - DEADLINE_EXCEEDED
+----
+
+|===
+|Property |Default |Description
+
+|`enabled`
+|`false`
+|Whether the channel has a circuit breaker.
+
+|`failure-threshold`
+|`5`
+|The number of consecutive failed calls that opens the circuit.
+
+|`reset-timeout`
+|`20s`
+|How long the circuit stays open. After it, the next call is a trial: it closes the circuit if it succeeds and opens it again if it fails.
+
+|`failure-status-codes`
+|`UNAVAILABLE`, `DEADLINE_EXCEEDED`
+|The status codes that count as failures. Other codes, such as `INVALID_ARGUMENT` or `NOT_FOUND`, are application errors and reset the count.
+|===
+
+While the circuit is open, a call ends with status `UNAVAILABLE` and the description `Circuit breaker for gRPC channel [greeter] is open`, without reaching the network. Client interceptor beans still see these calls, so tracing and metrics record them.
+
+All stubs created from the same channel share one circuit breaker. Inject `GrpcCircuitBreakerRegistry` to read its state, for example in a health indicator:
+
+[source,java]
+----
+CircuitState state = registry.currentState("greeter").orElse(CircuitState.CLOSED);
+----
+
+NOTE: The circuit breaker never retries a call, because streaming calls cannot be replayed. To retry failed calls, enable retries in the channel's gRPC service config, which applies before a call counts as failed.

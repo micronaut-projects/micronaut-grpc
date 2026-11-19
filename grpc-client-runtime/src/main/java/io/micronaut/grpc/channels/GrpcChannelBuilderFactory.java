@@ -27,6 +27,7 @@ import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.annotation.Prototype;
 import io.micronaut.core.util.CollectionUtils;
+import io.micronaut.grpc.client.circuitbreaker.GrpcCircuitBreakerRegistry;
 import io.micronaut.inject.qualifiers.Qualifiers;
 import io.micronaut.scheduling.TaskExecutors;
 
@@ -79,6 +80,10 @@ public class GrpcChannelBuilderFactory {
             }
         );
         final NettyChannelBuilder channelBuilder = config.getChannelBuilder();
+        // Added first so that it runs last: user interceptors (tracing, metrics) also see calls rejected by an open circuit.
+        beanContext.findBean(GrpcCircuitBreakerRegistry.class)
+            .flatMap(registry -> registry.findInterceptor(target))
+            .ifPresent(channelBuilder::intercept);
         if (CollectionUtils.isNotEmpty(interceptors)) {
             Collections.reverse(interceptors);
             channelBuilder.intercept(interceptors);

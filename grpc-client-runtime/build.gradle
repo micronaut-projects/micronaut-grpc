@@ -16,6 +16,7 @@ dependencies {
     }
 
     compileOnly mn.micronaut.discovery.core
+    compileOnly mn.micronaut.retry
 
     implementation libs.grpc.netty
     implementation mn.reactor
@@ -29,6 +30,7 @@ dependencies {
     testImplementation mnReactor.micronaut.reactor.http.client
     testImplementation mn.micronaut.jackson.databind
     testImplementation libs.opentracing.mock
+    testImplementation mn.micronaut.retry
 
     testRuntimeOnly mn.micronaut.jackson.databind
 }
