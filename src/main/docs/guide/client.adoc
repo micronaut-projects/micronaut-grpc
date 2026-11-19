@@ -126,7 +126,7 @@ grpc:
 
 |`reset-timeout`
 |`20s`
-|How long the circuit stays open. After it, the next call is a trial: it closes the circuit if it succeeds and opens it again if it fails.
+|How long the circuit stays open. After it, a single trial call is let through: it closes the circuit if it succeeds and opens it again if it fails. Calls made while the trial is in flight fail fast.
 
 |`failure-status-codes`
 |`UNAVAILABLE`, `DEADLINE_EXCEEDED`

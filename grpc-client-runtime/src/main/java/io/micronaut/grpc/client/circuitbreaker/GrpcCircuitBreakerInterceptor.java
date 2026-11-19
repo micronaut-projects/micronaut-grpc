@@ -32,6 +32,7 @@ import io.micronaut.retry.exception.CircuitOpenException;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -40,7 +41,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>A call that ends with one of the configured failure status codes counts as a failure. After
  * {@link GrpcCircuitBreakerConfiguration#failureThreshold()} consecutive failures the circuit opens and calls fail
  * immediately with {@link Status#UNAVAILABLE} without reaching the network. After the reset timeout the circuit is
- * half-open: the next call is let through, and closes the circuit if it succeeds or opens it again if it fails.</p>
+ * half-open: a single trial call is let through, and closes the circuit if it succeeds or opens it again if it fails.
+ * Other calls made while the trial is in flight fail fast. The circuit state is updated before the caller is notified
+ * of a call's result.</p>
  *
  * <p>The interceptor never retries. Streaming calls cannot be replayed from an interceptor; configure retries with the
  * gRPC service config instead.</p>
@@ -53,6 +56,7 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
     private final GrpcCircuitBreakerConfiguration configuration;
     private final CircuitBreakerOperations operations;
     private final AtomicInteger consecutiveFailures = new AtomicInteger();
+    private final AtomicBoolean trialInFlight = new AtomicBoolean();
 
     /**
      * @param configuration The circuit breaker configuration
@@ -117,37 +121,54 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
         @Override
         public void start(Listener<RespT> responseListener, Metadata headers) {
             boolean trial = operations.currentState() == CircuitState.HALF_OPEN;
+            if (trial && !trialInFlight.compareAndSet(false, true)) {
+                // Only one trial call while half-open; the others fail fast until it completes.
+                reject(responseListener, null);
+                return;
+            }
             try {
                 operations.executeCompletionStage(() -> {
                     CompletableFuture<Void> outcome = new CompletableFuture<>();
                     delegate.start(new ForwardingClientCallListener.SimpleForwardingClientCallListener<>(responseListener) {
                         @Override
                         public void onClose(Status status, Metadata trailers) {
+                            // Update the circuit before the caller sees the result, so that a call the caller starts
+                            // from its completion callback already observes the new state.
                             try {
-                                super.onClose(status, trailers);
-                            } finally {
                                 Throwable failure = recordOutcome(status, trailers, trial);
                                 if (failure == null) {
                                     outcome.complete(null);
                                 } else {
                                     outcome.completeExceptionally(failure);
                                 }
+                            } finally {
+                                if (trial) {
+                                    trialInFlight.set(false);
+                                }
+                                super.onClose(status, trailers);
                             }
                         }
                     }, headers);
                     return outcome;
                 });
             } catch (CircuitOpenException e) {
-                rejected = true;
-                Status status = Status.UNAVAILABLE
-                    .withDescription("Circuit breaker for gRPC channel [" + configuration.channelName() + "] is open")
-                    .withCause(e);
-                Runnable close = () -> responseListener.onClose(status, new Metadata());
-                if (callExecutor != null) {
-                    callExecutor.execute(close);
-                } else {
-                    close.run();
+                if (trial) {
+                    trialInFlight.set(false);
                 }
+                reject(responseListener, e);
+            }
+        }
+
+        private void reject(Listener<RespT> responseListener, @Nullable CircuitOpenException cause) {
+            rejected = true;
+            Status status = Status.UNAVAILABLE
+                .withDescription("Circuit breaker for gRPC channel [" + configuration.channelName() + "] is open")
+                .withCause(cause);
+            Runnable close = () -> responseListener.onClose(status, new Metadata());
+            if (callExecutor != null) {
+                callExecutor.execute(close);
+            } else {
+                close.run();
             }
         }
 
