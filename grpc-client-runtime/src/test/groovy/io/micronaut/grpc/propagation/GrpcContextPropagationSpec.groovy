@@ -63,6 +63,7 @@ class GrpcContextPropagationSpec extends Specification {
 
                 @Override
                 void onCompleted() {
+                    // Nothing to do: the reply is handled in onNext.
                 }
             })
         }
@@ -97,6 +98,7 @@ class GrpcContextPropagationSpec extends Specification {
 
                 @Override
                 void onCompleted() {
+                    // Nothing to do: the reply is handled in onNext.
                 }
             })
         }
@@ -131,6 +133,7 @@ class GrpcContextPropagationSpec extends Specification {
 
                 @Override
                 void onCompleted() {
+                    // Nothing to do: the reply is handled in onNext.
                 }
             })
         }
