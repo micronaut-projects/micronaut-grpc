@@ -2,12 +2,16 @@ package io.micronaut.grpc.propagation
 
 import io.grpc.CallOptions
 import io.grpc.Channel
+import io.grpc.ClientCall
+import io.grpc.ClientInterceptor
+import io.grpc.ForwardingClientCall
 import io.grpc.Metadata
 import io.grpc.MethodDescriptor
 import io.grpc.ServerCall
 import io.grpc.ServerCallHandler
 import io.grpc.ServerInterceptor
 import io.grpc.ServerServiceDefinition
+import io.grpc.Status
 import io.grpc.stub.ClientCalls
 import io.grpc.stub.ServerCalls
 import io.grpc.stub.StreamObserver
@@ -65,6 +69,42 @@ class GrpcContextPropagationSpec extends Specification {
 
         then:
         seenInCallback.get(10, TimeUnit.SECONDS) == 'acme'
+
+        cleanup:
+        server?.close()
+    }
+
+    void "other client interceptors see the caller's context in their response callbacks"() {
+        given:
+        EmbeddedServer server = start([:])
+        def context = server.applicationContext
+        Channel channel = context.getBean(Client).channel
+        RecordingClientInterceptor recorder = context.getBean(RecordingClientInterceptor)
+
+        when: 'an async call, so that callbacks run on the channel executor rather than the calling thread'
+        CompletableFuture<String> reply = new CompletableFuture<>()
+        try (PropagatedContext.Scope ignored = PropagatedContext.getOrEmpty().plus(new Tenant('acme')).propagate()) {
+            ClientCalls.asyncUnaryCall(channel.newCall(ECHO, CallOptions.DEFAULT), 'hi', new StreamObserver<String>() {
+                @Override
+                void onNext(String value) {
+                    reply.complete(value)
+                }
+
+                @Override
+                void onError(Throwable t) {
+                    reply.completeExceptionally(t)
+                }
+
+                @Override
+                void onCompleted() {
+                }
+            })
+        }
+
+        then:
+        reply.get(10, TimeUnit.SECONDS) == 'hi from tenant-from-header'
+        recorder.seenInOnMessage.get(10, TimeUnit.SECONDS) == 'acme'
+        recorder.seenInOnClose.get(10, TimeUnit.SECONDS) == 'acme'
 
         cleanup:
         server?.close()
@@ -136,7 +176,7 @@ class GrpcContextPropagationSpec extends Specification {
         ] + extra)
     }
 
-    private static String currentTenant() {
+    static String currentTenant() {
         PropagatedContext.find().flatMap { it.find(Tenant) }.map { it.name }.orElse('none')
     }
 
@@ -186,6 +226,70 @@ class GrpcContextPropagationSpec extends Specification {
         @Override
         int getOrder() {
             return 0
+        }
+    }
+
+    /**
+     * A client interceptor with the default order that reads the context in its own listener before delegating.
+     */
+    @Singleton
+    @Requires(property = 'spec.name', value = 'GrpcContextPropagationSpec')
+    static class RecordingClientInterceptor implements ClientInterceptor {
+        final CompletableFuture<String> seenInOnMessage = new CompletableFuture<>()
+        final CompletableFuture<String> seenInOnClose = new CompletableFuture<>()
+
+        @Override
+        <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
+            new RecordingCall(next.newCall(method, callOptions), this)
+        }
+    }
+
+    static class RecordingCall extends ForwardingClientCall.SimpleForwardingClientCall {
+        final RecordingClientInterceptor recorder
+
+        RecordingCall(ClientCall delegate, RecordingClientInterceptor recorder) {
+            super(delegate)
+            this.recorder = recorder
+        }
+
+        @Override
+        void start(ClientCall.Listener responseListener, Metadata headers) {
+            delegate().start(new RecordingListener(responseListener, recorder), headers)
+        }
+    }
+
+    /**
+     * Forwards to a stored listener; Groovy cannot call super methods declared in gRPC's package-private forwarding base class.
+     */
+    static class RecordingListener extends ClientCall.Listener {
+        final ClientCall.Listener next
+        final RecordingClientInterceptor recorder
+
+        RecordingListener(ClientCall.Listener next, RecordingClientInterceptor recorder) {
+            this.next = next
+            this.recorder = recorder
+        }
+
+        @Override
+        void onHeaders(Metadata headers) {
+            next.onHeaders(headers)
+        }
+
+        @Override
+        void onMessage(Object message) {
+            recorder.seenInOnMessage.complete(GrpcContextPropagationSpec.currentTenant())
+            next.onMessage(message)
+        }
+
+        @Override
+        void onClose(Status status, Metadata trailers) {
+            recorder.seenInOnClose.complete(GrpcContextPropagationSpec.currentTenant())
+            next.onClose(status, trailers)
+        }
+
+        @Override
+        void onReady() {
+            next.onReady()
         }
     }
 

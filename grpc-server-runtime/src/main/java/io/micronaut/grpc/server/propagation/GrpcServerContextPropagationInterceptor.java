@@ -83,37 +83,28 @@ public class GrpcServerContextPropagationInterceptor implements ServerIntercepto
 
         @Override
         public void onMessage(ReqT message) {
-            try (PropagatedContext.Scope ignored = context.propagate()) {
-                super.onMessage(message);
-            }
+            // propagate(Runnable) also works in the scoped-value propagation mode, where Scope-based propagation is not supported.
+            context.propagate(() -> super.onMessage(message));
         }
 
         @Override
         public void onHalfClose() {
-            try (PropagatedContext.Scope ignored = context.propagate()) {
-                super.onHalfClose();
-            }
+            context.propagate(() -> super.onHalfClose());
         }
 
         @Override
         public void onCancel() {
-            try (PropagatedContext.Scope ignored = context.propagate()) {
-                super.onCancel();
-            }
+            context.propagate(() -> super.onCancel());
         }
 
         @Override
         public void onComplete() {
-            try (PropagatedContext.Scope ignored = context.propagate()) {
-                super.onComplete();
-            }
+            context.propagate(() -> super.onComplete());
         }
 
         @Override
         public void onReady() {
-            try (PropagatedContext.Scope ignored = context.propagate()) {
-                super.onReady();
-            }
+            context.propagate(() -> super.onReady());
         }
     }
 }
