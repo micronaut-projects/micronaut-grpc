@@ -1,0 +1,59 @@
+=== gRPC Server Security
+
+Micronaut gRPC can integrate with Micronaut Security on the server side through `io.grpc.ServerInterceptor` beans.
+
+For JWT-based authentication, add both dependencies:
+
+- `dependency:io.micronaut.grpc:micronaut-grpc-server-security-jwt[]`
+- `dependency:io.micronaut.security:micronaut-security-jwt[]`
+
+The JWT module reads a token from gRPC metadata, validates it with Micronaut Security token validators, and then evaluates the configured `grpc.server.security.intercept-method-map` rules against the gRPC method name.
+
+==== JWT Metadata
+
+By default, the token is read from the `JWT` metadata key.
+
+[configuration]
+----
+grpc:
+  server:
+    security:
+      token:
+        jwt:
+          enabled: true
+          metadata-key-name: JWT
+----
+
+If you want to use an `Authorization` metadata key instead, set `metadata-key-name` accordingly. The interceptor accepts both a raw token value and a `Bearer <token>` value.
+
+==== Authorization Rules
+
+Authorization rules for gRPC calls are configured with `grpc.server.security.intercept-method-map`. Each entry has a `pattern`, a regular expression matched against the fully qualified gRPC method name (for example `helloworld.Greeter/SayHello`), and the `access` rules required to invoke matching methods. Entries are evaluated in order and the first matching entry applies.
+
+[configuration]
+----
+grpc:
+  server:
+    security:
+      intercept-method-map:
+        - pattern: helloworld.Greeter/SayHello
+          access:
+            - isAuthenticated()
+        - pattern: helloworld.Admin/.*
+          access:
+            - ROLE_ADMIN
+----
+
+NOTE: Micronaut Security's `micronaut.security.intercept-url-map` is not applied to gRPC calls. Its entries are Ant-style HTTP path patterns (such as `/**`), so an application exposing both HTTP and gRPC endpoints can keep its HTTP rules there and declare gRPC rules separately.
+
+Granted roles are the roles exposed by the `Authentication` (`Authentication#getRoles()`) combined with the roles resolved from its attributes by the `RolesFinder` bean, so both JWT claims and authentications returned by a custom `GrpcServerAuthenticationFetcher` (for example `Authentication.build("alice", List.of("ROLE_ADMIN"))`) are matched against role-based rules.
+
+If a rule requires authentication and no token is provided, the server responds with `UNAUTHENTICATED`. If a token is provided but validation fails, or the authenticated principal does not satisfy the configured access rules, the server responds with `PERMISSION_DENIED`.
+
+With Micronaut Security's default `micronaut.security.reject-not-found=true`, unmatched gRPC methods are rejected as well. Define explicit `intercept-method-map` patterns for the methods you want to secure, or set `reject-not-found` to `false` if unmatched methods should remain accessible.
+
+==== Configuration Reference
+
+include::{includedir}configurationProperties/io.micronaut.grpc.server.security.GrpcServerSecurityConfiguration.adoc[]
+
+include::{includedir}configurationProperties/io.micronaut.grpc.server.security.jwt.GrpcServerSecurityJwtConfiguration.adoc[]
