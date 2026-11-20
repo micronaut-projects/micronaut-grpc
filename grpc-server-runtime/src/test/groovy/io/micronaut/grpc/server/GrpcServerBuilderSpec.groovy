@@ -30,6 +30,7 @@ class GrpcServerBuilderSpec extends Specification {
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)
+        1 * mockGrpcConfiguration.getExecutor() >> Optional.empty()
         0 * _
 
         and:
@@ -69,6 +70,7 @@ class GrpcServerBuilderSpec extends Specification {
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)
+        1 * mockGrpcConfiguration.getExecutor() >> Optional.empty()
         0 * _
 
         and:
@@ -108,6 +110,7 @@ class GrpcServerBuilderSpec extends Specification {
 
         then:
         1 * mockGrpcConfiguration.serverBuilder >> NettyServerBuilder.forPort(8080)
+        1 * mockGrpcConfiguration.getExecutor() >> Optional.empty()
         0 * _
 
         and:

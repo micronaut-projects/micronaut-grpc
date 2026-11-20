@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2019 original authors
+ * Copyright 2017-2026 original authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package io.micronaut.grpc.server;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -149,7 +148,7 @@ public class GrpcEmbeddedServer implements EmbeddedServer {
     public URL getURL() {
         try {
             return getURI().toURL();
-        } catch (MalformedURLException e) {
+        } catch (IOException e) {
             throw new IllegalStateException("Invalid Server URI: " + getURI());
         }
     }
