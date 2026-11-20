@@ -204,10 +204,11 @@ final class HttpRuleMessageMapper {
      */
     static @Nullable List<Descriptors.FieldDescriptor> canonicalPath(Descriptors.Descriptor type, String path) {
         Descriptors.Descriptor current = type;
-        String[] parts = path.split("\\.");
+        // Keep empty segments, so that names such as ".", "a." or "a..b" are not resolved to a field.
+        String[] parts = path.split("\\.", -1);
         List<Descriptors.FieldDescriptor> fields = new ArrayList<>(parts.length);
         for (int i = 0; i < parts.length; i++) {
-            Descriptors.FieldDescriptor field = findField(current, parts[i]);
+            Descriptors.FieldDescriptor field = parts[i].isEmpty() ? null : findField(current, parts[i]);
             if (field == null) {
                 return null;
             }

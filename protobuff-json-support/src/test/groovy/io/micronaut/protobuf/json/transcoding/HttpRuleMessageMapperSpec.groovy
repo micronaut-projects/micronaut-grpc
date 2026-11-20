@@ -20,6 +20,18 @@ class HttpRuleMessageMapperSpec extends Specification {
         HttpRuleMessageMapper.resolve(ListBooksRequest.descriptor, 'paging.missing') == null
         HttpRuleMessageMapper.resolve(ListBooksRequest.descriptor, 'page_size.nested') == null
         HttpRuleMessageMapper.resolve(ListBooksRequest.descriptor, 'tags.nested') == null
+        HttpRuleMessageMapper.resolve(ListBooksRequest.descriptor, '.') == null
+        HttpRuleMessageMapper.resolve(ListBooksRequest.descriptor, 'page_size.') == null
+        HttpRuleMessageMapper.resolve(ListBooksRequest.descriptor, 'paging..token') == null
+        HttpRuleMessageMapper.resolve(ListBooksRequest.descriptor, '') == null
+    }
+
+    void "query names made only of dots are ignored on a binding without bound fields"() {
+        when:
+        DynamicMessage request = mapper.request(method('ListPage', '', ''), [:], ['.': ['x'], '..': ['y'], page_size: ['7']], null)
+
+        then:
+        ListBooksRequest.parseFrom(request.toByteArray()).pageSize == 7
     }
 
     void "a whole-body binding requires a JSON object"() {
