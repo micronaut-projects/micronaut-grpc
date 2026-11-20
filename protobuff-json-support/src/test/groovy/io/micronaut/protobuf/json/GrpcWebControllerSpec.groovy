@@ -1,6 +1,9 @@
 package io.micronaut.protobuf.json
 
+import io.grpc.Status
 import io.micronaut.http.HttpResponse
+import io.micronaut.http.HttpStatus
+import io.micronaut.http.exceptions.HttpStatusException
 import io.micronaut.protobuf.json.exception.GrpcInvocationException
 import io.micronaut.protobuf.json.exception.MethodNotFoundException
 import io.micronaut.protobuf.json.grpc.GrpcProxyService
@@ -31,11 +34,11 @@ class GrpcWebControllerSpec extends Specification {
         }
         0 * grpcProxyService.invokeGrpcMethod(_, _, _)
 
-        and:
-        response.header("grpc-status") == "12"
-        response.header("grpc-message") == "Method 'sayHello' not found"
+        and: "the status is only sent in the trailer frame"
+        response.header("grpc-status") == null
+        response.header("grpc-message") == null
+        response.header("trailer") == null
         response.header("x-grpc-web") == "1"
-        response.header("trailer") == "grpc-status,grpc-message"
 
         and:
         def frames = readFrames(response.body())
@@ -44,7 +47,7 @@ class GrpcWebControllerSpec extends Specification {
         new String(frames[0].payload, StandardCharsets.US_ASCII).contains("grpc-message:Method 'sayHello' not found")
     }
 
-    def "maps invocation failures to grpc status 13 and sanitizes grpc-message"() {
+    def "maps invocation failures without a gRPC status to INTERNAL without exposing the message"() {
         given:
         HelloRequest request = HelloRequest.newBuilder().setName("Micronaut").build()
         byte[] payload = frame(request.toByteArray())
@@ -59,14 +62,67 @@ class GrpcWebControllerSpec extends Specification {
         }
 
         and:
-        response.header("grpc-status") == "13"
-        response.header("grpc-message") == "bad%0D%0Amessage"
+        def frames = readFrames(response.body())
+        frames*.trailer == [true]
+        def trailers = new String(frames[0].payload, StandardCharsets.US_ASCII)
+        trailers.contains("grpc-status:13")
+        trailers.contains("grpc-message:" + GrpcWebController.INTERNAL_ERROR_MESSAGE)
+        !trailers.contains("bad")
+    }
+
+    @Unroll
+    def "sends a gRPC status raised by the service: #scenario"() {
+        given:
+        HelloRequest request = HelloRequest.newBuilder().setName("Micronaut").build()
+
+        when:
+        HttpResponse<byte[]> response = controller.invokeMethod("GreeterService", "sayHello", frame(request.toByteArray()), GrpcWebController.GRPC_WEB_PROTO)
+
+        then:
+        1 * grpcProxyService.parseRequestMessage("GreeterService", "sayHello", _ as byte[]) >> request
+        1 * grpcProxyService.invokeGrpcMethod("GreeterService", "sayHello", request) >> { throw failure }
 
         and:
         def frames = readFrames(response.body())
         frames*.trailer == [true]
-        new String(frames[0].payload, StandardCharsets.US_ASCII).contains("grpc-status:13")
-        new String(frames[0].payload, StandardCharsets.US_ASCII).contains("grpc-message:bad%0D%0Amessage")
+        def trailers = new String(frames[0].payload, StandardCharsets.US_ASCII)
+        trailers.contains("grpc-status:${code}\r\n")
+        trailers.contains("grpc-message:${message}\r\n")
+
+        where:
+        scenario                       | failure                                                                                                       | code | message
+        "passed to onError"            | new GrpcInvocationException("Error executing gRPC method", Status.NOT_FOUND.withDescription("gone").asRuntimeException()) | 5    | "gone"
+        "thrown by the method"         | Status.PERMISSION_DENIED.withDescription("no access").asRuntimeException()                                   | 7    | "no access"
+        "thrown without a status"      | new IllegalStateException("secret detail")                                                                    | 13   | GrpcWebController.INTERNAL_ERROR_MESSAGE
+        "invalid protobuf request"     | new HttpStatusException(HttpStatus.BAD_REQUEST, "Failed to parse protobuf request")                           | 3    | "Failed to parse protobuf request"
+    }
+
+    @Unroll
+    def "answers with the request media type #contentType"() {
+        given:
+        HelloRequest request = HelloRequest.newBuilder().setName("Micronaut").build()
+        HelloResponse responseMessage = HelloResponse.newBuilder().setGreeting("Hello Micronaut").build()
+        byte[] payload = frame(request.toByteArray())
+        boolean text = expected.startsWith(GrpcWebController.GRPC_WEB_TEXT)
+
+        when:
+        HttpResponse<byte[]> response = controller.invokeMethod("GreeterService", "sayHello", text ? Base64.encoder.encode(payload) : payload, contentType)
+
+        then:
+        1 * grpcProxyService.parseRequestMessage("GreeterService", "sayHello", _ as byte[]) >> request
+        1 * grpcProxyService.invokeGrpcMethod("GreeterService", "sayHello", request) >> [responseMessage]
+
+        and:
+        response.contentType.get().toString() == expected
+        def frames = readFrames(text ? Base64.decoder.decode(response.body()) : response.body())
+        HelloResponse.parseFrom(frames[0].payload).greeting == "Hello Micronaut"
+
+        where:
+        contentType                                    | expected
+        "application/grpc-web"                         | "application/grpc-web"
+        "application/grpc-web-text"                    | "application/grpc-web-text"
+        "Application/GRPC-Web-Text+proto"              | "application/grpc-web-text+proto"
+        "application/grpc-web+proto; charset=utf-8"    | "application/grpc-web+proto"
     }
 
     @Unroll
@@ -81,8 +137,7 @@ class GrpcWebControllerSpec extends Specification {
         byte[] encodedBody = contentType == GrpcWebController.GRPC_WEB_TEXT_PROTO ? Base64.decoder.decode(response.body()) : response.body()
         def frames = readFrames(encodedBody)
         frames*.trailer == [true]
-        response.header("grpc-status") == "3"
-        response.header("grpc-message") == expectedMessage
+        response.header("grpc-status") == null
         new String(frames[0].payload, StandardCharsets.US_ASCII).contains("grpc-status:3")
         new String(frames[0].payload, StandardCharsets.US_ASCII).contains("grpc-message:${expectedMessage}")
 
@@ -109,7 +164,7 @@ class GrpcWebControllerSpec extends Specification {
         1 * grpcProxyService.invokeGrpcMethod("GreeterService", "sayHello", request) >> [responseMessage]
 
         and:
-        response.header("grpc-status") == "0"
+        response.header("grpc-status") == null
         def frames = readFrames(response.body())
         frames*.trailer == [false, true]
         HelloResponse.parseFrom(frames[0].payload).greeting == "Hello Micronaut"

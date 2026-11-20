@@ -59,6 +59,8 @@ public class GrpcInvocationException extends HttpStatusException {
      */
     public GrpcInvocationException(String message, Throwable throwable) {
         super(HttpStatus.INTERNAL_SERVER_ERROR, message);
+        // Keep the cause, so that a gRPC status raised by the service can be recovered from it.
+        initCause(throwable);
         LOG.error(message, throwable);
     }
 }
