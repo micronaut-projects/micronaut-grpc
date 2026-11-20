@@ -30,10 +30,12 @@ protobuf {
 // end::config[]
 
 // tag::omit-generated[]
-generateProtoTasks {
-    all()*.plugins {
-        grpc {
-            option '@generated=omit'
+protobuf {
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {
+                option '@generated=omit'
+            }
         }
     }
 }

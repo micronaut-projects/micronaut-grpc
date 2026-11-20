@@ -27,12 +27,17 @@ if (System.getenv("SONAR_TOKEN") != null) {
     }
 }
 
-def guideVersionAttributes = layout.buildDirectory.file("generated/docs/guide-version-attributes.adoc")
-
 tasks.register("generateGuideVersionAttributes") {
+    // Capture file locations at configuration time so the action stays configuration-cache safe.
+    def versionCatalogFile = layout.projectDirectory.file("gradle/libs.versions.toml")
+    def guideVersionAttributes = layout.buildDirectory.file("generated/docs/guide-version-attributes.adoc")
+    inputs.file(versionCatalogFile)
+        .withPropertyName("versionCatalog")
+        .withPathSensitivity(PathSensitivity.NONE)
     outputs.file(guideVersionAttributes)
+        .withPropertyName("guideVersionAttributes")
     doLast {
-        def versionCatalog = file("gradle/libs.versions.toml").text
+        def versionCatalog = versionCatalogFile.asFile.text
         def findVersion = { String key ->
             def matcher = versionCatalog =~ /(?m)^${java.util.regex.Pattern.quote(key)}\s*=\s*['"]([^'"]+)['"]\s*$/
             if (!matcher.find()) {
