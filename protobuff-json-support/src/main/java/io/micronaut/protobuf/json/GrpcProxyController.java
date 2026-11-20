@@ -32,7 +32,8 @@ import io.micronaut.protobuf.json.grpc.GrpcProxyService;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
+
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -60,7 +61,7 @@ public final class GrpcProxyController {
     private final GrpcProxyService grpcProxyService;
 
     public GrpcProxyController(GrpcProxyService grpcProxyService) {
-        this.grpcProxyService = checkNotNull(grpcProxyService, "GrpcProxyService cannot be null");
+        this.grpcProxyService = Objects.requireNonNull(grpcProxyService, "GrpcProxyService cannot be null");
         LOG.info("GrpcProxyController initialized and services registered");
     }
 
