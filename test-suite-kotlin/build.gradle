@@ -13,6 +13,10 @@ ext {
 }
 // end::variables[]
 
+ext {
+    reactiveGrpcVersion = libs.versions.reactive.grpc.get()
+}
+
 application {
     mainClass = "helloworld.Application"
 }
@@ -36,6 +40,11 @@ dependencies {
     implementation mn.kotlinx.coroutines.core
     implementation mn.micronaut.runtime
     implementation projects.micronautGrpcServerRuntime
+    implementation projects.micronautGrpcClientRuntime
+    implementation projects.micronautProtobuffJsonSupport
+    implementation platform(libs.micronaut.reactor)
+    implementation libs.reactive.grpc.stub
+    implementation "io.projectreactor:reactor-core"
     implementation mn.snakeyaml
 
     // tag::dependencies[]
@@ -48,6 +57,7 @@ dependencies {
 
     runtimeOnly mnLogging.logback.classic
     runtimeOnly mn.jackson.module.kotlin
+    runtimeOnly mn.micronaut.jackson.databind
 
     testCompileOnly libs.javax.annotation.api
     testImplementation mnTest.micronaut.test.kotest5
@@ -64,6 +74,7 @@ sourceSets {
             srcDirs 'build/generated/source/proto/main/grpc'
             srcDirs 'build/generated/source/proto/main/grpckt'
             srcDirs 'build/generated/source/proto/main/java'
+            srcDirs 'build/generated/source/proto/main/reactor'
         }
     }
 }
@@ -73,11 +84,13 @@ protobuf {
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
         grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk8@jar" }
+        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
     }
     generateProtoTasks {
         all()*.plugins {
             grpc {}
             grpckt {}
+            reactor {}
         }
     }
 }
