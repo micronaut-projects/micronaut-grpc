@@ -19,6 +19,7 @@ import io.grpc.BindableService;
 import io.grpc.protobuf.services.ProtoReflectionServiceV1;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.util.StringUtils;
 import jakarta.inject.Named;
 import jakarta.inject.Singleton;
@@ -27,6 +28,8 @@ import jakarta.inject.Singleton;
  * Registers the gRPC server reflection service ({@code grpc.reflection.v1.ServerReflection}) so that
  * tools such as {@code grpcurl}, Postman or {@code grpcui} can discover the services exposed by the server.
  *
+ * <p>Applications enable it through configuration and don't use this class directly.</p>
+ *
  * <p>Reflection is disabled by default because it exposes the full API surface. Enable it with
  * {@code grpc.server.reflection.enabled=true}. The {@code io.grpc:grpc-services} dependency must be on the
  * classpath.</p>
@@ -34,6 +37,7 @@ import jakarta.inject.Singleton;
  * @since 5.3.0
  */
 @Factory
+@Internal
 @Requires(classes = ProtoReflectionServiceV1.class)
 public class GrpcReflectionFactory {
 

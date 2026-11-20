@@ -18,4 +18,7 @@
  *
  * @since 5.3.0
  */
+@NullMarked
 package io.micronaut.grpc.server.reflection;
+
+import org.jspecify.annotations.NullMarked;
