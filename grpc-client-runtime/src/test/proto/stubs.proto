@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.micronaut.grpc.stubs";
+option java_outer_classname = "StubsProto";
+
+package stubs;
+
+service Echo {
+  rpc Echo (EchoRequest) returns (EchoReply) {}
+}
+
+message EchoRequest {
+  string text = 1;
+}
+
+message EchoReply {
+  string text = 1;
+}

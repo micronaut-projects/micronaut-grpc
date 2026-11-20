@@ -9,4 +9,5 @@ tracing: Distributed Tracing
 protocolBuffers: Protocol Buffers Support
 protocolBuffersJsonSupport: Protocol Buffers Json Support (Experimental)
 restTranscoding: REST Transcoding (Experimental)
+grpcWeb: gRPC-Web
 repository: Repository
