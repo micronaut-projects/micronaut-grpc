@@ -2,6 +2,7 @@ package io.micronaut.grpc.server.security.jwt
 
 import io.grpc.Channel
 import io.grpc.Metadata
+import io.grpc.ServerCall
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
 import io.grpc.examples.helloworld.GreeterGrpc
@@ -16,6 +17,7 @@ import io.micronaut.context.env.Environment
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcEmbeddedServer
 import io.micronaut.grpc.server.GrpcServerChannel
+import io.micronaut.grpc.server.security.GrpcServerAuthenticationFetcher
 import io.micronaut.security.authentication.Authentication
 import io.micronaut.security.token.jwt.generator.JwtTokenGenerator
 import jakarta.inject.Singleton
@@ -36,7 +38,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
     void "accepts valid jwt for authenticated method"() {
         given:
         ApplicationContext context = startContext([
-            "micronaut.security.intercept-url-map": [[pattern: ".*", access: ["isAuthenticated()"]]]
+            "grpc.server.security.intercept-method-map": [[pattern: ".*", access: ["isAuthenticated()"]]]
         ])
         TestBean testBean = context.getBean(TestBean)
 
@@ -50,7 +52,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
     void "accepts bearer jwt with surrounding whitespace and lowercase scheme"() {
         given:
         ApplicationContext context = startContext([
-            "micronaut.security.intercept-url-map": [[pattern: ".*", access: ["isAuthenticated()"]]]
+            "grpc.server.security.intercept-method-map": [[pattern: ".*", access: ["isAuthenticated()"]]]
         ])
         TestBean testBean = context.getBean(TestBean)
 
@@ -64,7 +66,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
     void "rejects missing jwt for authenticated method"() {
         given:
         ApplicationContext context = startContext([
-            "micronaut.security.intercept-url-map": [[pattern: ".*", access: ["isAuthenticated()"]]]
+            "grpc.server.security.intercept-method-map": [[pattern: ".*", access: ["isAuthenticated()"]]]
         ])
         TestBean testBean = context.getBean(TestBean)
 
@@ -82,7 +84,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
     void "rejects invalid jwt"() {
         given:
         ApplicationContext context = startContext([
-            "micronaut.security.intercept-url-map": [[pattern: ".*", access: ["isAuthenticated()"]]]
+            "grpc.server.security.intercept-method-map": [[pattern: ".*", access: ["isAuthenticated()"]]]
         ])
         TestBean testBean = context.getBean(TestBean)
 
@@ -100,7 +102,7 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
     void "rejects valid jwt without required role"() {
         given:
         ApplicationContext context = startContext([
-            "micronaut.security.intercept-url-map": [[pattern: ".*", access: ["ROLE_HELLO"]]]
+            "grpc.server.security.intercept-method-map": [[pattern: ".*", access: ["ROLE_HELLO"]]]
         ])
         TestBean testBean = context.getBean(TestBean)
 
@@ -115,10 +117,10 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         stopContext(context)
     }
 
-    void "matches the fully qualified gRPC method name in intercept-url-map"() {
+    void "matches the fully qualified gRPC method name in intercept-method-map"() {
         given:
         ApplicationContext context = startContext([
-            "micronaut.security.intercept-url-map": [[pattern: "helloworld\\.Greeter/SayHello", access: ["isAuthenticated()"]]]
+            "grpc.server.security.intercept-method-map": [[pattern: "helloworld\\.Greeter/SayHello", access: ["isAuthenticated()"]]]
         ])
         TestBean testBean = context.getBean(TestBean)
 
@@ -129,10 +131,10 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         stopContext(context)
     }
 
-    void "rejects when intercept-url-map does not match the gRPC method name"() {
+    void "rejects when intercept-method-map does not match the gRPC method name"() {
         given:
         ApplicationContext context = startContext([
-            "micronaut.security.intercept-url-map": [[pattern: "helloworld\\.Greeter/OtherMethod", access: ["isAuthenticated()"]]]
+            "grpc.server.security.intercept-method-map": [[pattern: "helloworld\\.Greeter/OtherMethod", access: ["isAuthenticated()"]]]
         ])
         TestBean testBean = context.getBean(TestBean)
 
@@ -142,6 +144,43 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
         then:
         StatusRuntimeException e = thrown()
         e.status.code == Status.Code.PERMISSION_DENIED
+
+        cleanup:
+        stopContext(context)
+    }
+
+    void "starts and authorizes with an HTTP catch-all in the shared intercept-url-map"() {
+        given:
+        ApplicationContext context = startContext([
+            "micronaut.security.intercept-url-map"     : [[pattern: "/**", access: ["isAnonymous()"]]],
+            "grpc.server.security.intercept-method-map": [[pattern: "helloworld.Greeter/SayHello", access: ["isAuthenticated()"]]]
+        ])
+        TestBean testBean = context.getBean(TestBean)
+
+        expect:
+        testBean.sayHelloWithJwt("Brian") == "Hello Brian"
+
+        when:
+        testBean.sayHelloWithoutJwt("Brian")
+
+        then:
+        StatusRuntimeException e = thrown()
+        e.status.code == Status.Code.UNAUTHENTICATED
+
+        cleanup:
+        stopContext(context)
+    }
+
+    void "allows roles exposed by an authentication from a custom fetcher"() {
+        given:
+        ApplicationContext context = startContext([
+            "spec.custom-fetcher"                      : true,
+            "grpc.server.security.intercept-method-map": [[pattern: ".*", access: ["ROLE_ADMIN"]]]
+        ])
+        TestBean testBean = context.getBean(TestBean)
+
+        expect:
+        testBean.sayHelloWithCustomUser("Brian") == "Hello Brian"
 
         cleanup:
         stopContext(context)
@@ -203,6 +242,13 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
             blockingStub.sayHello(request).message
         }
 
+        String sayHelloWithCustomUser(String message) {
+            Metadata metadata = new Metadata()
+            metadata.put(CustomAuthenticationFetcher.USER_KEY, "alice")
+            HelloRequest request = HelloRequest.newBuilder().setName(message).build()
+            blockingStub.withInterceptors(MetadataUtils.newAttachHeadersInterceptor(metadata)).sayHello(request).message
+        }
+
         private String sayHelloWithMetadata(String message, String token) {
             Metadata metadata = new Metadata()
             metadata.put(Metadata.Key.of("JWT", Metadata.ASCII_STRING_MARSHALLER), token)
@@ -220,6 +266,19 @@ class GrpcServerSecurityJwtInterceptorSpec extends Specification {
             HelloReply reply = HelloReply.newBuilder().setMessage("Hello ${request.name}").build()
             responseObserver.onNext(reply)
             responseObserver.onCompleted()
+        }
+    }
+
+    @Singleton
+    @Requires(env = REQUIRED_ENV)
+    @Requires(property = "spec.custom-fetcher", value = "true")
+    static class CustomAuthenticationFetcher implements GrpcServerAuthenticationFetcher {
+
+        static final Metadata.Key<String> USER_KEY = Metadata.Key.of("X-User", Metadata.ASCII_STRING_MARSHALLER)
+
+        @Override
+        <T, S> Authentication fetchAuthentication(ServerCall<T, S> serverCall, Metadata metadata) {
+            metadata.get(USER_KEY) == "alice" ? Authentication.build("alice", List.of("ROLE_ADMIN")) : null
         }
     }
 }

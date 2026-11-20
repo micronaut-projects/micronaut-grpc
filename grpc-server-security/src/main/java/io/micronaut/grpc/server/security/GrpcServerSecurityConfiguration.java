@@ -18,10 +18,13 @@ package io.micronaut.grpc.server.security;
 import io.grpc.Status;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Requires;
+import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.bind.annotation.Bindable;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.core.util.Toggleable;
 import io.micronaut.grpc.server.GrpcServerConfiguration;
+
+import java.util.List;
 
 /**
  * gRPC server security configuration.
@@ -53,4 +56,17 @@ public interface GrpcServerSecurityConfiguration extends Toggleable {
      */
     @Bindable(defaultValue = "PERMISSION_DENIED")
     Status.Code getFailedAuthorizationStatus();
+
+    /**
+     * The gRPC authorization rules. Each entry has a {@code pattern}, a regular expression matched against the fully
+     * qualified gRPC method name (for example {@code helloworld.Greeter/SayHello}), and the {@code access} rules
+     * required to invoke matching methods. The first matching entry applies.
+     *
+     * <p>These rules are separate from {@code micronaut.security.intercept-url-map}, which holds HTTP path patterns.</p>
+     *
+     * @return The gRPC method authorization rules
+     * @since 5.3.0
+     */
+    @Nullable
+    List<InterceptMethodMapPattern> getInterceptMethodMap();
 }

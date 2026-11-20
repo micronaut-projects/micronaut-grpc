@@ -24,7 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Base support for gRPC server security rules.
@@ -45,7 +47,8 @@ public abstract class AbstractGrpcServerSecurityRule implements GrpcServerSecuri
     }
 
     /**
-     * Resolves the granted roles for the current authentication.
+     * Resolves the granted roles for the current authentication: the roles exposed by
+     * {@link Authentication#getRoles()} combined with the roles resolved from its attributes by the {@link RolesFinder}.
      *
      * @param authentication The current authentication
      * @return The granted roles
@@ -55,7 +58,9 @@ public abstract class AbstractGrpcServerSecurityRule implements GrpcServerSecuri
         if (authentication == null) {
             roles.add(SecurityRule.IS_ANONYMOUS);
         } else {
-            roles.addAll(rolesFinder.resolveRoles(authentication.getAttributes()));
+            Set<String> grantedRoles = new LinkedHashSet<>(authentication.getRoles());
+            grantedRoles.addAll(rolesFinder.resolveRoles(authentication.getAttributes()));
+            roles.addAll(grantedRoles);
             roles.add(SecurityRule.IS_ANONYMOUS);
             roles.add(SecurityRule.IS_AUTHENTICATED);
         }
