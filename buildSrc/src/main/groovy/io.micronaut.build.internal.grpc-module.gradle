@@ -2,6 +2,14 @@ plugins {
     id 'io.micronaut.build.internal.grpc-base'
     id "io.micronaut.build.internal.module"
 }
+def libs = extensions.getByType(VersionCatalogsExtension).named('libs')
+dependencies {
+    constraints {
+        implementation(libs.findLibrary('guava').get()) {
+            because 'grpc-java brings in Guava versions affected by GHSA-xxph-c9ww-hj94 (fixed in 33.7.2)'
+        }
+    }
+}
 ossIndexAudit {
     excludeCompileOnly = true
 }
