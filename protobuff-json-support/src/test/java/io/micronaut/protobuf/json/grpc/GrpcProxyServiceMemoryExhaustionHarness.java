@@ -17,6 +17,8 @@ package io.micronaut.protobuf.json.grpc;
 
 import com.google.protobuf.Message;
 import com.google.protobuf.StringValue;
+import io.grpc.MethodDescriptor;
+import io.grpc.protobuf.ProtoUtils;
 import io.grpc.stub.StreamObserver;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.core.type.Argument;
@@ -42,7 +44,7 @@ public final class GrpcProxyServiceMemoryExhaustionHarness {
     public static void main(String[] args) {
         StreamingBackend backend = new StreamingBackend();
         GrpcServiceRegistry registry = new GrpcServiceRegistry();
-        registry.register(StreamingBackend.class, "stream", executableMethod(backend));
+        registry.register(StreamingBackend.class, "stream", executableMethod(backend), methodDescriptor());
 
         ApplicationContext context = (ApplicationContext) Proxy.newProxyInstance(
             GrpcProxyServiceMemoryExhaustionHarness.class.getClassLoader(),
@@ -57,6 +59,15 @@ public final class GrpcProxyServiceMemoryExhaustionHarness {
 
         new GrpcProxyService(registry, context, new ProtobufJsonTranscoder())
             .invokeGrpcMethod("StreamingBackend", "stream", "\"attacker\"");
+    }
+
+    private static MethodDescriptor<StringValue, StringValue> methodDescriptor() {
+        return MethodDescriptor.<StringValue, StringValue>newBuilder()
+            .setType(MethodDescriptor.MethodType.SERVER_STREAMING)
+            .setFullMethodName(MethodDescriptor.generateFullMethodName("StreamingBackend", "stream"))
+            .setRequestMarshaller(ProtoUtils.marshaller(StringValue.getDefaultInstance()))
+            .setResponseMarshaller(ProtoUtils.marshaller(StringValue.getDefaultInstance()))
+            .build();
     }
 
     @SuppressWarnings("unchecked")

@@ -8,4 +8,5 @@ serviceDiscovery: Service Discovery
 tracing: Distributed Tracing
 protocolBuffers: Protocol Buffers Support
 protocolBuffersJsonSupport: Protocol Buffers Json Support (Experimental)
+grpcWeb: gRPC-Web
 repository: Repository
