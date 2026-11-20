@@ -36,6 +36,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A {@link ClientInterceptor} that guards every call of a channel with a Micronaut circuit breaker.
@@ -148,9 +149,9 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
         private final CallOptions callOptions;
         private final Channel next;
         private final Context context;
-        private volatile @Nullable ClientCall<ReqT, RespT> delegate;
+        private final AtomicReference<@Nullable ClientCall<ReqT, RespT>> delegate = new AtomicReference<>();
         private volatile boolean rejected;
-        private volatile @Nullable Status cancelledBeforeStart;
+        private final AtomicReference<@Nullable Status> cancelledBeforeStart = new AtomicReference<>();
 
         CircuitBreakerCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next, Context context) {
             this.method = method;
@@ -161,7 +162,7 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
 
         @Override
         public void start(Listener<RespT> responseListener, Metadata headers) {
-            Status cancelled = cancelledBeforeStart;
+            Status cancelled = cancelledBeforeStart.get();
             if (cancelled != null) {
                 rejected = true;
                 close(responseListener, cancelled);
@@ -187,7 +188,7 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
                 return;
             }
             ClientCall<ReqT, RespT> call = newDownstreamCall();
-            delegate = call;
+            delegate.set(call);
             call.start(new OutcomeListener<>(responseListener, outcome, trial, generation), headers);
         }
 
@@ -216,7 +217,7 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
 
         @Override
         public void request(int numMessages) {
-            ClientCall<ReqT, RespT> call = delegate;
+            ClientCall<ReqT, RespT> call = delegate.get();
             if (call != null) {
                 call.request(numMessages);
             } else if (!rejected) {
@@ -226,7 +227,7 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
 
         @Override
         public void cancel(@Nullable String message, @Nullable Throwable cause) {
-            ClientCall<ReqT, RespT> call = delegate;
+            ClientCall<ReqT, RespT> call = delegate.get();
             if (call != null) {
                 call.cancel(message, cause);
             } else if (!rejected) {
@@ -237,13 +238,13 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
                 if (cause != null) {
                     status = status.withCause(cause);
                 }
-                cancelledBeforeStart = status;
+                cancelledBeforeStart.set(status);
             }
         }
 
         @Override
         public void halfClose() {
-            ClientCall<ReqT, RespT> call = delegate;
+            ClientCall<ReqT, RespT> call = delegate.get();
             if (call != null) {
                 call.halfClose();
             } else if (!rejected) {
@@ -253,7 +254,7 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
 
         @Override
         public void sendMessage(ReqT message) {
-            ClientCall<ReqT, RespT> call = delegate;
+            ClientCall<ReqT, RespT> call = delegate.get();
             if (call != null) {
                 call.sendMessage(message);
             } else if (!rejected) {
@@ -263,7 +264,7 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
 
         @Override
         public void setMessageCompression(boolean enabled) {
-            ClientCall<ReqT, RespT> call = delegate;
+            ClientCall<ReqT, RespT> call = delegate.get();
             if (call != null) {
                 call.setMessageCompression(enabled);
             }
@@ -271,13 +272,13 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
 
         @Override
         public boolean isReady() {
-            ClientCall<ReqT, RespT> call = delegate;
+            ClientCall<ReqT, RespT> call = delegate.get();
             return call != null && call.isReady();
         }
 
         @Override
         public Attributes getAttributes() {
-            ClientCall<ReqT, RespT> call = delegate;
+            ClientCall<ReqT, RespT> call = delegate.get();
             return call != null ? call.getAttributes() : Attributes.EMPTY;
         }
     }
