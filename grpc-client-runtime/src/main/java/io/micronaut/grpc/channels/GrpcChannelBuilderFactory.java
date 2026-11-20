@@ -26,6 +26,7 @@ import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.annotation.Prototype;
+import io.micronaut.core.io.ResourceResolver;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.inject.qualifiers.Qualifiers;
 import io.micronaut.scheduling.TaskExecutors;
@@ -79,6 +80,12 @@ public class GrpcChannelBuilderFactory {
             }
         );
         final NettyChannelBuilder channelBuilder = config.getChannelBuilder();
+        GrpcChannelSslSupport.apply(
+            channelBuilder,
+            config instanceof GrpcNamedManagedChannelConfiguration ? config.getName() : null,
+            beanContext.getEnvironment(),
+            beanContext.getBean(ResourceResolver.class)
+        );
         if (CollectionUtils.isNotEmpty(interceptors)) {
             Collections.reverse(interceptors);
             channelBuilder.intercept(interceptors);
