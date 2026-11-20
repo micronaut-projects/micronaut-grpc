@@ -18,10 +18,10 @@ package io.micronaut.grpc.channels;
 import io.grpc.netty.NettyChannelBuilder;
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.env.Environment;
-import io.micronaut.core.annotation.Internal;
 import io.micronaut.core.convert.format.MapFormat;
 import io.micronaut.core.naming.Named;
 import io.micronaut.core.naming.conventions.StringConvention;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -61,33 +61,18 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
      * @param name            The name
      * @param env             The environment
      * @param executorService The executor service to use
-     * @deprecated Use {@link #GrpcManagedChannelConfiguration(String, String, Environment, ExecutorService)} instead
      */
-    @Deprecated(since = "4.9.0", forRemoval = true)
     protected GrpcManagedChannelConfiguration(String name, Environment env, ExecutorService executorService) {
-        this(name, PREFIX + '.' + name, env, executorService);
-    }
-
-    /**
-     * Constructs a new managed channel configuration.
-     *
-     * @param name            The name
-     * @param propertyPrefix  The property prefix for reading environment configuration
-     * @param env             The environment
-     * @param executorService The executor service to use
-     */
-    @Internal
-    protected GrpcManagedChannelConfiguration(String name, String propertyPrefix, Environment env, ExecutorService executorService) {
         this.name = name;
-        this.connectOnStartup = env.getProperty(propertyPrefix + CONNECT_ON_STARTUP, Boolean.class).isPresent();
-        this.connectionTimeout = env.getProperty(propertyPrefix + CONNECTION_TIMEOUT, Long.class)
+        this.connectOnStartup = env.getProperty(PREFIX + '.' + name + CONNECT_ON_STARTUP, Boolean.class).isPresent();
+        this.connectionTimeout = env.getProperty(PREFIX + '.' + name + CONNECTION_TIMEOUT, Long.class)
             .filter(t -> t > 0)
             .map(Duration::ofSeconds)
             .orElse(DEFAULT_CONNECTION_TIMEOUT);
 
-        this.channelBuilder = env.getProperty(propertyPrefix + SETTING_URL, SocketAddress.class)
+        this.channelBuilder = env.getProperty(PREFIX + '.' + name + SETTING_URL, SocketAddress.class)
             .map(this::getChannelBuilder)
-            .orElseGet(() -> env.getProperty(propertyPrefix + SETTING_TARGET, String.class)
+            .orElseGet(() -> env.getProperty(PREFIX + '.' + name + SETTING_TARGET, String.class)
                 .map(NettyChannelBuilder::forTarget)
                 .orElseGet(() -> {
                     final URI uri = name.contains("//") ? URI.create(name) : null;
@@ -155,8 +140,10 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
      * Applies the gRPC default service config using Micronaut's nested/raw map binding.
      *
      * @param serviceConfig The service config map
+     * @since 5.2.1
      */
     public void setDefaultServiceConfig(
+        @Nullable
         @MapFormat(transformation = MapFormat.MapTransformation.NESTED, keyFormat = StringConvention.RAW)
         Map<String, Object> serviceConfig) {
         if (serviceConfig != null) {
