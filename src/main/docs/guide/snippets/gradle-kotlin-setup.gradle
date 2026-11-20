@@ -22,16 +22,6 @@ dependencies {
 }
 
 // tag::config[]
-sourceSets {
-    main {
-        java {
-            srcDirs 'build/generated/source/proto/main/grpc'
-            srcDirs 'build/generated/source/proto/main/grpckt'
-            srcDirs 'build/generated/source/proto/main/java'
-        }
-    }
-}
-
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
