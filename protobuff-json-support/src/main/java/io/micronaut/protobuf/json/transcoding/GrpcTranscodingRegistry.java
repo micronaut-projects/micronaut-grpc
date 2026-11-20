@@ -68,6 +68,10 @@ import java.util.concurrent.TimeUnit;
 final class GrpcTranscodingRegistry implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(GrpcTranscodingRegistry.class);
+    /**
+     * The custom HTTP method kind that matches any HTTP method.
+     */
+    private static final String ANY_METHOD = "*";
 
     private final List<TranscodedMethod> methods;
     private final Server server;
@@ -124,22 +128,28 @@ final class GrpcTranscodingRegistry implements AutoCloseable {
     }
 
     /**
-     * Finds the binding that matches a request.
+     * Finds the binding that matches a request. A binding of the HTTP method wins over a custom binding of any
+     * method ({@code kind: "*"}).
      *
      * @param httpMethod The HTTP method name
      * @param rawPath The raw request path
      * @return The match, or {@code null}
      */
     @Nullable Match find(String httpMethod, String rawPath) {
+        Match wildcard = null;
         for (TranscodedMethod method : methods) {
-            if (method.httpMethod().equals(httpMethod)) {
+            boolean exact = method.httpMethod().equals(httpMethod);
+            if (exact || (wildcard == null && ANY_METHOD.equals(method.httpMethod()))) {
                 Map<String, String> variables = method.template().match(rawPath);
                 if (variables != null) {
-                    return new Match(method, variables);
+                    if (exact) {
+                        return new Match(method, variables);
+                    }
+                    wildcard = new Match(method, variables);
                 }
             }
         }
-        return null;
+        return wildcard;
     }
 
     @Override

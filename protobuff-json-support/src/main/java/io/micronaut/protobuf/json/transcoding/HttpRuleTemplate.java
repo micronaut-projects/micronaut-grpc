@@ -185,41 +185,50 @@ final class HttpRuleTemplate {
             List<String> parts = split(segments);
             StringBuilder regex = new StringBuilder();
             for (int i = 0; i < parts.size(); i++) {
-                String segment = parts.get(i);
                 if (i > 0) {
                     regex.append('/');
                 }
-                if (segment.isEmpty()) {
-                    throw new IllegalArgumentException("Empty segment in HTTP rule template: " + template);
-                } else if (segment.equals("*")) {
-                    regex.append("[^/]+");
-                } else if (segment.equals("**")) {
-                    if (i != parts.size() - 1) {
-                        throw new IllegalArgumentException("'**' must be the last segment in HTTP rule template: " + template);
-                    }
-                    regex.append(".*");
-                } else if (segment.startsWith("{")) {
-                    if (insideVariable || !segment.endsWith("}")) {
-                        throw new IllegalArgumentException("Invalid variable in HTTP rule template: " + template);
-                    }
-                    String content = segment.substring(1, segment.length() - 1);
-                    int equals = content.indexOf('=');
-                    String fieldPath = equals < 0 ? content : content.substring(0, equals);
-                    String inner = equals < 0 ? "*" : content.substring(equals + 1);
-                    if (fieldPath.isEmpty() || inner.isEmpty()) {
-                        throw new IllegalArgumentException("Invalid variable in HTTP rule template: " + template);
-                    }
-                    variables.add(fieldPath);
-                    regex.append('(').append(segments(inner, true)).append(')');
-                } else {
-                    if (segment.contains("{") || segment.contains("}")) {
-                        throw new IllegalArgumentException("Invalid segment '" + segment + "' in HTTP rule template: " + template);
-                    }
-                    literalLength += segment.length() + 1;
-                    regex.append(Pattern.quote(segment));
-                }
+                regex.append(segment(parts.get(i), i == parts.size() - 1, insideVariable));
             }
             return regex.toString();
+        }
+
+        private String segment(String segment, boolean last, boolean insideVariable) {
+            if (segment.isEmpty()) {
+                throw new IllegalArgumentException("Empty segment in HTTP rule template: " + template);
+            }
+            if (segment.equals("*")) {
+                return "[^/]+";
+            }
+            if (segment.equals("**")) {
+                if (!last) {
+                    throw new IllegalArgumentException("'**' must be the last segment in HTTP rule template: " + template);
+                }
+                return ".*";
+            }
+            if (segment.startsWith("{")) {
+                return variable(segment, insideVariable);
+            }
+            if (segment.contains("{") || segment.contains("}")) {
+                throw new IllegalArgumentException("Invalid segment '" + segment + "' in HTTP rule template: " + template);
+            }
+            literalLength += segment.length() + 1;
+            return Pattern.quote(segment);
+        }
+
+        private String variable(String segment, boolean insideVariable) {
+            if (insideVariable || !segment.endsWith("}")) {
+                throw new IllegalArgumentException("Invalid variable in HTTP rule template: " + template);
+            }
+            String content = segment.substring(1, segment.length() - 1);
+            int equals = content.indexOf('=');
+            String fieldPath = equals < 0 ? content : content.substring(0, equals);
+            String inner = equals < 0 ? "*" : content.substring(equals + 1);
+            if (fieldPath.isEmpty() || inner.isEmpty()) {
+                throw new IllegalArgumentException("Invalid variable in HTTP rule template: " + template);
+            }
+            variables.add(fieldPath);
+            return "(" + segments(inner, true) + ")";
         }
 
         private static List<String> split(String segments) {

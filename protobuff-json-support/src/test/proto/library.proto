@@ -46,6 +46,15 @@ service LibraryService {
   rpc StreamBooks(ListBooksRequest) returns (stream Book) {
     option (google.api.http) = { get: "/v1/stream" };
   }
+  rpc ListPage(ListBooksRequest) returns (ListBooksResponse) {
+    option (google.api.http) = { get: "/v1/pages/{page_size}/{paging.page_token}" };
+  }
+  rpc AnyVerb(DeleteBookRequest) returns (Book) {
+    option (google.api.http) = { custom: { kind: "*" path: "/v1/any/{id}" } };
+  }
+  rpc AnyVerbTitle(DeleteBookRequest) returns (Book) {
+    option (google.api.http) = { custom: { kind: "*" path: "/v1/books/{id}/title" } };
+  }
 }
 
 message Shelf {
@@ -79,6 +88,7 @@ message ListBooksRequest {
 
 message Paging {
   string token = 1;
+  string page_token = 2;
 }
 
 message ListBooksResponse {

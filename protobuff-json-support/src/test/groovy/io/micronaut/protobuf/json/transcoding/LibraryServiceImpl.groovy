@@ -104,4 +104,25 @@ class LibraryServiceImpl extends LibraryServiceGrpc.LibraryServiceImplBase {
     void streamBooks(ListBooksRequest request, StreamObserver<Book> responseObserver) {
         responseObserver.onCompleted()
     }
+
+    @Override
+    void listPage(ListBooksRequest request, StreamObserver<ListBooksResponse> responseObserver) {
+        lastRequest = request
+        responseObserver.onNext(ListBooksResponse.newBuilder().setNextPageToken(request.paging.pageToken + '-next').build())
+        responseObserver.onCompleted()
+    }
+
+    @Override
+    void anyVerb(DeleteBookRequest request, StreamObserver<Book> responseObserver) {
+        lastRequest = request
+        responseObserver.onNext(Book.newBuilder().setId(request.id).setTitle('any').build())
+        responseObserver.onCompleted()
+    }
+
+    @Override
+    void anyVerbTitle(DeleteBookRequest request, StreamObserver<Book> responseObserver) {
+        lastRequest = request
+        responseObserver.onNext(Book.newBuilder().setId(request.id).setTitle('any title').build())
+        responseObserver.onCompleted()
+    }
 }

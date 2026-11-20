@@ -67,6 +67,32 @@ class GrpcTranscodingSpec extends Specification {
         json == [books: [[id: '1', title: 'Dune', tags: ['a', 'b']]], nextPageToken: 't1-next']
     }
 
+    void "path bindings win over query parameters that spell the same field differently"() {
+        when:
+        def json = get('/v1/pages/5/p1?pageSize=7&page_size=8&paging.pageToken=q&paging.page_token=r&paging.token=t')
+
+        then:
+        ListBooksRequest request = service.lastRequest as ListBooksRequest
+        request.pageSize == 5
+        request.paging.pageToken == 'p1'
+        request.paging.token == 't'
+        json == [nextPageToken: 'p1-next']
+    }
+
+    void "a custom wildcard rule matches any HTTP method"() {
+        expect:
+        exchange(HttpRequest.GET('/v1/any/1')) == [id: '1', title: 'any']
+        service.lastRequest.id == 1
+        exchange(HttpRequest.POST('/v1/any/2', '{}')) == [id: '2', title: 'any']
+        service.lastRequest.id == 2
+        exchange(HttpRequest.PUT('/v1/any/3', '{}')) == [id: '3', title: 'any']
+        exchange(HttpRequest.create(HttpMethod.DELETE, '/v1/any/4')) == [id: '4', title: 'any']
+
+        and: 'an exact HTTP method binding wins over the wildcard'
+        client.retrieve(HttpRequest.GET('/v1/books/3/title'), String) == '"Title 3"'
+        exchange(HttpRequest.POST('/v1/books/3/title', '{}')) == [id: '3', title: 'any title']
+    }
+
     void "POST maps the whole body to the request"() {
         when:
         def json = exchange(HttpRequest.POST('/v1/books', '{"title":"Dune","author":"Herbert","tags":["sf"]}'))

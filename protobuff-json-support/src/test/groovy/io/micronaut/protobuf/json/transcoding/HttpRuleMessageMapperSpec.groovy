@@ -48,6 +48,50 @@ class HttpRuleMessageMapperSpec extends Specification {
         CreateShelfRequest.parseFrom(request.toByteArray()).validateOnly
     }
 
+    void "bound fields are compared by their canonical field path"() {
+        when:
+        DynamicMessage request = mapper.request(method('ListPage', '', ''),
+                [page_size: '5', 'paging.page_token': 'p'],
+                [pageSize: ['7'], 'paging.pageToken': ['q'], paging: ['ignored'], tags: ['a']],
+                null)
+        ListBooksRequest parsed = ListBooksRequest.parseFrom(request.toByteArray())
+
+        then:
+        parsed.pageSize == 5
+        parsed.paging.pageToken == 'p'
+        parsed.tagsList == ['a']
+    }
+
+    void "query parameters spelling the same field differently set it once"() {
+        when:
+        DynamicMessage request = mapper.request(method('ListPage', '', ''), [:], [pageSize: ['7'], page_size: ['8'], 'paging.pageToken': ['q'], 'paging.page_token': ['r']], null)
+        ListBooksRequest parsed = ListBooksRequest.parseFrom(request.toByteArray())
+
+        then:
+        parsed.pageSize in [7, 8]
+        parsed.paging.pageToken in ['q', 'r']
+    }
+
+    void "a path variable spelled with its JSON name sets the field once"() {
+        when:
+        DynamicMessage request = mapper.request(method('ListPage', '', ''), [pageSize: '5'], [page_size: ['7']], null)
+
+        then:
+        ListBooksRequest.parseFrom(request.toByteArray()).pageSize == 5
+    }
+
+    void "a path variable replaces a whole-body field given by its JSON name"() {
+        when:
+        DynamicMessage request = mapper.request(method('ListPage', '*', ''), [page_size: '5', 'paging.page_token': 'p'],
+                [:], '{"pageSize":7,"paging":{"pageToken":"q","token":"t"}}')
+        ListBooksRequest parsed = ListBooksRequest.parseFrom(request.toByteArray())
+
+        then:
+        parsed.pageSize == 5
+        parsed.paging.pageToken == 'p'
+        parsed.paging.token == 't'
+    }
+
     void "an empty body leaves the body field unset"() {
         expect:
         mapper.request(method('CreateShelf', 'shelf', ''), [:], [:], '  ').allFields.isEmpty()

@@ -44,21 +44,21 @@ public class GrpcTranscodingConfiguration {
      */
     public static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(30);
 
-    private boolean enabled;
+    private boolean transcodingEnabled;
     private Duration timeout = DEFAULT_TIMEOUT;
 
     /**
      * @return Whether REST transcoding is enabled. Defaults to {@code false}.
      */
     public boolean isEnabled() {
-        return enabled;
+        return transcodingEnabled;
     }
 
     /**
      * @param enabled Whether REST transcoding is enabled
      */
     public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+        this.transcodingEnabled = enabled;
     }
 
     /**

@@ -36,9 +36,9 @@ service LibraryService {
 
 The rules are read from the service's protobuf descriptors when the application starts. The module uses no reflection and needs no generated code. It supports the following:
 
-* The `get`, `post`, `put`, `patch` and `delete` methods, custom methods (`custom: { kind: "..." }`) and `additional_bindings`.
+* The `get`, `post`, `put`, `patch` and `delete` methods, custom methods (`custom: { kind: "..." }`, where `kind: "*"` matches any HTTP method unless a rule for that method also matches) and `additional_bindings`.
 * Path templates with literal segments, `*` and `**` wildcards, variables with or without a sub-template (`{name=shelves/*}`), nested field paths (`{book.id}`) and a verb suffix (`/v1/books/{id}:archive`).
-* `body: "*"`, `body: "<field>"` or no body. When the body is not `*`, query parameters set the remaining fields. Query parameters may use proto field names or JSON names, including nested paths like `paging.token`, and a repeated field takes repeated parameters.
+* `body: "*"`, `body: "<field>"` or no body. When the body is not `*`, query parameters set the remaining fields. Query parameters may use proto field names or JSON names, including nested paths like `paging.token`, and a repeated field takes repeated parameters. A field bound by the path or the body is not overridden by a query parameter, whichever name the parameter uses.
 * `response_body`, which returns a single field of the response instead of the whole message.
 
 A request is matched against the rules before routing. Requests that match no rule continue to your controllers. A matching request is dispatched in-process to the gRPC service, through the `ServerInterceptor` beans of the application. The HTTP request headers become gRPC metadata, except for hop-by-hop and transport headers, `grpc-*` headers and binary (`-bin`) headers. Interceptors that authenticate from metadata therefore also apply to REST calls.
