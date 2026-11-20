@@ -26,6 +26,7 @@ dependencies {
     api libs.managed.grpc.stub
     api libs.managed.grpc.protobuf
     api projects.micronautGrpcAnnotation
+    implementation projects.micronautProtobuffSupport
 
     implementation(libs.gson) {
         because("Vulnerability in 2.11.0")
@@ -35,6 +36,8 @@ dependencies {
     testCompileOnly libs.managed.protobuf.java
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-json
 
+    testAnnotationProcessor mn.micronaut.inject.java
+    testAnnotationProcessor projects.micronautProtobuffProcessor
     testImplementation libs.managed.grpc.services
     testImplementation mn.micronaut.discovery.core
     testImplementation mnReactor.micronaut.reactor.http.client

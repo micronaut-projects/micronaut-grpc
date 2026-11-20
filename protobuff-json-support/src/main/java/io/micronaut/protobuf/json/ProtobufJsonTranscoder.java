@@ -21,6 +21,7 @@ import com.google.protobuf.util.JsonFormat;
 import io.micronaut.core.annotation.Experimental;
 import org.jspecify.annotations.NonNull;
 import io.micronaut.http.HttpStatus;
+import io.micronaut.protobuf.ProtobufMessageBuilders;
 import io.micronaut.protobuf.json.exception.MalformedGrpcJsonException;
 import io.micronaut.protobuf.json.exception.ProtobufTranscodingException;
 import jakarta.inject.Singleton;
@@ -77,9 +78,7 @@ public class ProtobufJsonTranscoder {
     @NonNull
     public <T extends Message> T fromJson(@NonNull String jsonBody, @NonNull Class<T> messageType) {
         try {
-            Message.Builder builder = (Message.Builder) messageType
-                    .getMethod("newBuilder")
-                    .invoke(null);
+            Message.Builder builder = ProtobufMessageBuilders.newBuilder(messageType);
             jsonParser.merge(jsonBody, builder);
             @SuppressWarnings("unchecked")
             T message = (T) builder.build();

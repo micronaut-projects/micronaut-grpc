@@ -20,6 +20,7 @@ include 'grpc-server-runtime'
 include 'grpc-inprocess'
 include 'grpc-runtime'
 include 'protobuff-support'
+include 'protobuff-processor'
 include 'protobuff-json-support'
 
 // documentation samples

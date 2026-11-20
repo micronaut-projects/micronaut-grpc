@@ -1,0 +1,11 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+}
+
+dependencies {
+    compileOnly mn.micronaut.core.processor
+}
+
+micronautBuild {
+    binaryCompatibility.enabledAfter("5.3.0")
+}
