@@ -42,7 +42,7 @@ public abstract class GrpcManagedChannelConfiguration implements Named {
     private static final Duration DEFAULT_CONNECTION_TIMEOUT = Duration.ofSeconds(20);
     protected final String name;
 
-    @ConfigurationBuilder(prefixes = {"use", ""}, allowZeroArgs = true)
+    @ConfigurationBuilder(prefixes = {"use", ""}, allowZeroArgs = true, excludes = "executor")
     protected final NettyChannelBuilder channelBuilder;
 
     private final boolean connectOnStartup;
