@@ -1,0 +1,25 @@
+// tag::variables[]
+def reactiveGrpcVersion = '{reactive-grpc-version}'
+// end::variables[]
+
+dependencies {
+    // tag::dependencies[]
+    implementation("com.salesforce.servicelibs:reactor-grpc-stub:$reactiveGrpcVersion")
+    implementation("io.projectreactor:reactor-core")
+    // end::dependencies[]
+}
+
+protobuf {
+    plugins {
+        // tag::plugin[]
+        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
+        // end::plugin[]
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            // tag::config[]
+            reactor {}
+            // end::config[]
+        }
+    }
+}

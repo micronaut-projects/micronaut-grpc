@@ -51,6 +51,7 @@ tasks.register("generateGuideVersionAttributes") {
             "protobuf-version"               : findVersion("managed-protobuf"),
             "protobuf-gradle-plugin-version" : findVersion("managed-protobuf-gradle"),
             "javax-annotation-api-version"   : findVersion("javax-annotation-api"),
+            "reactive-grpc-version"          : findVersion("reactive-grpc"),
         ]
         def output = guideVersionAttributes.get().asFile
         output.parentFile.mkdirs()

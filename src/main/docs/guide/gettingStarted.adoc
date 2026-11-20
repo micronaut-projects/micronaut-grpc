@@ -25,37 +25,60 @@ To manually setup gRPC you can create an application:
 $ mn create-app helloworld
 ----
 
-Then follow the below steps depending on the build system chosen.
+TIP: Add `--lang kotlin` or `--lang groovy` to create a Kotlin or Groovy application and `--build maven` to use Maven instead of Gradle.
 
+Then follow the below steps depending on the build system and language chosen. The Gradle examples are shown for both the Groovy DSL (`build.gradle`) and the Kotlin DSL (`build.gradle.kts`).
 
 === Configuring Gradle
 
-To configure Gradle for Java or Groovy projects, add the `com.google.protobuf` plugin to your existing `plugins` block:
+The `com.google.protobuf` plugin registers the generated sources with the corresponding source sets, so no additional `sourceSets` configuration is required.
 
-[source,groovy,subs="attributes+"]
+==== Java and Groovy Projects
+
+For Java or Groovy projects, add the `com.google.protobuf` plugin to your existing `plugins` block:
+
+[source.multi-language-sample,gradle-groovy,subs="attributes+"]
 ----
 plugins {
     ...
 include::src/main/docs/guide/snippets/gradle-java-setup.gradle[tags=plugin]
 }
 ----
+[source.multi-language-sample,gradle-kotlin,subs="attributes+"]
+----
+plugins {
+    ...
+include::src/main/docs/guide/snippets/gradle-java-setup.gradle.kts[tags=plugin]
+}
+----
 
 Then configure protobuf source generation:
 
-[source,groovy,subs="attributes+"]
+[source.multi-language-sample,gradle-groovy,subs="attributes+"]
 ----
 include::src/main/docs/guide/snippets/gradle-java-setup.gradle[tags=config]
 ----
+[source.multi-language-sample,gradle-kotlin,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/gradle-java-setup.gradle.kts[tags=config]
+----
+
 NOTE: If you are using JDK 9 or above, provide the following compiler option to the gRPC plugin to skip `javax.annotation.Generated` stubs: `option '@generated=omit'` (added in link:https://github.com/grpc/grpc-java/releases/tag/v1.64.0[gRPC Java v1.64.0]). See link:https://github.com/grpc/grpc-java/issues/9179[issue 9179] for background.
 
-[source,groovy,subs="attributes+"]
+[source.multi-language-sample,gradle-groovy,subs="attributes+"]
 ----
 include::src/main/docs/guide/snippets/gradle-java-setup.gradle[tags=omit-generated]
 ----
+[source.multi-language-sample,gradle-kotlin,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/gradle-java-setup.gradle.kts[tags=omit-generated]
+----
 
-Use this Gradle configuration for Kotlin projects:
+==== Kotlin Projects
 
-[source,groovy,subs="attributes+"]
+Kotlin projects additionally generate coroutine-based stubs with https://github.com/grpc/grpc-kotlin[gRPC Kotlin]. Use the following Gradle configuration:
+
+[source.multi-language-sample,gradle-groovy,subs="attributes+"]
 ----
 plugins {
     ...
@@ -71,33 +94,75 @@ include::src/main/docs/guide/snippets/gradle-kotlin-setup.gradle[tags=dependenci
 
 include::src/main/docs/guide/snippets/gradle-kotlin-setup.gradle[tags=config]
 ----
+[source.multi-language-sample,gradle-kotlin,subs="attributes+"]
+----
+plugins {
+    ...
+include::src/main/docs/guide/snippets/gradle-kotlin-setup.gradle.kts[tags=plugin]
+}
+
+include::src/main/docs/guide/snippets/gradle-kotlin-setup.gradle.kts[tags=variables]
+
+dependencies {
+    ...
+include::src/main/docs/guide/snippets/gradle-kotlin-setup.gradle.kts[tags=dependencies]
+}
+
+include::src/main/docs/guide/snippets/gradle-kotlin-setup.gradle.kts[tags=config]
+----
+
+==== Reactor Stubs
 
 If you want to generate Reactor-based stubs with https://github.com/salesforce/reactive-grpc[reactive-grpc], add the generator plugin and stub dependency alongside the standard gRPC code generation:
 
-[source,groovy]
+[source.multi-language-sample,gradle-groovy,subs="attributes+"]
 ----
-include::test-suite/build.gradle[tags=reactive-variables]
+include::src/main/docs/guide/snippets/gradle-reactive-setup.gradle[tags=variables]
 
 dependencies {
-...
-include::test-suite/build.gradle[tags=reactive-dependencies]
-}
-
-sourceSets {
-    main {
-        java {
-include::test-suite/build.gradle[tags=reactive-source-set]
-        }
-    }
+    ...
+include::src/main/docs/guide/snippets/gradle-reactive-setup.gradle[tags=dependencies]
 }
 
 protobuf {
-...
-include::test-suite/build.gradle[tags=reactive-plugin]
-...
-include::test-suite/build.gradle[tags=reactive-config]
+    plugins {
+        ...
+include::src/main/docs/guide/snippets/gradle-reactive-setup.gradle[tags=plugin]
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            ...
+include::src/main/docs/guide/snippets/gradle-reactive-setup.gradle[tags=config]
+        }
+    }
 }
 ----
+[source.multi-language-sample,gradle-kotlin,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/gradle-reactive-setup.gradle.kts[tags=variables]
+
+dependencies {
+    ...
+include::src/main/docs/guide/snippets/gradle-reactive-setup.gradle.kts[tags=dependencies]
+}
+
+protobuf {
+    plugins {
+        ...
+include::src/main/docs/guide/snippets/gradle-reactive-setup.gradle.kts[tags=plugin]
+    }
+    generateProtoTasks {
+        all().configureEach {
+            plugins {
+                ...
+include::src/main/docs/guide/snippets/gradle-reactive-setup.gradle.kts[tags=config]
+            }
+        }
+    }
+}
+----
+
+==== Dependencies
 
 Finally, add the following dependencies to your build:
 
@@ -118,24 +183,86 @@ You can then run:
 $ ./gradlew generateProto
 ----
 
-To generate the Java sources from protobuf definitions in `src/main/proto`.
+To generate the Java (and, for Kotlin projects, Kotlin) sources from protobuf definitions in `src/main/proto`.
 
 The generated sources are the service stubs, not the server implementation. Before starting the application, create a bean that extends the generated `*ImplBase` type (or `*CoroutineImplBase` for Kotlin) as shown in the next section.
 
 === Configuring Maven
 
-For Maven create a maven project first:
+For Maven create a Maven project first:
 
 [source,bash]
 ----
-$ mn create-app helloworld --build
+$ mn create-app helloworld --build maven
+----
+
+Add `--lang kotlin` or `--lang groovy` for a Kotlin or Groovy project.
+
+==== Java and Groovy Projects
+
+Define the gRPC and Protobuf versions in the `properties` section of your `pom.xml`:
+
+[source,xml,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/maven-java-setup.xml[tags=properties, indent=0]
+----
+
+Add the `os-maven-plugin` build extension, which detects the classifier of the `protoc` executable for the current platform:
+
+[source,xml,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/maven-java-setup.xml[tags=extensions, indent=0]
 ----
 
 Then configure the Protobuf plugin appropriately:
 
-[source,xml]
+[source,xml,subs="attributes+"]
 ----
-include::test-suite/pom.xml[tags=plugin, indent=0]
+include::src/main/docs/guide/snippets/maven-java-setup.xml[tags=plugin, indent=0]
+----
+
+The generated code requires the following dependencies, in addition to the Micronaut gRPC dependencies listed above:
+
+[source,xml,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/maven-java-setup.xml[tags=dependencies, indent=0]
+----
+
+==== Kotlin Projects
+
+Kotlin projects additionally generate coroutine-based stubs with https://github.com/grpc/grpc-kotlin[gRPC Kotlin]. Define the versions in the `properties` section of your `pom.xml`:
+
+[source,xml,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/maven-kotlin-setup.xml[tags=properties, indent=0]
+----
+
+Add the `os-maven-plugin` build extension:
+
+[source,xml,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/maven-kotlin-setup.xml[tags=extensions, indent=0]
+----
+
+Configure the Protobuf plugin to run both the gRPC Java and the gRPC Kotlin generators:
+
+[source,xml,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/maven-kotlin-setup.xml[tags=plugin, indent=0]
+----
+
+Add the generated sources to the `compile` execution of the `kotlin-maven-plugin` (the `kotlin.version` property is defined by the Micronaut parent POM):
+
+[source,xml,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/maven-kotlin-setup.xml[tags=kotlin-plugin, indent=0]
+----
+
+The generated code requires the following dependencies, in addition to the Micronaut gRPC dependencies listed above:
+
+[source,xml,subs="attributes+"]
+----
+include::src/main/docs/guide/snippets/maven-kotlin-setup.xml[tags=dependencies, indent=0]
 ----
 
 You can then run:
@@ -145,7 +272,7 @@ You can then run:
 $ ./mvnw generate-sources
 ----
 
-To generate the Java sources from protobuf definitions in `src/main/proto`.
+To generate the Java (and, for Kotlin projects, Kotlin) sources from protobuf definitions in `src/main/proto`.
 
 === Defining a Protobuf File
 

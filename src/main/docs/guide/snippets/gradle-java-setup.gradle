@@ -9,15 +9,6 @@ plugins {
 def grpcVersion = '{grpc-version}'
 def protobufVersion = '{protobuf-version}'
 
-sourceSets {
-    main {
-        java {
-            srcDirs 'build/generated/source/proto/main/grpc'
-            srcDirs 'build/generated/source/proto/main/java'
-        }
-    }
-}
-
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
