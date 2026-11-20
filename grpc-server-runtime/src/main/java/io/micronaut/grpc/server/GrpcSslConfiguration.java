@@ -18,6 +18,7 @@ package io.micronaut.grpc.server;
 import java.util.Optional;
 
 import io.micronaut.context.annotation.ConfigurationProperties;
+import io.netty.handler.ssl.ClientAuth;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -32,6 +33,10 @@ public class GrpcSslConfiguration {
     private String certChain;
 
     private String privateKey;
+
+    private @Nullable String trustCertificates;
+
+    private ClientAuth clientAuth = ClientAuth.NONE;
 
     /**
      * @return The cert chain
@@ -59,5 +64,47 @@ public class GrpcSslConfiguration {
      */
     public void setPrivateKey(@Nullable String privateKey) {
         this.privateKey = privateKey;
+    }
+
+    /**
+     * The location of the PEM-encoded CA certificates used to verify client certificates.
+     *
+     * @return The trust certificates location
+     * @since 5.3.0
+     */
+    public Optional<String> getTrustCertificates() {
+        return Optional.ofNullable(trustCertificates);
+    }
+
+    /**
+     * Sets the location of the PEM-encoded CA certificates used to verify client certificates, for example
+     * {@code classpath:ca.crt} or {@code file:/etc/grpc/ca.crt}. Without it, the JVM's default trust store is used.
+     *
+     * @param trustCertificates The trust certificates location
+     * @since 5.3.0
+     */
+    public void setTrustCertificates(@Nullable String trustCertificates) {
+        this.trustCertificates = trustCertificates;
+    }
+
+    /**
+     * Whether clients must present a certificate.
+     *
+     * @return The client authentication mode, {@link ClientAuth#NONE} by default
+     * @since 5.3.0
+     */
+    public ClientAuth getClientAuth() {
+        return clientAuth;
+    }
+
+    /**
+     * Sets whether clients must present a certificate: {@code none} (the default), {@code optional} or
+     * {@code require}. Use {@code require} for mutual TLS.
+     *
+     * @param clientAuth The client authentication mode
+     * @since 5.3.0
+     */
+    public void setClientAuth(@Nullable ClientAuth clientAuth) {
+        this.clientAuth = clientAuth == null ? ClientAuth.NONE : clientAuth;
     }
 }

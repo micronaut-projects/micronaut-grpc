@@ -42,6 +42,26 @@ grpc:
 <1> Load the certificate from `/path/to/my.cert` file.
 <2> Load the private key from the classpath. The file should be in `src/main/resources/my.key`.
 
+==== Mutual TLS
+
+To require clients to present a certificate, add the CA certificates that sign client certificates and set `client-auth`:
+
+.Requiring client certificates
+[configuration]
+----
+grpc:
+    server:
+        ssl:
+            cert-chain: 'classpath:server.crt'
+            private-key: 'classpath:server.key'
+            trust-certificates: 'classpath:ca.crt' # <1>
+            client-auth: require # <2>
+----
+<1> PEM-encoded CA certificates used to verify client certificates. Without it, the JVM's default trust store is used.
+<2> `none` (the default), `optional` or `require`.
+
+`trust-certificates` and `client-auth` need `cert-chain` and `private-key` to be configured.
+
 By default, the gRPC server will be enabled. To disable the gRPC server, set `grpc.server.enabled` to false.
 
 For tests, add the `io.micronaut.grpc:micronaut-grpc-inprocess` module and set `grpc.server.in-process-name` to switch the embedded server and the injected `@GrpcChannel("grpc-server")` test channel to gRPC's in-process transport instead of opening a TCP port.
