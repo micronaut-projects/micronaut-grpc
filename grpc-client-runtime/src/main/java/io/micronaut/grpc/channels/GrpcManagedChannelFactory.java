@@ -32,6 +32,8 @@ import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.context.exceptions.DisabledBeanException;
+import io.micronaut.core.annotation.Internal;
+import io.micronaut.core.annotation.UsedByGeneratedCode;
 import io.micronaut.core.type.Argument;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.grpc.annotation.GrpcChannel;
@@ -57,6 +59,11 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
     private static final Logger LOG = LoggerFactory.getLogger(GrpcManagedChannelFactory.class);
     private static final String ENABLED = GrpcDefaultManagedChannelConfiguration.PREFIX + ".enabled";
     private static final String NAMED_ENABLED = GrpcDefaultManagedChannelConfiguration.PREFIX + '.';
+    private static final String GRPC_SERVER = "grpc-server";
+    /**
+     * The cache key argument shared by all stub injection points, so that the stubs of a channel share it.
+     */
+    private static final Argument<Channel> STUB_CHANNEL_ARGUMENT = Argument.of(Channel.class, "grpcStubChannel");
     private final Map<ChannelKey, ManagedChannel> channels = new ConcurrentHashMap<>();
     private final ApplicationContext beanContext;
 
@@ -79,30 +86,55 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
     @Bean
     @Primary
     protected ManagedChannel managedChannel(InjectionPoint<Channel> injectionPoint) {
-        Argument<?> argument;
-        if (injectionPoint instanceof FieldInjectionPoint) {
-            argument = ((FieldInjectionPoint<?, ?>) injectionPoint).asArgument();
-        } else if (injectionPoint instanceof ArgumentInjectionPoint) {
-            argument = ((ArgumentInjectionPoint<?, ?>) injectionPoint).getArgument();
-        } else {
-            throw new ConfigurationException("Cannot directly create channels use @Inject or constructor injection instead");
+        Argument<?> argument = argument(injectionPoint);
+        String target = target(argument, injectionPoint);
+        if (GRPC_SERVER.equalsIgnoreCase(target)) {
+            return beanContext.getBean(ManagedChannel.class, Qualifiers.byName(GRPC_SERVER));
         }
+        return channel(new ChannelKey(argument, target), target);
+    }
 
+    /**
+     * Returns the channel for a client stub injection point annotated with {@link GrpcChannel}. Called by the stub
+     * factories that {@code micronaut-grpc-client-processor} generates. All stubs of the same channel share one
+     * {@link ManagedChannel}, whatever their type or injection point.
+     *
+     * @param injectionPoint The stub injection point
+     * @return The channel
+     * @since 5.3.0
+     */
+    @Internal
+    @UsedByGeneratedCode
+    public ManagedChannel stubChannel(InjectionPoint<?> injectionPoint) {
+        String target = target(argument(injectionPoint), injectionPoint);
+        if (GRPC_SERVER.equalsIgnoreCase(target)) {
+            return beanContext.getBean(ManagedChannel.class, Qualifiers.byName(GRPC_SERVER));
+        }
+        return channel(new ChannelKey(STUB_CHANNEL_ARGUMENT, target), target);
+    }
+
+    private static Argument<?> argument(InjectionPoint<?> injectionPoint) {
+        if (injectionPoint instanceof FieldInjectionPoint<?, ?> fieldInjectionPoint) {
+            return fieldInjectionPoint.asArgument();
+        } else if (injectionPoint instanceof ArgumentInjectionPoint<?, ?> argumentInjectionPoint) {
+            return argumentInjectionPoint.getArgument();
+        }
+        throw new ConfigurationException("Cannot directly create channels use @Inject or constructor injection instead");
+    }
+
+    private String target(Argument<?> argument, InjectionPoint<?> injectionPoint) {
         String target = argument.getAnnotationMetadata().stringValue(GrpcChannel.class).orElse(null);
         if (StringUtils.isEmpty(target)) {
             throw new ConfigurationException("No value specified to @GrpcChannel annotation: " + injectionPoint);
         }
-
         if (!isEnabled(target)) {
             throw new DisabledBeanException("GRPC client [" + target + "] is disabled via configuration");
         }
+        return target;
+    }
 
-        if ("grpc-server".equalsIgnoreCase(target)) {
-            return beanContext.getBean(ManagedChannel.class, Qualifiers.byName("grpc-server"));
-        }
-
-
-        return channels.computeIfAbsent(new ChannelKey(argument, target), channelKey -> {
+    private ManagedChannel channel(ChannelKey key, String target) {
+        return channels.computeIfAbsent(key, channelKey -> {
             final NettyChannelBuilder nettyChannelBuilder = beanContext.createBean(NettyChannelBuilder.class, target);
             ManagedChannel channel = nettyChannelBuilder.build();
             beanContext.findBean(GrpcNamedManagedChannelConfiguration.class, Qualifiers.byName(target))

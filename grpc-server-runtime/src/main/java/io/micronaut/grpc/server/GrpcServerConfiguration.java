@@ -39,7 +39,6 @@ import io.micronaut.scheduling.TaskExecutors;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import com.google.common.base.Preconditions;
 
 /**
  * Configuration for the GRPC server.
@@ -194,7 +193,9 @@ public class GrpcServerConfiguration {
      */
     public void setMaxInboundMessageSize(@ReadableBytes int bytes) {
         // intentional noop rather than throw, this method is only advisory.
-        Preconditions.checkArgument(bytes >= 0, "bytes must be >= 0");
+        if (bytes < 0) {
+            throw new IllegalArgumentException("bytes must be >= 0");
+        }
         maxInboundMessageSize = bytes;
         serverBuilder.maxInboundMessageSize(bytes);
     }
@@ -216,7 +217,9 @@ public class GrpcServerConfiguration {
      * @since 1.17.0
      */
     public void setMaxInboundMetadataSize(@ReadableBytes int bytes) {
-        Preconditions.checkArgument(bytes > 0, "maxInboundMetadataSize must be > 0");
+        if (bytes <= 0) {
+            throw new IllegalArgumentException("maxInboundMetadataSize must be > 0");
+        }
         maxInboundMetadataSize = bytes;
         serverBuilder.maxInboundMetadataSize(bytes);
     }
