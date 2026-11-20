@@ -3,9 +3,8 @@ plugins {
 }
 
 dependencies {
-    compileOnly mn.micronaut.core.processor
-
-    testImplementation mn.micronaut.core.processor
+    // The Micronaut visitor runner: adding this artifact to the annotation processor path is enough to generate factories
+    api mn.micronaut.inject.java
 }
 
 micronautBuild {

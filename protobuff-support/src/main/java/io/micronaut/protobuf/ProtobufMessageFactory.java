@@ -16,7 +16,7 @@
 package io.micronaut.protobuf;
 
 import com.google.protobuf.Message;
-import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.annotation.UsedByGeneratedCode;
 
 /**
  * Creates builders for one Protocol Buffers message type without reflection.
@@ -27,17 +27,16 @@ import io.micronaut.core.annotation.NonNull;
  * @param <T> The message type
  * @since 5.3.0
  */
+@UsedByGeneratedCode
 public interface ProtobufMessageFactory<T extends Message> {
 
     /**
      * @return The message type this factory creates builders for
      */
-    @NonNull
     Class<T> getMessageType();
 
     /**
      * @return A new builder, as returned by the message's static {@code newBuilder()} method
      */
-    @NonNull
     Message.Builder newBuilder();
 }

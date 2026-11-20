@@ -26,7 +26,8 @@ dependencies {
     api libs.managed.grpc.stub
     api libs.managed.grpc.protobuf
     api projects.micronautGrpcAnnotation
-    implementation projects.micronautProtobuffSupport
+    // api: consumers need ProtobufMessageFactory on the compile classpath for the processor to generate factories
+    api projects.micronautProtobuffSupport
 
     implementation(libs.gson) {
         because("Vulnerability in 2.11.0")

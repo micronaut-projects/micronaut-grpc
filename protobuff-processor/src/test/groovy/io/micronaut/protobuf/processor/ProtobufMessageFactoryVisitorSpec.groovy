@@ -40,23 +40,49 @@ class ProtobufMessageFactoryVisitorSpec extends Specification {
         code.contains('return com.example.wire.Example.GeoPoint.newBuilder();')
     }
 
-    void "a top-level message in the default package gets a factory without a package declaration"() {
+    void "messages in the default package are skipped"() {
+        given:
+        VisitorContext context = Mock {
+            getClassElement(_) >> Optional.of(Mock(ClassElement))
+        }
+
+        when:
+        visitor.visitClass(message('', 'HelloRequest'), context)
+
+        then:
+        0 * context.visitGeneratedSourceFile(*_)
+        0 * context.visitServiceDescriptor(*_)
+    }
+
+    void "a top-level message gets a factory named after it"() {
         given:
         StringWriter source = new StringWriter()
-        ClassElement message = message('', 'HelloRequest')
-        VisitorContext context = Mock()
+        ClassElement message = message('org.example.grpc', 'org.example.grpc.HelloRequest')
+        VisitorContext context = Mock {
+            getClassElement(_) >> Optional.of(Mock(ClassElement))
+        }
 
         when:
         visitor.visitClass(message, context)
 
         then:
-        1 * context.getClassElement(_) >> Optional.of(Mock(ClassElement))
-        1 * context.visitGeneratedSourceFile('', 'HelloRequest$ProtobufMessageFactory', message) >> Optional.of(file(source))
-        1 * context.visitServiceDescriptor(ProtobufMessageFactoryVisitor.FACTORY_TYPE, 'HelloRequest$ProtobufMessageFactory', message)
+        1 * context.visitGeneratedSourceFile('org.example.grpc', 'HelloRequest$ProtobufMessageFactory', message) >> Optional.of(file(source))
+        1 * context.visitServiceDescriptor(ProtobufMessageFactoryVisitor.FACTORY_TYPE, 'org.example.grpc.HelloRequest$ProtobufMessageFactory', message)
 
         and:
-        !source.toString().contains('package ')
-        source.toString().contains('return HelloRequest.newBuilder();')
+        source.toString().contains('public java.lang.Class<org.example.grpc.HelloRequest> getMessageType()')
+    }
+
+    void "factory names encode nesting so that different nestings never collide"() {
+        expect:
+        ProtobufMessageFactoryVisitor.factorySimpleName(binaryName, 'p') == expected
+
+        where:
+        binaryName  | expected
+        'p.A$B$C'   | 'A_B_C$ProtobufMessageFactory'
+        'p.A_B$C'   | 'A_1B_C$ProtobufMessageFactory'
+        'p.A$B_C'   | 'A_B_1C$ProtobufMessageFactory'
+        'p.Message' | 'Message$ProtobufMessageFactory'
     }
 
     void "classes that are not concrete public messages are skipped"() {

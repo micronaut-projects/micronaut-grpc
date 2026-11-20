@@ -8,10 +8,12 @@ Micronaut will now support the encoding and decoding requests / responses of typ
 
 === Avoiding Reflection
 
-To create a message from a request body, Micronaut needs a builder for the message type. By default it calls the message's static `newBuilder()` method by reflection. Add the `micronaut-protobuff-processor` annotation processor to generate a factory for every message class compiled in your project, so that builders are created without reflection:
+To create a message from a request body, Micronaut needs a builder for the message type. Add the `micronaut-protobuff-processor` annotation processor to generate a factory for every message class compiled in your project, so that builders are created without reflection:
 
 dependency:micronaut-protobuff-processor[groupId="io.micronaut.grpc", scope="annotationProcessor"]
 
+The processor brings Micronaut's annotation processing (`micronaut-inject-java`) with it, so nothing else is needed on the annotation processor path. The project must have `micronaut-protobuff-support` on its compile classpath, directly or through `micronaut-protobuff-json-support`.
+
 The processor runs on the Java sources that `protoc` generates. It finds message classes by the `@com.google.protobuf.Generated` annotation and writes a small factory for each one, which Micronaut registers like its own generated services, so GraalVM native images need no extra reflection configuration for them. The JSON support in `micronaut-protobuff-json-support` uses the same factories.
 
-Messages compiled elsewhere, for example in a shared library of `.proto` definitions, still fall back to reflection unless that library is also compiled with the processor.
+For compatibility, messages without a generated factory still work: Micronaut falls back to calling their static `newBuilder()` method by reflection. This applies to messages compiled elsewhere, for example in a shared library of `.proto` definitions built without the processor, and to messages in the default Java package, which the processor skips.

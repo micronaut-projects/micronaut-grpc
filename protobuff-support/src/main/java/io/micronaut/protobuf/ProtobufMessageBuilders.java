@@ -17,30 +17,55 @@ package io.micronaut.protobuf;
 
 import com.google.protobuf.Message;
 import io.micronaut.core.annotation.Internal;
-import io.micronaut.core.annotation.NonNull;
+import io.micronaut.core.io.service.ServiceDefinition;
 import io.micronaut.core.io.service.SoftServiceLoader;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Optional;
 
 /**
  * Creates Protocol Buffers message builders.
  *
- * <p>Uses the {@link ProtobufMessageFactory} generated at compile time for the message type when one exists. A message
- * compiled without {@code micronaut-protobuff-processor}, for example one from a shared library, falls back to calling
- * its static {@code newBuilder()} method by reflection.</p>
+ * <p>Uses the {@link ProtobufMessageFactory} generated at compile time by {@code micronaut-protobuff-processor} for the
+ * message type. Factories are looked up through the message type's own class loader, and the result is cached per
+ * message class, so nothing keeps a class loader alive after its classes are unloaded.</p>
+ *
+ * <p>For compatibility only, a message compiled without the processor, for example one from a shared library, falls
+ * back to calling its static {@code newBuilder()} method by reflection.</p>
  *
  * @since 5.3.0
  */
 @Internal
 public final class ProtobufMessageBuilders {
 
+    /**
+     * The suffix of generated factory class names.
+     */
+    static final String FACTORY_SUFFIX = "$ProtobufMessageFactory";
+
     private static final Logger LOG = LoggerFactory.getLogger(ProtobufMessageBuilders.class);
-    private static final Map<Class<?>, Method> REFLECTIVE_FACTORIES = new ConcurrentHashMap<>();
+
+    private static final ClassValue<Optional<ProtobufMessageFactory<?>>> FACTORIES = new ClassValue<>() {
+        @Override
+        protected Optional<ProtobufMessageFactory<?>> computeValue(Class<?> type) {
+            return findFactory(type);
+        }
+    };
+
+    private static final ClassValue<Method> REFLECTIVE_FACTORIES = new ClassValue<>() {
+        @Override
+        protected Method computeValue(Class<?> type) {
+            LOG.debug("No generated ProtobufMessageFactory for {}; using reflection. Add micronaut-protobuff-processor to the annotation processor path to avoid it.", type.getName());
+            try {
+                return type.getMethod("newBuilder");
+            } catch (NoSuchMethodException e) {
+                throw new IllegalArgumentException("Type " + type.getName() + " is not a generated Protocol Buffers message: it has no static newBuilder() method", e);
+            }
+        }
+    };
 
     private ProtobufMessageBuilders() {
     }
@@ -52,11 +77,10 @@ public final class ProtobufMessageBuilders {
      * @return A new builder
      * @throws IllegalArgumentException if the type has no static {@code newBuilder()} method
      */
-    @NonNull
-    public static Message.Builder newBuilder(@NonNull Class<? extends Message> type) {
-        ProtobufMessageFactory<?> factory = Factories.ALL.get(type);
-        if (factory != null) {
-            return factory.newBuilder();
+    public static Message.Builder newBuilder(Class<? extends Message> type) {
+        Optional<ProtobufMessageFactory<?>> factory = FACTORIES.get(type);
+        if (factory.isPresent()) {
+            return factory.get().newBuilder();
         }
         return newBuilderReflectively(type);
     }
@@ -67,39 +91,47 @@ public final class ProtobufMessageBuilders {
      * @param type The message type
      * @return True if a generated {@link ProtobufMessageFactory} exists for the type
      */
-    public static boolean hasGeneratedFactory(@NonNull Class<? extends Message> type) {
-        return Factories.ALL.containsKey(type);
+    public static boolean hasGeneratedFactory(Class<? extends Message> type) {
+        return FACTORIES.get(type).isPresent();
+    }
+
+    /**
+     * Computes the name of the factory class generated for a message class. The nested part of the binary name is encoded
+     * so that distinct nestings never map to the same name: {@code _} becomes {@code _1}, then {@code $} becomes
+     * {@code _}. It must stay in sync with {@code ProtobufMessageFactoryVisitor}.
+     *
+     * @param binaryName The binary name of the message class
+     * @param packageName The package of the message class
+     * @return The binary name of the generated factory class
+     */
+    static String factoryName(String binaryName, String packageName) {
+        String nestedName = packageName.isEmpty() ? binaryName : binaryName.substring(packageName.length() + 1);
+        String simpleName = nestedName.replace("_", "_1").replace('$', '_') + FACTORY_SUFFIX;
+        return packageName.isEmpty() ? simpleName : packageName + '.' + simpleName;
+    }
+
+    @SuppressWarnings("rawtypes")
+    private static Optional<ProtobufMessageFactory<?>> findFactory(Class<?> type) {
+        String expectedName = factoryName(type.getName(), type.getPackageName());
+        @Nullable ClassLoader classLoader = type.getClassLoader();
+        SoftServiceLoader<ProtobufMessageFactory> loader = SoftServiceLoader.load(ProtobufMessageFactory.class, classLoader, expectedName::equals);
+        for (ServiceDefinition<ProtobufMessageFactory> definition : loader) {
+            if (definition.isPresent()) {
+                ProtobufMessageFactory<?> factory = definition.load();
+                if (factory.getMessageType() == type) {
+                    return Optional.of(factory);
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     private static Message.Builder newBuilderReflectively(Class<? extends Message> type) {
-        Method method = REFLECTIVE_FACTORIES.computeIfAbsent(type, t -> {
-            LOG.debug("No generated ProtobufMessageFactory for {}; using reflection. Add micronaut-protobuff-processor to the annotation processor path to avoid it.", t.getName());
-            try {
-                return t.getMethod("newBuilder");
-            } catch (NoSuchMethodException e) {
-                throw new IllegalArgumentException("Type " + t.getName() + " is not a generated Protocol Buffers message: it has no static newBuilder() method", e);
-            }
-        });
+        Method method = REFLECTIVE_FACTORIES.get(type);
         try {
             return (Message.Builder) method.invoke(null);
         } catch (ReflectiveOperationException e) {
             throw new IllegalStateException("Unable to create a builder for " + type.getName(), e);
-        }
-    }
-
-    /**
-     * Holds the generated factories, loaded on first use.
-     */
-    private static final class Factories {
-        static final Map<Class<?>, ProtobufMessageFactory<?>> ALL = load();
-
-        @SuppressWarnings("rawtypes")
-        private static Map<Class<?>, ProtobufMessageFactory<?>> load() {
-            Map<Class<?>, ProtobufMessageFactory<?>> factories = new HashMap<>();
-            for (ProtobufMessageFactory factory : SoftServiceLoader.load(ProtobufMessageFactory.class).collectAll()) {
-                factories.put(factory.getMessageType(), factory);
-            }
-            return Map.copyOf(factories);
         }
     }
 }

@@ -18,4 +18,7 @@
  *
  * @since 5.3.0
  */
+@NullMarked
 package io.micronaut.protobuf.processor;
+
+import org.jspecify.annotations.NullMarked;

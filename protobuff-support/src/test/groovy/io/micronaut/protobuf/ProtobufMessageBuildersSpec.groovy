@@ -33,6 +33,24 @@ class ProtobufMessageBuildersSpec extends Specification {
         ProtobufMessageBuilders.newBuilder(Timestamp) instanceof Timestamp.Builder
     }
 
+    void "factory names match the processor's encoding"() {
+        expect:
+        ProtobufMessageBuilders.factoryName(binaryName, packageName) == expected
+
+        where:
+        binaryName                         | packageName        | expected
+        'com.example.wire.Example$GeoPoint' | 'com.example.wire' | 'com.example.wire.Example_GeoPoint$ProtobufMessageFactory'
+        'p.A_B$C'                           | 'p'                | 'p.A_1B_C$ProtobufMessageFactory'
+        'p.A$B_C'                           | 'p'                | 'p.A_B_1C$ProtobufMessageFactory'
+        'Top'                               | ''                 | 'Top$ProtobufMessageFactory'
+    }
+
+    void "the lookup result is cached per message class"() {
+        expect:
+        ProtobufMessageBuilders.newBuilder(Example.GeoPoint).getClass() == ProtobufMessageBuilders.newBuilder(Example.GeoPoint).getClass()
+        ProtobufMessageBuilders.newBuilder(Timestamp).getClass() == Timestamp.Builder
+    }
+
     void "a type without newBuilder() is rejected"() {
         when:
         ProtobufMessageBuilders.newBuilder(Message)
