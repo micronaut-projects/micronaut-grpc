@@ -47,10 +47,10 @@ micronaut:
 
 == Supported Content Types
 
-The endpoint accepts and returns:
+The endpoint accepts the following media types, ignoring case and parameters, and answers with the media type of the request:
 
-- `application/grpc-web+proto`
-- `application/grpc-web-text+proto`
+- `application/grpc-web` and `application/grpc-web+proto`
+- `application/grpc-web-text` and `application/grpc-web-text+proto`
 
 Binary requests use the standard gRPC-Web frame format.
 Text requests use the same frames, base64-encoded for browser compatibility.
@@ -73,7 +73,13 @@ Successful responses include:
 - one protobuf data frame containing the unary response message
 - one trailers frame containing `grpc-status: 0`
 
-Error responses are still returned using gRPC-Web framing and include trailer metadata such as `grpc-status` and `grpc-message`.
+The status is only sent in the trailers frame, not as response headers.
+
+Error responses are also returned using gRPC-Web framing, with a trailers frame containing `grpc-status` and `grpc-message`:
+
+- A status raised by the service, passed to `onError` or thrown as a `StatusRuntimeException`, is sent as is.
+- An unknown service or method is sent as `UNIMPLEMENTED` (12), and a malformed request as `INVALID_ARGUMENT` (3).
+- Any other failure is sent as `INTERNAL` (13) with a generic message, so that internal error details are not exposed. The failure is logged.
 
 == Example Flow
 

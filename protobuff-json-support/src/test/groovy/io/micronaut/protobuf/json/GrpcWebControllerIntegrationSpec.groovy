@@ -9,6 +9,7 @@ import jakarta.inject.Inject
 import org.example.grpc.HelloRequest
 import org.example.grpc.HelloResponse
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
@@ -78,6 +79,71 @@ class GrpcWebControllerIntegrationSpec extends Specification {
         HelloResponse.parseFrom(frames[0].payload).greeting == "TEST Hello, Micronaut Text"
         frames[1].trailer
         new String(frames[1].payload, StandardCharsets.US_ASCII).contains("grpc-status:0")
+    }
+
+    @Unroll
+    def "accepts the gRPC-Web media type #mediaType"() {
+        given:
+        boolean text = mediaType.toLowerCase(Locale.ROOT).startsWith("application/grpc-web-text")
+        byte[] binaryPayload = frame(HelloRequest.newBuilder().setName("Micronaut").build().toByteArray())
+
+        when:
+        HttpResponse<byte[]> response = httpClient.toBlocking().exchange(
+                HttpRequest.POST("/grpc-web/GreeterService/sayHello", text ? Base64.encoder.encode(binaryPayload) : binaryPayload)
+                        .header("content-type", mediaType)
+                        .header("accept", mediaType)
+                        .header("x-grpc-web", "1"),
+                byte[]
+        )
+
+        then:
+        response.status.code == 200
+        response.header("content-type").startsWith(mediaType.toLowerCase(Locale.ROOT))
+        response.header("grpc-status") == null
+
+        and:
+        def frames = readFrames(text ? Base64.decoder.decode(response.body()) : response.body())
+        HelloResponse.parseFrom(frames[0].payload).greeting == "TEST Hello, Micronaut"
+        new String(frames[1].payload, StandardCharsets.US_ASCII).contains("grpc-status:0")
+
+        where:
+        mediaType << [
+                "application/grpc-web",
+                "application/grpc-web+proto",
+                "application/grpc-web-text",
+                "application/grpc-web-text+proto",
+        ]
+    }
+
+    @Unroll
+    def "sends the status the service raised (#name)"() {
+        given:
+        byte[] requestPayload = frame(HelloRequest.newBuilder().setName(name).build().toByteArray())
+
+        when:
+        HttpResponse<byte[]> response = httpClient.toBlocking().exchange(
+                HttpRequest.POST("/grpc-web/GreeterService/sayHello", requestPayload)
+                        .header("content-type", CONTENT_TYPE)
+                        .header("accept", CONTENT_TYPE)
+                        .header("x-grpc-web", "1"),
+                byte[]
+        )
+
+        then:
+        response.status.code == 200
+        response.header("grpc-status") == null
+
+        and:
+        def frames = readFrames(response.body())
+        frames*.trailer == [true]
+        def trailers = new String(frames[0].payload, StandardCharsets.US_ASCII)
+        trailers.contains("grpc-status:${code}\r\n")
+        trailers.contains("grpc-message:${message}\r\n")
+
+        where:
+        name                 | code | message
+        "grpc-web-not-found" | 5    | "No greeting for you"
+        "grpc-web-denied"    | 7    | "Denied"
     }
 
     private static byte[] frame(byte[] message) {

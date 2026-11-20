@@ -1,5 +1,6 @@
 package io.micronaut.protobuf.grpc
 
+import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import io.micronaut.context.annotation.Requires
 import io.micronaut.grpc.annotation.GrpcRestJsonExposed
@@ -21,6 +22,13 @@ class GreeterService extends GreeterGrpc.GreeterImplBase {
     @Override
     void sayHello(HelloRequest request, StreamObserver<HelloResponse> responseObserver) {
         log.info("Request {} happening", request)
+        if (request.name == "grpc-web-not-found") {
+            responseObserver.onError(Status.NOT_FOUND.withDescription("No greeting for you").asRuntimeException())
+            return
+        }
+        if (request.name == "grpc-web-denied") {
+            throw Status.PERMISSION_DENIED.withDescription("Denied").asRuntimeException()
+        }
         HelloResponse reply = HelloResponse.newBuilder()
                 .setGreeting("TEST Hello, ${request.name}")
                 .build()
