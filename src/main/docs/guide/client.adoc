@@ -1,4 +1,4 @@
-Micronaut for gRPC does not create client beans automatically for you. Instead, you must expose which client stubs your application needs using a `@Factory`.
+By default, Micronaut for gRPC does not create client stub beans for you: you expose the stubs your application needs using a `@Factory`, as described below. Alternatively, add the `micronaut-grpc-client-processor` annotation processor and inject stubs directly (see <<injectingStubs, Injecting Client Stubs>>).
 
 You can dependency inject a `io.grpc.ManagedChannel` into the factory. Each injected `io.grpc.ManagedChannel` will automatically be shutdown when the application shuts down.
 
@@ -49,6 +49,32 @@ By default, each channel will automatically be dependency injected with beans of
 
 * `io.grpc.ClientInterceptor` - Any client interceptors declared as beans
 * `io.grpc.NameResolver` - The configured name resolver
+
+[[injectingStubs]]
+=== Injecting Client Stubs
+
+Add the client processor to the annotation processor path of the module that compiles your `.proto` files:
+
+dependency:micronaut-grpc-client-processor[groupId="io.micronaut.grpc", scope="annotationProcessor"]
+
+For every service class that `protoc-gen-grpc-java` generates, the processor generates a bean factory for its stubs. You can then inject the blocking, async and future stubs with `@GrpcChannel`, by field or constructor:
+
+[source,java]
+----
+@Singleton
+public class GreetingClient {
+
+    private final GreeterGrpc.GreeterBlockingStub greeter;
+
+    public GreetingClient(@GrpcChannel("greeter") GreeterGrpc.GreeterBlockingStub greeter) {
+        this.greeter = greeter;
+    }
+}
+----
+
+The channel is resolved and configured exactly as for an injected `ManagedChannel`, including `grpc.channels.[NAME]` configuration, interceptors and service discovery. All stubs of the same channel share one `ManagedChannel`. A stub of a disabled channel behaves like a disabled channel: a `@Nullable` or `Optional` injection point receives no stub.
+
+The generated factories are secondary beans, so a stub bean you define yourself in a `@Factory` takes precedence. Stubs of other code generators, such as the grpc-kotlin coroutine stubs, aren't generated and still need a factory.
 
 === Creating Client Stub Beans
 
