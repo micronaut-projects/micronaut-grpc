@@ -15,25 +15,27 @@
  */
 package io.micronaut.grpc.client.circuitbreaker;
 
+import io.grpc.Attributes;
 import io.grpc.CallOptions;
 import io.grpc.Channel;
 import io.grpc.ClientCall;
 import io.grpc.ClientInterceptor;
-import io.grpc.ForwardingClientCall;
+import io.grpc.Context;
 import io.grpc.ForwardingClientCallListener;
 import io.grpc.Metadata;
 import io.grpc.MethodDescriptor;
 import io.grpc.Status;
 import io.micronaut.core.annotation.Internal;
-import io.micronaut.core.annotation.Nullable;
 import io.micronaut.retry.CircuitBreakerOperations;
 import io.micronaut.retry.CircuitState;
 import io.micronaut.retry.exception.CircuitOpenException;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * A {@link ClientInterceptor} that guards every call of a channel with a Micronaut circuit breaker.
@@ -53,38 +55,69 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Internal
 public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
 
+    /**
+     * Completes outcomes of calls admitted before the circuit last opened. It is not a
+     * {@code StatusRuntimeException}, so Micronaut Retry ignores it and leaves the circuit state untouched.
+     */
+    private static final RuntimeException STALE_OUTCOME = new StaleOutcomeException();
+
     private final GrpcCircuitBreakerConfiguration configuration;
     private final CircuitBreakerOperations operations;
+    private final Executor fallbackExecutor;
+    /**
+     * Marks calls that this interceptor already guards, so that registering it twice on the same channel builder does
+     * not count a call twice or reject its own trial call.
+     */
+    private final CallOptions.Key<Boolean> guarded;
     private final AtomicInteger consecutiveFailures = new AtomicInteger();
     private final AtomicBoolean trialInFlight = new AtomicBoolean();
+    /**
+     * Incremented each time a failure is reported, that is each time the circuit opens.
+     */
+    private final AtomicLong openGeneration = new AtomicLong();
 
     /**
      * @param configuration The circuit breaker configuration
-     * @param operations The circuit breaker operations, configured with a single attempt
+     * @param operations The circuit breaker operations, configured without retries
+     * @param fallbackExecutor The executor for callbacks of rejected calls that don't specify their own executor
      */
-    GrpcCircuitBreakerInterceptor(GrpcCircuitBreakerConfiguration configuration, CircuitBreakerOperations operations) {
+    GrpcCircuitBreakerInterceptor(GrpcCircuitBreakerConfiguration configuration,
+                                  CircuitBreakerOperations operations,
+                                  Executor fallbackExecutor) {
         this.configuration = configuration;
         this.operations = operations;
+        this.fallbackExecutor = fallbackExecutor;
+        this.guarded = CallOptions.Key.create("micronaut-grpc-circuit-breaker-" + configuration.channelName());
     }
 
     /**
      * @return The current state of the circuit
      */
     public CircuitState currentState() {
-        return operations.currentState();
+        CircuitState state = operations.currentState();
+        if (state == CircuitState.OPEN) {
+            // CircuitBreakerRetry.currentState() returns the previous state on the call that moves the circuit from
+            // OPEN to HALF_OPEN, so read it again to see the state the circuit is now in.
+            state = operations.currentState();
+        }
+        return state;
     }
 
     @Override
     public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method,
                                                                CallOptions callOptions,
                                                                Channel next) {
-        return new CircuitBreakerCall<>(next.newCall(method, callOptions), callOptions.getExecutor());
+        if (Boolean.TRUE.equals(callOptions.getOption(guarded))) {
+            return next.newCall(method, callOptions);
+        }
+        return new CircuitBreakerCall<>(method, callOptions.withOption(guarded, Boolean.TRUE), next, Context.current());
     }
 
     /**
      * Records the outcome of a call.
      *
      * @param status The final status of the call
+     * @param trailers The trailers of the call
      * @param trial Whether the call was let through while the circuit was half-open
      * @return The failure to report to the circuit breaker, or {@code null} if the call does not open the circuit
      */
@@ -96,66 +129,74 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
         int failures = consecutiveFailures.incrementAndGet();
         if (trial || failures >= configuration.failureThreshold()) {
             consecutiveFailures.set(0);
+            openGeneration.incrementAndGet();
             return status.asRuntimeException(trailers);
         }
         return null;
     }
 
-    private final class CircuitBreakerCall<ReqT, RespT> extends ForwardingClientCall<ReqT, RespT> {
+    /**
+     * A call that is admitted by the circuit breaker when it starts. The downstream call is only created once the call
+     * is admitted, so rejected calls never reach the channel.
+     *
+     * @param <ReqT> The request type
+     * @param <RespT> The response type
+     */
+    private final class CircuitBreakerCall<ReqT, RespT> extends ClientCall<ReqT, RespT> {
 
-        private final ClientCall<ReqT, RespT> delegate;
-        @Nullable
-        private final Executor callExecutor;
+        private final MethodDescriptor<ReqT, RespT> method;
+        private final CallOptions callOptions;
+        private final Channel next;
+        private final Context context;
+        private volatile @Nullable ClientCall<ReqT, RespT> delegate;
         private volatile boolean rejected;
+        private volatile @Nullable Status cancelledBeforeStart;
 
-        CircuitBreakerCall(ClientCall<ReqT, RespT> delegate, @Nullable Executor callExecutor) {
-            this.delegate = delegate;
-            this.callExecutor = callExecutor;
-        }
-
-        @Override
-        protected ClientCall<ReqT, RespT> delegate() {
-            return delegate;
+        CircuitBreakerCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next, Context context) {
+            this.method = method;
+            this.callOptions = callOptions;
+            this.next = next;
+            this.context = context;
         }
 
         @Override
         public void start(Listener<RespT> responseListener, Metadata headers) {
-            boolean trial = operations.currentState() == CircuitState.HALF_OPEN;
+            Status cancelled = cancelledBeforeStart;
+            if (cancelled != null) {
+                rejected = true;
+                close(responseListener, cancelled);
+                return;
+            }
+            boolean trial = currentState() == CircuitState.HALF_OPEN;
             if (trial && !trialInFlight.compareAndSet(false, true)) {
                 // Only one trial call while half-open; the others fail fast until it completes.
                 reject(responseListener, null);
                 return;
             }
+            long generation = openGeneration.get();
+            CompletableFuture<Void> outcome = new CompletableFuture<>();
             try {
-                operations.executeCompletionStage(() -> {
-                    CompletableFuture<Void> outcome = new CompletableFuture<>();
-                    delegate.start(new ForwardingClientCallListener.SimpleForwardingClientCallListener<>(responseListener) {
-                        @Override
-                        public void onClose(Status status, Metadata trailers) {
-                            // Update the circuit before the caller sees the result, so that a call the caller starts
-                            // from its completion callback already observes the new state.
-                            try {
-                                Throwable failure = recordOutcome(status, trailers, trial);
-                                if (failure == null) {
-                                    outcome.complete(null);
-                                } else {
-                                    outcome.completeExceptionally(failure);
-                                }
-                            } finally {
-                                if (trial) {
-                                    trialInFlight.set(false);
-                                }
-                                super.onClose(status, trailers);
-                            }
-                        }
-                    }, headers);
-                    return outcome;
-                });
+                // The supplier only hands over the outcome. The call starts after Micronaut Retry has attached its
+                // completion handler, so even a call that closes inside start() updates the circuit first.
+                operations.executeCompletionStage(() -> outcome);
             } catch (CircuitOpenException e) {
                 if (trial) {
                     trialInFlight.set(false);
                 }
                 reject(responseListener, e);
+                return;
+            }
+            ClientCall<ReqT, RespT> call = newDownstreamCall();
+            delegate = call;
+            call.start(new OutcomeListener<>(responseListener, outcome, trial, generation), headers);
+        }
+
+        private ClientCall<ReqT, RespT> newDownstreamCall() {
+            Context previous = context.attach();
+            try {
+                return next.newCall(method, callOptions);
+            } finally {
+                context.detach(previous);
             }
         }
 
@@ -164,52 +205,130 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
             Status status = Status.UNAVAILABLE
                 .withDescription("Circuit breaker for gRPC channel [" + configuration.channelName() + "] is open")
                 .withCause(cause);
-            Runnable close = () -> responseListener.onClose(status, new Metadata());
-            if (callExecutor != null) {
-                callExecutor.execute(close);
-            } else {
-                close.run();
-            }
+            close(responseListener, status);
+        }
+
+        private void close(Listener<RespT> responseListener, Status status) {
+            Executor executor = callOptions.getExecutor();
+            (executor != null ? executor : fallbackExecutor).execute(() -> responseListener.onClose(status, new Metadata()));
         }
 
         @Override
         public void request(int numMessages) {
-            if (!rejected) {
-                super.request(numMessages);
+            ClientCall<ReqT, RespT> call = delegate;
+            if (call != null) {
+                call.request(numMessages);
+            } else if (!rejected) {
+                throw new IllegalStateException("Not started");
             }
         }
 
         @Override
         public void cancel(@Nullable String message, @Nullable Throwable cause) {
-            if (!rejected) {
-                super.cancel(message, cause);
+            ClientCall<ReqT, RespT> call = delegate;
+            if (call != null) {
+                call.cancel(message, cause);
+            } else if (!rejected) {
+                Status status = Status.CANCELLED;
+                if (message != null) {
+                    status = status.withDescription(message);
+                }
+                if (cause != null) {
+                    status = status.withCause(cause);
+                }
+                cancelledBeforeStart = status;
             }
         }
 
         @Override
         public void halfClose() {
-            if (!rejected) {
-                super.halfClose();
+            ClientCall<ReqT, RespT> call = delegate;
+            if (call != null) {
+                call.halfClose();
+            } else if (!rejected) {
+                throw new IllegalStateException("Not started");
             }
         }
 
         @Override
         public void sendMessage(ReqT message) {
-            if (!rejected) {
-                super.sendMessage(message);
+            ClientCall<ReqT, RespT> call = delegate;
+            if (call != null) {
+                call.sendMessage(message);
+            } else if (!rejected) {
+                throw new IllegalStateException("Not started");
             }
         }
 
         @Override
         public void setMessageCompression(boolean enabled) {
-            if (!rejected) {
-                super.setMessageCompression(enabled);
+            ClientCall<ReqT, RespT> call = delegate;
+            if (call != null) {
+                call.setMessageCompression(enabled);
             }
         }
 
         @Override
         public boolean isReady() {
-            return !rejected && super.isReady();
+            ClientCall<ReqT, RespT> call = delegate;
+            return call != null && call.isReady();
+        }
+
+        @Override
+        public Attributes getAttributes() {
+            ClientCall<ReqT, RespT> call = delegate;
+            return call != null ? call.getAttributes() : Attributes.EMPTY;
+        }
+    }
+
+    /**
+     * Reports the outcome of an admitted call to the circuit breaker before notifying the caller.
+     *
+     * @param <RespT> The response type
+     */
+    private final class OutcomeListener<RespT> extends ForwardingClientCallListener.SimpleForwardingClientCallListener<RespT> {
+
+        private final CompletableFuture<Void> outcome;
+        private final boolean trial;
+        private final long generation;
+
+        OutcomeListener(ClientCall.Listener<RespT> delegate, CompletableFuture<Void> outcome, boolean trial, long generation) {
+            super(delegate);
+            this.outcome = outcome;
+            this.trial = trial;
+            this.generation = generation;
+        }
+
+        @Override
+        public void onClose(Status status, Metadata trailers) {
+            try {
+                if (!trial && generation != openGeneration.get()) {
+                    // Admitted before the circuit last opened: the result says nothing about the server now, and must
+                    // not decide a trial that is in flight.
+                    outcome.completeExceptionally(STALE_OUTCOME);
+                } else {
+                    Throwable failure = recordOutcome(status, trailers, trial);
+                    if (failure == null) {
+                        outcome.complete(null);
+                    } else {
+                        outcome.completeExceptionally(failure);
+                    }
+                }
+            } finally {
+                if (trial) {
+                    trialInFlight.set(false);
+                }
+                super.onClose(status, trailers);
+            }
+        }
+    }
+
+    /**
+     * Marks the outcome of a call admitted before the circuit last opened.
+     */
+    private static final class StaleOutcomeException extends RuntimeException {
+        StaleOutcomeException() {
+            super("Outcome of a call admitted before the circuit last opened", null, false, false);
         }
     }
 }

@@ -255,6 +255,129 @@ class GrpcCircuitBreakerSpec extends Specification {
         server?.close()
     }
 
+    void "the call that crosses the reset timeout is the trial, without anyone reading the state first"() {
+        given:
+        int port = SocketUtils.findAvailableTcpPort()
+        EmbeddedServer server = ApplicationContext.run(EmbeddedServer, config(port, 1, '300ms'))
+        def context = server.applicationContext
+        FailingInterceptor failing = context.getBean(FailingInterceptor)
+        Client client = context.getBean(Client)
+        GrpcCircuitBreakerRegistry registry = context.getBean(GrpcCircuitBreakerRegistry)
+        failing.status = Status.UNAVAILABLE
+        callIgnoringErrors(client.stub)
+        failing.status = null
+        failing.hits.set(0)
+        CountDownLatch release = new CountDownLatch(1)
+        failing.hold = release
+        Thread.sleep(600) // past the reset timeout; nothing reads the circuit state meanwhile
+
+        when: 'the first call after the timeout is in flight'
+        CompletableFuture<String> trial = CompletableFuture.supplyAsync { client.stub.sayHello(request()).message }
+        new PollingConditions(timeout: 5).eventually {
+            assert failing.hits.get() == 1
+        }
+
+        and: 'another call is made'
+        client.stub.sayHello(request())
+
+        then: 'the first call was the trial, so the second fails fast'
+        StatusRuntimeException e = thrown()
+        e.status.description.contains('is open')
+        failing.hits.get() == 1
+
+        when:
+        release.countDown()
+
+        then:
+        trial.get(10, TimeUnit.SECONDS) == 'Hello Fred'
+        registry.currentState('breaker').get() == CircuitState.CLOSED
+
+        cleanup:
+        release?.countDown()
+        server?.close()
+    }
+
+    void "a call admitted before the circuit opened does not decide the trial"() {
+        given:
+        int port = SocketUtils.findAvailableTcpPort()
+        EmbeddedServer server = ApplicationContext.run(EmbeddedServer, config(port, 1, '300ms'))
+        def context = server.applicationContext
+        FailingInterceptor failing = context.getBean(FailingInterceptor)
+        Client client = context.getBean(Client)
+        GrpcCircuitBreakerRegistry registry = context.getBean(GrpcCircuitBreakerRegistry)
+        CountDownLatch slowRelease = new CountDownLatch(1)
+        CountDownLatch trialRelease = new CountDownLatch(1)
+
+        and: 'a slow call is admitted while the circuit is closed'
+        failing.hold = slowRelease
+        CompletableFuture<String> slow = CompletableFuture.supplyAsync { client.stub.sayHello(request()).message }
+        new PollingConditions(timeout: 5).eventually {
+            assert failing.hits.get() == 1
+        }
+
+        and: 'the circuit opens, and later a trial call is in flight'
+        failing.status = Status.UNAVAILABLE
+        callIgnoringErrors(client.stub)
+        failing.status = null
+        failing.hold = trialRelease
+        Thread.sleep(600)
+        CompletableFuture<String> trial = CompletableFuture.supplyAsync { client.stub.sayHello(request()).message }
+        new PollingConditions(timeout: 5).eventually {
+            assert failing.hits.get() == 3
+        }
+
+        when: 'the slow call succeeds while the trial is in flight'
+        slowRelease.countDown()
+        slow.get(10, TimeUnit.SECONDS)
+
+        and:
+        client.stub.sayHello(request())
+
+        then: 'the circuit is still half-open, so new calls fail fast'
+        StatusRuntimeException e = thrown()
+        e.status.description.contains('is open')
+        failing.hits.get() == 3
+
+        when: 'the trial succeeds'
+        trialRelease.countDown()
+
+        then:
+        trial.get(10, TimeUnit.SECONDS) == 'Hello Fred'
+        registry.currentState('breaker').get() == CircuitState.CLOSED
+
+        cleanup:
+        slowRelease?.countDown()
+        trialRelease?.countDown()
+        server?.close()
+    }
+
+    void "channels built twice from the same configuration count each call once"() {
+        given:
+        int port = SocketUtils.findAvailableTcpPort()
+        EmbeddedServer server = ApplicationContext.run(EmbeddedServer, config(port, 2, '20s'))
+        def context = server.applicationContext
+        FailingInterceptor failing = context.getBean(FailingInterceptor)
+        context.getBean(Client)
+        SecondClient second = context.getBean(SecondClient)
+        GrpcCircuitBreakerRegistry registry = context.getBean(GrpcCircuitBreakerRegistry)
+        failing.status = Status.UNAVAILABLE
+
+        when: 'one call fails on the channel built second'
+        callIgnoringErrors(second.stub)
+
+        then: 'it counts once, below the threshold of two'
+        registry.currentState('breaker').get() == CircuitState.CLOSED
+
+        when:
+        callIgnoringErrors(second.stub)
+
+        then:
+        registry.currentState('breaker').get() == CircuitState.OPEN
+
+        cleanup:
+        server?.close()
+    }
+
     private static Map<String, Object> config(int port, int threshold, String resetTimeout) {
         [
                 'spec.name'                                             : 'GrpcCircuitBreakerSpec',
@@ -290,6 +413,19 @@ class GrpcCircuitBreakerSpec extends Specification {
         }
     }
 
+    /**
+     * A second injection point for the same channel, so that its channel is built again from the same configuration.
+     */
+    @Singleton
+    @Requires(property = 'spec.name', value = 'GrpcCircuitBreakerSpec')
+    static class SecondClient {
+        final GreeterGrpc.GreeterBlockingStub stub
+
+        SecondClient(@GrpcChannel('breaker') Channel otherChannel) {
+            this.stub = GreeterGrpc.newBlockingStub(otherChannel)
+        }
+    }
+
     @Singleton
     @Requires(property = 'spec.name', value = 'GrpcCircuitBreakerSpec')
     static class FailingInterceptor implements ServerInterceptor {
@@ -300,7 +436,13 @@ class GrpcCircuitBreakerSpec extends Specification {
         @Override
         <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
             hits.incrementAndGet()
-            hold?.await(10, TimeUnit.SECONDS)
+            CountDownLatch latch
+            synchronized (this) {
+                // each latch holds back only the next call that reaches the server
+                latch = hold
+                hold = null
+            }
+            latch?.await(10, TimeUnit.SECONDS)
             Status current = status
             if (current != null) {
                 call.close(current, new Metadata())

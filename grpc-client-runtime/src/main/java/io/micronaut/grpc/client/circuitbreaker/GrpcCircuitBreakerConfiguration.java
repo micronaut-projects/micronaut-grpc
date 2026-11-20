@@ -17,7 +17,6 @@ package io.micronaut.grpc.client.circuitbreaker;
 
 import io.grpc.Status;
 import io.micronaut.context.env.Environment;
-import io.micronaut.core.annotation.NonNull;
 import io.micronaut.core.type.Argument;
 import io.micronaut.grpc.channels.GrpcManagedChannelConfiguration;
 
@@ -37,11 +36,11 @@ import java.util.Set;
  * @param failureStatusCodes The status codes that count as failures
  * @since 5.3.0
  */
-public record GrpcCircuitBreakerConfiguration(@NonNull String channelName,
+public record GrpcCircuitBreakerConfiguration(String channelName,
                                               boolean enabled,
                                               int failureThreshold,
-                                              @NonNull Duration resetTimeout,
-                                              @NonNull Set<Status.Code> failureStatusCodes) {
+                                              Duration resetTimeout,
+                                              Set<Status.Code> failureStatusCodes) {
 
     /**
      * The property suffix under a channel's prefix.
@@ -84,7 +83,7 @@ public record GrpcCircuitBreakerConfiguration(@NonNull String channelName,
      * @param channelName The channel name
      * @return The configuration
      */
-    public static @NonNull GrpcCircuitBreakerConfiguration of(@NonNull Environment environment, @NonNull String channelName) {
+    public static GrpcCircuitBreakerConfiguration of(Environment environment, String channelName) {
         String prefix = GrpcManagedChannelConfiguration.PREFIX + '.' + channelName + '.' + PREFIX + '.';
         boolean enabled = environment.getProperty(prefix + "enabled", Boolean.class, false);
         int threshold = environment.getProperty(prefix + "failure-threshold", Integer.class, DEFAULT_FAILURE_THRESHOLD);

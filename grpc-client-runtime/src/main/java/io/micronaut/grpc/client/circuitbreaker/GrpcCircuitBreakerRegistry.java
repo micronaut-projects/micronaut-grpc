@@ -19,16 +19,18 @@ import io.grpc.ClientInterceptor;
 import io.grpc.StatusRuntimeException;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.context.env.Environment;
-import io.micronaut.core.annotation.NonNull;
 import io.micronaut.retry.CircuitBreakerOperationsFactory;
 import io.micronaut.retry.CircuitBreakerPolicy;
 import io.micronaut.retry.CircuitState;
+import io.micronaut.scheduling.TaskExecutors;
+import jakarta.inject.Named;
 import jakarta.inject.Singleton;
 
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Holds one circuit breaker per gRPC channel that enables {@code grpc.channels.<name>.circuit-breaker.enabled}.
@@ -44,15 +46,20 @@ public class GrpcCircuitBreakerRegistry {
 
     private final Environment environment;
     private final CircuitBreakerOperationsFactory operationsFactory;
+    private final ExecutorService ioExecutor;
     private final Map<String, Optional<GrpcCircuitBreakerInterceptor>> interceptors = new ConcurrentHashMap<>();
 
     /**
      * @param environment The environment
      * @param operationsFactory The factory for circuit breaker operations
+     * @param ioExecutor The executor that runs the callbacks of rejected calls that don't specify their own executor
      */
-    public GrpcCircuitBreakerRegistry(Environment environment, CircuitBreakerOperationsFactory operationsFactory) {
+    public GrpcCircuitBreakerRegistry(Environment environment,
+                                      CircuitBreakerOperationsFactory operationsFactory,
+                                      @Named(TaskExecutors.IO) ExecutorService ioExecutor) {
         this.environment = environment;
         this.operationsFactory = operationsFactory;
+        this.ioExecutor = ioExecutor;
     }
 
     /**
@@ -61,7 +68,7 @@ public class GrpcCircuitBreakerRegistry {
      * @param channelName The channel name
      * @return The interceptor
      */
-    public @NonNull Optional<ClientInterceptor> findInterceptor(@NonNull String channelName) {
+    public Optional<ClientInterceptor> findInterceptor(String channelName) {
         return find(channelName).map(ClientInterceptor.class::cast);
     }
 
@@ -71,7 +78,7 @@ public class GrpcCircuitBreakerRegistry {
      * @param channelName The channel name
      * @return The state, or empty if the channel has no circuit breaker
      */
-    public @NonNull Optional<CircuitState> currentState(@NonNull String channelName) {
+    public Optional<CircuitState> currentState(String channelName) {
         return find(channelName).map(GrpcCircuitBreakerInterceptor::currentState);
     }
 
@@ -91,7 +98,7 @@ public class GrpcCircuitBreakerRegistry {
                 .capturedException(StatusRuntimeException.class)
                 .throwWrappedException(true)
                 .build();
-            return Optional.of(new GrpcCircuitBreakerInterceptor(configuration, operationsFactory.createCircuitBreakerOperations(policy)));
+            return Optional.of(new GrpcCircuitBreakerInterceptor(configuration, operationsFactory.createCircuitBreakerOperations(policy), ioExecutor));
         });
     }
 }
