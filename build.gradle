@@ -26,3 +26,38 @@ if (System.getenv("SONAR_TOKEN") != null) {
         }
     }
 }
+
+tasks.register("generateGuideVersionAttributes") {
+    // Capture file locations at configuration time so the action stays configuration-cache safe.
+    def versionCatalogFile = layout.projectDirectory.file("gradle/libs.versions.toml")
+    def guideVersionAttributes = layout.buildDirectory.file("generated/docs/guide-version-attributes.adoc")
+    inputs.file(versionCatalogFile)
+        .withPropertyName("versionCatalog")
+        .withPathSensitivity(PathSensitivity.NONE)
+    outputs.file(guideVersionAttributes)
+        .withPropertyName("guideVersionAttributes")
+    doLast {
+        def versionCatalog = versionCatalogFile.asFile.text
+        def findVersion = { String key ->
+            def matcher = versionCatalog =~ /(?m)^${java.util.regex.Pattern.quote(key)}\s*=\s*['"]([^'"]+)['"]\s*$/
+            if (!matcher.find()) {
+                throw new GradleException("Unable to find version '${key}' in gradle/libs.versions.toml")
+            }
+            matcher.group(1)
+        }
+        def attrs = [
+            "grpc-version"                   : findVersion("managed-grpc"),
+            "grpc-kotlin-version"            : findVersion("managed-grpc-kotlin"),
+            "protobuf-version"               : findVersion("managed-protobuf"),
+            "protobuf-gradle-plugin-version" : findVersion("managed-protobuf-gradle"),
+            "javax-annotation-api-version"   : findVersion("javax-annotation-api"),
+        ]
+        def output = guideVersionAttributes.get().asFile
+        output.parentFile.mkdirs()
+        output.text = attrs.collect { key, value -> ":${key}: ${value}" }.join(System.lineSeparator()) + System.lineSeparator()
+    }
+}
+
+tasks.matching { it.name in ["publishGuide", "docs"] }.configureEach {
+    dependsOn(tasks.named("generateGuideVersionAttributes"))
+}

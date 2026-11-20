@@ -1,4 +1,4 @@
-Micronaut for gRPC does not create client beans automatically for you. Instead, you must expose which client stubs your application needs using a `@Factory`.
+By default, Micronaut for gRPC does not create client stub beans for you: you expose the stubs your application needs using a `@Factory`, as described below. Alternatively, add the `micronaut-grpc-client-processor` annotation processor and inject stubs directly (see <<injectingStubs, Injecting Client Stubs>>).
 
 You can dependency inject a `io.grpc.ManagedChannel` into the factory. Each injected `io.grpc.ManagedChannel` will automatically be shutdown when the application shuts down.
 
@@ -39,9 +39,56 @@ grpc:
 
 When a client is disabled, optional or nullable `@GrpcChannel` injection points resolve to an empty value, while required injection points fail with a dependency injection error.
 
+For gRPC service-config based retry and resiliency features, you can configure `default-service-config` as a nested map. The map is bound using Micronaut's nested/raw map binding so gRPC service config keys such as `methodConfig`, `retryPolicy`, and `hedgingPolicy` are preserved as-is.
+
+[configuration]
+----
+grpc:
+    client:
+        plaintext: true
+        enable-retry: true
+        max-retry-attempts: 4
+        default-service-config:
+            methodConfig:
+                -
+                    name:
+                        -
+                            service: helloworld.Greeter
+                    retryPolicy:
+                        maxAttempts: 4
+                        initialBackoff: 0.1s
+                        maxBackoff: 1s
+                        backoffMultiplier: 2
+                        retryableStatusCodes:
+                            - UNAVAILABLE
+----
+
+The same structure can be defined per channel under `grpc.channels.<name>.default-service-config`.
+
 Alternatively if you prefer programmatic configuration you can write a `BeanCreatedEventListener` for example:
 
 snippet::helloworld.ManagedChannelBuilderListener[tags="imports,clazz", source="main", title="Configuring the NettyChannelBuilder"]
+
+==== TLS and Mutual TLS
+
+A channel can verify the server against your own CA certificates and present a client certificate to servers that require one:
+
+.Configuring TLS for a channel
+[configuration]
+----
+grpc:
+    channels:
+        greeter:
+            address: 'greeter.internal:50051'
+            ssl:
+                trust-certificates: 'classpath:ca.crt' # <1>
+                cert-chain: 'classpath:client.crt' # <2>
+                private-key: 'classpath:client.key'
+----
+<1> PEM-encoded CA certificates that verify the server. Without it, the JVM's default trust store is used.
+<2> The client certificate and its PKCS#8 private key, for mutual TLS. Configure both or neither.
+
+Properties under `grpc.client.ssl` are defaults for channels that have no `ssl` settings of their own. Locations accept the `classpath:` and `file:` prefixes. Don't combine these settings with `plaintext: true`.
 
 ==== Client Executors
 
@@ -72,6 +119,32 @@ gRPC runs a call's response callbacks, such as `StreamObserver.onNext` of an asy
 
 To turn this off, set `grpc.client.context-propagation.enabled` to `false`.
 
+[[injectingStubs]]
+=== Injecting Client Stubs
+
+Add the client processor to the annotation processor path of the module that compiles your `.proto` files:
+
+dependency:micronaut-grpc-client-processor[groupId="io.micronaut.grpc", scope="annotationProcessor"]
+
+For every service class that `protoc-gen-grpc-java` generates, the processor generates a bean factory for its stubs. You can then inject the blocking, async and future stubs with `@GrpcChannel`, by field or constructor:
+
+[source,java]
+----
+@Singleton
+public class GreetingClient {
+
+    private final GreeterGrpc.GreeterBlockingStub greeter;
+
+    public GreetingClient(@GrpcChannel("greeter") GreeterGrpc.GreeterBlockingStub greeter) {
+        this.greeter = greeter;
+    }
+}
+----
+
+The channel is resolved and configured exactly as for an injected `ManagedChannel`, including `grpc.channels.[NAME]` configuration, interceptors and service discovery. All stubs of the same channel share one `ManagedChannel`. A stub of a disabled channel behaves like a disabled channel: a `@Nullable` or `Optional` injection point receives no stub.
+
+The generated factories are secondary beans, so a stub bean you define yourself in a `@Factory` takes precedence. Stubs of other code generators, such as the grpc-kotlin coroutine stubs, aren't generated and still need a factory.
+
 === Creating Client Stub Beans
 
 The value of the `@GrpcChannel` annotation can be used to specify the target server, the configuration for which can also be externalized:
@@ -89,7 +162,21 @@ grpc:
         greeter:
             address: '${my.server}:${my.port}'
             plaintext: true
-            max-retry-attempts: 10
+            enable-retry: true
+            max-retry-attempts: 4
+            default-service-config:
+                methodConfig:
+                    -
+                        name:
+                            -
+                                service: helloworld.Greeter
+                        retryPolicy:
+                            maxAttempts: 4
+                            initialBackoff: 0.1s
+                            maxBackoff: 1s
+                            backoffMultiplier: 2
+                            retryableStatusCodes:
+                                - UNAVAILABLE
 ----
 
 You can then define the `@GrpcChannel` annotation as follows:

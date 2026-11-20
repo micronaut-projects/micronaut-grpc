@@ -26,6 +26,9 @@ import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.annotation.Prototype;
+import io.micronaut.core.io.ResourceResolver;
+import io.micronaut.core.io.file.FileSystemResourceLoader;
+import io.micronaut.core.io.scan.ClassPathResourceLoader;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.grpc.client.circuitbreaker.GrpcCircuitBreakerRegistry;
 import io.micronaut.inject.qualifiers.Qualifiers;
@@ -81,6 +84,12 @@ public class GrpcChannelBuilderFactory {
         );
         final NettyChannelBuilder channelBuilder = config.getChannelBuilder();
         GrpcChannelExecutors.resolve(beanContext, config.getName()).ifPresent(channelBuilder::executor);
+        GrpcChannelSslSupport.apply(
+            channelBuilder,
+            config instanceof GrpcNamedManagedChannelConfiguration ? config.getName() : null,
+            beanContext.getEnvironment(),
+            this::resourceResolver
+        );
         // Added first so that it runs last: user interceptors (tracing, metrics) also see calls rejected by an open circuit.
         beanContext.findBean(GrpcCircuitBreakerRegistry.class)
             .flatMap(registry -> registry.findInterceptor(target))
@@ -90,5 +99,18 @@ public class GrpcChannelBuilderFactory {
             channelBuilder.intercept(interceptors);
         }
         return channelBuilder;
+    }
+
+    /**
+     * The resolver for certificate locations. The HTTP or gRPC server modules provide one, but an application that only
+     * uses the client does not have a resolver bean.
+     *
+     * @return The resource resolver
+     */
+    private ResourceResolver resourceResolver() {
+        return beanContext.findBean(ResourceResolver.class).orElseGet(() -> new ResourceResolver(List.of(
+            ClassPathResourceLoader.defaultLoader(beanContext.getClassLoader()),
+            FileSystemResourceLoader.defaultLoader()
+        )));
     }
 }
