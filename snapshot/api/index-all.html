@@ -196,10 +196,18 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:E">E</h2>
 <dl class="index">
+<dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html#ENABLED" class="member-name-link">ENABLED</a> - Static variable in class io.micronaut.grpc.client.propagation.<a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor</a></dt>
+<dd>
+<div class="block">The property that enables client context propagation.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#ENABLED" class="member-name-link">ENABLED</a> - Static variable in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#ENABLED" class="member-name-link">ENABLED</a> - Static variable in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/server/propagation/GrpcServerContextPropagationInterceptor.html#ENABLED" class="member-name-link">ENABLED</a> - Static variable in class io.micronaut.grpc.server.propagation.<a href="io/micronaut/grpc/server/propagation/GrpcServerContextPropagationInterceptor.html" title="class in io.micronaut.grpc.server.propagation">GrpcServerContextPropagationInterceptor</a></dt>
+<dd>
+<div class="block">The property that enables server context propagation.</div>
+</dd>
 <dt><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#encode(T)" class="member-name-link">encode(T)</a> - Method in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#encode(T,io.micronaut.core.io.buffer.ByteBufferFactory)" class="member-name-link">encode(T, ByteBufferFactory)</a> - Method in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
@@ -458,9 +466,19 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block"><code>string name = 1;</code></div>
 </dd>
+<dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html#getOrder()" class="member-name-link">getOrder()</a> - Method in class io.micronaut.grpc.client.propagation.<a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor</a></dt>
+<dd>
+<div class="block">Runs first, so that the context is captured on the thread that starts the call.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.Restoring.html#getOrder()" class="member-name-link">getOrder()</a> - Method in class io.micronaut.grpc.client.propagation.<a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.Restoring.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor.Restoring</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/interceptor/OrderedServerInterceptor.html#getOrder()" class="member-name-link">getOrder()</a> - Method in class io.micronaut.grpc.server.interceptor.<a href="io/micronaut/grpc/server/interceptor/OrderedServerInterceptor.html" title="class in io.micronaut.grpc.server.interceptor">OrderedServerInterceptor</a></dt>
 <dd>
 <div class="block">Get the order in which this interceptor should execute in the interceptor chain.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/server/propagation/GrpcServerContextPropagationInterceptor.html#getOrder()" class="member-name-link">getOrder()</a> - Method in class io.micronaut.grpc.server.propagation.<a href="io/micronaut/grpc/server/propagation/GrpcServerContextPropagationInterceptor.html" title="class in io.micronaut.grpc.server.propagation">GrpcServerContextPropagationInterceptor</a></dt>
+<dd>
+<div class="block">Runs last, so that the context set by every other interceptor is captured.</div>
 </dd>
 <dt><a href="helloworld/HelloReply.html#getParserForType()" class="member-name-link">getParserForType()</a> - Method in class helloworld.<a href="helloworld/HelloReply.html" title="class in helloworld">HelloReply</a></dt>
 <dd>&nbsp;</dd>
@@ -608,6 +626,17 @@ The greeting service definition.</div>
 <dd>
 <div class="block">Default constructor.</div>
 </dd>
+<dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html" class="type-name-link" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor</a> - Class in <a href="io/micronaut/grpc/client/propagation/package-summary.html">io.micronaut.grpc.client.propagation</a></dt>
+<dd>
+<div class="block">Makes the Micronaut <code>PropagatedContext</code> of the thread that starts a client call current again in the call's
+response callbacks (<code>onHeaders</code>, <code>onMessage</code>, <code>onClose</code> and <code>onReady</code>).</div>
+</dd>
+<dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html#%3Cinit%3E()" class="member-name-link">GrpcClientContextPropagationInterceptor()</a> - Constructor for class io.micronaut.grpc.client.propagation.<a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.Restoring.html" class="type-name-link" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor.Restoring</a> - Class in <a href="io/micronaut/grpc/client/propagation/package-summary.html">io.micronaut.grpc.client.propagation</a></dt>
+<dd>
+<div class="block">Restores the captured context around the response callbacks coming from the transport.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.client.tracing">GrpcClientTracingInterceptorConfiguration</a> - Class in <a href="io/micronaut/grpc/client/tracing/package-summary.html">io.micronaut.grpc.client.tracing</a></dt>
 <dd>
 <div class="block">Adds a <code>TracingClientInterceptor</code> when OpenTracing for GRPC is on the classpath
@@ -728,6 +757,17 @@ to perform service discovery.</div>
 <dd>
 <div class="block">Creates a proxy service using the configured streaming response limits.</div>
 </dd>
+<dt><a href="io/micronaut/grpc/server/reflection/GrpcReflectionFactory.html" class="type-name-link" title="class in io.micronaut.grpc.server.reflection">GrpcReflectionFactory</a> - Class in <a href="io/micronaut/grpc/server/reflection/package-summary.html">io.micronaut.grpc.server.reflection</a></dt>
+<dd>
+<div class="block">Registers the gRPC server reflection service (<code>grpc.reflection.v1.ServerReflection</code>) so that
+tools such as <code>grpcurl</code>, Postman or <code>grpcui</code> can discover the services exposed by the server.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/server/reflection/GrpcReflectionFactory.html#%3Cinit%3E()" class="member-name-link">GrpcReflectionFactory()</a> - Constructor for class io.micronaut.grpc.server.reflection.<a href="io/micronaut/grpc/server/reflection/GrpcReflectionFactory.html" title="class in io.micronaut.grpc.server.reflection">GrpcReflectionFactory</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/server/reflection/GrpcReflectionFactory.html#grpcReflectionService()" class="member-name-link">grpcReflectionService()</a> - Method in class io.micronaut.grpc.server.reflection.<a href="io/micronaut/grpc/server/reflection/GrpcReflectionFactory.html" title="class in io.micronaut.grpc.server.reflection">GrpcReflectionFactory</a></dt>
+<dd>
+<div class="block">Creates the reflection service.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcResourceLoaderFactory.html" class="type-name-link" title="class in io.micronaut.grpc.server">GrpcResourceLoaderFactory</a> - Class in <a href="io/micronaut/grpc/server/package-summary.html">io.micronaut.grpc.server</a></dt>
 <dd>
 <div class="block">Provides core resource loading support when the HTTP module is not present.</div>
@@ -764,6 +804,13 @@ to perform service discovery.</div>
 <dd>
 <div class="block">Default constructor.</div>
 </dd>
+<dt><a href="io/micronaut/grpc/server/propagation/GrpcServerContextPropagationInterceptor.html" class="type-name-link" title="class in io.micronaut.grpc.server.propagation">GrpcServerContextPropagationInterceptor</a> - Class in <a href="io/micronaut/grpc/server/propagation/package-summary.html">io.micronaut.grpc.server.propagation</a></dt>
+<dd>
+<div class="block">Carries the Micronaut <code>PropagatedContext</code> that outer server interceptors make current when they start a call
+into every later event of that call, so that the service method sees it.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/server/propagation/GrpcServerContextPropagationInterceptor.html#%3Cinit%3E()" class="member-name-link">GrpcServerContextPropagationInterceptor()</a> - Constructor for class io.micronaut.grpc.server.propagation.<a href="io/micronaut/grpc/server/propagation/GrpcServerContextPropagationInterceptor.html" title="class in io.micronaut.grpc.server.propagation">GrpcServerContextPropagationInterceptor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/health/GrpcServerHealthIndicator.html" class="type-name-link" title="class in io.micronaut.grpc.server.health">GrpcServerHealthIndicator</a> - Class in <a href="io/micronaut/grpc/server/health/package-summary.html">io.micronaut.grpc.server.health</a></dt>
 <dd>
 <div class="block">A <code>HealthIndicator</code> for Grpc server.</div>
@@ -918,6 +965,12 @@ The request message containing the user's name.</div>
 </dd>
 <dt><a href="io/micronaut/grpc/server/InProcessGrpcServerChannel.html#%3Cinit%3E()" class="member-name-link">InProcessGrpcServerChannel()</a> - Constructor for class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/InProcessGrpcServerChannel.html" title="class in io.micronaut.grpc.server">InProcessGrpcServerChannel</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html#interceptCall(io.grpc.MethodDescriptor,io.grpc.CallOptions,io.grpc.Channel)" class="member-name-link">interceptCall(MethodDescriptor, CallOptions, Channel)</a> - Method in class io.micronaut.grpc.client.propagation.<a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.Restoring.html#interceptCall(io.grpc.MethodDescriptor,io.grpc.CallOptions,io.grpc.Channel)" class="member-name-link">interceptCall(MethodDescriptor, CallOptions, Channel)</a> - Method in class io.micronaut.grpc.client.propagation.<a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.Restoring.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor.Restoring</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/server/propagation/GrpcServerContextPropagationInterceptor.html#interceptCall(io.grpc.ServerCall,io.grpc.Metadata,io.grpc.ServerCallHandler)" class="member-name-link">interceptCall(ServerCall, Metadata, ServerCallHandler)</a> - Method in class io.micronaut.grpc.server.propagation.<a href="io/micronaut/grpc/server/propagation/GrpcServerContextPropagationInterceptor.html" title="class in io.micronaut.grpc.server.propagation">GrpcServerContextPropagationInterceptor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/interceptor/OrderedServerInterceptor.html#interceptCall(io.grpc.ServerCall,io.grpc.Metadata,io.grpc.ServerCallHandler)" class="member-name-link">interceptCall(ServerCall, Metadata, ServerCallHandler)</a> - Method in class io.micronaut.grpc.server.interceptor.<a href="io/micronaut/grpc/server/interceptor/OrderedServerInterceptor.html" title="class in io.micronaut.grpc.server.interceptor">OrderedServerInterceptor</a></dt>
 <dd>
 <div class="block">Delegates interceptor logic to <code>OrderedServerInterceptor.delegate</code> interceptor.</div>
@@ -950,6 +1003,10 @@ The request message containing the user's name.</div>
 <dd>
 <div class="block">Classes related to GRPC channels and clients.</div>
 </dd>
+<dt><a href="io/micronaut/grpc/client/propagation/package-summary.html">io.micronaut.grpc.client.propagation</a> - package io.micronaut.grpc.client.propagation</dt>
+<dd>
+<div class="block">Micronaut context propagation for gRPC client calls.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/client/tracing/package-summary.html">io.micronaut.grpc.client.tracing</a> - package io.micronaut.grpc.client.tracing</dt>
 <dd>
 <div class="block">Classes related to distributed tracing.</div>
@@ -968,6 +1025,14 @@ The request message containing the user's name.</div>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/interceptor/package-summary.html">io.micronaut.grpc.server.interceptor</a> - package io.micronaut.grpc.server.interceptor</dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/server/propagation/package-summary.html">io.micronaut.grpc.server.propagation</a> - package io.micronaut.grpc.server.propagation</dt>
+<dd>
+<div class="block">Micronaut context propagation for gRPC server calls.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/server/reflection/package-summary.html">io.micronaut.grpc.server.reflection</a> - package io.micronaut.grpc.server.reflection</dt>
+<dd>
+<div class="block">gRPC server reflection support.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/tracing/package-summary.html">io.micronaut.grpc.server.tracing</a> - package io.micronaut.grpc.server.tracing</dt>
 <dd>
 <div class="block">Classes related to distributed tracing.</div>
@@ -1495,6 +1560,14 @@ same service name in this test application.</div>
 </dd>
 <dt><a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html#read(io.micronaut.core.type.Argument,io.micronaut.http.MediaType,io.micronaut.core.type.Headers,java.io.InputStream)" class="member-name-link">read(Argument, MediaType, Headers, InputStream)</a> - Method in class io.micronaut.protobuf.handler.<a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html" title="class in io.micronaut.protobuf.handler">ProtobufBodyHandler</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/server/reflection/GrpcReflectionFactory.html#REFLECTION_ENABLED" class="member-name-link">REFLECTION_ENABLED</a> - Static variable in class io.micronaut.grpc.server.reflection.<a href="io/micronaut/grpc/server/reflection/GrpcReflectionFactory.html" title="class in io.micronaut.grpc.server.reflection">GrpcReflectionFactory</a></dt>
+<dd>
+<div class="block">The configuration property that enables the reflection service.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/server/reflection/GrpcReflectionFactory.html#REFLECTION_SERVICE_NAME" class="member-name-link">REFLECTION_SERVICE_NAME</a> - Static variable in class io.micronaut.grpc.server.reflection.<a href="io/micronaut/grpc/server/reflection/GrpcReflectionFactory.html" title="class in io.micronaut.grpc.server.reflection">GrpcReflectionFactory</a></dt>
+<dd>
+<div class="block">The name of the reflection service bean.</div>
+</dd>
 <dt><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html#register(java.lang.Class,java.lang.String,io.micronaut.inject.ExecutableMethod)" class="member-name-link">register(Class, String, ExecutableMethod)</a> - Method in class io.micronaut.protobuf.json.registry.<a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry</a></dt>
 <dd>
 <div class="block">Registers a gRPC service method with the internal registry, allowing it to be exposed
@@ -1513,6 +1586,8 @@ for invocation via JSON over REST.</div>
 <dt><a href="org/example/grpc/GreeterProto.html#registerAllExtensions(com.google.protobuf.ExtensionRegistryLite)" class="member-name-link">registerAllExtensions(ExtensionRegistryLite)</a> - Static method in class org.example.grpc.<a href="org/example/grpc/GreeterProto.html" title="class in org.example.grpc">GreeterProto</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcResourceLoaderFactory.html#resourceResolver(java.util.List)" class="member-name-link">resourceResolver(List)</a> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcResourceLoaderFactory.html" title="class in io.micronaut.grpc.server">GrpcResourceLoaderFactory</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.Restoring.html#%3Cinit%3E()" class="member-name-link">Restoring()</a> - Constructor for class io.micronaut.grpc.client.propagation.<a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.Restoring.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor.Restoring</a></dt>
 <dd>&nbsp;</dd>
 </dl>
 <h2 class="title" id="I:S">S</h2>

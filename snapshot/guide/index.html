@@ -1081,6 +1081,66 @@ class ServerBuilderListener implements BeanCreatedEventListener&lt;ServerBuilder
 <p>In addition, by default the server will be setup to use Micronaut&#8217;s I/O executor service.
 Set <code>grpc.server.executor</code> to the name of an <code>Executor</code> bean to override that default from configuration.</p>
 </div>
+<div class="paragraph">
+<p>To run service methods on virtual threads, use Micronaut&#8217;s <code>blocking</code> executor, which uses virtual threads when the JVM supports them:</p>
+</div>
+<div class="openblock">
+<div class="title">Running gRPC service methods on virtual threads</div>
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.server.executor=blocking</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+    server:
+        executor: blocking</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.server]
+executor = "blocking"</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  server {
+    executor = "blocking"
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    server {
+      executor = "blocking"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "server": {
+      "executor": "blocking"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Virtual threads suit blocking stubs and service methods that call databases or other services synchronously. Kotlin coroutine and Reactor services don&#8217;t need them.</p>
+</div>
 <div class="sect3">
 <h4 id="_server_interceptor_ordering">Server Interceptor Ordering</h4>
 <div class="paragraph">
@@ -1315,6 +1375,38 @@ and then the order will be reversed when sending the response message.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_context_propagation">Context Propagation</h3>
+<div class="paragraph">
+<p>gRPC delivers each event of a call (messages, half-close, cancellation) as a separate task on the server executor, possibly on a different thread. A unary service method runs when the client half-closes the call, so a Micronaut <code>PropagatedContext</code> that a server interceptor makes current while it starts the call would otherwise be gone by the time the method runs.</p>
+</div>
+<div class="paragraph">
+<p>Micronaut registers an interceptor that runs last, closest to the service, and makes that context current again for every later event of the call. A server interceptor can therefore add context elements, for example an authenticated user or MDC entries, and the service method sees them:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton
+public class TenantInterceptor implements ServerInterceptor {
+    private static final Metadata.Key&lt;String&gt; TENANT = Metadata.Key.of("x-tenant", Metadata.ASCII_STRING_MARSHALLER);
+
+    @Override
+    public &lt;ReqT, RespT&gt; ServerCall.Listener&lt;ReqT&gt; interceptCall(ServerCall&lt;ReqT, RespT&gt; call,
+                                                                 Metadata headers,
+                                                                 ServerCallHandler&lt;ReqT, RespT&gt; next) {
+        return PropagatedContext.getOrEmpty()
+            .plus(new Tenant(headers.get(TENANT))) // your own PropagatedContextElement
+            .propagate(() -&gt; next.startCall(call, headers));
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This covers interceptors registered as beans. Interceptors applied to a single service with <code>ServerInterceptors.intercept(..)</code> run inside Micronaut&#8217;s interceptor, so a context they make current is not carried to later events. The captured context is only a fallback: if an interceptor makes a context current around a later event, for example around one message, that context takes precedence.</p>
+</div>
+<div class="paragraph">
+<p>To turn this off, set <code>grpc.server.context-propagation.enabled</code> to <code>false</code>.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_health_checks">Health checks</h3>
 <div class="sect3">
 <h4 id="_grpc_health_checks">gRPC Health checks</h4>
@@ -1439,6 +1531,96 @@ class HealthService {
 <div class="paragraph">
 <p>If you wish to disable the Micronaut gRPC server health check while still using the management dependency you can set the property <code>grpc.server.health.enabled</code> to <code>false</code> in your application configuration.</p>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_server_reflection">Server Reflection</h3>
+<div class="paragraph">
+<p>The <a href="https://github.com/grpc/grpc/blob/master/doc/server-reflection.md">gRPC server reflection</a> service lets tools such as <a href="https://github.com/fullstorydev/grpcurl">grpcurl</a>, Postman and grpcui discover the services, methods and message types exposed by the server without a copy of the <code>.proto</code> files.</p>
+</div>
+<div class="paragraph">
+<p>Reflection exposes your whole API surface, so it is disabled by default. To enable it, add the gRPC services dependency (<code>io.grpc:grpc-services</code>) and set <code>grpc.server.reflection.enabled</code> to <code>true</code>:</p>
+</div>
+<div class="openblock">
+<div class="title">Enabling server reflection</div>
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.server.reflection.enabled=true</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+    server:
+        reflection:
+            enabled: true</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.server.reflection]
+enabled = true</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  server {
+    reflection {
+      enabled = true
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    server {
+      reflection {
+        enabled = true
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "server": {
+      "reflection": {
+        "enabled": true
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Micronaut registers the <code>grpc.reflection.v1.ServerReflection</code> service. It lists the services generated by <code>protoc</code> (whose descriptors carry the <code>.proto</code> schema), plus the health service when gRPC health checks are enabled. A service you build by hand as a <code>ServerServiceDefinition</code> without a schema descriptor still accepts calls but doesn&#8217;t appear in reflection results. You can then list the services with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">grpcurl -plaintext localhost:50051 list</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Consider enabling reflection only in development, for example in <code>application-dev.yml</code>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -1959,6 +2141,90 @@ class ManagedChannelBuilderListener implements BeanCreatedEventListener&lt;Manag
 }</code></pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_client_executors">Client Executors</h4>
+<div class="paragraph">
+<p>Each channel runs its callbacks, such as <code>StreamObserver.onNext</code> of an async stub, on Micronaut&#8217;s I/O executor. Set <code>grpc.client.executor</code> for every channel, or <code>grpc.channels.[NAME].executor</code> for one, to the name of another <code>Executor</code> bean. For example, to run callbacks on virtual threads:</p>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.client.executor=blocking
+grpc.channels.greeter.executor=io</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+    client:
+        executor: blocking
+    channels:
+        greeter:
+            executor: io</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.client]
+executor = "blocking"
+
+[grpc.channels.greeter]
+executor = "io"</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  client {
+    executor = "blocking"
+  }
+  channels {
+    greeter {
+      executor = "io"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    client {
+      executor = "blocking"
+    }
+    channels {
+      greeter {
+        executor = "io"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "client": {
+      "executor": "blocking"
+    },
+    "channels": {
+      "greeter": {
+        "executor": "io"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The value can also be an <code>Executor</code> instance supplied by a programmatic property source. An unknown executor name fails when the channel is created. The built-in <code>@GrpcChannel("grpc-server")</code> channel to the embedded server, used in tests, always uses the I/O executor.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_auto_injected_types">Auto Injected Types</h3>
@@ -1974,6 +2240,15 @@ class ManagedChannelBuilderListener implements BeanCreatedEventListener&lt;Manag
 <p><code>io.grpc.NameResolver</code> - The configured name resolver</p>
 </li>
 </ul>
+</div>
+<div class="sect3">
+<h4 id="_context_propagation">Context Propagation</h4>
+<div class="paragraph">
+<p>gRPC runs a call&#8217;s response callbacks, such as <code>StreamObserver.onNext</code> of an async stub, on the channel&#8217;s executor. Micronaut captures the <code>PropagatedContext</code> of the thread that starts the call (when <code>ClientCall.start</code> runs, which a stub does for you) and makes it current again in those callbacks, so MDC entries, tracing context and other context elements of the caller are available there. Client interceptors see it in their response listeners too, including calls an interceptor completes itself without reaching the server. A callback that already runs inside a propagated context keeps it.</p>
+</div>
+<div class="paragraph">
+<p>To turn this off, set <code>grpc.client.context-propagation.enabled</code> to <code>false</code>.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
