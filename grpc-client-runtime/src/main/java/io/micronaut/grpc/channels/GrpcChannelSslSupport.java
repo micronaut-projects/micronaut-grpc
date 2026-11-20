@@ -27,6 +27,7 @@ import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Configures TLS, including mutual TLS, for a gRPC channel from {@code grpc.channels.<name>.ssl.*}, or from the
@@ -54,12 +55,12 @@ final class GrpcChannelSslSupport {
      * @param builder The channel builder
      * @param channelName The name of the named channel configuration, or {@code null} for the default configuration
      * @param environment The environment
-     * @param resourceResolver The resolver for certificate locations
+     * @param resourceResolverSupplier Supplies the resolver for certificate locations, only called when TLS is configured
      */
     static void apply(NettyChannelBuilder builder,
                       @Nullable String channelName,
                       Environment environment,
-                      ResourceResolver resourceResolver) {
+                      Supplier<ResourceResolver> resourceResolverSupplier) {
         String prefix = sslPrefix(channelName, environment);
         Optional<String> trust = environment.getProperty(prefix + TRUST_CERTIFICATES, String.class);
         Optional<String> certChain = environment.getProperty(prefix + CERT_CHAIN, String.class);
@@ -70,6 +71,7 @@ final class GrpcChannelSslSupport {
         if (certChain.isPresent() != privateKey.isPresent()) {
             throw new ConfigurationException("Both '" + prefix + CERT_CHAIN + "' and '" + prefix + PRIVATE_KEY + "' must be configured for a client certificate");
         }
+        ResourceResolver resourceResolver = resourceResolverSupplier.get();
         SslContextBuilder sslContext = GrpcSslContexts.forClient();
         try {
             if (trust.isPresent()) {
