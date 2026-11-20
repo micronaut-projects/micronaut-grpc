@@ -40,6 +40,30 @@ class ProtobufMessageFactoryVisitorSpec extends Specification {
         code.contains('return com.example.wire.Example.GeoPoint.newBuilder();')
     }
 
+    void "messages nested in a generated wrapper that is not a message get factories"() {
+        given: 'the outer wrapper is the only class protoc annotates with the default java_multiple_files=false layout'
+        ClassElement geoPoint = message('com.example.wire', 'com.example.wire.Example$GeoPoint')
+        ClassElement wrapper = Mock {
+            isPublic() >> true
+            isAssignable(ProtobufMessageFactoryVisitor.MESSAGE_TYPE) >> false
+            getName() >> 'com.example.wire.Example'
+            getEnclosedElements(_) >> [geoPoint]
+        }
+        VisitorContext context = Mock {
+            getClassElement(_) >> Optional.of(Mock(ClassElement))
+        }
+
+        when: 'the nested message is also visited directly afterwards, as non-incremental processing may do'
+        visitor.visitClass(wrapper, context)
+        visitor.visitClass(geoPoint, context)
+
+        then: 'its factory is generated once'
+        1 * context.visitGeneratedSourceFile('com.example.wire', 'Example_GeoPoint$ProtobufMessageFactory', geoPoint) >> Optional.of(file(new StringWriter()))
+        1 * context.visitServiceDescriptor(ProtobufMessageFactoryVisitor.FACTORY_TYPE, 'com.example.wire.Example_GeoPoint$ProtobufMessageFactory', geoPoint)
+        0 * context.visitGeneratedSourceFile(*_)
+        0 * context.visitServiceDescriptor(*_)
+    }
+
     void "messages in the default package are skipped"() {
         given:
         VisitorContext context = Mock {
@@ -92,6 +116,7 @@ class ProtobufMessageFactoryVisitorSpec extends Specification {
             isInterface() >> interfaceType
             isPublic() >> publicType
             isAssignable(ProtobufMessageFactoryVisitor.MESSAGE_TYPE) >> messageType
+            getEnclosedElements(_) >> []
         }
         VisitorContext context = Mock()
 
@@ -129,6 +154,7 @@ class ProtobufMessageFactoryVisitorSpec extends Specification {
             isPublic() >> true
             isAssignable(ProtobufMessageFactoryVisitor.MESSAGE_TYPE) >> true
             getEnclosedElement(_) >> Optional.empty()
+            getEnclosedElements(_) >> []
         }
         VisitorContext context = Mock {
             getClassElement(_) >> Optional.of(Mock(ClassElement))
@@ -181,6 +207,7 @@ class ProtobufMessageFactoryVisitorSpec extends Specification {
             getEnclosedElement(_) >> Optional.of(Mock(MethodElement))
             getPackageName() >> packageName
             getName() >> binaryName
+            getEnclosedElements(_) >> []
         }
     }
 

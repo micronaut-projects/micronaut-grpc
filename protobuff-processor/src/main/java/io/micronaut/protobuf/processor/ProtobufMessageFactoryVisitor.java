@@ -24,6 +24,7 @@ import io.micronaut.inject.writer.GeneratedFile;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,6 +37,11 @@ import java.util.Set;
  * {@code newBuilder()} method, and registers it as a service. Messages in the default package are skipped and keep the
  * reflective fallback.</p>
  *
+ * <p>{@code protoc} only annotates the classes it writes to their own file. With the default
+ * {@code java_multiple_files = false} layout the messages are nested in an outer wrapper class, and only the wrapper
+ * carries the annotation, so incremental processing selects just the wrapper. Every visited class is therefore
+ * traversed for nested message classes as well.</p>
+ *
  * @since 5.3.0
  */
 @Internal
@@ -45,6 +51,8 @@ public final class ProtobufMessageFactoryVisitor implements TypeElementVisitor<O
     static final String MESSAGE_TYPE = "com.google.protobuf.Message";
     static final String FACTORY_TYPE = "io.micronaut.protobuf.ProtobufMessageFactory";
     static final String FACTORY_SUFFIX = "$ProtobufMessageFactory";
+
+    private final Set<String> visitedClasses = new HashSet<>();
 
     @Override
     public Set<String> getSupportedAnnotationNames() {
@@ -58,9 +66,19 @@ public final class ProtobufMessageFactoryVisitor implements TypeElementVisitor<O
 
     @Override
     public void visitClass(ClassElement element, VisitorContext context) {
-        if (!isGeneratedMessage(element, context)) {
+        if (!visitedClasses.add(element.getName())) {
+            // already handled while traversing its enclosing class, or visited directly before
             return;
         }
+        if (isGeneratedMessage(element, context)) {
+            writeFactory(element, context);
+        }
+        for (ClassElement nested : element.getEnclosedElements(ElementQuery.of(ClassElement.class))) {
+            visitClass(nested, context);
+        }
+    }
+
+    private void writeFactory(ClassElement element, VisitorContext context) {
         String packageName = element.getPackageName();
         if (packageName.isEmpty()) {
             // Generated sources need a package; messages in the default package keep the reflective fallback.
