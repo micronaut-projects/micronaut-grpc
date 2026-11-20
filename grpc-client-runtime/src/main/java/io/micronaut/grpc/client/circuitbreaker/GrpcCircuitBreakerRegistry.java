@@ -17,8 +17,9 @@ package io.micronaut.grpc.client.circuitbreaker;
 
 import io.grpc.ClientInterceptor;
 import io.grpc.StatusRuntimeException;
+import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.annotation.Requires;
-import io.micronaut.context.env.Environment;
+import io.micronaut.grpc.channels.GrpcChannelExecutors;
 import io.micronaut.retry.CircuitBreakerOperationsFactory;
 import io.micronaut.retry.CircuitBreakerPolicy;
 import io.micronaut.retry.CircuitState;
@@ -30,6 +31,7 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -44,20 +46,21 @@ import java.util.concurrent.ExecutorService;
 @Requires(classes = CircuitBreakerOperationsFactory.class)
 public class GrpcCircuitBreakerRegistry {
 
-    private final Environment environment;
+    private final ApplicationContext context;
     private final CircuitBreakerOperationsFactory operationsFactory;
     private final ExecutorService ioExecutor;
     private final Map<String, Optional<GrpcCircuitBreakerInterceptor>> interceptors = new ConcurrentHashMap<>();
 
     /**
-     * @param environment The environment
+     * @param context The application context
      * @param operationsFactory The factory for circuit breaker operations
-     * @param ioExecutor The executor that runs the callbacks of rejected calls that don't specify their own executor
+     * @param ioExecutor The executor that runs the callbacks of rejected calls when neither the call nor the channel
+     *                   configuration specifies one
      */
-    public GrpcCircuitBreakerRegistry(Environment environment,
+    public GrpcCircuitBreakerRegistry(ApplicationContext context,
                                       CircuitBreakerOperationsFactory operationsFactory,
                                       @Named(TaskExecutors.IO) ExecutorService ioExecutor) {
-        this.environment = environment;
+        this.context = context;
         this.operationsFactory = operationsFactory;
         this.ioExecutor = ioExecutor;
     }
@@ -84,7 +87,7 @@ public class GrpcCircuitBreakerRegistry {
 
     private Optional<GrpcCircuitBreakerInterceptor> find(String channelName) {
         return interceptors.computeIfAbsent(channelName, name -> {
-            GrpcCircuitBreakerConfiguration configuration = GrpcCircuitBreakerConfiguration.of(environment, name);
+            GrpcCircuitBreakerConfiguration configuration = GrpcCircuitBreakerConfiguration.of(context.getEnvironment(), name);
             if (!configuration.enabled()) {
                 return Optional.empty();
             }
@@ -98,7 +101,9 @@ public class GrpcCircuitBreakerRegistry {
                 .capturedException(StatusRuntimeException.class)
                 .throwWrappedException(true)
                 .build();
-            return Optional.of(new GrpcCircuitBreakerInterceptor(configuration, operationsFactory.createCircuitBreakerOperations(policy), ioExecutor));
+            // Rejected calls never reach the channel, so their callbacks run on the executor the channel would use.
+            Executor callbackExecutor = GrpcChannelExecutors.resolve(context, name).orElse(ioExecutor);
+            return Optional.of(new GrpcCircuitBreakerInterceptor(configuration, operationsFactory.createCircuitBreakerOperations(policy), callbackExecutor));
         });
     }
 }

@@ -4,6 +4,7 @@ import io.grpc.CallOptions
 import io.grpc.Channel
 import io.grpc.ClientCall
 import io.grpc.ClientInterceptor
+import io.grpc.Context
 import io.grpc.Metadata
 import io.grpc.MethodDescriptor
 import io.grpc.Status
@@ -87,6 +88,63 @@ class GrpcCircuitBreakerInterceptorSpec extends Specification {
         listener.thread.name.contains('io-executor')
     }
 
+    void "a rejected call is closed in the gRPC context it was created in"() {
+        given:
+        Context.Key<String> key = Context.key('request-value')
+        RecordingListener listener = new RecordingListener(key)
+        openCircuit(interceptor)
+
+        when: 'a call created under a gRPC context is rejected and closed on the I/O executor'
+        Context.current().withValue(key, 'from-caller').run {
+            interceptor.interceptCall(METHOD, CallOptions.DEFAULT, next).start(listener, new Metadata())
+        }
+
+        then:
+        0 * next.newCall(*_)
+        listener.status.get(5, TimeUnit.SECONDS).code == Status.Code.UNAVAILABLE
+        listener.thread != Thread.currentThread()
+        listener.contextValue == 'from-caller'
+    }
+
+    void "a rejected call without its own executor is closed on the executor configured for the channel"() {
+        given:
+        ApplicationContext ctx = ApplicationContext.run(channelExecutorConfig())
+        ClientInterceptor named = ctx.getBean(GrpcCircuitBreakerRegistry).findInterceptor('named').get()
+        RecordingListener listener = new RecordingListener()
+        openCircuit(named)
+
+        when:
+        named.interceptCall(METHOD, CallOptions.DEFAULT, next).start(listener, new Metadata())
+
+        then:
+        0 * next.newCall(*_)
+        listener.status.get(5, TimeUnit.SECONDS).code == Status.Code.UNAVAILABLE
+        listener.thread.name.contains('breaker-callbacks')
+
+        cleanup:
+        ctx.close()
+    }
+
+    void "the executor of the call takes precedence over the executor configured for the channel"() {
+        given:
+        ApplicationContext ctx = ApplicationContext.run(channelExecutorConfig())
+        ClientInterceptor named = ctx.getBean(GrpcCircuitBreakerRegistry).findInterceptor('named').get()
+        RecordingListener listener = new RecordingListener()
+        Executor perCall = { Runnable r -> new Thread(r, 'per-call').start() } as Executor
+        openCircuit(named)
+
+        when:
+        named.interceptCall(METHOD, CallOptions.DEFAULT.withExecutor(perCall), next).start(listener, new Metadata())
+
+        then:
+        0 * next.newCall(*_)
+        listener.status.get(5, TimeUnit.SECONDS).code == Status.Code.UNAVAILABLE
+        listener.thread.name == 'per-call'
+
+        cleanup:
+        ctx.close()
+    }
+
     void "a call cancelled before it starts is closed as cancelled without reaching the channel"() {
         given:
         RecordingListener listener = new RecordingListener()
@@ -126,13 +184,42 @@ class GrpcCircuitBreakerInterceptorSpec extends Specification {
         listener.status.get(5, TimeUnit.SECONDS).ok
     }
 
+    /**
+     * Opens the circuit of an interceptor configured with a failure threshold of 1.
+     */
+    private void openCircuit(ClientInterceptor target) {
+        Channel failing = Stub()
+        failing.newCall(*_) >> new ClosingCall(Status.UNAVAILABLE)
+        RecordingListener failed = new RecordingListener()
+        target.interceptCall(METHOD, CallOptions.DEFAULT.withExecutor(DIRECT), failing).start(failed, new Metadata())
+        assert failed.status.get(5, TimeUnit.SECONDS).code == Status.Code.UNAVAILABLE
+    }
+
+    private static Map<String, Object> channelExecutorConfig() {
+        [
+                'micronaut.executors.breaker-callbacks.type'           : 'fixed',
+                'micronaut.executors.breaker-callbacks.n-threads'      : 1,
+                'grpc.channels.named.executor'                         : 'breaker-callbacks',
+                'grpc.channels.named.circuit-breaker.enabled'          : true,
+                'grpc.channels.named.circuit-breaker.failure-threshold': 1,
+                'grpc.channels.named.circuit-breaker.reset-timeout'    : '20s',
+        ]
+    }
+
     static class RecordingListener extends ClientCall.Listener<String> {
         final CompletableFuture<Status> status = new CompletableFuture<>()
+        final Context.Key<String> key
         volatile Thread thread
+        volatile String contextValue
+
+        RecordingListener(Context.Key<String> key = null) {
+            this.key = key
+        }
 
         @Override
         void onClose(Status s, Metadata trailers) {
             thread = Thread.currentThread()
+            contextValue = key?.get()
             status.complete(s)
         }
     }

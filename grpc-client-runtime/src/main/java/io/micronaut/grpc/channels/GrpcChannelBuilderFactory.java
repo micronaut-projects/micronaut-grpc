@@ -17,8 +17,6 @@ package io.micronaut.grpc.channels;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 import io.grpc.ClientInterceptor;
@@ -28,10 +26,7 @@ import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.annotation.Prototype;
-import io.micronaut.context.env.Environment;
-import io.micronaut.context.exceptions.ConfigurationException;
 import io.micronaut.core.util.CollectionUtils;
-import io.micronaut.core.util.StringUtils;
 import io.micronaut.grpc.client.circuitbreaker.GrpcCircuitBreakerRegistry;
 import io.micronaut.inject.qualifiers.Qualifiers;
 import io.micronaut.scheduling.TaskExecutors;
@@ -46,8 +41,6 @@ import jakarta.inject.Named;
  */
 @Factory
 public class GrpcChannelBuilderFactory {
-
-    private static final String EXECUTOR = ".executor";
 
     private final ApplicationContext beanContext;
     private final ExecutorService executorService;
@@ -87,7 +80,7 @@ public class GrpcChannelBuilderFactory {
             }
         );
         final NettyChannelBuilder channelBuilder = config.getChannelBuilder();
-        resolveExecutor(config.getName()).ifPresent(channelBuilder::executor);
+        GrpcChannelExecutors.resolve(beanContext, config.getName()).ifPresent(channelBuilder::executor);
         // Added first so that it runs last: user interceptors (tracing, metrics) also see calls rejected by an open circuit.
         beanContext.findBean(GrpcCircuitBreakerRegistry.class)
             .flatMap(registry -> registry.findInterceptor(target))
@@ -97,32 +90,5 @@ public class GrpcChannelBuilderFactory {
             channelBuilder.intercept(interceptors);
         }
         return channelBuilder;
-    }
-
-    /**
-     * Resolves the executor configured by {@code grpc.channels.<name>.executor}, or by {@code grpc.client.executor} for
-     * every channel. The value is the name of an {@link Executor} bean, or an {@link Executor} instance supplied by a
-     * programmatic property source. Without either, the channel keeps the I/O executor.
-     *
-     * @param channelName The name of the matched channel configuration
-     * @return The executor, if one is configured
-     */
-    private Optional<Executor> resolveExecutor(String channelName) {
-        Environment environment = beanContext.getEnvironment();
-        return environment.getProperty(GrpcManagedChannelConfiguration.PREFIX + '.' + channelName + EXECUTOR, Object.class)
-            .or(() -> environment.getProperty(GrpcDefaultManagedChannelConfiguration.PREFIX + EXECUTOR, Object.class))
-            .flatMap(value -> toExecutor(value, channelName));
-    }
-
-    private Optional<Executor> toExecutor(Object value, String channelName) {
-        if (value instanceof Executor executor) {
-            return Optional.of(executor);
-        }
-        String name = value.toString();
-        if (StringUtils.isEmpty(name)) {
-            return Optional.empty();
-        }
-        return Optional.of(beanContext.findBean(Executor.class, Qualifiers.byName(name))
-            .orElseThrow(() -> new ConfigurationException("No executor bean named [" + name + "] is available for gRPC channel [" + channelName + "]")));
     }
 }

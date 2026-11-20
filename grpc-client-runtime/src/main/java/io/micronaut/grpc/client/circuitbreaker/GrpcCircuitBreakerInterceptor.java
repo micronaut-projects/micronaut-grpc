@@ -79,7 +79,7 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
     /**
      * @param configuration The circuit breaker configuration
      * @param operations The circuit breaker operations, configured without retries
-     * @param fallbackExecutor The executor for callbacks of rejected calls that don't specify their own executor
+     * @param fallbackExecutor The channel's callback executor, used for rejected calls that don't specify their own executor
      */
     GrpcCircuitBreakerInterceptor(GrpcCircuitBreakerConfiguration configuration,
                                   CircuitBreakerOperations operations,
@@ -210,7 +210,8 @@ public final class GrpcCircuitBreakerInterceptor implements ClientInterceptor {
 
         private void close(Listener<RespT> responseListener, Status status) {
             Executor executor = callOptions.getExecutor();
-            (executor != null ? executor : fallbackExecutor).execute(() -> responseListener.onClose(status, new Metadata()));
+            // Like ClientCallImpl, deliver the callback in the gRPC context the call was created in.
+            (executor != null ? executor : fallbackExecutor).execute(context.wrap(() -> responseListener.onClose(status, new Metadata())));
         }
 
         @Override
