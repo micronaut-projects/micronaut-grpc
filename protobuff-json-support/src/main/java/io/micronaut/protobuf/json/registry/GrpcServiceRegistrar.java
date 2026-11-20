@@ -28,8 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.beans.Introspector;
-
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * The {@code GrpcServiceRegistrar} is responsible for processing methods annotated with
@@ -66,8 +65,8 @@ public class GrpcServiceRegistrar implements ExecutableMethodProcessor<GrpcRestJ
 
     public GrpcServiceRegistrar(GrpcServiceRegistry registry,
                                 ApplicationContext applicationContext) {
-        this.registry = checkNotNull(registry, "GrpcServiceRegistry cannot be null");
-        this.applicationContext = checkNotNull(applicationContext, "ApplicationContext cannot be null");
+        this.registry = Objects.requireNonNull(registry, "GrpcServiceRegistry cannot be null");
+        this.applicationContext = Objects.requireNonNull(applicationContext, "ApplicationContext cannot be null");
     }
 
     /**

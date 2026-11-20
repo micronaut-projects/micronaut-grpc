@@ -14,7 +14,7 @@ See the [Snapshot Documentation](https://micronaut-projects.github.io/micronaut-
 
 ## Examples
 
-Examples for Java, Kotlin and Groovy can be found in the [examples](https://github.com/micronaut-projects/micronaut-grpc/tree/master/doc-examples) directory.
+Examples for [Java](https://github.com/micronaut-projects/micronaut-grpc/tree/5.2.x/test-suite), [Kotlin](https://github.com/micronaut-projects/micronaut-grpc/tree/5.2.x/test-suite-kotlin) and [Groovy](https://github.com/micronaut-projects/micronaut-grpc/tree/5.2.x/test-suite-groovy) can be found in the `test-suite` directories.
 
 ## Snapshots and Releases
 
@@ -26,7 +26,7 @@ Releases are published to JCenter and Maven Central via [Github Actions](https:/
 
 A release is performed with the following steps:
 
-* [Edit the version](https://github.com/micronaut-projects/micronaut-grpc/edit/master/gradle.properties) specified by `projectVersion` in `gradle.properties` to a semantic, unreleased version. Example `1.0.0`
+* [Edit the version](https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/gradle.properties) specified by `projectVersion` in `gradle.properties` to a semantic, unreleased version. Example `1.0.0`
 * [Create a new release](https://github.com/micronaut-projects/micronaut-grpc/releases/new). The Git Tag should start with `v`. For example `v1.0.0`.
 * [Monitor the Workflow](https://github.com/micronaut-projects/micronaut-grpc/actions?query=workflow%3ARelease) to check it passed successfully.
 * Celebrate!
