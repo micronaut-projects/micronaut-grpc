@@ -65,6 +65,8 @@ loadScripts(document, 'script');</script>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
 <li><a href="#invokeGrpcMethod(java.lang.String,java.lang.String,java.lang.String)" tabindex="0">invokeGrpcMethod(String, String, String)</a></li>
+<li><a href="#invokeGrpcMethod(java.lang.String,java.lang.String,com.google.protobuf.Message)" tabindex="0">invokeGrpcMethod(String, String, Message)</a></li>
+<li><a href="#parseRequestMessage(java.lang.String,java.lang.String,byte%5B%5D)" tabindex="0">parseRequestMessage(String, String, byte[])</a></li>
 </ol>
 </li>
 </ol>
@@ -149,12 +151,26 @@ Exceptions:
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeGrpcMethod(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">invokeGrpcMethod</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serviceName,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;com.google.protobuf.Message&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeGrpcMethod(java.lang.String,java.lang.String,com.google.protobuf.Message)" class="member-name-link">invokeGrpcMethod</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serviceName,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName,
+ com.google.protobuf.Message&nbsp;requestMessage)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Invokes a specified gRPC method on a service using a protobuf request.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeGrpcMethod(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">invokeGrpcMethod</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serviceName,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jsonRequest)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Invokes a specified gRPC method on a service and converts the Protobuf response(s) to a JSON string.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>com.google.protobuf.Message</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parseRequestMessage(java.lang.String,java.lang.String,byte%5B%5D)" class="member-name-link">parseRequestMessage</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serviceName,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName,
+ byte[]&nbsp;requestBytes)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Parses a protobuf request payload for the given gRPC method.</div>
 </div>
 </div>
 </div>
@@ -250,6 +266,44 @@ For streaming calls, it's a JSON array of objects. Never null (returns "[]" for 
 <dd><code><a href="../exception/ServiceNotFoundException.html" title="class in io.micronaut.protobuf.json.exception">ServiceNotFoundException</a></code> - If the specified service cannot be located in the context.</dd>
 <dd><code><a href="../exception/ProtobufTranscodingException.html" title="class in io.micronaut.protobuf.json.exception">ProtobufTranscodingException</a></code> - If there is an error in converting JSON to or from Protobuf.</dd>
 <dd><code><a href="../exception/GrpcInvocationException.html" title="class in io.micronaut.protobuf.json.exception">GrpcInvocationException</a></code> - If the invocation of the gRPC method fails or times out.</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="invokeGrpcMethod(java.lang.String,java.lang.String,com.google.protobuf.Message)">
+<h3>invokeGrpcMethod</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;com.google.protobuf.Message&gt;</span>&nbsp;<span class="element-name">invokeGrpcMethod</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serviceName,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName,
+ com.google.protobuf.Message&nbsp;requestMessage)</span></div>
+<div class="block">Invokes a specified gRPC method on a service using a protobuf request.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>serviceName</code> - The gRPC service name.</dd>
+<dd><code>methodName</code> - The gRPC method name.</dd>
+<dd><code>requestMessage</code> - The protobuf request.</dd>
+<dt>Returns:</dt>
+<dd>The protobuf responses emitted by the method.</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="parseRequestMessage(java.lang.String,java.lang.String,byte[])">
+<h3>parseRequestMessage</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">com.google.protobuf.Message</span>&nbsp;<span class="element-name">parseRequestMessage</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serviceName,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName,
+ byte[]&nbsp;requestBytes)</span></div>
+<div class="block">Parses a protobuf request payload for the given gRPC method.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>serviceName</code> - The gRPC service name.</dd>
+<dd><code>methodName</code> - The gRPC method name.</dd>
+<dd><code>requestBytes</code> - The protobuf request bytes.</dd>
+<dt>Returns:</dt>
+<dd>The decoded request message.</dd>
 </dl>
 </div>
 </section>

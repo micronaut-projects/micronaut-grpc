@@ -67,6 +67,10 @@ loadScripts(document, 'script');</script>
 <li><a href="#setCertChain(java.lang.String)" tabindex="0">setCertChain(String)</a></li>
 <li><a href="#getPrivateKey()" tabindex="0">getPrivateKey()</a></li>
 <li><a href="#setPrivateKey(java.lang.String)" tabindex="0">setPrivateKey(String)</a></li>
+<li><a href="#getTrustCertificates()" tabindex="0">getTrustCertificates()</a></li>
+<li><a href="#setTrustCertificates(java.lang.String)" tabindex="0">setTrustCertificates(String)</a></li>
+<li><a href="#getClientAuth()" tabindex="0">getClientAuth()</a></li>
+<li><a href="#setClientAuth(io.netty.handler.ssl.ClientAuth)" tabindex="0">setClientAuth(ClientAuth)</a></li>
 </ol>
 </li>
 </ol>
@@ -123,15 +127,37 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getCertChain()" class="member-name-link">getCertChain</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>io.netty.handler.ssl.ClientAuth</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getClientAuth()" class="member-name-link">getClientAuth</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Whether clients must present a certificate.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPrivateKey()" class="member-name-link">getPrivateKey</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPrivateKey()" class="member-name-link">getPrivateKey</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTrustCertificates()" class="member-name-link">getTrustCertificates</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">The location of the PEM-encoded CA certificates used to verify client certificates.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCertChain(java.lang.String)" class="member-name-link">setCertChain</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;certChain)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPrivateKey(java.lang.String)" class="member-name-link">setPrivateKey</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;privateKey)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setClientAuth(io.netty.handler.ssl.ClientAuth)" class="member-name-link">setClientAuth</a><wbr>(@Nullable io.netty.handler.ssl.ClientAuth&nbsp;clientAuth)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets whether clients must present a certificate: <code>none</code> (the default), <code>optional</code> or
+<code>require</code>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPrivateKey(java.lang.String)" class="member-name-link">setPrivateKey</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;privateKey)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTrustCertificates(java.lang.String)" class="member-name-link">setTrustCertificates</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;trustCertificates)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the location of the PEM-encoded CA certificates used to verify client certificates, for example
+<code>classpath:ca.crt</code> or <code>file:/etc/grpc/ca.crt</code>.</div>
+</div>
 </div>
 </div>
 </div>
@@ -209,6 +235,68 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>privateKey</code> - Sets the private key</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getTrustCertificates()">
+<h3>getTrustCertificates</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">getTrustCertificates</span>()</div>
+<div class="block">The location of the PEM-encoded CA certificates used to verify client certificates.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The trust certificates location</dd>
+<dt>Since:</dt>
+<dd>5.3.0</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setTrustCertificates(java.lang.String)">
+<h3>setTrustCertificates</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setTrustCertificates</span><wbr><span class="parameters">(@Nullable <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;trustCertificates)</span></div>
+<div class="block">Sets the location of the PEM-encoded CA certificates used to verify client certificates, for example
+<code>classpath:ca.crt</code> or <code>file:/etc/grpc/ca.crt</code>. Without it, the JVM's default trust store is used.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>trustCertificates</code> - The trust certificates location</dd>
+<dt>Since:</dt>
+<dd>5.3.0</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getClientAuth()">
+<h3>getClientAuth</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">io.netty.handler.ssl.ClientAuth</span>&nbsp;<span class="element-name">getClientAuth</span>()</div>
+<div class="block">Whether clients must present a certificate.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The client authentication mode, <code>ClientAuth.NONE</code> by default</dd>
+<dt>Since:</dt>
+<dd>5.3.0</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="setClientAuth(io.netty.handler.ssl.ClientAuth)">
+<h3>setClientAuth</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setClientAuth</span><wbr><span class="parameters">(@Nullable io.netty.handler.ssl.ClientAuth&nbsp;clientAuth)</span></div>
+<div class="block">Sets whether clients must present a certificate: <code>none</code> (the default), <code>optional</code> or
+<code>require</code>. Use <code>require</code> for mutual TLS.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>clientAuth</code> - The client authentication mode</dd>
+<dt>Since:</dt>
+<dd>5.3.0</dd>
 </dl>
 </div>
 </section>

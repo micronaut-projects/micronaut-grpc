@@ -54,6 +54,7 @@ loadScripts(document, 'script');</script>
 <div class="toc-header">Contents&nbsp;<input type="text" class="filter-input" disabled placeholder="Filter contents (type .)" aria-label="Filter table of contents" autocomplete="off" spellcheck="false"><input type="reset" class="reset-filter" disabled tabindex="-1" value="Reset"></div>
 <ol class="toc-list" tabindex="-1">
 <li><a href="#" tabindex="0">Description</a></li>
+<li><a href="#nested-class-summary" tabindex="0">Nested Class Summary</a></li>
 <li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
@@ -63,8 +64,9 @@ loadScripts(document, 'script');</script>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
-<li><a href="#register(java.lang.Class,java.lang.String,io.micronaut.inject.ExecutableMethod)" tabindex="0">register(Class, String, ExecutableMethod)</a></li>
+<li><a href="#register(java.lang.Class,java.lang.String,io.micronaut.inject.ExecutableMethod,io.grpc.MethodDescriptor)" tabindex="0">register(Class, String, ExecutableMethod, MethodDescriptor)</a></li>
 <li><a href="#getExecutableMethod(java.lang.String,java.lang.String)" tabindex="0">getExecutableMethod(String, String)</a></li>
+<li><a href="#getRegisteredMethod(java.lang.String,java.lang.String)" tabindex="0">getRegisteredMethod(String, String)</a></li>
 </ol>
 </li>
 </ol>
@@ -103,6 +105,23 @@ Thread Safety:
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<li>
+<section class="nested-class-summary" id="nested-class-summary">
+<h2>Nested Class Summary</h2>
+<div class="caption"><span>Nested Classes</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="GrpcServiceRegistry.RegisteredMethod.html" class="type-name-link" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry.RegisteredMethod</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">Registered gRPC method metadata.</div>
+</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -133,11 +152,18 @@ Thread Safety:
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Retrieves an <code>ExecutableMethod</code> instance based on the specified service name and method name.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(java.lang.Class,java.lang.String,io.micronaut.inject.ExecutableMethod)" class="member-name-link">register</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;serviceBeanType,
- <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName,
- io.micronaut.inject.ExecutableMethod&lt;?,<wbr>?&gt;&nbsp;method)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="GrpcServiceRegistry.RegisteredMethod.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry.RegisteredMethod</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRegisteredMethod(java.lang.String,java.lang.String)" class="member-name-link">getRegisteredMethod</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serviceName,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Retrieves a registered gRPC method entry based on the specified service and method name.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(java.lang.Class,java.lang.String,io.micronaut.inject.ExecutableMethod,io.grpc.MethodDescriptor)" class="member-name-link">register</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;serviceBeanType,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName,
+ io.micronaut.inject.ExecutableMethod&lt;?,<wbr>?&gt;&nbsp;method,
+ io.grpc.MethodDescriptor&lt;?,<wbr>?&gt;&nbsp;methodDescriptor)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Registers a gRPC service method with the internal registry, allowing it to be exposed
 for invocation via JSON over REST.</div>
 </div>
@@ -175,12 +201,13 @@ for invocation via JSON over REST.</div>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="register(java.lang.Class,java.lang.String,io.micronaut.inject.ExecutableMethod)">
+<section class="detail" id="register(java.lang.Class,java.lang.String,io.micronaut.inject.ExecutableMethod,io.grpc.MethodDescriptor)">
 <h3>register</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;serviceBeanType,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName,
- io.micronaut.inject.ExecutableMethod&lt;?,<wbr>?&gt;&nbsp;method)</span></div>
+ io.micronaut.inject.ExecutableMethod&lt;?,<wbr>?&gt;&nbsp;method,
+ io.grpc.MethodDescriptor&lt;?,<wbr>?&gt;&nbsp;methodDescriptor)</span></div>
 <div class="block">Registers a gRPC service method with the internal registry, allowing it to be exposed
 for invocation via JSON over REST. This method maintains a mapping between the service
 name, method name, and its corresponding <code>ExecutableMethod</code>.</div>
@@ -189,6 +216,7 @@ name, method name, and its corresponding <code>ExecutableMethod</code>.</div>
 <dd><code>serviceBeanType</code> - The class type of the gRPC service bean being registered. Must not be null.</dd>
 <dd><code>methodName</code> - The name of the method in the gRPC service being registered. Must not be null or empty.</dd>
 <dd><code>method</code> - The <code>ExecutableMethod</code> representing the method's metadata and logic. Must not be null.</dd>
+<dd><code>methodDescriptor</code> - The gRPC <code>MethodDescriptor</code> for the method. Must not be null.</dd>
 </dl>
 </div>
 </section>
@@ -208,6 +236,23 @@ This method is used to locate a registered gRPC method within the given service 
 <dt>Returns:</dt>
 <dd>An <code>Optional</code> containing the <code>ExecutableMethod</code> if found, or an empty <code>Optional</code>
         if no matching service or method is registered.</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getRegisteredMethod(java.lang.String,java.lang.String)">
+<h3>getRegisteredMethod</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="GrpcServiceRegistry.RegisteredMethod.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry.RegisteredMethod</a>&gt;</span>&nbsp;<span class="element-name">getRegisteredMethod</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serviceName,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;methodName)</span></div>
+<div class="block">Retrieves a registered gRPC method entry based on the specified service and method name.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>serviceName</code> - The gRPC service containing the method.</dd>
+<dd><code>methodName</code> - The gRPC method name.</dd>
+<dt>Returns:</dt>
+<dd>The registered method entry if present.</dd>
 </dl>
 </div>
 </section>

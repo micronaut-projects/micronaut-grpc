@@ -5,6 +5,7 @@ io.micronaut.grpc.client.propagation
 io.micronaut.grpc.client.tracing
 io.micronaut.grpc.discovery
 io.micronaut.grpc.info
+io.micronaut.grpc.processor
 io.micronaut.grpc.server
 io.micronaut.grpc.server.health
 io.micronaut.grpc.server.interceptor

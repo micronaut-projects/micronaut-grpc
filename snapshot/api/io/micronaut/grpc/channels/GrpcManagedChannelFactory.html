@@ -64,6 +64,7 @@ loadScripts(document, 'script');</script>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
 <li><a href="#managedChannel(io.micronaut.inject.InjectionPoint)" tabindex="0">managedChannel(InjectionPoint)</a></li>
+<li><a href="#stubChannel(io.micronaut.inject.InjectionPoint)" tabindex="0">stubChannel(InjectionPoint)</a></li>
 <li><a href="#close()" tabindex="0">close()</a></li>
 </ol>
 </li>
@@ -133,6 +134,11 @@ implements <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Builds a managed channel for the given target.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>io.grpc.ManagedChannel</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stubChannel(io.micronaut.inject.InjectionPoint)" class="member-name-link">stubChannel</a><wbr>(io.micronaut.inject.InjectionPoint&lt;?&gt;&nbsp;injectionPoint)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the channel for a client stub injection point annotated with <a href="../annotation/GrpcChannel.html" title="annotation interface in io.micronaut.grpc.annotation"><code>GrpcChannel</code></a>.</div>
+</div>
 </div>
 </div>
 </div>
@@ -184,6 +190,26 @@ implements <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base
 <dd><code>injectionPoint</code> - The injection point</dd>
 <dt>Returns:</dt>
 <dd>The channel</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="stubChannel(io.micronaut.inject.InjectionPoint)">
+<h3>stubChannel</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">io.grpc.ManagedChannel</span>&nbsp;<span class="element-name">stubChannel</span><wbr><span class="parameters">(io.micronaut.inject.InjectionPoint&lt;?&gt;&nbsp;injectionPoint)</span></div>
+<div class="block">Returns the channel for a client stub injection point annotated with <a href="../annotation/GrpcChannel.html" title="annotation interface in io.micronaut.grpc.annotation"><code>GrpcChannel</code></a>. Called by the stub
+factories that <code>micronaut-grpc-client-processor</code> generates. All stubs of the same channel share one
+<code>ManagedChannel</code>, whatever their type or injection point.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>injectionPoint</code> - The stub injection point</dd>
+<dt>Returns:</dt>
+<dd>The channel</dd>
+<dt>Since:</dt>
+<dd>5.3.0</dd>
 </dl>
 </div>
 </section>

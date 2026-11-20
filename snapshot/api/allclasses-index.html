@@ -51,7 +51,7 @@ loadScripts(document, 'script');</script>
 <h1 title="All Classes and Interfaces" class="title">All Classes and Interfaces</h1>
 </div>
 <div id="all-classes-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab5" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab5', 2)" class="table-tab">Exception Classes</button><button id="all-classes-table-tab6" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab6', 2)" class="table-tab">Annotation Interfaces</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="all-classes-table-tab0" role="tab" aria-selected="true" aria-controls="all-classes-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="all-classes-table-tab1" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab1', 2)" class="table-tab">Interfaces</button><button id="all-classes-table-tab2" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab2', 2)" class="table-tab">Classes</button><button id="all-classes-table-tab4" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab4', 2)" class="table-tab">Record Classes</button><button id="all-classes-table-tab5" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab5', 2)" class="table-tab">Exception Classes</button><button id="all-classes-table-tab6" role="tab" aria-selected="false" aria-controls="all-classes-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('all-classes-table', 'all-classes-table-tab6', 2)" class="table-tab">Annotation Interfaces</button></div>
 <div id="all-classes-table.tabpanel" role="tabpanel" aria-labelledby="all-classes-table-tab0">
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
@@ -255,82 +255,97 @@ and allows integration with Zipkin and Jaeger.</div>
 <div class="block">A class responsible for maintaining a registry of gRPC service methods, enabling them
 to be exposed and invoked via JSON over REST.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab4"><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.RegisteredMethod.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry.RegisteredMethod</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab4">
+<div class="block">Registered gRPC method metadata.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Configuration for the SSL properties of GRPC.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/processor/GrpcStubFactoryVisitor.html" title="class in io.micronaut.grpc.processor">GrpcStubFactoryVisitor</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Generates a bean factory for the client stubs of every gRPC service class that <code>protoc-gen-grpc-java</code>
+generates, so that stubs can be injected with <code>@GrpcChannel</code> without a hand-written factory.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/json/GrpcWebController.html" title="class in io.micronaut.protobuf.json">GrpcWebController</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">HTTP/1.1 bridge that exposes annotated gRPC services via the gRPC-Web wire protocol.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">A container for the <code>HealthStatusManager</code>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="helloworld/HelloReply.html" title="class in helloworld">HelloReply</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">
-The response message containing the greetings</div>
-</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="helloworld/HelloReply.Builder.html" title="class in helloworld">HelloReply.Builder</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="helloworld/HelloReply.html" title="class in helloworld">HelloReply</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">
 The response message containing the greetings</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="helloworld/HelloReplyOrBuilder.html" title="interface in helloworld">HelloReplyOrBuilder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="helloworld/HelloRequest.html" title="class in helloworld">HelloRequest</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="helloworld/HelloReply.Builder.html" title="class in helloworld">HelloReply.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">
+The response message containing the greetings</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="helloworld/HelloReplyOrBuilder.html" title="interface in helloworld">HelloReplyOrBuilder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="helloworld/HelloRequest.html" title="class in helloworld">HelloRequest</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">
 The request message containing the user's name.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/example/grpc/HelloRequest.html" title="class in org.example.grpc">HelloRequest</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/example/grpc/HelloRequest.html" title="class in org.example.grpc">HelloRequest</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Protobuf type <code>greeter.HelloRequest</code></div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="helloworld/HelloRequest.Builder.html" title="class in helloworld">HelloRequest.Builder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="helloworld/HelloRequest.Builder.html" title="class in helloworld">HelloRequest.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">
 The request message containing the user's name.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/example/grpc/HelloRequest.Builder.html" title="class in org.example.grpc">HelloRequest.Builder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/example/grpc/HelloRequest.Builder.html" title="class in org.example.grpc">HelloRequest.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Protobuf type <code>greeter.HelloRequest</code></div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="helloworld/HelloRequestOrBuilder.html" title="interface in helloworld">HelloRequestOrBuilder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/example/grpc/HelloRequestOrBuilder.html" title="interface in org.example.grpc">HelloRequestOrBuilder</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="helloworld/HelloRequestOrBuilder.html" title="interface in helloworld">HelloRequestOrBuilder</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/example/grpc/HelloResponse.html" title="class in org.example.grpc">HelloResponse</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">Protobuf type <code>greeter.HelloResponse</code></div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/example/grpc/HelloResponse.Builder.html" title="class in org.example.grpc">HelloResponse.Builder</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/example/grpc/HelloRequestOrBuilder.html" title="interface in org.example.grpc">HelloRequestOrBuilder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="org/example/grpc/HelloResponse.html" title="class in org.example.grpc">HelloResponse</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Protobuf type <code>greeter.HelloResponse</code></div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="org/example/grpc/HelloResponseOrBuilder.html" title="interface in org.example.grpc">HelloResponseOrBuilder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="helloworld/HelloWorldProto.html" title="class in helloworld">HelloWorldProto</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/InProcessGrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server">InProcessGrpcEmbeddedServer</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="org/example/grpc/HelloResponse.Builder.html" title="class in org.example.grpc">HelloResponse.Builder</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Protobuf type <code>greeter.HelloResponse</code></div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="org/example/grpc/HelloResponseOrBuilder.html" title="interface in org.example.grpc">HelloResponseOrBuilder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="helloworld/HelloWorldProto.html" title="class in helloworld">HelloWorldProto</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/InProcessGrpcEmbeddedServer.html" title="class in io.micronaut.grpc.server">InProcessGrpcEmbeddedServer</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Replaces the embedded server bean when the in-process transport is enabled.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/InProcessGrpcServerBuilder.html" title="class in io.micronaut.grpc.server">InProcessGrpcServerBuilder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/InProcessGrpcServerBuilder.html" title="class in io.micronaut.grpc.server">InProcessGrpcServerBuilder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builds an in-process gRPC server when explicitly enabled.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/InProcessGrpcServerChannel.html" title="class in io.micronaut.grpc.server">InProcessGrpcServerChannel</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/server/InProcessGrpcServerChannel.html" title="class in io.micronaut.grpc.server">InProcessGrpcServerChannel</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Provides an in-process managed channel for the embedded gRPC server.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="io/micronaut/protobuf/json/exception/MalformedGrpcJsonException.html" title="class in io.micronaut.protobuf.json.exception">MalformedGrpcJsonException</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="io/micronaut/protobuf/json/exception/MalformedGrpcJsonException.html" title="class in io.micronaut.protobuf.json.exception">MalformedGrpcJsonException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
 <div class="block">Exception thrown to indicate that a gRPC JSON payload is malformed or invalid.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="io/micronaut/protobuf/json/exception/MethodNotFoundException.html" title="class in io.micronaut.protobuf.json.exception">MethodNotFoundException</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="io/micronaut/protobuf/json/exception/MethodNotFoundException.html" title="class in io.micronaut.protobuf.json.exception">MethodNotFoundException</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
 <div class="block">Exception thrown to indicate that a specified method could not be found within
  a given context, such as a gRPC service.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/info/MicronautGrpcAnnotationModuleInfo.html" title="class in io.micronaut.grpc.info">MicronautGrpcAnnotationModuleInfo</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/info/MicronautGrpcAnnotationModuleInfo.html" title="class in io.micronaut.grpc.info">MicronautGrpcAnnotationModuleInfo</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/info/MicronautGrpcClientProcessorModuleInfo.html" title="class in io.micronaut.grpc.info">MicronautGrpcClientProcessorModuleInfo</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/info/MicronautGrpcClientRuntimeModuleInfo.html" title="class in io.micronaut.grpc.info">MicronautGrpcClientRuntimeModuleInfo</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>

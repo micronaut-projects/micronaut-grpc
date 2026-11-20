@@ -64,7 +64,9 @@
                                 
                                 <div class="toc-item" style="margin-left:0"><a href="#protocolBuffersJsonSupport"><strong>9</strong><span>Protocol Buffers Json Support (Experimental)</span></a></div>
                                 
-                                <div class="toc-item" style="margin-left:0"><a href="#repository"><strong>10</strong><span>Repository</span></a></div>
+                                <div class="toc-item" style="margin-left:0"><a href="#grpcWeb"><strong>10</strong><span>gRPC-Web</span></a></div>
+                                
+                                <div class="toc-item" style="margin-left:0"><a href="#repository"><strong>11</strong><span>Repository</span></a></div>
                                 
                             </div>
                         </div>
@@ -113,7 +115,9 @@
         
         <div class="toc-item" style="margin-left:0px" id="toc-item-protocolBuffersJsonSupport"><a href="#protocolBuffersJsonSupport"><strong>9</strong><span>Protocol Buffers Json Support (Experimental)</span></a></div>
         
-        <div class="toc-item" style="margin-left:0px" id="toc-item-repository"><a href="#repository"><strong>10</strong><span>Repository</span></a></div>
+        <div class="toc-item" style="margin-left:0px" id="toc-item-grpcWeb"><a href="#grpcWeb"><strong>10</strong><span>gRPC-Web</span></a></div>
+        
+        <div class="toc-item" style="margin-left:0px" id="toc-item-repository"><a href="#repository"><strong>11</strong><span>Repository</span></a></div>
         
         </div>
     </div>
@@ -238,26 +242,23 @@ cd demo</code></pre>
 <div class="sect2">
 <h3 id="_configuring_gradle">Configuring Gradle</h3>
 <div class="paragraph">
-<p>To configure Gradle, first apply the <code>com.google.protobuf</code> plugin:</p>
+<p>To configure Gradle for Java or Groovy projects, add the <code>com.google.protobuf</code> plugin to your existing <code>plugins</code> block:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
     ...
-    alias(libs.plugins.protobuf)
+    id 'com.google.protobuf' version '0.10.1'
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Then configure the gRPC and protobuf plugins:</p>
+<p>Then configure protobuf source generation:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
-    grpcVersion = libs.versions.managed.grpc.asProvider().get()
-    protobufVersion = libs.versions.managed.protobuf.asProvider().get()
-}
-
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">def grpcVersion = '1.84.2'
+def protobufVersion = '4.36.2'
 
 sourceSets {
     main {
@@ -267,15 +268,14 @@ sourceSets {
         }
     }
 }
+
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
     }
     generateProtoTasks {
-        all()*.plugins {
-            grpc {}
-        }
+        all()*.plugins { grpc {} }
     }
 }</code></pre>
 </div>
@@ -287,42 +287,46 @@ protobuf {
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you are using JDK9 or above, in order to avoid issues javax packages, provide the following compiler option to the grpc plugin to skip these stubs: <code>option '@generated=omit'</code> (added on <a href="https://github.com/grpc/grpc-java/releases/tag/v1.64.0">grpc-kava v1.64.0</a>) See discussion here: <a href="https://github.com/grpc/grpc-java/issues/9179">issue 9179</a>
+If you are using JDK 9 or above, provide the following compiler option to the gRPC plugin to skip <code>javax.annotation.Generated</code> stubs: <code>option '@generated=omit'</code> (added in <a href="https://github.com/grpc/grpc-java/releases/tag/v1.64.0">gRPC Java v1.64.0</a>). See <a href="https://github.com/grpc/grpc-java/issues/9179">issue 9179</a> for background.
 </td>
 </tr>
 </table>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">    ...
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">protobuf {
     generateProtoTasks {
         all()*.plugins {
             grpc {
                 option '@generated=omit'
-            } }
-    }</code></pre>
+            }
+        }
+    }
+}</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Use this configuration for Kotlin projects:</p>
+<p>Use this Gradle configuration for Kotlin projects:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
-    grpcVersion = libs.versions.managed.grpc.asProvider().get()
-    grpcKotlinVersion = libs.versions.managed.grpc.kotlin.get()
-    protobufVersion = libs.versions.managed.protobuf.asProvider().get()
+<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
+    ...
+    id 'com.google.protobuf' version '0.10.1'
 }
+
+def grpcVersion = '1.84.2'
+def grpcKotlinVersion = '1.5.0'
+def protobufVersion = '4.36.2'
 
 dependencies {
-...
-    implementation libs.managed.grpc.kotlin.stub
-    implementation libs.managed.grpc.services
-    compileOnly libs.managed.grpc.stub
-    compileOnly libs.managed.protobuf.java
-    compileOnly libs.javax.annotation.api
+    ...
+    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
+    implementation("io.grpc:grpc-services:$grpcVersion")
+    compileOnly("io.grpc:grpc-stub:$grpcVersion")
+    compileOnly("com.google.protobuf:protobuf-java:$protobufVersion")
+    compileOnly("javax.annotation:javax.annotation-api:1.3.2")
 }
-
 
 sourceSets {
     main {
@@ -330,7 +334,6 @@ sourceSets {
             srcDirs 'build/generated/source/proto/main/grpc'
             srcDirs 'build/generated/source/proto/main/grpckt'
             srcDirs 'build/generated/source/proto/main/java'
-            srcDirs 'build/generated/source/proto/main/reactor'
         }
     }
 }
@@ -339,14 +342,12 @@ protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
         grpc { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
-        grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:${grpcKotlinVersion}:jdk8@jar" }
-        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
+        grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:$grpcKotlinVersion:jdk8@jar" }
     }
     generateProtoTasks {
         all()*.plugins {
             grpc {}
             grpckt {}
-            reactor {}
         }
     }
 }</code></pre>
@@ -467,6 +468,9 @@ If you wish to use gRPC standalone without the Micronaut HTTP server you should 
 </div>
 <div class="paragraph">
 <p>To generate the Java sources from protobuf definitions in <code>src/main/proto</code>.</p>
+</div>
+<div class="paragraph">
+<p>The generated sources are the service stubs, not the server implementation. Before starting the application, create a bean that extends the generated <code>*ImplBase</code> type (or <code>*CoroutineImplBase</code> for Kotlin) as shown in the next section.</p>
 </div>
 </div>
 <div class="sect2">
@@ -915,6 +919,105 @@ private-key = "classpath:my.key"</code></pre>
 </tr>
 </table>
 </div>
+<div class="sect3">
+<h4 id="_mutual_tls">Mutual TLS</h4>
+<div class="paragraph">
+<p>To require clients to present a certificate, add the CA certificates that sign client certificates and set <code>client-auth</code>:</p>
+</div>
+<div class="openblock">
+<div class="title">Requiring client certificates</div>
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.server.ssl.cert-chain=classpath:server.crt
+grpc.server.ssl.private-key=classpath:server.key
+grpc.server.ssl.trust-certificates=classpath:ca.crt
+grpc.server.ssl.client-auth=require</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+    server:
+        ssl:
+            cert-chain: 'classpath:server.crt'
+            private-key: 'classpath:server.key'
+            trust-certificates: 'classpath:ca.crt' # <b class="conum">(1)</b>
+            client-auth: require # <b class="conum">(2)</b></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.server.ssl]
+cert-chain = "classpath:server.crt"
+private-key = "classpath:server.key"
+trust-certificates = "classpath:ca.crt"
+client-auth = "require"</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  server {
+    ssl {
+      certChain = "classpath:server.crt"
+      privateKey = "classpath:server.key"
+      trustCertificates = "classpath:ca.crt"
+      clientAuth = "require"
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    server {
+      ssl {
+        cert-chain = "classpath:server.crt"
+        private-key = "classpath:server.key"
+        trust-certificates = "classpath:ca.crt"
+        client-auth = "require"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "server": {
+      "ssl": {
+        "cert-chain": "classpath:server.crt",
+        "private-key": "classpath:server.key",
+        "trust-certificates": "classpath:ca.crt",
+        "client-auth": "require"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>PEM-encoded CA certificates used to verify client certificates. Without it, the JVM&#8217;s default trust store is used.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>none</code> (the default), <code>optional</code> or <code>require</code>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>trust-certificates</code> and <code>client-auth</code> need <code>cert-chain</code> and <code>private-key</code> to be configured.</p>
+</div>
 <div class="paragraph">
 <p>By default, the gRPC server will be enabled. To disable the gRPC server, set <code>grpc.server.enabled</code> to false.</p>
 </div>
@@ -1056,6 +1159,7 @@ class ServerBuilderListener implements BeanCreatedEventListener&lt;ServerBuilder
         builder
     }
 }</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1864,7 +1968,7 @@ class GreetingEndpointTest extends Specification {
 
 
 <div class="paragraph">
-<p>Micronaut for gRPC does not create client beans automatically for you. Instead, you must expose which client stubs your application needs using a <code>@Factory</code>.</p>
+<p>By default, Micronaut for gRPC does not create client stub beans for you: you expose the stubs your application needs using a <code>@Factory</code>, as described below. Alternatively, add the <code>micronaut-grpc-client-processor</code> annotation processor and inject stubs directly (see <a href="#injectingStubs">Injecting Client Stubs</a>).</p>
 </div>
 <div class="paragraph">
 <p>You can dependency inject a <code>io.grpc.ManagedChannel</code> into the factory. Each injected <code>io.grpc.ManagedChannel</code> will automatically be shutdown when the application shuts down.</p>
@@ -2062,6 +2166,150 @@ enabled = false</code></pre>
 <p>When a client is disabled, optional or nullable <code>@GrpcChannel</code> injection points resolve to an empty value, while required injection points fail with a dependency injection error.</p>
 </div>
 <div class="paragraph">
+<p>For gRPC service-config based retry and resiliency features, you can configure <code>default-service-config</code> as a nested map. The map is bound using Micronaut&#8217;s nested/raw map binding so gRPC service config keys such as <code>methodConfig</code>, <code>retryPolicy</code>, and <code>hedgingPolicy</code> are preserved as-is.</p>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.client.plaintext=true
+grpc.client.enable-retry=true
+grpc.client.max-retry-attempts=4
+grpc.client.default-service-config.methodConfig[0].name[0].service=helloworld.Greeter
+grpc.client.default-service-config.methodConfig[0].retryPolicy.maxAttempts=4
+grpc.client.default-service-config.methodConfig[0].retryPolicy.initialBackoff=0.1s
+grpc.client.default-service-config.methodConfig[0].retryPolicy.maxBackoff=1s
+grpc.client.default-service-config.methodConfig[0].retryPolicy.backoffMultiplier=2
+grpc.client.default-service-config.methodConfig[0].retryPolicy.retryableStatusCodes[0]=UNAVAILABLE</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+    client:
+        plaintext: true
+        enable-retry: true
+        max-retry-attempts: 4
+        default-service-config:
+            methodConfig:
+                -
+                    name:
+                        -
+                            service: helloworld.Greeter
+                    retryPolicy:
+                        maxAttempts: 4
+                        initialBackoff: 0.1s
+                        maxBackoff: 1s
+                        backoffMultiplier: 2
+                        retryableStatusCodes:
+                            - UNAVAILABLE</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.client]
+plaintext = true
+enable-retry = true
+max-retry-attempts = 4
+
+[[grpc.client.default-service-config.methodConfig]]
+
+[grpc.client.default-service-config.methodConfig.retryPolicy]
+maxAttempts = 4
+initialBackoff = "0.1s"
+maxBackoff = "1s"
+backoffMultiplier = 2
+retryableStatusCodes = ["UNAVAILABLE"]
+
+[[grpc.client.default-service-config.methodConfig.name]]
+service = "helloworld.Greeter"</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  client {
+    plaintext = true
+    enableRetry = true
+    maxRetryAttempts = 4
+    defaultServiceConfig {
+      methodConfig = [{
+          name = [{
+              service = "helloworld.Greeter"
+            }]
+          retryPolicy {
+            maxAttempts = 4
+            initialBackoff = "0.1s"
+            maxBackoff = "1s"
+            backoffMultiplier = 2
+            retryableStatusCodes = ["UNAVAILABLE"]
+          }
+        }]
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    client {
+      plaintext = true
+      enable-retry = true
+      max-retry-attempts = 4
+      default-service-config {
+        methodConfig = [{
+            name = [{
+                service = "helloworld.Greeter"
+              }]
+            retryPolicy {
+              maxAttempts = 4
+              initialBackoff = "0.1s"
+              maxBackoff = "1s"
+              backoffMultiplier = 2
+              retryableStatusCodes = ["UNAVAILABLE"]
+            }
+          }]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "client": {
+      "plaintext": true,
+      "enable-retry": true,
+      "max-retry-attempts": 4,
+      "default-service-config": {
+        "methodConfig": [{
+            "name": [{
+                "service": "helloworld.Greeter"
+              }],
+            "retryPolicy": {
+              "maxAttempts": 4,
+              "initialBackoff": "0.1s",
+              "maxBackoff": "1s",
+              "backoffMultiplier": 2,
+              "retryableStatusCodes": ["UNAVAILABLE"]
+            }
+          }]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>The same structure can be defined per channel under <code>grpc.channels.&lt;name&gt;.default-service-config</code>.</p>
+</div>
+<div class="paragraph">
 <p>Alternatively if you prefer programmatic configuration you can write a <code>BeanCreatedEventListener</code> for example:</p>
 </div>
 <div class="listingblock multi-language-sample">
@@ -2139,6 +2387,115 @@ class ManagedChannelBuilderListener implements BeanCreatedEventListener&lt;Manag
         channelBuilder
     }
 }</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_tls_and_mutual_tls">TLS and Mutual TLS</h4>
+<div class="paragraph">
+<p>A channel can verify the server against your own CA certificates and present a client certificate to servers that require one:</p>
+</div>
+<div class="openblock">
+<div class="title">Configuring TLS for a channel</div>
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.channels.greeter.address=greeter.internal:50051
+grpc.channels.greeter.ssl.trust-certificates=classpath:ca.crt
+grpc.channels.greeter.ssl.cert-chain=classpath:client.crt
+grpc.channels.greeter.ssl.private-key=classpath:client.key</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+    channels:
+        greeter:
+            address: 'greeter.internal:50051'
+            ssl:
+                trust-certificates: 'classpath:ca.crt' # <b class="conum">(1)</b>
+                cert-chain: 'classpath:client.crt' # <b class="conum">(2)</b>
+                private-key: 'classpath:client.key'</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.channels.greeter]
+address = "greeter.internal:50051"
+
+[grpc.channels.greeter.ssl]
+trust-certificates = "classpath:ca.crt"
+cert-chain = "classpath:client.crt"
+private-key = "classpath:client.key"</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  channels {
+    greeter {
+      address = "greeter.internal:50051"
+      ssl {
+        trustCertificates = "classpath:ca.crt"
+        certChain = "classpath:client.crt"
+        privateKey = "classpath:client.key"
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    channels {
+      greeter {
+        address = "greeter.internal:50051"
+        ssl {
+          trust-certificates = "classpath:ca.crt"
+          cert-chain = "classpath:client.crt"
+          private-key = "classpath:client.key"
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "channels": {
+      "greeter": {
+        "address": "greeter.internal:50051",
+        "ssl": {
+          "trust-certificates": "classpath:ca.crt",
+          "cert-chain": "classpath:client.crt",
+          "private-key": "classpath:client.key"
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>PEM-encoded CA certificates that verify the server. Without it, the JVM&#8217;s default trust store is used.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>The client certificate and its PKCS#8 private key, for mutual TLS. Configure both or neither.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Properties under <code>grpc.client.ssl</code> are defaults for channels that have no <code>ssl</code> settings of their own. Locations accept the <code>classpath:</code> and <code>file:</code> prefixes. Don&#8217;t combine these settings with <code>plaintext: true</code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2252,6 +2609,63 @@ executor = "io"</code></pre>
 </div>
 </div>
 <div class="sect2">
+<h3 id="injectingStubs">Injecting Client Stubs</h3>
+<div class="paragraph">
+<p>Add the client processor to the annotation processor path of the module that compiles your <code>.proto</code> files:</p>
+</div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">annotationProcessor(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-client-processor")</span></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;annotationProcessorPaths&gt;
+    &lt;path&gt;
+        &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
+        &lt;artifactId&gt;micronaut-grpc-client-processor&lt;/artifactId&gt;
+    &lt;/path&gt;
+&lt;/annotationProcessorPaths&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+build = [
+    <span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-client-processor"</span>,
+]</code></pre>
+</div>
+</div>
+</p>
+</div>
+<div class="paragraph">
+<p>For every service class that <code>protoc-gen-grpc-java</code> generates, the processor generates a bean factory for its stubs. You can then inject the blocking, async and future stubs with <code>@GrpcChannel</code>, by field or constructor:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@Singleton
+public class GreetingClient {
+
+    private final GreeterGrpc.GreeterBlockingStub greeter;
+
+    public GreetingClient(@GrpcChannel("greeter") GreeterGrpc.GreeterBlockingStub greeter) {
+        this.greeter = greeter;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The channel is resolved and configured exactly as for an injected <code>ManagedChannel</code>, including <code>grpc.channels.[NAME]</code> configuration, interceptors and service discovery. All stubs of the same channel share one <code>ManagedChannel</code>. A stub of a disabled channel behaves like a disabled channel: a <code>@Nullable</code> or <code>Optional</code> injection point receives no stub.</p>
+</div>
+<div class="paragraph">
+<p>The generated factories are secondary beans, so a stub bean you define yourself in a <code>@Factory</code> takes precedence. Stubs of other code generators, such as the grpc-kotlin coroutine stubs, aren&#8217;t generated and still need a factory.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_creating_client_stub_beans">Creating Client Stub Beans</h3>
 <div class="paragraph">
 <p>The value of the <code>@GrpcChannel</code> annotation can be used to specify the target server, the configuration for which can also be externalized:</p>
@@ -2333,7 +2747,14 @@ class ExternalizedClients {
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.channels.greeter.address=${my.server}:${my.port}
 grpc.channels.greeter.plaintext=true
-grpc.channels.greeter.max-retry-attempts=10</code></pre>
+grpc.channels.greeter.enable-retry=true
+grpc.channels.greeter.max-retry-attempts=4
+grpc.channels.greeter.default-service-config.methodConfig[0].name[0].service=helloworld.Greeter
+grpc.channels.greeter.default-service-config.methodConfig[0].retryPolicy.maxAttempts=4
+grpc.channels.greeter.default-service-config.methodConfig[0].retryPolicy.initialBackoff=0.1s
+grpc.channels.greeter.default-service-config.methodConfig[0].retryPolicy.maxBackoff=1s
+grpc.channels.greeter.default-service-config.methodConfig[0].retryPolicy.backoffMultiplier=2
+grpc.channels.greeter.default-service-config.methodConfig[0].retryPolicy.retryableStatusCodes[0]=UNAVAILABLE</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -2343,7 +2764,21 @@ grpc.channels.greeter.max-retry-attempts=10</code></pre>
         greeter:
             address: '${my.server}:${my.port}'
             plaintext: true
-            max-retry-attempts: 10</code></pre>
+            enable-retry: true
+            max-retry-attempts: 4
+            default-service-config:
+                methodConfig:
+                    -
+                        name:
+                            -
+                                service: helloworld.Greeter
+                        retryPolicy:
+                            maxAttempts: 4
+                            initialBackoff: 0.1s
+                            maxBackoff: 1s
+                            backoffMultiplier: 2
+                            retryableStatusCodes:
+                                - UNAVAILABLE</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -2351,7 +2786,20 @@ grpc.channels.greeter.max-retry-attempts=10</code></pre>
 <pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.channels.greeter]
 address = "${my.server}:${my.port}"
 plaintext = true
-max-retry-attempts = 10</code></pre>
+enable-retry = true
+max-retry-attempts = 4
+
+[[grpc.channels.greeter.default-service-config.methodConfig]]
+
+[grpc.channels.greeter.default-service-config.methodConfig.retryPolicy]
+maxAttempts = 4
+initialBackoff = "0.1s"
+maxBackoff = "1s"
+backoffMultiplier = 2
+retryableStatusCodes = ["UNAVAILABLE"]
+
+[[grpc.channels.greeter.default-service-config.methodConfig.name]]
+service = "helloworld.Greeter"</code></pre>
 </div>
 </div>
 <div class="listingblock multi-language-sample">
@@ -2361,7 +2809,22 @@ max-retry-attempts = 10</code></pre>
     greeter {
       address = "${my.server}:${my.port}"
       plaintext = true
-      maxRetryAttempts = 10
+      enableRetry = true
+      maxRetryAttempts = 4
+      defaultServiceConfig {
+        methodConfig = [{
+            name = [{
+                service = "helloworld.Greeter"
+              }]
+            retryPolicy {
+              maxAttempts = 4
+              initialBackoff = "0.1s"
+              maxBackoff = "1s"
+              backoffMultiplier = 2
+              retryableStatusCodes = ["UNAVAILABLE"]
+            }
+          }]
+      }
     }
   }
 }</code></pre>
@@ -2375,7 +2838,22 @@ max-retry-attempts = 10</code></pre>
       greeter {
         address = "${my.server}:${my.port}"
         plaintext = true
-        max-retry-attempts = 10
+        enable-retry = true
+        max-retry-attempts = 4
+        default-service-config {
+          methodConfig = [{
+              name = [{
+                  service = "helloworld.Greeter"
+                }]
+              retryPolicy {
+                maxAttempts = 4
+                initialBackoff = "0.1s"
+                maxBackoff = "1s"
+                backoffMultiplier = 2
+                retryableStatusCodes = ["UNAVAILABLE"]
+              }
+            }]
+        }
       }
     }
   }
@@ -2390,7 +2868,22 @@ max-retry-attempts = 10</code></pre>
       "greeter": {
         "address": "${my.server}:${my.port}",
         "plaintext": true,
-        "max-retry-attempts": 10
+        "enable-retry": true,
+        "max-retry-attempts": 4,
+        "default-service-config": {
+          "methodConfig": [{
+              "name": [{
+                  "service": "helloworld.Greeter"
+                }],
+              "retryPolicy": {
+                "maxAttempts": 4,
+                "initialBackoff": "0.1s",
+                "maxBackoff": "1s",
+                "backoffMultiplier": 2,
+                "retryableStatusCodes": ["UNAVAILABLE"]
+              }
+            }]
+        }
       }
     }
   }
@@ -3417,7 +3910,8 @@ class GreeterService extends GreeterGrpc.GreeterImplBase {
 </div>
 </div>
 <div class="paragraph">
-<p>Micronaut will now support the encoding and decoding requests / responses of type <code>application/json</code> via http 1.1.</p>
+<p>Micronaut will now support the encoding and decoding requests / responses of type <code>application/json</code> via http 1.1.
+For browser-oriented gRPC-Web support, see the dedicated guide section at <a href="grpcWeb.html">gRPC-Web</a>.</p>
 </div>
 <div class="sect1">
 <h2 id="_how_this_works">How this works</h2>
@@ -3529,7 +4023,261 @@ service Greeter {
 </div>
 </div>
 
-<h1 id="repository"><a class="anchor" href="#repository"></a>10 Repository</h1>
+<h1 id="grpcWeb"><a class="anchor" href="#grpcWeb"></a>10 gRPC-Web</h1>
+
+<div class='contribute-btn'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/grpcWeb.adoc"'>
+        <i class='fa fa-pencil-square-o'></i> Improve this doc
+    </button>
+</div>
+
+
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Micronaut can also expose <code>@GrpcRestJsonExposed</code> methods through the gRPC-Web wire protocol over HTTP/1.1.</p>
+</div>
+<div class="paragraph">
+<p>This is useful when a browser or browser-facing proxy needs protobuf-native unary calls instead of the JSON transcoding endpoint described in <a href="protocolBuffersJsonSupport.html">Protocol Buffers Json Support</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_setup">Setup</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Add the JSON support module:</p>
+</div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-json-support")</span></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-protobuff-json-support&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+runtime = [
+    <span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-json-support"</span>,
+]</code></pre>
+</div>
+</div>
+</p>
+</div>
+<div class="paragraph">
+<p>Then annotate the gRPC service method you want to expose:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">package com.example.services;
+
+import io.grpc.stub.StreamObserver;
+import io.micronaut.grpc.annotation.GrpcRestJsonExposed;
+import jakarta.inject.Singleton;
+import org.example.grpc.GreeterGrpc;
+import org.example.grpc.HelloRequest;
+import org.example.grpc.HelloResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Singleton
+public class GreeterService extends GreeterGrpc.GreeterImplBase {
+    private static final Logger log = LoggerFactory.getLogger(GreeterService.class);
+
+    @GrpcRestJsonExposed
+    @Override
+    public void sayHello(HelloRequest request, StreamObserver&lt;HelloResponse&gt; responseObserver) {
+        log.debug("Received request: {}", request);
+        String name = request.getName();
+        String greeting = "Hello, " + name;
+
+        HelloResponse reply = HelloResponse.newBuilder()
+                .setGreeting(greeting)
+                .build();
+
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same annotation enables both:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>the JSON endpoint at <code>/grpc-json/{serviceName}/{method}</code></p>
+</li>
+<li>
+<p>the gRPC-Web endpoint at <code>/grpc-web/{serviceName}/{method}</code></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_endpoint_shape">Endpoint Shape</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Unary gRPC-Web requests are served from:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-none hljs">/grpc-web/{serviceName}/{method}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the sample <code>GreeterService#sayHello</code> method this becomes:</p>
+</div>
+<div class="paragraph">
+<p><code><a href="http://localhost:8080/grpc-web/GreeterService/sayHello" class="bare">http://localhost:8080/grpc-web/GreeterService/sayHello</a></code></p>
+</div>
+<div class="paragraph">
+<p>The path prefix defaults to <code>grpc-web</code> and can be changed with:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">micronaut:
+    grpc:
+        web:
+            path: custom-grpc-web</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_supported_content_types">Supported Content Types</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The endpoint accepts the following media types, ignoring case and parameters, and answers with the media type of the request:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>application/grpc-web</code> and <code>application/grpc-web+proto</code></p>
+</li>
+<li>
+<p><code>application/grpc-web-text</code> and <code>application/grpc-web-text+proto</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Binary requests use the standard gRPC-Web frame format.
+Text requests use the same frames, base64-encoded for browser compatibility.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_request_format">Request Format</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Each request body must contain a framed protobuf message:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>One byte of flags.</p>
+</li>
+<li>
+<p>Four bytes of message length.</p>
+</li>
+<li>
+<p>The serialized protobuf payload.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>The current implementation supports unary requests with an uncompressed data frame.
+Compressed request frames are rejected.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_response_format">Response Format</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Successful responses include:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>one protobuf data frame containing the unary response message</p>
+</li>
+<li>
+<p>one trailers frame containing <code>grpc-status: 0</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The status is only sent in the trailers frame, not as response headers.</p>
+</div>
+<div class="paragraph">
+<p>Error responses are also returned using gRPC-Web framing, with a trailers frame containing <code>grpc-status</code> and <code>grpc-message</code>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A status raised by the service, passed to <code>onError</code> or thrown as a <code>StatusRuntimeException</code>, is sent as is.</p>
+</li>
+<li>
+<p>An unknown service or method is sent as <code>UNIMPLEMENTED</code> (12), and a malformed request as <code>INVALID_ARGUMENT</code> (3).</p>
+</li>
+<li>
+<p>Any other failure is sent as <code>INTERNAL</code> (13) with a generic message, so that internal error details are not exposed. The failure is logged.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example_flow">Example Flow</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>With this proto definition:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-protobuf hljs" data-lang="protobuf">syntax = "proto3";
+package helloworld;
+
+option java_package = "org.example.grpc";
+option java_outer_classname = "HelloworldProto";
+option java_multiple_files = true;
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloResponse {
+  string greeting = 1;
+}
+
+service Greeter {
+  rpc sayHello (HelloRequest) returns (HelloResponse);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>the gRPC-Web endpoint expects a framed <code>HelloRequest</code> protobuf payload and returns a framed <code>HelloResponse</code> protobuf payload.</p>
+</div>
+<div class="paragraph">
+<p>In practice, a browser application will usually rely on a gRPC-Web client library or proxy to construct these frames rather than building them manually.</p>
+</div>
+</div>
+</div>
+
+<h1 id="repository"><a class="anchor" href="#repository"></a>11 Repository</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/repository.adoc"'>
