@@ -1,0 +1,22 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+}
+
+dependencies {
+    runtimeOnly(libs.guava) {
+        because("Maven consumers don't inherit the published dependency constraint; grpc-java brings in a Guava version affected by GHSA-xxph-c9ww-hj94")
+    }
+    api platform(libs.boms.grpc)
+    api(libs.managed.grpc.core)
+    api mnMicrometer.micronaut.micrometer.observation
+    api mnMicrometer.micrometer.observation
+
+    testImplementation projects.micronautGrpcServerRuntime
+    testImplementation projects.micronautGrpcClientRuntime
+    testImplementation mnMicrometer.micronaut.micrometer.core
+    testImplementation mn.micronaut.runtime
+}
+
+micronautBuild {
+    binaryCompatibility.enabledAfter("5.3.0")
+}

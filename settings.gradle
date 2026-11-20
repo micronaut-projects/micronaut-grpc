@@ -29,6 +29,7 @@ include 'test-suite-kotlin'
 include 'test-suite-python'
 include 'test-suite-protobuff-json-java'
 include 'grpc-health'
+include 'grpc-micrometer'
 include 'grpc-opentracing'
 
 //experiemental feature so we're putting at the bottom
@@ -38,6 +39,7 @@ micronautBuild {
     useStandardizedProjectNames = true
     importMicronautCatalog()
     importMicronautCatalog("micronaut-reactor")
+    importMicronautCatalog("micronaut-micrometer")
     importMicronautCatalog("micronaut-tracing")
     importMicronautCatalog("micronaut-validation")
 }

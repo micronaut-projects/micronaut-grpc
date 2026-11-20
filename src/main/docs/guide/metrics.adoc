@@ -1,0 +1,46 @@
+The `micronaut-grpc-micrometer` module observes every gRPC call with https://docs.micrometer.io/micrometer/reference/reference/grpc.html[Micrometer's gRPC instrumentation]. Each call becomes a `grpc.server` or `grpc.client` observation. Micronaut Micrometer's observation handlers turn observations into timers and, when Micrometer Tracing is configured, into spans.
+
+Add the module together with Micronaut Micrometer and a meter registry:
+
+dependency:micronaut-grpc-micrometer[groupId="io.micronaut.grpc"]
+
+dependency:micronaut-micrometer-core[groupId="io.micronaut.micrometer"]
+
+The module registers a server interceptor and a client interceptor when an `ObservationRegistry` bean exists, which `micronaut-micrometer-observation` provides. Like any interceptor bean, they are installed on the gRPC server and on every channel. They run ahead of interceptors with the default order, so calls that another interceptor rejects or fails are observed too.
+
+The timers are named `grpc.server` and `grpc.client`, and carry these tags:
+
+|===
+|Tag |Description
+
+|`rpc.service`
+|The gRPC service, for example `helloworld.Greeter`
+
+|`rpc.method`
+|The method, for example `SayHello`
+
+|`rpc.type`
+|The method type: `UNARY`, `CLIENT_STREAMING`, `SERVER_STREAMING` or `BIDI_STREAMING`
+
+|`grpc.status_code`
+|The status the call ended with, for example `OK` or `UNAVAILABLE`
+|===
+
+Client timers also carry the `net.peer.name` and `net.peer.port` of the target.
+
+To change the names or tags, declare a `GrpcServerObservationConvention` or `GrpcClientObservationConvention` bean; it replaces Micrometer's default convention.
+
+Server and client observations can be turned off separately:
+
+[configuration]
+----
+micrometer:
+    observation:
+        grpc:
+            server:
+                enabled: false
+            client:
+                enabled: true
+----
+
+NOTE: `micronaut-micrometer-core` also registers Micrometer's older `MetricCollecting` gRPC interceptors, which record `grpc.server.processing.duration` and similar meters. When you use this module, set `micronaut.metrics.binders.grpc.enabled` to `false` to avoid recording each call twice.

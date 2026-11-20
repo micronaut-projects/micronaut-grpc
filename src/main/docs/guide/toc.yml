@@ -6,6 +6,7 @@ server: gRPC Server
 client: gRPC Clients
 serviceDiscovery: Service Discovery
 tracing: Distributed Tracing
+metrics: Metrics
 protocolBuffers: Protocol Buffers Support
 protocolBuffersJsonSupport: Protocol Buffers Json Support (Experimental)
 repository: Repository

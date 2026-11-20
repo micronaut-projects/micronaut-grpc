@@ -22,6 +22,7 @@ micronaut-serde = "3.2.4"
 micronaut-platform = "5.2.2"
 micronaut-discovery-client = "5.1.0"
 micronaut-reactor = "4.3.0"
+micronaut-micrometer = "6.1.0"
 micronaut-tracing = "8.3.0"
 micronaut-validation = "5.2.1"
 micronaut-kotlin = "5.1.0"
@@ -50,6 +51,7 @@ boms-grpc = { module = 'io.grpc:grpc-bom', version.ref = 'managed-grpc' }
 micronaut-core = { module = 'io.micronaut:micronaut-core-bom', version.ref = 'micronaut' }
 micronaut-tracing-legacy = { module = 'io.micronaut:micronaut-tracing', version.ref = 'micronaut-tracing-legacy' }
 micronaut-reactor = { module = 'io.micronaut.reactor:micronaut-reactor-bom', version.ref = 'micronaut-reactor' }
+micronaut-micrometer = { module = 'io.micronaut.micrometer:micronaut-micrometer-bom', version.ref = 'micronaut-micrometer' }
 micronaut-tracing = { module = 'io.micronaut.tracing:micronaut-tracing-bom', version.ref = 'micronaut-tracing' }
 micronaut-discovery-client = { module = "io.micronaut.discovery:micronaut-discovery-client", version.ref = "micronaut-discovery-client" }
 micronaut-validation = { module = 'io.micronaut.validation:micronaut-validation-bom', version.ref = 'micronaut-validation' }
