@@ -108,6 +108,33 @@ and then the order will be reversed when sending the response message.
 Request -> 1 -> 2 -> 3 -> business logic -> 3 -> 2 -> 1 -> Response
 ----
 
+=== Context Propagation
+
+gRPC delivers each event of a call (messages, half-close, cancellation) as a separate task on the server executor, possibly on a different thread. A unary service method runs when the client half-closes the call, so a Micronaut `PropagatedContext` that a server interceptor makes current while it starts the call would otherwise be gone by the time the method runs.
+
+Micronaut registers an interceptor that runs last, closest to the service, and makes that context current again for every later event of the call. A server interceptor can therefore add context elements, for example an authenticated user or MDC entries, and the service method sees them:
+
+[source,java]
+----
+@Singleton
+public class TenantInterceptor implements ServerInterceptor {
+    private static final Metadata.Key<String> TENANT = Metadata.Key.of("x-tenant", Metadata.ASCII_STRING_MARSHALLER);
+
+    @Override
+    public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call,
+                                                                 Metadata headers,
+                                                                 ServerCallHandler<ReqT, RespT> next) {
+        return PropagatedContext.getOrEmpty()
+            .plus(new Tenant(headers.get(TENANT))) // your own PropagatedContextElement
+            .propagate(() -> next.startCall(call, headers));
+    }
+}
+----
+
+This covers interceptors registered as beans. Interceptors applied to a single service with `ServerInterceptors.intercept(..)` run inside Micronaut's interceptor, so a context they make current is not carried to later events. The captured context is only a fallback: if an interceptor makes a context current around a later event, for example around one message, that context takes precedence.
+
+To turn this off, set `grpc.server.context-propagation.enabled` to `false`.
+
 === Health checks
 
 ==== gRPC Health checks
