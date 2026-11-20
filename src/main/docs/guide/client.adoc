@@ -43,6 +43,22 @@ Alternatively if you prefer programmatic configuration you can write a `BeanCrea
 
 snippet::helloworld.ManagedChannelBuilderListener[tags="imports,clazz", source="main", title="Configuring the NettyChannelBuilder"]
 
+==== Client Executors
+
+Each channel runs its callbacks, such as `StreamObserver.onNext` of an async stub, on Micronaut's I/O executor. Set `grpc.client.executor` for every channel, or `grpc.channels.[NAME].executor` for one, to the name of another `Executor` bean. For example, to run callbacks on virtual threads:
+
+[configuration]
+----
+grpc:
+    client:
+        executor: blocking
+    channels:
+        greeter:
+            executor: io
+----
+
+The value can also be an `Executor` instance supplied by a programmatic property source. An unknown executor name fails when the channel is created. The built-in `@GrpcChannel("grpc-server")` channel to the embedded server, used in tests, always uses the I/O executor.
+
 === Auto Injected Types
 
 By default, each channel will automatically be dependency injected with beans of the following types:
