@@ -247,6 +247,25 @@ class GrpcNamedChannelSpec extends Specification {
         context.close()
     }
 
+    void "test unnamed channel target is not overridden by default client target"() {
+        given:
+        def port = SocketUtils.findAvailableTcpPort()
+        def context = ApplicationContext.run([
+                'grpc.client.target' : 'dns:///other.example:9999',
+                'grpc.client.address': 'other.example:9998'
+        ])
+
+        when:
+        def channel = context.createBean(NettyChannelBuilder, "http://localhost:${port}").build()
+
+        then:
+        channel.authority() == "localhost:${port}"
+
+        cleanup:
+        channel?.shutdownNow()
+        context.close()
+    }
+
     @Retry
     void "test named client - eager init"() {
         given:
