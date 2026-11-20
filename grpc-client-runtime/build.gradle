@@ -24,6 +24,8 @@ dependencies {
     implementation mn.reactor
     implementation mn.micronaut.buffer.netty
 
+    testAnnotationProcessor mn.micronaut.inject.java
+    testAnnotationProcessor projects.micronautGrpcClientProcessor
     testCompileOnly libs.javax.annotation.api
     testCompileOnly libs.managed.protobuf.java
 

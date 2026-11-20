@@ -1,0 +1,11 @@
+plugins {
+    id 'io.micronaut.build.internal.grpc-module'
+}
+
+dependencies {
+    api mn.micronaut.inject.java
+}
+
+micronautBuild {
+    binaryCompatibility.enabledAfter("5.3.0")
+}
