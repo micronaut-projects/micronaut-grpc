@@ -69,6 +69,27 @@ Alternatively if you prefer programmatic configuration you can write a `BeanCrea
 
 snippet::helloworld.ManagedChannelBuilderListener[tags="imports,clazz", source="main", title="Configuring the NettyChannelBuilder"]
 
+==== TLS and Mutual TLS
+
+A channel can verify the server against your own CA certificates and present a client certificate to servers that require one:
+
+.Configuring TLS for a channel
+[configuration]
+----
+grpc:
+    channels:
+        greeter:
+            address: 'greeter.internal:50051'
+            ssl:
+                trust-certificates: 'classpath:ca.crt' # <1>
+                cert-chain: 'classpath:client.crt' # <2>
+                private-key: 'classpath:client.key'
+----
+<1> PEM-encoded CA certificates that verify the server. Without it, the JVM's default trust store is used.
+<2> The client certificate and its PKCS#8 private key, for mutual TLS. Configure both or neither.
+
+Properties under `grpc.client.ssl` are defaults for channels that have no `ssl` settings of their own. Locations accept the `classpath:` and `file:` prefixes. Don't combine these settings with `plaintext: true`.
+
 ==== Client Executors
 
 Each channel runs its callbacks, such as `StreamObserver.onNext` of an async stub, on Micronaut's I/O executor. Set `grpc.client.executor` for every channel, or `grpc.channels.[NAME].executor` for one, to the name of another `Executor` bean. For example, to run callbacks on virtual threads:

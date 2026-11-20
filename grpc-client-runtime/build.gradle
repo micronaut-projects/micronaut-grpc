@@ -65,3 +65,24 @@ micronautBuild {
         acceptedRegressionsFile = file("config/accepted-api-changes.json")
     }
 }
+
+testing {
+    suites {
+        // Runs without the gRPC server and HTTP modules, which the main test suite depends on, to check that the client
+        // works on its own.
+        clientOnlyTest(JvmTestSuite) {
+            useJUnitJupiter()
+            dependencies {
+                implementation platform(mn.micronaut.core.bom)
+                implementation platform(libs.boms.grpc)
+                implementation project()
+                implementation mn.micronaut.context
+                implementation libs.grpc.netty
+            }
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn testing.suites.clientOnlyTest
+}

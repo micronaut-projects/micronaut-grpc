@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 
 import io.grpc.ServerBuilder;
+import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyServerBuilder;
 import io.micronaut.context.annotation.ConfigurationBuilder;
 import io.micronaut.context.annotation.ConfigurationProperties;
@@ -38,6 +39,9 @@ import io.micronaut.scheduling.TaskExecutors;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import io.netty.handler.ssl.ClientAuth;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
 
 
 /**
@@ -271,10 +275,14 @@ public class GrpcServerConfiguration {
                     try {
                         try (InputStream certStream = certChain.get()) {
                             try (InputStream keyStream = privateKey.get()) {
-                                serverBuilder.useTransportSecurity(
-                                    certStream,
-                                    keyStream
-                                );
+                                if (isMutualTls(sslConfiguration)) {
+                                    serverBuilder.sslContext(buildServerSslContext(sslConfiguration, certStream, keyStream));
+                                } else {
+                                    serverBuilder.useTransportSecurity(
+                                        certStream,
+                                        keyStream
+                                    );
+                                }
                             }
                         }
                         this.secure = true;
@@ -282,6 +290,9 @@ public class GrpcServerConfiguration {
                         throw new ConfigurationException("Unable to configure SSL certificate: " + e.getMessage(), e);
                     }
                 } else {
+                    if (!hasCert && !hasPrivateKey && isMutualTls(sslConfiguration)) {
+                        throw new ConfigurationException("'trust-certificates' and 'client-auth' require 'cert-chain' and 'private-key' to be configured");
+                    }
                     if (hasCert) {
                         try {
                             certChain.get().close();
@@ -312,4 +323,23 @@ public class GrpcServerConfiguration {
         return maxInboundMetadataSize;
     }
 
+    private static boolean isMutualTls(GrpcSslConfiguration sslConfiguration) {
+        return sslConfiguration.getTrustCertificates().isPresent() || sslConfiguration.getClientAuth() != ClientAuth.NONE;
+    }
+
+    private SslContext buildServerSslContext(GrpcSslConfiguration sslConfiguration,
+                                             InputStream certStream,
+                                             InputStream keyStream) throws IOException {
+        SslContextBuilder builder = GrpcSslContexts.forServer(certStream, keyStream)
+            .clientAuth(sslConfiguration.getClientAuth());
+        Optional<String> trustLocation = sslConfiguration.getTrustCertificates();
+        if (trustLocation.isPresent()) {
+            String location = trustLocation.get();
+            try (InputStream trustStream = resourceResolver.getResourceAsStream(location)
+                .orElseThrow(() -> new ConfigurationException("Trust certificates not found: " + location))) {
+                builder.trustManager(trustStream);
+            }
+        }
+        return builder.build();
+    }
 }

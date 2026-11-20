@@ -13,12 +13,20 @@ dependencies {
     implementation(libs.gson) {
         because("Vulnerability in 2.11.0")
     }
+    testAnnotationProcessor mn.micronaut.inject.java
+    testAnnotationProcessor projects.micronautProtobuffProcessor
     testImplementation mn.micronaut.http.server.netty
     testImplementation mnReactor.micronaut.reactor.http.client
     testImplementation mn.micronaut.jackson.databind
     testImplementation libs.jackson.datatype.protobuf
 
     testRuntimeOnly mn.micronaut.jackson.databind
+}
+
+tasks.named('compileTestJava', JavaCompile) {
+    // protoc only annotates the outer wrapper of the nested test messages, so compile them the way Gradle
+    // applications do by default to check that the processor still finds them
+    options.compilerArgs.add('-Amicronaut.processing.incremental=true')
 }
 
 protobuf {

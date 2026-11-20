@@ -30,6 +30,9 @@ import io.micronaut.context.annotation.Parameter;
 import io.micronaut.context.annotation.Prototype;
 import io.micronaut.context.env.Environment;
 import io.micronaut.context.exceptions.ConfigurationException;
+import io.micronaut.core.io.ResourceResolver;
+import io.micronaut.core.io.file.FileSystemResourceLoader;
+import io.micronaut.core.io.scan.ClassPathResourceLoader;
 import io.micronaut.core.util.CollectionUtils;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.inject.qualifiers.Qualifiers;
@@ -87,11 +90,30 @@ public class GrpcChannelBuilderFactory {
         );
         final NettyChannelBuilder channelBuilder = config.getChannelBuilder();
         resolveExecutor(config.getName()).ifPresent(channelBuilder::executor);
+        GrpcChannelSslSupport.apply(
+            channelBuilder,
+            config instanceof GrpcNamedManagedChannelConfiguration ? config.getName() : null,
+            beanContext.getEnvironment(),
+            this::resourceResolver
+        );
         if (CollectionUtils.isNotEmpty(interceptors)) {
             Collections.reverse(interceptors);
             channelBuilder.intercept(interceptors);
         }
         return channelBuilder;
+    }
+
+    /**
+     * The resolver for certificate locations. The HTTP or gRPC server modules provide one, but an application that only
+     * uses the client does not have a resolver bean.
+     *
+     * @return The resource resolver
+     */
+    private ResourceResolver resourceResolver() {
+        return beanContext.findBean(ResourceResolver.class).orElseGet(() -> new ResourceResolver(List.of(
+            ClassPathResourceLoader.defaultLoader(beanContext.getClassLoader()),
+            FileSystemResourceLoader.defaultLoader()
+        )));
     }
 
     /**

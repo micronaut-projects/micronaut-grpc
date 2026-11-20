@@ -29,6 +29,8 @@ dependencies {
     api libs.managed.grpc.stub
     api libs.managed.grpc.protobuf
     api projects.micronautGrpcAnnotation
+    // api: consumers need ProtobufMessageFactory on the compile classpath for the processor to generate factories
+    api projects.micronautProtobuffSupport
     implementation libs.managed.grpc.inprocess
 
     implementation(libs.gson) {
@@ -39,6 +41,8 @@ dependencies {
     testCompileOnly libs.managed.protobuf.java
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-json
 
+    testAnnotationProcessor mn.micronaut.inject.java
+    testAnnotationProcessor projects.micronautProtobuffProcessor
     testImplementation libs.managed.grpc.services
     testImplementation mn.micronaut.discovery.core
     testImplementation mnReactor.micronaut.reactor.http.client
