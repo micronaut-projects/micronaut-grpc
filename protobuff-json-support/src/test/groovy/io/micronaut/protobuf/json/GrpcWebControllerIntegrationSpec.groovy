@@ -14,6 +14,8 @@ import spock.lang.Unroll
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
 import java.util.Base64
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 @MicronautTest(environments = ["test"])
 class GrpcWebControllerIntegrationSpec extends Specification {
@@ -144,6 +146,40 @@ class GrpcWebControllerIntegrationSpec extends Specification {
         name                 | code | message
         "grpc-web-not-found" | 5    | "No greeting for you"
         "grpc-web-denied"    | 7    | "Denied"
+    }
+
+    def "runs gRPC-Web calls off the event loop"() {
+        when:
+        HttpResponse<byte[]> response = httpClient.toBlocking().exchange(grpcWebRequest("grpc-web-thread"), byte[])
+
+        then:
+        def thread = HelloResponse.parseFrom(readFrames(response.body())[0].payload).greeting
+        !thread.toLowerCase(Locale.ROOT).contains("eventloop")
+    }
+
+    def "answers other requests while a service completes its response asynchronously"() {
+        when:
+        CompletableFuture<HttpResponse<byte[]>> delayed = CompletableFuture.supplyAsync {
+            httpClient.toBlocking().exchange(grpcWebRequest("grpc-web-delayed"), byte[])
+        }
+        HttpResponse<byte[]> other = httpClient.toBlocking().exchange(grpcWebRequest("Micronaut"), byte[])
+
+        then:
+        HelloResponse.parseFrom(readFrames(other.body())[0].payload).greeting == "TEST Hello, Micronaut"
+        !delayed.isDone()
+
+        when:
+        HttpResponse<byte[]> delayedResponse = delayed.get(10, TimeUnit.SECONDS)
+
+        then:
+        HelloResponse.parseFrom(readFrames(delayedResponse.body())[0].payload).greeting == "TEST Hello, delayed"
+    }
+
+    private static HttpRequest<byte[]> grpcWebRequest(String name) {
+        HttpRequest.POST("/grpc-web/GreeterService/sayHello", frame(HelloRequest.newBuilder().setName(name).build().toByteArray()))
+                .header("content-type", CONTENT_TYPE)
+                .header("accept", CONTENT_TYPE)
+                .header("x-grpc-web", "1")
     }
 
     private static byte[] frame(byte[] message) {

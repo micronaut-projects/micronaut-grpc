@@ -6,6 +6,9 @@ import io.micronaut.context.annotation.Requires
 import io.micronaut.grpc.annotation.GrpcRestJsonExposed
 import io.micronaut.grpc.annotation.GrpcService
 import jakarta.inject.Singleton
+
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 import org.example.grpc.GreeterGrpc
 import org.example.grpc.HelloRequest
 import org.example.grpc.HelloResponse
@@ -24,6 +27,19 @@ class GreeterService extends GreeterGrpc.GreeterImplBase {
         log.info("Request {} happening", request)
         if (request.name == "grpc-web-not-found") {
             responseObserver.onError(Status.NOT_FOUND.withDescription("No greeting for you").asRuntimeException())
+            return
+        }
+        if (request.name == "grpc-web-thread") {
+            responseObserver.onNext(HelloResponse.newBuilder().setGreeting(Thread.currentThread().name).build())
+            responseObserver.onCompleted()
+            return
+        }
+        if (request.name == "grpc-web-delayed") {
+            // Completes the observer later on another thread, as an asynchronous service implementation would.
+            CompletableFuture.delayedExecutor(500, TimeUnit.MILLISECONDS).execute {
+                responseObserver.onNext(HelloResponse.newBuilder().setGreeting("TEST Hello, delayed").build())
+                responseObserver.onCompleted()
+            }
             return
         }
         if (request.name == "grpc-web-denied") {

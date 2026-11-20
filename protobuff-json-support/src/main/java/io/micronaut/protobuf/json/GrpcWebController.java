@@ -32,6 +32,8 @@ import io.grpc.Status;
 import io.micronaut.protobuf.json.exception.MethodNotFoundException;
 import io.micronaut.protobuf.json.exception.ServiceNotFoundException;
 import io.micronaut.protobuf.json.grpc.GrpcProxyService;
+import io.micronaut.scheduling.TaskExecutors;
+import io.micronaut.scheduling.annotation.ExecuteOn;
 import jakarta.inject.Singleton;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
@@ -48,6 +50,8 @@ import java.util.Locale;
  */
 @Experimental
 @Singleton
+// The proxy call waits for the service to complete its response observer, so it must not run on the event loop.
+@ExecuteOn(TaskExecutors.BLOCKING)
 @Controller("/${micronaut.grpc.web.path:`grpc-web`}")
 public final class GrpcWebController {
     static final String GRPC_WEB = "application/grpc-web";
