@@ -57,7 +57,7 @@ grpc:
             executor: io
 ----
 
-An unknown executor name fails when the channel is created.
+The value can also be an `Executor` instance supplied by a programmatic property source. An unknown executor name fails when the channel is created. The built-in `@GrpcChannel("grpc-server")` channel to the embedded server, used in tests, always uses the I/O executor.
 
 === Auto Injected Types
 

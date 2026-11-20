@@ -86,7 +86,7 @@ public class GrpcChannelBuilderFactory {
             }
         );
         final NettyChannelBuilder channelBuilder = config.getChannelBuilder();
-        resolveExecutor(target).ifPresent(channelBuilder::executor);
+        resolveExecutor(config.getName()).ifPresent(channelBuilder::executor);
         if (CollectionUtils.isNotEmpty(interceptors)) {
             Collections.reverse(interceptors);
             channelBuilder.intercept(interceptors);
@@ -95,18 +95,29 @@ public class GrpcChannelBuilderFactory {
     }
 
     /**
-     * Resolves the executor named by {@code grpc.channels.<target>.executor}, or by {@code grpc.client.executor} for
-     * every channel. Without either, the channel keeps the I/O executor.
+     * Resolves the executor configured by {@code grpc.channels.<name>.executor}, or by {@code grpc.client.executor} for
+     * every channel. The value is the name of an {@link Executor} bean, or an {@link Executor} instance supplied by a
+     * programmatic property source. Without either, the channel keeps the I/O executor.
      *
-     * @param target The channel target
+     * @param channelName The name of the matched channel configuration
      * @return The executor, if one is configured
      */
-    private Optional<Executor> resolveExecutor(String target) {
+    private Optional<Executor> resolveExecutor(String channelName) {
         Environment environment = beanContext.getEnvironment();
-        return environment.getProperty(GrpcManagedChannelConfiguration.PREFIX + '.' + target + EXECUTOR, String.class)
-            .or(() -> environment.getProperty(GrpcDefaultManagedChannelConfiguration.PREFIX + EXECUTOR, String.class))
-            .filter(StringUtils::isNotEmpty)
-            .map(name -> beanContext.findBean(Executor.class, Qualifiers.byName(name))
-                .orElseThrow(() -> new ConfigurationException("No executor bean named [" + name + "] is available for gRPC channel [" + target + "]")));
+        return environment.getProperty(GrpcManagedChannelConfiguration.PREFIX + '.' + channelName + EXECUTOR, Object.class)
+            .or(() -> environment.getProperty(GrpcDefaultManagedChannelConfiguration.PREFIX + EXECUTOR, Object.class))
+            .flatMap(value -> toExecutor(value, channelName));
+    }
+
+    private Optional<Executor> toExecutor(Object value, String channelName) {
+        if (value instanceof Executor executor) {
+            return Optional.of(executor);
+        }
+        String name = value.toString();
+        if (StringUtils.isEmpty(name)) {
+            return Optional.empty();
+        }
+        return Optional.of(beanContext.findBean(Executor.class, Qualifiers.byName(name))
+            .orElseThrow(() -> new ConfigurationException("No executor bean named [" + name + "] is available for gRPC channel [" + channelName + "]")));
     }
 }

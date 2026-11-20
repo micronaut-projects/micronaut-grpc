@@ -20,6 +20,9 @@ import jakarta.inject.Singleton
 import spock.lang.Specification
 
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import java.util.concurrent.ThreadFactory
 import java.util.concurrent.TimeUnit
 
 class GrpcExecutorSpec extends Specification {
@@ -123,6 +126,77 @@ class GrpcExecutorSpec extends Specification {
 
         cleanup:
         context.close()
+    }
+
+    void "an Executor instance from a programmatic property source is used directly"() {
+        given:
+        int port = SocketUtils.findAvailableTcpPort()
+        ExecutorService custom = Executors.newSingleThreadExecutor({ Runnable r -> new Thread(r, 'custom-grpc-callbacks') } as ThreadFactory)
+        EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
+                'spec.name'                       : 'GrpcExecutorSpec',
+                'grpc.server.port'                : port,
+                'grpc.channels.executors.address'  : "localhost:$port".toString(),
+                'grpc.channels.executors.plaintext': true,
+                'grpc.channels.executors.executor' : custom,
+        ])
+        GreeterGrpc.GreeterStub stub = server.applicationContext.getBean(Client).stub
+
+        expect:
+        callbackThread(stub).name == 'custom-grpc-callbacks'
+
+        cleanup:
+        server?.close()
+        custom?.shutdownNow()
+    }
+
+    void "the executor follows the channel configuration matched for the injection point"() {
+        given: 'the injection point uses a different letter case than the configuration key'
+        int port = SocketUtils.findAvailableTcpPort()
+        EmbeddedServer server = ApplicationContext.run(EmbeddedServer, [
+                'spec.name'                       : 'GrpcExecutorSpec-case',
+                'grpc.server.port'                : port,
+                'grpc.channels.executors.address'  : "localhost:$port".toString(),
+                'grpc.channels.executors.plaintext': true,
+                'grpc.channels.executors.executor' : TaskExecutors.BLOCKING,
+        ])
+        GreeterGrpc.GreeterStub stub = server.applicationContext.getBean(UpperCaseClient).stub
+
+        expect:
+        callbackThread(stub).virtual
+
+        cleanup:
+        server?.close()
+    }
+
+    private static Thread callbackThread(GreeterGrpc.GreeterStub stub) {
+        CompletableFuture<Thread> callbackThread = new CompletableFuture<>()
+        stub.sayHello(HelloRequest.newBuilder().setName('Fred').build(), new StreamObserver<HelloReply>() {
+            @Override
+            void onNext(HelloReply value) {
+                callbackThread.complete(Thread.currentThread())
+            }
+
+            @Override
+            void onError(Throwable t) {
+                callbackThread.completeExceptionally(t)
+            }
+
+            @Override
+            void onCompleted() {
+                // Nothing to do: the reply is handled in onNext.
+            }
+        })
+        callbackThread.get(10, TimeUnit.SECONDS)
+    }
+
+    @Singleton
+    @Requires(property = 'spec.name', value = 'GrpcExecutorSpec-case')
+    static class UpperCaseClient {
+        final GreeterGrpc.GreeterStub stub
+
+        UpperCaseClient(@GrpcChannel('EXECUTORS') Channel channel) {
+            this.stub = GreeterGrpc.newStub(channel)
+        }
     }
 
     @Singleton
