@@ -24,7 +24,7 @@ import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import java.util.Objects;
 
 /**
  * The {@code GrpcServiceRegistrar} is responsible for processing methods annotated with
@@ -59,7 +59,7 @@ public class GrpcServiceRegistrar implements ExecutableMethodProcessor<GrpcRestJ
     private final GrpcServiceRegistry registry;
 
     public GrpcServiceRegistrar(GrpcServiceRegistry registry) {
-        this.registry = checkNotNull(registry, "GrpcServiceRegistry cannot be null");
+        this.registry = Objects.requireNonNull(registry, "GrpcServiceRegistry cannot be null");
     }
 
     /**
