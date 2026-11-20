@@ -4,6 +4,9 @@ plugins {
 }
 
 dependencies {
+    runtimeOnly(libs.guava) {
+        because("Maven consumers don't inherit the published dependency constraint; grpc-java brings in a Guava version affected by GHSA-xxph-c9ww-hj94")
+    }
     api platform(libs.boms.protobuf)
     api platform(libs.boms.grpc)
     api projects.micronautGrpcAnnotation
