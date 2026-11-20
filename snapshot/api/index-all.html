@@ -147,6 +147,10 @@ loadScripts(document, 'script');</script>
 <dl class="index">
 <dt><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#channelBuilder" class="member-name-link">channelBuilder</a> - Variable in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#channelName()" class="member-name-link">channelName()</a> - Method in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">Returns the value of the <a href="./io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#param-channelName"><code>channelName</code></a> record component.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/security/GrpcServerSecurityRule.html#check(io.grpc.ServerCall,io.grpc.Metadata,io.micronaut.security.authentication.Authentication)" class="member-name-link">check(ServerCall, Metadata, Authentication)</a> - Method in interface io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/GrpcServerSecurityRule.html" title="interface in io.micronaut.grpc.server.security">GrpcServerSecurityRule</a></dt>
 <dd>
 <div class="block">Checks the current gRPC server call.</div>
@@ -199,6 +203,12 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/protobuf/convert/ByteBufToProtoMessageConverter.html#convert(io.netty.buffer.ByteBuf,java.lang.Class,io.micronaut.core.convert.ConversionContext)" class="member-name-link">convert(ByteBuf, Class, ConversionContext)</a> - Method in class io.micronaut.protobuf.convert.<a href="io/micronaut/protobuf/convert/ByteBufToProtoMessageConverter.html" title="class in io.micronaut.protobuf.convert">ByteBufToProtoMessageConverter</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerInterceptor.html#currentState()" class="member-name-link">currentState()</a> - Method in class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerInterceptor.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerInterceptor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerRegistry.html#currentState(java.lang.String)" class="member-name-link">currentState(String)</a> - Method in class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerRegistry.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerRegistry</a></dt>
+<dd>
+<div class="block">Returns the state of a channel's circuit breaker.</div>
+</dd>
 </dl>
 <h2 class="title" id="I:D">D</h2>
 <dl class="index">
@@ -210,6 +220,15 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#DEFAULT_AWAIT_TERMINATION" class="member-name-link">DEFAULT_AWAIT_TERMINATION</a> - Static variable in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#DEFAULT_FAILURE_STATUS_CODES" class="member-name-link">DEFAULT_FAILURE_STATUS_CODES</a> - Static variable in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">The status codes that count as failures by default: those that indicate the server is unreachable or overloaded,
+rather than an application error.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#DEFAULT_FAILURE_THRESHOLD" class="member-name-link">DEFAULT_FAILURE_THRESHOLD</a> - Static variable in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">The default number of consecutive failures that opens the circuit.</div>
+</dd>
 <dt><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#DEFAULT_MEDIA_TYPES" class="member-name-link">DEFAULT_MEDIA_TYPES</a> - Static variable in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
 <dd>
 <div class="block">List of default protobuf media types.</div>
@@ -220,9 +239,21 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#DEFAULT_PORT" class="member-name-link">DEFAULT_PORT</a> - Static variable in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#DEFAULT_RESET_TIMEOUT" class="member-name-link">DEFAULT_RESET_TIMEOUT</a> - Static variable in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">The default time the circuit stays open.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html#DEFAULT_TIMEOUT" class="member-name-link">DEFAULT_TIMEOUT</a> - Static variable in class io.micronaut.protobuf.json.transcoding.<a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingConfiguration</a></dt>
+<dd>
+<div class="block">The default deadline of a transcoded call.</div>
+</dd>
 </dl>
 <h2 class="title" id="I:E">E</h2>
 <dl class="index">
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#enabled()" class="member-name-link">enabled()</a> - Method in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">Returns the value of the <a href="./io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#param-enabled"><code>enabled</code></a> record component.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html#ENABLED" class="member-name-link">ENABLED</a> - Static variable in class io.micronaut.grpc.client.propagation.<a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor</a></dt>
 <dd>
 <div class="block">The property that enables client context propagation.</div>
@@ -235,6 +266,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The property that enables server context propagation.</div>
 </dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html#ENABLED" class="member-name-link">ENABLED</a> - Static variable in class io.micronaut.protobuf.json.transcoding.<a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingConfiguration</a></dt>
+<dd>
+<div class="block">The property that enables REST transcoding.</div>
+</dd>
 <dt><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#encode(T)" class="member-name-link">encode(T)</a> - Method in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/protobuf/codec/ProtobufferCodec.html#encode(T,io.micronaut.core.io.buffer.ByteBufferFactory)" class="member-name-link">encode(T, ByteBufferFactory)</a> - Method in class io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a></dt>
@@ -245,6 +280,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="helloworld/HelloRequest.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in class helloworld.<a href="helloworld/HelloRequest.html" title="class in helloworld">HelloRequest</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">Indicates whether some other object is "equal to" this one.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/security/InterceptMethodMapPattern.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in record class io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/InterceptMethodMapPattern.html" title="class in io.micronaut.grpc.server.security">InterceptMethodMapPattern</a></dt>
 <dd>
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
@@ -274,6 +313,14 @@ loadScripts(document, 'script');</script>
 </dl>
 <h2 class="title" id="I:F">F</h2>
 <dl class="index">
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#failureStatusCodes()" class="member-name-link">failureStatusCodes()</a> - Method in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">Returns the value of the <a href="./io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#param-failureStatusCodes"><code>failureStatusCodes</code></a> record component.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#failureThreshold()" class="member-name-link">failureThreshold()</a> - Method in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">Returns the value of the <a href="./io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#param-failureThreshold"><code>failureThreshold</code></a> record component.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/security/GrpcServerAuthenticationFetcher.html#fetchAuthentication(io.grpc.ServerCall,io.grpc.Metadata)" class="member-name-link">fetchAuthentication(ServerCall, Metadata)</a> - Method in interface io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/GrpcServerAuthenticationFetcher.html" title="interface in io.micronaut.grpc.server.security">GrpcServerAuthenticationFetcher</a></dt>
 <dd>
 <div class="block">Attempts to read an <code>Authentication</code> from the current server call.</div>
@@ -282,6 +329,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcResourceLoaderFactory.html#fileSystemResourceLoader()" class="member-name-link">fileSystemResourceLoader()</a> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcResourceLoaderFactory.html" title="class in io.micronaut.grpc.server">GrpcResourceLoaderFactory</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerRegistry.html#findInterceptor(java.lang.String)" class="member-name-link">findInterceptor(String)</a> - Method in class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerRegistry.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerRegistry</a></dt>
+<dd>
+<div class="block">Returns the circuit breaker interceptor of a channel, if its circuit breaker is enabled.</div>
+</dd>
 <dt><a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html#fromJson(java.lang.String,java.lang.Class)" class="member-name-link">fromJson(String, Class)</a> - Method in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a></dt>
 <dd>
 <div class="block">Creates a Protobuf message from JSON string.</div>
@@ -543,6 +594,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="io/micronaut/grpc/server/security/GrpcServerSecurityInterceptor.html#getOrder()" class="member-name-link">getOrder()</a> - Method in class io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/GrpcServerSecurityInterceptor.html" title="class in io.micronaut.grpc.server.security">GrpcServerSecurityInterceptor</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingFilter.html#getOrder()" class="member-name-link">getOrder()</a> - Method in class io.micronaut.protobuf.json.transcoding.<a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingFilter.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingFilter</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="helloworld/HelloReply.html#getParserForType()" class="member-name-link">getParserForType()</a> - Method in class helloworld.<a href="helloworld/HelloReply.html" title="class in helloworld">HelloReply</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="helloworld/HelloRequest.html#getParserForType()" class="member-name-link">getParserForType()</a> - Method in class helloworld.<a href="helloworld/HelloRequest.html" title="class in helloworld">HelloRequest</a></dt>
@@ -615,6 +668,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="io/micronaut/grpc/processor/GrpcStubFactoryVisitor.html#getSupportedAnnotationNames()" class="member-name-link">getSupportedAnnotationNames()</a> - Method in class io.micronaut.grpc.processor.<a href="io/micronaut/grpc/processor/GrpcStubFactoryVisitor.html" title="class in io.micronaut.grpc.processor">GrpcStubFactoryVisitor</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/protobuf/processor/ProtobufMessageFactoryVisitor.html#getSupportedAnnotationNames()" class="member-name-link">getSupportedAnnotationNames()</a> - Method in class io.micronaut.protobuf.processor.<a href="io/micronaut/protobuf/processor/ProtobufMessageFactoryVisitor.html" title="class in io.micronaut.protobuf.processor">ProtobufMessageFactoryVisitor</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html#getTimeout()" class="member-name-link">getTimeout()</a> - Method in class io.micronaut.protobuf.json.transcoding.<a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcSslConfiguration.html#getTrustCertificates()" class="member-name-link">getTrustCertificates()</a> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcSslConfiguration.html" title="class in io.micronaut.grpc.server">GrpcSslConfiguration</a></dt>
 <dd>
@@ -710,6 +765,28 @@ The greeting service definition.</div>
 <dd>
 <div class="block">Default constructor.</div>
 </dd>
+<dt><a href="io/micronaut/grpc/channels/GrpcChannelExecutors.html" class="type-name-link" title="class in io.micronaut.grpc.channels">GrpcChannelExecutors</a> - Class in <a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a></dt>
+<dd>
+<div class="block">Resolves the callback executor configured for a gRPC channel.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a> - Record Class in <a href="io/micronaut/grpc/client/circuitbreaker/package-summary.html">io.micronaut.grpc.client.circuitbreaker</a></dt>
+<dd>
+<div class="block">Circuit breaker settings of a gRPC channel, read from <code>grpc.channels.&lt;name&gt;.circuit-breaker.*</code>.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#%3Cinit%3E(java.lang.String,boolean,int,java.time.Duration,java.util.Set)" class="member-name-link">GrpcCircuitBreakerConfiguration(String, boolean, int, Duration, Set)</a> - Constructor for record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">Validates the configuration.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerInterceptor.html" class="type-name-link" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerInterceptor</a> - Class in <a href="io/micronaut/grpc/client/circuitbreaker/package-summary.html">io.micronaut.grpc.client.circuitbreaker</a></dt>
+<dd>
+<div class="block">A <code>ClientInterceptor</code> that guards every call of a channel with a Micronaut circuit breaker.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerRegistry.html" class="type-name-link" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerRegistry</a> - Class in <a href="io/micronaut/grpc/client/circuitbreaker/package-summary.html">io.micronaut.grpc.client.circuitbreaker</a></dt>
+<dd>
+<div class="block">Holds one circuit breaker per gRPC channel that enables <code>grpc.channels.&lt;name&gt;.circuit-breaker.enabled</code>.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerRegistry.html#%3Cinit%3E(io.micronaut.context.ApplicationContext,io.micronaut.retry.CircuitBreakerOperationsFactory,java.util.concurrent.ExecutorService)" class="member-name-link">GrpcCircuitBreakerRegistry(ApplicationContext, CircuitBreakerOperationsFactory, ExecutorService)</a> - Constructor for class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerRegistry.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerRegistry</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html" class="type-name-link" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor</a> - Class in <a href="io/micronaut/grpc/client/propagation/package-summary.html">io.micronaut.grpc.client.propagation</a></dt>
 <dd>
 <div class="block">Makes the Micronaut <code>PropagatedContext</code> of the thread that starts a client call current again in the call's
@@ -976,6 +1053,17 @@ generates, so that stubs can be injected with <code>@GrpcChannel</code> without 
 </dd>
 <dt><a href="io/micronaut/grpc/processor/GrpcStubFactoryVisitor.html#%3Cinit%3E()" class="member-name-link">GrpcStubFactoryVisitor()</a> - Constructor for class io.micronaut.grpc.processor.<a href="io/micronaut/grpc/processor/GrpcStubFactoryVisitor.html" title="class in io.micronaut.grpc.processor">GrpcStubFactoryVisitor</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html" class="type-name-link" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingConfiguration</a> - Class in <a href="io/micronaut/protobuf/json/transcoding/package-summary.html">io.micronaut.protobuf.json.transcoding</a></dt>
+<dd>
+<div class="block">Configuration of REST transcoding for gRPC methods that declare <code>google.api.http</code> rules.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html#%3Cinit%3E()" class="member-name-link">GrpcTranscodingConfiguration()</a> - Constructor for class io.micronaut.protobuf.json.transcoding.<a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingFilter.html" class="type-name-link" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingFilter</a> - Class in <a href="io/micronaut/protobuf/json/transcoding/package-summary.html">io.micronaut.protobuf.json.transcoding</a></dt>
+<dd>
+<div class="block">Answers HTTP requests that match a <code>google.api.http</code> rule by calling the gRPC method in process, and lets
+every other request through unchanged.</div>
+</dd>
 <dt><a href="io/micronaut/protobuf/json/GrpcWebController.html" class="type-name-link" title="class in io.micronaut.protobuf.json">GrpcWebController</a> - Class in <a href="io/micronaut/protobuf/json/package-summary.html">io.micronaut.protobuf.json</a></dt>
 <dd>
 <div class="block">HTTP/1.1 bridge that exposes annotated gRPC services via the gRPC-Web wire protocol.</div>
@@ -1003,6 +1091,10 @@ generates, so that stubs can be injected with <code>@GrpcChannel</code> without 
 <dd>&nbsp;</dd>
 <dt><a href="helloworld/HelloRequest.html#hashCode()" class="member-name-link">hashCode()</a> - Method in class helloworld.<a href="helloworld/HelloRequest.html" title="class in helloworld">HelloRequest</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#hashCode()" class="member-name-link">hashCode()</a> - Method in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">Returns a hash code value for this object.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/security/InterceptMethodMapPattern.html#hashCode()" class="member-name-link">hashCode()</a> - Method in record class io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/InterceptMethodMapPattern.html" title="class in io.micronaut.grpc.server.security">InterceptMethodMapPattern</a></dt>
 <dd>
 <div class="block">Returns a hash code value for this object.</div>
@@ -1100,6 +1192,8 @@ The request message containing the user's name.</div>
 </dd>
 <dt><a href="io/micronaut/grpc/server/InProcessGrpcServerChannel.html#%3Cinit%3E()" class="member-name-link">InProcessGrpcServerChannel()</a> - Constructor for class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/InProcessGrpcServerChannel.html" title="class in io.micronaut.grpc.server">InProcessGrpcServerChannel</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerInterceptor.html#interceptCall(io.grpc.MethodDescriptor,io.grpc.CallOptions,io.grpc.Channel)" class="member-name-link">interceptCall(MethodDescriptor, CallOptions, Channel)</a> - Method in class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerInterceptor.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerInterceptor</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html#interceptCall(io.grpc.MethodDescriptor,io.grpc.CallOptions,io.grpc.Channel)" class="member-name-link">interceptCall(MethodDescriptor, CallOptions, Channel)</a> - Method in class io.micronaut.grpc.client.propagation.<a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.Restoring.html#interceptCall(io.grpc.MethodDescriptor,io.grpc.CallOptions,io.grpc.Channel)" class="member-name-link">interceptCall(MethodDescriptor, CallOptions, Channel)</a> - Method in class io.micronaut.grpc.client.propagation.<a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.Restoring.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor.Restoring</a></dt>
@@ -1159,6 +1253,10 @@ The request message containing the user's name.</div>
 <dt><a href="io/micronaut/grpc/channels/package-summary.html">io.micronaut.grpc.channels</a> - package io.micronaut.grpc.channels</dt>
 <dd>
 <div class="block">Classes related to GRPC channels and clients.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/package-summary.html">io.micronaut.grpc.client.circuitbreaker</a> - package io.micronaut.grpc.client.circuitbreaker</dt>
+<dd>
+<div class="block">Circuit breakers for gRPC client channels, built on Micronaut Retry.</div>
 </dd>
 <dt><a href="io/micronaut/grpc/client/propagation/package-summary.html">io.micronaut.grpc.client.propagation</a> - package io.micronaut.grpc.client.propagation</dt>
 <dd>
@@ -1220,6 +1318,10 @@ The request message containing the user's name.</div>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/protobuf/json/registry/package-summary.html">io.micronaut.protobuf.json.registry</a> - package io.micronaut.protobuf.json.registry</dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/package-summary.html">io.micronaut.protobuf.json.transcoding</a> - package io.micronaut.protobuf.json.transcoding</dt>
+<dd>
+<div class="block">Exposes gRPC methods annotated with <code>google.api.http</code> rules as REST endpoints on the HTTP server.</div>
+</dd>
 <dt><a href="io/micronaut/protobuf/processor/package-summary.html">io.micronaut.protobuf.processor</a> - package io.micronaut.protobuf.processor</dt>
 <dd>
 <div class="block">Compile-time support that removes reflection from Protocol Buffers message handling.</div>
@@ -1231,6 +1333,8 @@ The request message containing the user's name.</div>
 <dt><a href="io/micronaut/grpc/server/security/GrpcServerSecurityConfiguration.html#isEnabled()" class="member-name-link">isEnabled()</a> - Method in interface io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/GrpcServerSecurityConfiguration.html" title="interface in io.micronaut.grpc.server.security">GrpcServerSecurityConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/security/jwt/GrpcServerSecurityJwtConfiguration.html#isEnabled()" class="member-name-link">isEnabled()</a> - Method in interface io.micronaut.grpc.server.security.jwt.<a href="io/micronaut/grpc/server/security/jwt/GrpcServerSecurityJwtConfiguration.html" title="interface in io.micronaut.grpc.server.security.jwt">GrpcServerSecurityJwtConfiguration</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html#isEnabled()" class="member-name-link">isEnabled()</a> - Method in class io.micronaut.protobuf.json.transcoding.<a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="helloworld/HelloReply.Builder.html#isInitialized()" class="member-name-link">isInitialized()</a> - Method in class helloworld.<a href="helloworld/HelloReply.Builder.html" title="class in helloworld">HelloReply.Builder</a></dt>
 <dd>&nbsp;</dd>
@@ -1492,6 +1596,10 @@ the method name that could not be found.</div>
 </dl>
 <h2 class="title" id="I:O">O</h2>
 <dl class="index">
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#of(io.micronaut.context.env.Environment,java.lang.String)" class="member-name-link">of(Environment, String)</a> - Static method in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">Reads the circuit breaker settings of a channel from the environment.</div>
+</dd>
 <dt><a href="helloworld/ReactorGreeterGrpc.GreeterImplBase.html#onErrorMap(java.lang.Throwable)" class="member-name-link">onErrorMap(Throwable)</a> - Method in class helloworld.<a href="helloworld/ReactorGreeterGrpc.GreeterImplBase.html" title="class in helloworld">ReactorGreeterGrpc.GreeterImplBase</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="helloworld/ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase.html#onErrorMap(java.lang.Throwable)" class="member-name-link">onErrorMap(Throwable)</a> - Method in class helloworld.<a href="helloworld/ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase.html" title="class in helloworld">ReactorReactiveGreeterGrpc.ReactiveGreeterImplBase</a></dt>
@@ -1636,6 +1744,10 @@ calls to a delegate interceptor.</div>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">The property suffix under a channel's prefix.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorConfiguration.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class io.micronaut.grpc.client.tracing.<a href="io/micronaut/grpc/client/tracing/GrpcClientTracingInterceptorConfiguration.html" title="class in io.micronaut.grpc.client.tracing">GrpcClientTracingInterceptorConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
@@ -1652,6 +1764,10 @@ calls to a delegate interceptor.</div>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcJsonConfiguration.html" title="class in io.micronaut.protobuf.json">GrpcJsonConfiguration</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html#PREFIX" class="member-name-link">PREFIX</a> - Static variable in class io.micronaut.protobuf.json.transcoding.<a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingConfiguration</a></dt>
+<dd>
+<div class="block">The configuration prefix.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#priority()" class="member-name-link">priority()</a> - Method in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html#PRIORITY" class="member-name-link">PRIORITY</a> - Static variable in class io.micronaut.grpc.discovery.<a href="io/micronaut/grpc/discovery/GrpcNameResolverProvider.html" title="class in io.micronaut.grpc.discovery">GrpcNameResolverProvider</a></dt>
@@ -1832,6 +1948,15 @@ for invocation via JSON over REST.</div>
 <dd>
 <div class="block">Creates an instance of a <code>RegisteredMethod</code> record class.</div>
 </dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#resetTimeout()" class="member-name-link">resetTimeout()</a> - Method in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">Returns the value of the <a href="./io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#param-resetTimeout"><code>resetTimeout</code></a> record component.</div>
+</dd>
+<dt><a href="io/micronaut/grpc/channels/GrpcChannelExecutors.html#resolve(io.micronaut.context.ApplicationContext,java.lang.String)" class="member-name-link">resolve(ApplicationContext, String)</a> - Static method in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcChannelExecutors.html" title="class in io.micronaut.grpc.channels">GrpcChannelExecutors</a></dt>
+<dd>
+<div class="block">Resolves the executor configured by <code>grpc.channels.&lt;name&gt;.executor</code>, or by <code>grpc.client.executor</code> for
+every channel.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcResourceLoaderFactory.html#resourceResolver(java.util.List)" class="member-name-link">resourceResolver(List)</a> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcResourceLoaderFactory.html" title="class in io.micronaut.grpc.server">GrpcResourceLoaderFactory</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.Restoring.html#%3Cinit%3E()" class="member-name-link">Restoring()</a> - Constructor for class io.micronaut.grpc.client.propagation.<a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.Restoring.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor.Restoring</a></dt>
@@ -2005,6 +2130,8 @@ indicating the service that could not be found.</div>
 <dd>
 <div class="block">Applies the gRPC default service config using Micronaut's nested/raw map binding.</div>
 </dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html#setEnabled(boolean)" class="member-name-link">setEnabled(boolean)</a> - Method in class io.micronaut.protobuf.json.transcoding.<a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/server/GrpcServerConfiguration.html#setExecutor(java.lang.String)" class="member-name-link">setExecutor(String)</a> - Method in class io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></dt>
 <dd>
 <div class="block">Sets the executor bean name.</div>
@@ -2083,6 +2210,8 @@ indicating the service that could not be found.</div>
 <dd>
 <div class="block">Decorates the server span with custom data.</div>
 </dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html#setTimeout(java.time.Duration)" class="member-name-link">setTimeout(Duration)</a> - Method in class io.micronaut.protobuf.json.transcoding.<a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingConfiguration</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#SETTING_TARGET" class="member-name-link">SETTING_TARGET</a> - Static variable in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html#SETTING_URL" class="member-name-link">SETTING_URL</a> - Static variable in class io.micronaut.grpc.channels.<a href="io/micronaut/grpc/channels/GrpcManagedChannelConfiguration.html" title="class in io.micronaut.grpc.channels">GrpcManagedChannelConfiguration</a></dt>
@@ -2121,6 +2250,10 @@ indicating the service that could not be found.</div>
 <dd>
 <div class="block">Converts a Protobuf message to JSON string.</div>
 </dd>
+<dt><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html#toString()" class="member-name-link">toString()</a> - Method in record class io.micronaut.grpc.client.circuitbreaker.<a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></dt>
+<dd>
+<div class="block">Returns a string representation of this record class.</div>
+</dd>
 <dt><a href="io/micronaut/grpc/server/security/InterceptMethodMapPattern.html#toString()" class="member-name-link">toString()</a> - Method in record class io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/InterceptMethodMapPattern.html" title="class in io.micronaut.grpc.server.security">InterceptMethodMapPattern</a></dt>
 <dd>
 <div class="block">Returns a string representation of this record class.</div>
@@ -2128,6 +2261,10 @@ indicating the service that could not be found.</div>
 <dt><a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.RegisteredMethod.html#toString()" class="member-name-link">toString()</a> - Method in record class io.micronaut.protobuf.json.registry.<a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.RegisteredMethod.html" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry.RegisteredMethod</a></dt>
 <dd>
 <div class="block">Returns a string representation of this record class.</div>
+</dd>
+<dt><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingFilter.html#transcode(io.micronaut.http.HttpRequest)" class="member-name-link">transcode(HttpRequest)</a> - Method in class io.micronaut.protobuf.json.transcoding.<a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingFilter.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingFilter</a></dt>
+<dd>
+<div class="block">Transcodes a matching request.</div>
 </dd>
 </dl>
 <h2 class="title" id="I:V">V</h2>

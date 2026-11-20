@@ -132,6 +132,22 @@ The greeting service definition.</div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Factory class for creating <code>NettyChannelBuilder</code> instances.</div>
 </div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/channels/GrpcChannelExecutors.html" title="class in io.micronaut.grpc.channels">GrpcChannelExecutors</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Resolves the callback executor configured for a gRPC channel.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab4"><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerConfiguration.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerConfiguration</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab4">
+<div class="block">Circuit breaker settings of a gRPC channel, read from <code>grpc.channels.&lt;name&gt;.circuit-breaker.*</code>.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerInterceptor.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerInterceptor</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">A <code>ClientInterceptor</code> that guards every call of a channel with a Micronaut circuit breaker.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/client/circuitbreaker/GrpcCircuitBreakerRegistry.html" title="class in io.micronaut.grpc.client.circuitbreaker">GrpcCircuitBreakerRegistry</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Holds one circuit breaker per gRPC channel that enables <code>grpc.channels.&lt;name&gt;.circuit-breaker.enabled</code>.</div>
+</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/grpc/client/propagation/GrpcClientContextPropagationInterceptor.html" title="class in io.micronaut.grpc.client.propagation">GrpcClientContextPropagationInterceptor</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Makes the Micronaut <code>PropagatedContext</code> of the thread that starts a client call current again in the call's
@@ -291,6 +307,15 @@ to be exposed and invoked via JSON over REST.</div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Generates a bean factory for the client stubs of every gRPC service class that <code>protoc-gen-grpc-java</code>
 generates, so that stubs can be injected with <code>@GrpcChannel</code> without a hand-written factory.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingConfiguration.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingConfiguration</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Configuration of REST transcoding for gRPC methods that declare <code>google.api.http</code> rules.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/json/transcoding/GrpcTranscodingFilter.html" title="class in io.micronaut.protobuf.json.transcoding">GrpcTranscodingFilter</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Answers HTTP requests that match a <code>google.api.http</code> rule by calling the gRPC method in process, and lets
+every other request through unchanged.</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="io/micronaut/protobuf/json/GrpcWebController.html" title="class in io.micronaut.protobuf.json">GrpcWebController</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">

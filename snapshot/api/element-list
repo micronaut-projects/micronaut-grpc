@@ -1,6 +1,7 @@
 helloworld
 io.micronaut.grpc.annotation
 io.micronaut.grpc.channels
+io.micronaut.grpc.client.circuitbreaker
 io.micronaut.grpc.client.propagation
 io.micronaut.grpc.client.tracing
 io.micronaut.grpc.discovery
@@ -22,5 +23,6 @@ io.micronaut.protobuf.json
 io.micronaut.protobuf.json.exception
 io.micronaut.protobuf.json.grpc
 io.micronaut.protobuf.json.registry
+io.micronaut.protobuf.json.transcoding
 io.micronaut.protobuf.processor
 org.example.grpc
