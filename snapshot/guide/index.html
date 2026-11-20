@@ -54,19 +54,21 @@
                                 
                                 <div class="toc-item" style="margin-left:0"><a href="#server"><strong>4</strong><span>gRPC Server</span></a></div>
                                 
-                                <div class="toc-item" style="margin-left:0"><a href="#client"><strong>5</strong><span>gRPC Clients</span></a></div>
+                                <div class="toc-item" style="margin-left:0"><a href="#serverSecurity"><strong>5</strong><span>gRPC Server Security</span></a></div>
                                 
-                                <div class="toc-item" style="margin-left:0"><a href="#serviceDiscovery"><strong>6</strong><span>Service Discovery</span></a></div>
+                                <div class="toc-item" style="margin-left:0"><a href="#client"><strong>6</strong><span>gRPC Clients</span></a></div>
                                 
-                                <div class="toc-item" style="margin-left:0"><a href="#tracing"><strong>7</strong><span>Distributed Tracing</span></a></div>
+                                <div class="toc-item" style="margin-left:0"><a href="#serviceDiscovery"><strong>7</strong><span>Service Discovery</span></a></div>
                                 
-                                <div class="toc-item" style="margin-left:0"><a href="#protocolBuffers"><strong>8</strong><span>Protocol Buffers Support</span></a></div>
+                                <div class="toc-item" style="margin-left:0"><a href="#tracing"><strong>8</strong><span>Distributed Tracing</span></a></div>
                                 
-                                <div class="toc-item" style="margin-left:0"><a href="#protocolBuffersJsonSupport"><strong>9</strong><span>Protocol Buffers Json Support (Experimental)</span></a></div>
+                                <div class="toc-item" style="margin-left:0"><a href="#protocolBuffers"><strong>9</strong><span>Protocol Buffers Support</span></a></div>
                                 
-                                <div class="toc-item" style="margin-left:0"><a href="#grpcWeb"><strong>10</strong><span>gRPC-Web</span></a></div>
+                                <div class="toc-item" style="margin-left:0"><a href="#protocolBuffersJsonSupport"><strong>10</strong><span>Protocol Buffers Json Support (Experimental)</span></a></div>
                                 
-                                <div class="toc-item" style="margin-left:0"><a href="#repository"><strong>11</strong><span>Repository</span></a></div>
+                                <div class="toc-item" style="margin-left:0"><a href="#grpcWeb"><strong>11</strong><span>gRPC-Web</span></a></div>
+                                
+                                <div class="toc-item" style="margin-left:0"><a href="#repository"><strong>12</strong><span>Repository</span></a></div>
                                 
                             </div>
                         </div>
@@ -105,19 +107,21 @@
         
         <div class="toc-item" style="margin-left:0px" id="toc-item-server"><a href="#server"><strong>4</strong><span>gRPC Server</span></a></div>
         
-        <div class="toc-item" style="margin-left:0px" id="toc-item-client"><a href="#client"><strong>5</strong><span>gRPC Clients</span></a></div>
+        <div class="toc-item" style="margin-left:0px" id="toc-item-serverSecurity"><a href="#serverSecurity"><strong>5</strong><span>gRPC Server Security</span></a></div>
         
-        <div class="toc-item" style="margin-left:0px" id="toc-item-serviceDiscovery"><a href="#serviceDiscovery"><strong>6</strong><span>Service Discovery</span></a></div>
+        <div class="toc-item" style="margin-left:0px" id="toc-item-client"><a href="#client"><strong>6</strong><span>gRPC Clients</span></a></div>
         
-        <div class="toc-item" style="margin-left:0px" id="toc-item-tracing"><a href="#tracing"><strong>7</strong><span>Distributed Tracing</span></a></div>
+        <div class="toc-item" style="margin-left:0px" id="toc-item-serviceDiscovery"><a href="#serviceDiscovery"><strong>7</strong><span>Service Discovery</span></a></div>
         
-        <div class="toc-item" style="margin-left:0px" id="toc-item-protocolBuffers"><a href="#protocolBuffers"><strong>8</strong><span>Protocol Buffers Support</span></a></div>
+        <div class="toc-item" style="margin-left:0px" id="toc-item-tracing"><a href="#tracing"><strong>8</strong><span>Distributed Tracing</span></a></div>
         
-        <div class="toc-item" style="margin-left:0px" id="toc-item-protocolBuffersJsonSupport"><a href="#protocolBuffersJsonSupport"><strong>9</strong><span>Protocol Buffers Json Support (Experimental)</span></a></div>
+        <div class="toc-item" style="margin-left:0px" id="toc-item-protocolBuffers"><a href="#protocolBuffers"><strong>9</strong><span>Protocol Buffers Support</span></a></div>
         
-        <div class="toc-item" style="margin-left:0px" id="toc-item-grpcWeb"><a href="#grpcWeb"><strong>10</strong><span>gRPC-Web</span></a></div>
+        <div class="toc-item" style="margin-left:0px" id="toc-item-protocolBuffersJsonSupport"><a href="#protocolBuffersJsonSupport"><strong>10</strong><span>Protocol Buffers Json Support (Experimental)</span></a></div>
         
-        <div class="toc-item" style="margin-left:0px" id="toc-item-repository"><a href="#repository"><strong>11</strong><span>Repository</span></a></div>
+        <div class="toc-item" style="margin-left:0px" id="toc-item-grpcWeb"><a href="#grpcWeb"><strong>11</strong><span>gRPC-Web</span></a></div>
+        
+        <div class="toc-item" style="margin-left:0px" id="toc-item-repository"><a href="#repository"><strong>12</strong><span>Repository</span></a></div>
         
         </div>
     </div>
@@ -236,38 +240,54 @@ cd demo</code></pre>
 <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mn create-app helloworld</code></pre>
 </div>
 </div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Add <code>--lang kotlin</code> or <code>--lang groovy</code> to create a Kotlin or Groovy application and <code>--build maven</code> to use Maven instead of Gradle.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Then follow the below steps depending on the build system chosen.</p>
+<p>Then follow the below steps depending on the build system and language chosen. The Gradle examples are shown for both the Groovy DSL (<code>build.gradle</code>) and the Kotlin DSL (<code>build.gradle.kts</code>).</p>
 </div>
 <div class="sect2">
 <h3 id="_configuring_gradle">Configuring Gradle</h3>
 <div class="paragraph">
-<p>To configure Gradle for Java or Groovy projects, add the <code>com.google.protobuf</code> plugin to your existing <code>plugins</code> block:</p>
+<p>The <code>com.google.protobuf</code> plugin registers the generated sources with the corresponding source sets, so no additional <code>sourceSets</code> configuration is required.</p>
 </div>
-<div class="listingblock">
+<div class="sect3">
+<h4 id="_java_and_groovy_projects">Java and Groovy Projects</h4>
+<div class="paragraph">
+<p>For Java or Groovy projects, add the <code>com.google.protobuf</code> plugin to your existing <code>plugins</code> block:</p>
+</div>
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
+<pre class="highlightjs highlight"><code class="language-gradle-groovy hljs" data-lang="gradle-groovy">plugins {
     ...
     id 'com.google.protobuf' version '0.10.1'
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-gradle-kotlin hljs" data-lang="gradle-kotlin">plugins {
+    ...
+    id("com.google.protobuf") version "0.10.1"
 }</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>Then configure protobuf source generation:</p>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">def grpcVersion = '1.84.2'
+<pre class="highlightjs highlight"><code class="language-gradle-groovy hljs" data-lang="gradle-groovy">def grpcVersion = '1.84.2'
 def protobufVersion = '4.36.2'
-
-sourceSets {
-    main {
-        java {
-            srcDirs 'build/generated/source/proto/main/grpc'
-            srcDirs 'build/generated/source/proto/main/java'
-        }
-    }
-}
 
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
@@ -276,6 +296,26 @@ protobuf {
     }
     generateProtoTasks {
         all()*.plugins { grpc {} }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-gradle-kotlin hljs" data-lang="gradle-kotlin">val grpcVersion = "1.84.2"
+val protobufVersion = "4.36.2"
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
+    plugins {
+        create("grpc") { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
+    }
+    generateProtoTasks {
+        all().configureEach {
+            plugins {
+                create("grpc")
+            }
+        }
     }
 }</code></pre>
 </div>
@@ -292,9 +332,9 @@ If you are using JDK 9 or above, provide the following compiler option to the gR
 </tr>
 </table>
 </div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">protobuf {
+<pre class="highlightjs highlight"><code class="language-gradle-groovy hljs" data-lang="gradle-groovy">protobuf {
     generateProtoTasks {
         all()*.plugins {
             grpc {
@@ -305,12 +345,30 @@ If you are using JDK 9 or above, provide the following compiler option to the gR
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Use this Gradle configuration for Kotlin projects:</p>
-</div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">plugins {
+<pre class="highlightjs highlight"><code class="language-gradle-kotlin hljs" data-lang="gradle-kotlin">protobuf {
+    generateProtoTasks {
+        all().configureEach {
+            plugins {
+                named("grpc") {
+                    option("@generated=omit")
+                }
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_kotlin_projects">Kotlin Projects</h4>
+<div class="paragraph">
+<p>Kotlin projects additionally generate coroutine-based stubs with <a href="https://github.com/grpc/grpc-kotlin">gRPC Kotlin</a>. Use the following Gradle configuration:</p>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-gradle-groovy hljs" data-lang="gradle-groovy">plugins {
     ...
     id 'com.google.protobuf' version '0.10.1'
 }
@@ -328,16 +386,6 @@ dependencies {
     compileOnly("javax.annotation:javax.annotation-api:1.3.2")
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs 'build/generated/source/proto/main/grpc'
-            srcDirs 'build/generated/source/proto/main/grpckt'
-            srcDirs 'build/generated/source/proto/main/java'
-        }
-    }
-}
-
 protobuf {
     protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
     plugins {
@@ -353,38 +401,102 @@ protobuf {
 }</code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>If you want to generate Reactor-based stubs with <a href="https://github.com/salesforce/reactive-grpc">reactive-grpc</a>, add the generator plugin and stub dependency alongside the standard gRPC code generation:</p>
-</div>
-<div class="listingblock">
+<div class="listingblock multi-language-sample">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">ext {
-    reactiveGrpcVersion = libs.versions.reactive.grpc.get()
+<pre class="highlightjs highlight"><code class="language-gradle-kotlin hljs" data-lang="gradle-kotlin">plugins {
+    ...
+    id("com.google.protobuf") version "0.10.1"
 }
+
+val grpcVersion = "1.84.2"
+val grpcKotlinVersion = "1.5.0"
+val protobufVersion = "4.36.2"
 
 dependencies {
-...
-    implementation platform(libs.micronaut.reactor)
-    implementation libs.reactive.grpc.stub
-    implementation "io.projectreactor:reactor-core"
-}
-
-sourceSets {
-    main {
-        java {
-            srcDirs 'build/generated/source/proto/main/reactor'
-        }
-    }
+    ...
+    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
+    implementation("io.grpc:grpc-services:$grpcVersion")
+    compileOnly("io.grpc:grpc-stub:$grpcVersion")
+    compileOnly("com.google.protobuf:protobuf-java:$protobufVersion")
+    compileOnly("javax.annotation:javax.annotation-api:1.3.2")
 }
 
 protobuf {
-...
-        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
-...
-            reactor {}
+    protoc { artifact = "com.google.protobuf:protoc:$protobufVersion" }
+    plugins {
+        create("grpc") { artifact = "io.grpc:protoc-gen-grpc-java:$grpcVersion" }
+        create("grpckt") { artifact = "io.grpc:protoc-gen-grpc-kotlin:$grpcKotlinVersion:jdk8@jar" }
+    }
+    generateProtoTasks {
+        all().configureEach {
+            plugins {
+                create("grpc")
+                create("grpckt")
+            }
+        }
+    }
 }</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_reactor_stubs">Reactor Stubs</h4>
+<div class="paragraph">
+<p>If you want to generate Reactor-based stubs with <a href="https://github.com/salesforce/reactive-grpc">reactive-grpc</a>, add the generator plugin and stub dependency alongside the standard gRPC code generation:</p>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-gradle-groovy hljs" data-lang="gradle-groovy">def reactiveGrpcVersion = '1.2.4'
+
+dependencies {
+    ...
+    implementation("com.salesforce.servicelibs:reactor-grpc-stub:$reactiveGrpcVersion")
+    implementation("io.projectreactor:reactor-core")
+}
+
+protobuf {
+    plugins {
+        ...
+        reactor { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            ...
+            reactor {}
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-gradle-kotlin hljs" data-lang="gradle-kotlin">val reactiveGrpcVersion = "1.2.4"
+
+dependencies {
+    ...
+    implementation("com.salesforce.servicelibs:reactor-grpc-stub:$reactiveGrpcVersion")
+    implementation("io.projectreactor:reactor-core")
+}
+
+protobuf {
+    plugins {
+        ...
+        create("reactor") { artifact = "com.salesforce.servicelibs:reactor-grpc:$reactiveGrpcVersion" }
+    }
+    generateProtoTasks {
+        all().configureEach {
+            plugins {
+                ...
+                create("reactor")
+            }
+        }
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dependencies">Dependencies</h4>
 <div class="paragraph">
 <p>Finally, add the following dependencies to your build:</p>
 </div>
@@ -467,20 +579,51 @@ If you wish to use gRPC standalone without the Micronaut HTTP server you should 
 </div>
 </div>
 <div class="paragraph">
-<p>To generate the Java sources from protobuf definitions in <code>src/main/proto</code>.</p>
+<p>To generate the Java (and, for Kotlin projects, Kotlin) sources from protobuf definitions in <code>src/main/proto</code>.</p>
 </div>
 <div class="paragraph">
 <p>The generated sources are the service stubs, not the server implementation. Before starting the application, create a bean that extends the generated <code>*ImplBase</code> type (or <code>*CoroutineImplBase</code> for Kotlin) as shown in the next section.</p>
 </div>
 </div>
+</div>
 <div class="sect2">
 <h3 id="_configuring_maven">Configuring Maven</h3>
 <div class="paragraph">
-<p>For Maven create a maven project first:</p>
+<p>For Maven create a Maven project first:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mn create-app helloworld --build</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">$ mn create-app helloworld --build maven</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add <code>--lang kotlin</code> or <code>--lang groovy</code> for a Kotlin or Groovy project.</p>
+</div>
+<div class="sect3">
+<h4 id="_java_and_groovy_projects_2">Java and Groovy Projects</h4>
+<div class="paragraph">
+<p>Define the gRPC and Protobuf versions in the <code>properties</code> section of your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;properties&gt;
+    &lt;grpc.version&gt;1.84.2&lt;/grpc.version&gt;
+    &lt;protobuf.version&gt;4.36.2&lt;/protobuf.version&gt;
+&lt;/properties&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add the <code>os-maven-plugin</code> build extension, which detects the classifier of the <code>protoc</code> executable for the current platform:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;extensions&gt;
+    &lt;extension&gt;
+        &lt;groupId&gt;kr.motd.maven&lt;/groupId&gt;
+        &lt;artifactId&gt;os-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;1.7.1&lt;/version&gt;
+    &lt;/extension&gt;
+&lt;/extensions&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -493,27 +636,171 @@ If you wish to use gRPC standalone without the Micronaut HTTP server you should 
     &lt;artifactId&gt;protobuf-maven-plugin&lt;/artifactId&gt;
     &lt;version&gt;0.6.1&lt;/version&gt;
     &lt;configuration&gt;
-        &lt;protocArtifact&gt;com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}&lt;/protocArtifact&gt;
+        &lt;protocArtifact&gt;com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}&lt;/protocArtifact&gt;
         &lt;pluginId&gt;grpc-java&lt;/pluginId&gt;
         &lt;pluginArtifact&gt;io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}&lt;/pluginArtifact&gt;
     &lt;/configuration&gt;
     &lt;executions&gt;
         &lt;execution&gt;
-            &lt;id&gt;compile&lt;/id&gt;
             &lt;goals&gt;
                 &lt;goal&gt;compile&lt;/goal&gt;
                 &lt;goal&gt;compile-custom&lt;/goal&gt;
             &lt;/goals&gt;
         &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The generated code requires the following dependencies, in addition to the Micronaut gRPC dependencies listed above:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;io.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;grpc-protobuf&lt;/artifactId&gt;
+    &lt;version&gt;${grpc.version}&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;grpc-stub&lt;/artifactId&gt;
+    &lt;version&gt;${grpc.version}&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.google.protobuf&lt;/groupId&gt;
+    &lt;artifactId&gt;protobuf-java&lt;/artifactId&gt;
+    &lt;version&gt;${protobuf.version}&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;javax.annotation&lt;/groupId&gt;
+    &lt;artifactId&gt;javax.annotation-api&lt;/artifactId&gt;
+    &lt;version&gt;1.3.2&lt;/version&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_kotlin_projects_2">Kotlin Projects</h4>
+<div class="paragraph">
+<p>Kotlin projects additionally generate coroutine-based stubs with <a href="https://github.com/grpc/grpc-kotlin">gRPC Kotlin</a>. Define the versions in the <code>properties</code> section of your <code>pom.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;properties&gt;
+    &lt;grpc.version&gt;1.84.2&lt;/grpc.version&gt;
+    &lt;grpc.kotlin.version&gt;1.5.0&lt;/grpc.kotlin.version&gt;
+    &lt;protobuf.version&gt;4.36.2&lt;/protobuf.version&gt;
+&lt;/properties&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add the <code>os-maven-plugin</code> build extension:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;extensions&gt;
+    &lt;extension&gt;
+        &lt;groupId&gt;kr.motd.maven&lt;/groupId&gt;
+        &lt;artifactId&gt;os-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;1.7.1&lt;/version&gt;
+    &lt;/extension&gt;
+&lt;/extensions&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Configure the Protobuf plugin to run both the gRPC Java and the gRPC Kotlin generators:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plugin&gt;
+    &lt;groupId&gt;org.xolstice.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;protobuf-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;0.6.1&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;protocArtifact&gt;com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}&lt;/protocArtifact&gt;
+        &lt;pluginId&gt;grpc-java&lt;/pluginId&gt;
+        &lt;pluginArtifact&gt;io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}&lt;/pluginArtifact&gt;
+        &lt;protocPlugins&gt;
+            &lt;protocPlugin&gt;
+                &lt;id&gt;grpc-kotlin&lt;/id&gt;
+                &lt;groupId&gt;io.grpc&lt;/groupId&gt;
+                &lt;artifactId&gt;protoc-gen-grpc-kotlin&lt;/artifactId&gt;
+                &lt;version&gt;${grpc.kotlin.version}&lt;/version&gt;
+                &lt;classifier&gt;jdk8&lt;/classifier&gt;
+                &lt;mainClass&gt;io.grpc.kotlin.generator.GeneratorRunner&lt;/mainClass&gt;
+            &lt;/protocPlugin&gt;
+        &lt;/protocPlugins&gt;
+    &lt;/configuration&gt;
+    &lt;executions&gt;
         &lt;execution&gt;
-            &lt;id&gt;test-compile&lt;/id&gt;
             &lt;goals&gt;
-                &lt;goal&gt;test-compile&lt;/goal&gt;
-                &lt;goal&gt;test-compile-custom&lt;/goal&gt;
+                &lt;goal&gt;compile&lt;/goal&gt;
+                &lt;goal&gt;compile-custom&lt;/goal&gt;
             &lt;/goals&gt;
         &lt;/execution&gt;
     &lt;/executions&gt;
 &lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Add the generated sources to the <code>compile</code> execution of the <code>kotlin-maven-plugin</code> (the <code>kotlin.version</code> property is defined by the Micronaut parent POM):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;plugin&gt;
+    &lt;groupId&gt;org.jetbrains.kotlin&lt;/groupId&gt;
+    &lt;artifactId&gt;kotlin-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;${kotlin.version}&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;id&gt;compile&lt;/id&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;compile&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;configuration&gt;
+                &lt;sourceDirs&gt;
+                    &lt;sourceDir&gt;${project.basedir}/src/main/kotlin&lt;/sourceDir&gt;
+                    &lt;sourceDir&gt;${project.build.directory}/generated-sources/protobuf/java&lt;/sourceDir&gt;
+                    &lt;sourceDir&gt;${project.build.directory}/generated-sources/protobuf/grpc-java&lt;/sourceDir&gt;
+                &lt;/sourceDirs&gt;
+            &lt;/configuration&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The generated code requires the following dependencies, in addition to the Micronaut gRPC dependencies listed above:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;io.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;grpc-kotlin-stub&lt;/artifactId&gt;
+    &lt;version&gt;${grpc.kotlin.version}&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;grpc-protobuf&lt;/artifactId&gt;
+    &lt;version&gt;${grpc.version}&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;grpc-stub&lt;/artifactId&gt;
+    &lt;version&gt;${grpc.version}&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.google.protobuf&lt;/groupId&gt;
+    &lt;artifactId&gt;protobuf-java&lt;/artifactId&gt;
+    &lt;version&gt;${protobuf.version}&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;javax.annotation&lt;/groupId&gt;
+    &lt;artifactId&gt;javax.annotation-api&lt;/artifactId&gt;
+    &lt;version&gt;1.3.2&lt;/version&gt;
+    &lt;scope&gt;provided&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -525,7 +812,8 @@ If you wish to use gRPC standalone without the Micronaut HTTP server you should 
 </div>
 </div>
 <div class="paragraph">
-<p>To generate the Java sources from protobuf definitions in <code>src/main/proto</code>.</p>
+<p>To generate the Java (and, for Kotlin projects, Kotlin) sources from protobuf definitions in <code>src/main/proto</code>.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1958,7 +2246,375 @@ class GreetingEndpointTest extends Specification {
 </div>
 </div>
 
-<h1 id="client"><a class="anchor" href="#client"></a>5 gRPC Clients</h1>
+<h1 id="serverSecurity"><a class="anchor" href="#serverSecurity"></a>5 gRPC Server Security</h1>
+
+<div class='contribute-btn'>
+    <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/serverSecurity.adoc"'>
+        <i class='fa fa-pencil-square-o'></i> Improve this doc
+    </button>
+</div>
+
+
+<div class="sect2">
+<h3 id="_grpc_server_security">gRPC Server Security</h3>
+<div class="paragraph">
+<p>Micronaut gRPC can integrate with Micronaut Security on the server side through <code>io.grpc.ServerInterceptor</code> beans.</p>
+</div>
+<div class="paragraph">
+<p>For JWT-based authentication, add both dependencies:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-server-security-jwt")</span></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-grpc-server-security-jwt&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+runtime = [
+    <span class="hljs-string">"io.micronaut.grpc:micronaut-grpc-server-security-jwt"</span>,
+]</code></pre>
+</div>
+</div>
+</code></p>
+</li>
+<li>
+<p><code>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">implementation(<span class="hljs-string">"io.micronaut.security:micronaut-security-jwt")</span></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;dependency&gt;
+    &lt;groupId&gt;io.micronaut.security&lt;/groupId&gt;
+    &lt;artifactId&gt;micronaut-security-jwt&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+runtime = [
+    <span class="hljs-string">"io.micronaut.security:micronaut-security-jwt"</span>,
+]</code></pre>
+</div>
+</div>
+</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The JWT module reads a token from gRPC metadata, validates it with Micronaut Security token validators, and then evaluates the configured <code>grpc.server.security.intercept-method-map</code> rules against the gRPC method name.</p>
+</div>
+<div class="sect3">
+<h4 id="_jwt_metadata">JWT Metadata</h4>
+<div class="paragraph">
+<p>By default, the token is read from the <code>JWT</code> metadata key.</p>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.server.security.token.jwt.enabled=true
+grpc.server.security.token.jwt.metadata-key-name=JWT</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+  server:
+    security:
+      token:
+        jwt:
+          enabled: true
+          metadata-key-name: JWT</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[grpc.server.security.token.jwt]
+enabled = true
+metadata-key-name = "JWT"</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  server {
+    security {
+      token {
+        jwt {
+          enabled = true
+          metadataKeyName = "JWT"
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    server {
+      security {
+        token {
+          jwt {
+            enabled = true
+            metadata-key-name = "JWT"
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "server": {
+      "security": {
+        "token": {
+          "jwt": {
+            "enabled": true,
+            "metadata-key-name": "JWT"
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to use an <code>Authorization</code> metadata key instead, set <code>metadata-key-name</code> accordingly. The interceptor accepts both a raw token value and a <code>Bearer &lt;token&gt;</code> value.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_authorization_rules">Authorization Rules</h4>
+<div class="paragraph">
+<p>Authorization rules for gRPC calls are configured with <code>grpc.server.security.intercept-method-map</code>. Each entry has a <code>pattern</code>, a regular expression matched against the fully qualified gRPC method name (for example <code>helloworld.Greeter/SayHello</code>), and the <code>access</code> rules required to invoke matching methods. Entries are evaluated in order and the first matching entry applies.</p>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">grpc.server.security.intercept-method-map[0].pattern=helloworld.Greeter/SayHello
+grpc.server.security.intercept-method-map[0].access[0]=isAuthenticated()
+grpc.server.security.intercept-method-map[1].pattern=helloworld.Admin/.*
+grpc.server.security.intercept-method-map[1].access[0]=ROLE_ADMIN</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">grpc:
+  server:
+    security:
+      intercept-method-map:
+        - pattern: helloworld.Greeter/SayHello
+          access:
+            - isAuthenticated()
+        - pattern: helloworld.Admin/.*
+          access:
+            - ROLE_ADMIN</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="toml">[[grpc.server.security.intercept-method-map]]
+pattern = "helloworld.Greeter/SayHello"
+access = ["isAuthenticated()"]
+
+[[grpc.server.security.intercept-method-map]]
+pattern = "helloworld.Admin/.*"
+access = ["ROLE_ADMIN"]</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-groovy-config hljs" data-lang="groovy-config">grpc {
+  server {
+    security {
+      interceptMethodMap = [{
+          pattern = "helloworld.Greeter/SayHello"
+          access = ["isAuthenticated()"]
+        }, {
+          pattern = "helloworld.Admin/.*"
+          access = ["ROLE_ADMIN"]
+        }]
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-hocon hljs" data-lang="hocon">{
+  grpc {
+    server {
+      security {
+        intercept-method-map = [{
+            pattern = "helloworld.Greeter/SayHello"
+            access = ["isAuthenticated()"]
+          }, {
+            pattern = "helloworld.Admin/.*"
+            access = ["ROLE_ADMIN"]
+          }]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-json-config hljs" data-lang="json-config">{
+  "grpc": {
+    "server": {
+      "security": {
+        "intercept-method-map": [{
+            "pattern": "helloworld.Greeter/SayHello",
+            "access": ["isAuthenticated()"]
+          }, {
+            "pattern": "helloworld.Admin/.*",
+            "access": ["ROLE_ADMIN"]
+          }]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Micronaut Security&#8217;s <code>micronaut.security.intercept-url-map</code> is not applied to gRPC calls. Its entries are Ant-style HTTP path patterns (such as <code>/**</code>), so an application exposing both HTTP and gRPC endpoints can keep its HTTP rules there and declare gRPC rules separately.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Granted roles are the roles exposed by the <code>Authentication</code> (<code>Authentication#getRoles()</code>) combined with the roles resolved from its attributes by the <code>RolesFinder</code> bean, so both JWT claims and authentications returned by a custom <code>GrpcServerAuthenticationFetcher</code> (for example <code>Authentication.build("alice", List.of("ROLE_ADMIN"))</code>) are matched against role-based rules.</p>
+</div>
+<div class="paragraph">
+<p>If a rule requires authentication and no token is provided, the server responds with <code>UNAUTHENTICATED</code>. If a token is provided but validation fails, or the authenticated principal does not satisfy the configured access rules, the server responds with <code>PERMISSION_DENIED</code>.</p>
+</div>
+<div class="paragraph">
+<p>With Micronaut Security&#8217;s default <code>micronaut.security.reject-not-found=true</code>, unmatched gRPC methods are rejected as well. Define explicit <code>intercept-method-map</code> patterns for the methods you want to secure, or set <code>reject-not-found</code> to <code>false</code> if unmatched methods should remain accessible.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuration_reference">Configuration Reference</h4>
+<a id="io.micronaut.grpc.server.security.GrpcServerSecurityConfiguration" href="#io.micronaut.grpc.server.security.GrpcServerSecurityConfiguration">&#128279;</a>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Configuration Properties for <a href="../api/io/micronaut/grpc/server/security/GrpcServerSecurityConfiguration.html">GrpcServerSecurityConfiguration</a></caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.security.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.security.missing-authentication-status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.Status$Code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The gRPC status returned when authentication is missing.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UNAUTHENTICATED</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.security.failed-authorization-status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.grpc.Status$Code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The gRPC status returned when authorization fails.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PERMISSION_DENIED</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.security.intercept-method-map</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.util.List</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The gRPC authorization rules. Each entry has a {@code pattern}, a regular expression matched against the fully
+ qualified gRPC method name (for example {@code helloworld.Greeter/SayHello}), and the {@code access} rules
+ required to invoke matching methods. The first matching entry applies.</p>
+<p class="tableblock"> &lt;p&gt;These rules are separate from {@code micronaut.security.intercept-url-map}, which holds HTTP path patterns.&lt;/p&gt;</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<a id="io.micronaut.grpc.server.security.jwt.GrpcServerSecurityJwtConfiguration" href="#io.micronaut.grpc.server.security.jwt.GrpcServerSecurityJwtConfiguration">&#128279;</a>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Configuration Properties for <a href="../api/io/micronaut/grpc/server/security/jwt/GrpcServerSecurityJwtConfiguration.html">GrpcServerSecurityJwtConfiguration</a></caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.security.token.jwt.enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">boolean</p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>grpc.server.security.token.jwt.metadata-key-name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java.lang.String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The metadata key name that contains the JWT value.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JWT</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<h1 id="client"><a class="anchor" href="#client"></a>6 gRPC Clients</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/client.adoc"'>
@@ -3083,7 +3739,7 @@ class ReactiveGreetingEndpointTest extends Specification {
 </div>
 </div>
 
-<h1 id="serviceDiscovery"><a class="anchor" href="#serviceDiscovery"></a>6 Service Discovery</h1>
+<h1 id="serviceDiscovery"><a class="anchor" href="#serviceDiscovery"></a>7 Service Discovery</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/serviceDiscovery.adoc"'>
@@ -3557,7 +4213,7 @@ class DiscoveryClients {
 </div>
 </div>
 
-<h1 id="tracing"><a class="anchor" href="#tracing"></a>7 Distributed Tracing</h1>
+<h1 id="tracing"><a class="anchor" href="#tracing"></a>8 Distributed Tracing</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/tracing.adoc"'>
@@ -3691,7 +4347,7 @@ exporter = "google_cloud_trace"</code></pre>
 <p>For additional exporter options and authentication details, see the <a href="https://micronaut-projects.github.io/micronaut-tracing/latest/guide/#exporters">Micronaut Tracing OpenTelemetry exporter documentation</a>.</p>
 </div>
 
-<h1 id="protocolBuffers"><a class="anchor" href="#protocolBuffers"></a>8 Protocol Buffers Support</h1>
+<h1 id="protocolBuffers"><a class="anchor" href="#protocolBuffers"></a>9 Protocol Buffers Support</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/protocolBuffers.adoc"'>
@@ -3735,8 +4391,52 @@ runtime = [
 <div class="paragraph">
 <p>Micronaut will now support the encoding and decoding requests / responses of type <code>application/x-protobuf</code>.</p>
 </div>
+<div class="sect2">
+<h3 id="_avoiding_reflection">Avoiding Reflection</h3>
+<div class="paragraph">
+<p>To create a message from a request body, Micronaut needs a builder for the message type. Add the <code>micronaut-protobuff-processor</code> annotation processor to generate a factory for every message class compiled in your project, so that builders are created without reflection:</p>
+</div>
+<div class="paragraph">
+<p>        <div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-kotlin hljs" data-lang="gradle">annotationProcessor(<span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-processor")</span></code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="maven">&lt;annotationProcessorPaths&gt;
+    &lt;path&gt;
+        &lt;groupId&gt;io.micronaut.grpc&lt;/groupId&gt;
+        &lt;artifactId&gt;micronaut-protobuff-processor&lt;/artifactId&gt;
+    &lt;/path&gt;
+&lt;/annotationProcessorPaths&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock multi-language-sample">
+<div class="title"></div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-toml hljs" data-lang="pyronaut">[tool.pyronaut.dependencies]
+build = [
+    <span class="hljs-string">"io.micronaut.grpc:micronaut-protobuff-processor"</span>,
+]</code></pre>
+</div>
+</div>
+</p>
+</div>
+<div class="paragraph">
+<p>The processor brings Micronaut&#8217;s annotation processing (<code>micronaut-inject-java</code>) with it, so nothing else is needed on the annotation processor path. The project must have <code>micronaut-protobuff-support</code> on its compile classpath, directly or through <code>micronaut-protobuff-json-support</code>.</p>
+</div>
+<div class="paragraph">
+<p>The processor runs on the Java sources that <code>protoc</code> generates. It finds message classes by the <code>@com.google.protobuf.Generated</code> annotation and writes a small factory for each one, which Micronaut registers like its own generated services, so GraalVM native images need no extra reflection configuration for them. The JSON support in <code>micronaut-protobuff-json-support</code> uses the same factories.</p>
+</div>
+<div class="paragraph">
+<p>For compatibility, messages without a generated factory still work: Micronaut falls back to calling their static <code>newBuilder()</code> method by reflection. This applies to messages compiled elsewhere, for example in a shared library of <code>.proto</code> definitions built without the processor, and to messages in the default Java package, which the processor skips.</p>
+</div>
+</div>
 
-<h1 id="protocolBuffersJsonSupport"><a class="anchor" href="#protocolBuffersJsonSupport"></a>9 Protocol Buffers Json Support (Experimental)</h1>
+<h1 id="protocolBuffersJsonSupport"><a class="anchor" href="#protocolBuffersJsonSupport"></a>10 Protocol Buffers Json Support (Experimental)</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/protocolBuffersJsonSupport.adoc"'>
@@ -4023,7 +4723,7 @@ service Greeter {
 </div>
 </div>
 
-<h1 id="grpcWeb"><a class="anchor" href="#grpcWeb"></a>10 gRPC-Web</h1>
+<h1 id="grpcWeb"><a class="anchor" href="#grpcWeb"></a>11 gRPC-Web</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/grpcWeb.adoc"'>
@@ -4277,7 +4977,7 @@ service Greeter {
 </div>
 </div>
 
-<h1 id="repository"><a class="anchor" href="#repository"></a>11 Repository</h1>
+<h1 id="repository"><a class="anchor" href="#repository"></a>12 Repository</h1>
 
 <div class='contribute-btn'>
     <button type='button' class='btn btn-default' onclick='window.location.href="https://github.com/micronaut-projects/micronaut-grpc/edit/5.2.x/src/main/docs/guide/repository.adoc"'>

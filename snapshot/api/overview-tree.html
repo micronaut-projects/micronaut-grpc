@@ -65,7 +65,10 @@ loadScripts(document, 'script');</script>
 <li><a href="io/micronaut/grpc/server/interceptor/package-tree.html">io.micronaut.grpc.server.interceptor</a>, </li>
 <li><a href="io/micronaut/grpc/server/propagation/package-tree.html">io.micronaut.grpc.server.propagation</a>, </li>
 <li><a href="io/micronaut/grpc/server/reflection/package-tree.html">io.micronaut.grpc.server.reflection</a>, </li>
+<li><a href="io/micronaut/grpc/server/security/package-tree.html">io.micronaut.grpc.server.security</a>, </li>
+<li><a href="io/micronaut/grpc/server/security/jwt/package-tree.html">io.micronaut.grpc.server.security.jwt</a>, </li>
 <li><a href="io/micronaut/grpc/server/tracing/package-tree.html">io.micronaut.grpc.server.tracing</a>, </li>
+<li><a href="io/micronaut/protobuf/package-tree.html">io.micronaut.protobuf</a>, </li>
 <li><a href="io/micronaut/protobuf/codec/package-tree.html">io.micronaut.protobuf.codec</a>, </li>
 <li><a href="io/micronaut/protobuf/convert/package-tree.html">io.micronaut.protobuf.convert</a>, </li>
 <li><a href="io/micronaut/protobuf/handler/package-tree.html">io.micronaut.protobuf.handler</a>, </li>
@@ -73,6 +76,7 @@ loadScripts(document, 'script');</script>
 <li><a href="io/micronaut/protobuf/json/exception/package-tree.html">io.micronaut.protobuf.json.exception</a>, </li>
 <li><a href="io/micronaut/protobuf/json/grpc/package-tree.html">io.micronaut.protobuf.json.grpc</a>, </li>
 <li><a href="io/micronaut/protobuf/json/registry/package-tree.html">io.micronaut.protobuf.json.registry</a>, </li>
+<li><a href="io/micronaut/protobuf/processor/package-tree.html">io.micronaut.protobuf.processor</a>, </li>
 <li><a href="org/example/grpc/package-tree.html">org.example.grpc</a></li>
 </ul>
 <section class="hierarchy">
@@ -80,6 +84,11 @@ loadScripts(document, 'script');</script>
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" class="type-name-link external-link" title="class or interface in java.lang">Object</a>
 <ul>
+<li class="circle">io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/AbstractGrpcServerSecurityRule.html" class="type-name-link" title="class in io.micronaut.grpc.server.security">AbstractGrpcServerSecurityRule</a> (implements io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/GrpcServerSecurityRule.html" title="interface in io.micronaut.grpc.server.security">GrpcServerSecurityRule</a>)
+<ul>
+<li class="circle">io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/InterceptMethodMapGrpcServerSecurityRule.html" class="type-name-link" title="class in io.micronaut.grpc.server.security">InterceptMethodMapGrpcServerSecurityRule</a></li>
+</ul>
+</li>
 <li class="circle">com.google.protobuf.AbstractMessageLite&lt;MessageType, BuilderType&gt; (implements com.google.protobuf.MessageLite)
 <ul>
 <li class="circle">com.google.protobuf.AbstractMessage (implements com.google.protobuf.Message)
@@ -122,7 +131,10 @@ loadScripts(document, 'script');</script>
 <li class="circle">io.micronaut.grpc.info.<a href="io/micronaut/grpc/info/MicronautGrpcOpentracingModuleInfo.html" class="type-name-link" title="class in io.micronaut.grpc.info">MicronautGrpcOpentracingModuleInfo</a></li>
 <li class="circle">io.micronaut.grpc.info.<a href="io/micronaut/grpc/info/MicronautGrpcRuntimeModuleInfo.html" class="type-name-link" title="class in io.micronaut.grpc.info">MicronautGrpcRuntimeModuleInfo</a></li>
 <li class="circle">io.micronaut.grpc.info.<a href="io/micronaut/grpc/info/MicronautGrpcServerRuntimeModuleInfo.html" class="type-name-link" title="class in io.micronaut.grpc.info">MicronautGrpcServerRuntimeModuleInfo</a></li>
+<li class="circle">io.micronaut.grpc.info.<a href="io/micronaut/grpc/info/MicronautGrpcServerSecurityJwtModuleInfo.html" class="type-name-link" title="class in io.micronaut.grpc.info">MicronautGrpcServerSecurityJwtModuleInfo</a></li>
+<li class="circle">io.micronaut.grpc.info.<a href="io/micronaut/grpc/info/MicronautGrpcServerSecurityModuleInfo.html" class="type-name-link" title="class in io.micronaut.grpc.info">MicronautGrpcServerSecurityModuleInfo</a></li>
 <li class="circle">io.micronaut.grpc.info.<a href="io/micronaut/grpc/info/MicronautProtobuffJsonSupportModuleInfo.html" class="type-name-link" title="class in io.micronaut.grpc.info">MicronautProtobuffJsonSupportModuleInfo</a></li>
+<li class="circle">io.micronaut.grpc.info.<a href="io/micronaut/grpc/info/MicronautProtobuffProcessorModuleInfo.html" class="type-name-link" title="class in io.micronaut.grpc.info">MicronautProtobuffProcessorModuleInfo</a></li>
 <li class="circle">io.micronaut.grpc.info.<a href="io/micronaut/grpc/info/MicronautProtobuffSupportModuleInfo.html" class="type-name-link" title="class in io.micronaut.grpc.info">MicronautProtobuffSupportModuleInfo</a></li>
 </ul>
 </li>
@@ -204,6 +216,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/GrpcServerConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.server">GrpcServerConfiguration</a></li>
 <li class="circle">io.micronaut.grpc.server.propagation.<a href="io/micronaut/grpc/server/propagation/GrpcServerContextPropagationInterceptor.html" class="type-name-link" title="class in io.micronaut.grpc.server.propagation">GrpcServerContextPropagationInterceptor</a> (implements io.micronaut.core.order.Ordered, io.grpc.ServerInterceptor)</li>
 <li class="circle">io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/GrpcServerHealthIndicator.html" class="type-name-link" title="class in io.micronaut.grpc.server.health">GrpcServerHealthIndicator</a> (implements io.micronaut.management.health.indicator.HealthIndicator)</li>
+<li class="circle">io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/GrpcServerSecurityInterceptor.html" class="type-name-link" title="class in io.micronaut.grpc.server.security">GrpcServerSecurityInterceptor</a> (implements io.micronaut.core.order.Ordered, io.grpc.ServerInterceptor)</li>
 <li class="circle">io.micronaut.grpc.server.tracing.<a href="io/micronaut/grpc/server/tracing/GrpcServerTracingInterceptorConfiguration.html" class="type-name-link" title="class in io.micronaut.grpc.server.tracing">GrpcServerTracingInterceptorConfiguration</a></li>
 <li class="circle">io.micronaut.grpc.server.tracing.<a href="io/micronaut/grpc/server/tracing/GrpcServerTracingInterceptorFactory.html" class="type-name-link" title="class in io.micronaut.grpc.server.tracing">GrpcServerTracingInterceptorFactory</a></li>
 <li class="circle">io.micronaut.protobuf.json.registry.<a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistrar.html" class="type-name-link" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistrar</a> (implements io.micronaut.context.processor.ExecutableMethodProcessor&lt;A&gt;)</li>
@@ -213,6 +226,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/GrpcWebController.html" class="type-name-link" title="class in io.micronaut.protobuf.json">GrpcWebController</a></li>
 <li class="circle">io.micronaut.grpc.server.health.<a href="io/micronaut/grpc/server/health/HealthStatusManagerContainer.html" class="type-name-link" title="class in io.micronaut.grpc.server.health">HealthStatusManagerContainer</a></li>
 <li class="circle">io.micronaut.grpc.server.<a href="io/micronaut/grpc/server/InProcessGrpcServerChannel.html" class="type-name-link" title="class in io.micronaut.grpc.server">InProcessGrpcServerChannel</a></li>
+<li class="circle">io.micronaut.grpc.server.security.jwt.<a href="io/micronaut/grpc/server/security/jwt/JwtGrpcServerAuthenticationFetcher.html" class="type-name-link" title="class in io.micronaut.grpc.server.security.jwt">JwtGrpcServerAuthenticationFetcher</a> (implements io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/GrpcServerAuthenticationFetcher.html" title="interface in io.micronaut.grpc.server.security">GrpcServerAuthenticationFetcher</a>)</li>
 <li class="circle">io.grpc.NameResolver.Factory
 <ul>
 <li class="circle">io.grpc.NameResolverProvider
@@ -226,6 +240,8 @@ loadScripts(document, 'script');</script>
 <li class="circle">io.micronaut.protobuf.handler.<a href="io/micronaut/protobuf/handler/ProtobufBodyHandler.html" class="type-name-link" title="class in io.micronaut.protobuf.handler">ProtobufBodyHandler</a>&lt;T&gt; (implements io.micronaut.http.body.MessageBodyHandler&lt;T&gt;)</li>
 <li class="circle">io.micronaut.protobuf.codec.<a href="io/micronaut/protobuf/codec/ProtobufferCodec.html" class="type-name-link" title="class in io.micronaut.protobuf.codec">ProtobufferCodec</a> (implements io.micronaut.http.codec.MediaTypeCodec)</li>
 <li class="circle">io.micronaut.protobuf.json.<a href="io/micronaut/protobuf/json/ProtobufJsonTranscoder.html" class="type-name-link" title="class in io.micronaut.protobuf.json">ProtobufJsonTranscoder</a></li>
+<li class="circle">io.micronaut.protobuf.<a href="io/micronaut/protobuf/ProtobufMessageBuilders.html" class="type-name-link" title="class in io.micronaut.protobuf">ProtobufMessageBuilders</a></li>
+<li class="circle">io.micronaut.protobuf.processor.<a href="io/micronaut/protobuf/processor/ProtobufMessageFactoryVisitor.html" class="type-name-link" title="class in io.micronaut.protobuf.processor">ProtobufMessageFactoryVisitor</a> (implements io.micronaut.inject.visitor.TypeElementVisitor&lt;C,<wbr>E&gt;)</li>
 <li class="circle">io.micronaut.protobuf.convert.<a href="io/micronaut/protobuf/convert/ProtoMessageToByteBufConverter.html" class="type-name-link" title="class in io.micronaut.protobuf.convert">ProtoMessageToByteBufConverter</a> (implements io.micronaut.core.convert.TypeConverter&lt;S,<wbr>T&gt;)</li>
 <li class="circle">helloworld.<a href="helloworld/ReactiveGreeterGrpc.html" class="type-name-link" title="class in helloworld">ReactiveGreeterGrpc</a></li>
 <li class="circle">helloworld.<a href="helloworld/ReactiveGreeterGrpc.ReactiveGreeterImplBase.html" class="type-name-link" title="class in helloworld">ReactiveGreeterGrpc.ReactiveGreeterImplBase</a> (implements io.grpc.BindableService, helloworld.<a href="helloworld/ReactiveGreeterGrpc.AsyncService.html" title="interface in helloworld">ReactiveGreeterGrpc.AsyncService</a>)</li>
@@ -281,7 +297,20 @@ loadScripts(document, 'script');</script>
 </li>
 </ul>
 </li>
+<li class="circle">io.micronaut.core.order.Ordered
+<ul>
+<li class="circle">io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/GrpcServerAuthenticationFetcher.html" class="type-name-link" title="interface in io.micronaut.grpc.server.security">GrpcServerAuthenticationFetcher</a></li>
+<li class="circle">io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/GrpcServerSecurityRule.html" class="type-name-link" title="interface in io.micronaut.grpc.server.security">GrpcServerSecurityRule</a></li>
+</ul>
+</li>
+<li class="circle">io.micronaut.protobuf.<a href="io/micronaut/protobuf/ProtobufMessageFactory.html" class="type-name-link" title="interface in io.micronaut.protobuf">ProtobufMessageFactory</a>&lt;T&gt;</li>
 <li class="circle">helloworld.<a href="helloworld/ReactiveGreeterGrpc.AsyncService.html" class="type-name-link" title="interface in helloworld">ReactiveGreeterGrpc.AsyncService</a></li>
+<li class="circle">io.micronaut.core.util.Toggleable
+<ul>
+<li class="circle">io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/GrpcServerSecurityConfiguration.html" class="type-name-link" title="interface in io.micronaut.grpc.server.security">GrpcServerSecurityConfiguration</a></li>
+<li class="circle">io.micronaut.grpc.server.security.jwt.<a href="io/micronaut/grpc/server/security/jwt/GrpcServerSecurityJwtConfiguration.html" class="type-name-link" title="interface in io.micronaut.grpc.server.security.jwt">GrpcServerSecurityJwtConfiguration</a></li>
+</ul>
+</li>
 </ul>
 </section>
 <section class="hierarchy">
@@ -300,6 +329,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Record.html" class="type-name-link external-link" title="class or interface in java.lang">Record</a>
 <ul>
 <li class="circle">io.micronaut.protobuf.json.registry.<a href="io/micronaut/protobuf/json/registry/GrpcServiceRegistry.RegisteredMethod.html" class="type-name-link" title="class in io.micronaut.protobuf.json.registry">GrpcServiceRegistry.RegisteredMethod</a></li>
+<li class="circle">io.micronaut.grpc.server.security.<a href="io/micronaut/grpc/server/security/InterceptMethodMapPattern.html" class="type-name-link" title="class in io.micronaut.grpc.server.security">InterceptMethodMapPattern</a></li>
 </ul>
 </li>
 </ul>
