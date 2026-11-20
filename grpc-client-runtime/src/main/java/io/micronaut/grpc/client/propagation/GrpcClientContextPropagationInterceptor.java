@@ -30,6 +30,9 @@ import io.micronaut.core.order.Ordered;
 import io.micronaut.core.propagation.PropagatedContext;
 import io.micronaut.core.util.StringUtils;
 import jakarta.inject.Singleton;
+import org.jspecify.annotations.Nullable;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Makes the Micronaut {@link PropagatedContext} of the thread that starts a client call current again in the call's
@@ -37,11 +40,15 @@ import jakarta.inject.Singleton;
  *
  * <p>gRPC runs those callbacks on the channel's executor, so without this interceptor the MDC, tracing and other context
  * elements of the caller are lost in an async stub's {@code StreamObserver}. The interceptor does nothing when the
- * calling thread has no propagated context.</p>
+ * thread that starts the call has no propagated context.</p>
  *
- * <p>This interceptor runs first and captures the context on the calling thread. {@link Restoring} runs last, closest
- * to the transport, so that its listener receives each callback first and every other interceptor's listener runs
- * inside the restored context.</p>
+ * <p>The context is captured when the call is started ({@link ClientCall#start}), not when it is created. This
+ * interceptor runs first: it captures the context and wraps the application's listener, which also covers calls that
+ * another interceptor completes without reaching the transport. {@link Restoring} runs last, closest to the transport,
+ * so that the listeners of every other interceptor also run inside the restored context.</p>
+ *
+ * <p>The captured context is only a fallback: a callback that already runs inside a propagated context, such as one
+ * set by another interceptor, keeps it.</p>
  *
  * <p>Enabled by default; disable with {@code grpc.client.context-propagation.enabled=false}.</p>
  *
@@ -56,21 +63,35 @@ public class GrpcClientContextPropagationInterceptor implements ClientIntercepto
      */
     public static final String ENABLED = "grpc.client.context-propagation.enabled";
 
-    private static final CallOptions.Key<PropagatedContext> CONTEXT = CallOptions.Key.create("micronaut-propagated-context");
+    /**
+     * Carries the context captured at {@code start} from the outermost interceptor to {@link Restoring}. The holder is
+     * created when the call is created and filled when it is started, which happens before the inner calls start.
+     */
+    private static final CallOptions.Key<AtomicReference<@Nullable PropagatedContext>> CONTEXT =
+        CallOptions.Key.create("micronaut-propagated-context");
 
     @Override
     public <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method,
                                                                CallOptions callOptions,
                                                                Channel next) {
-        PropagatedContext context = PropagatedContext.find().orElse(null);
-        if (context == null || context.isEmpty()) {
-            return next.newCall(method, callOptions);
-        }
-        return next.newCall(method, callOptions.withOption(CONTEXT, context));
+        AtomicReference<@Nullable PropagatedContext> holder = new AtomicReference<>();
+        ClientCall<ReqT, RespT> call = next.newCall(method, callOptions.withOption(CONTEXT, holder));
+        return new ForwardingClientCall.SimpleForwardingClientCall<>(call) {
+            @Override
+            public void start(Listener<RespT> responseListener, Metadata headers) {
+                PropagatedContext context = currentContext();
+                if (context == null) {
+                    super.start(responseListener, headers);
+                    return;
+                }
+                holder.set(context);
+                super.start(new PropagatingListener<>(responseListener, context), headers);
+            }
+        };
     }
 
     /**
-     * Runs first, so that the context is captured on the calling thread.
+     * Runs first, so that the context is captured on the thread that starts the call.
      *
      * @return The order
      */
@@ -79,9 +100,13 @@ public class GrpcClientContextPropagationInterceptor implements ClientIntercepto
         return Ordered.HIGHEST_PRECEDENCE;
     }
 
+    private static @Nullable PropagatedContext currentContext() {
+        return PropagatedContext.find().filter(context -> !context.isEmpty()).orElse(null);
+    }
+
     /**
-     * Restores the captured context around the response callbacks. Runs last, so that it wraps the listeners of all
-     * other interceptors.
+     * Restores the captured context around the response callbacks coming from the transport. Runs last, so that it wraps
+     * the listeners of all other interceptors.
      */
     @Internal
     @Singleton
@@ -93,14 +118,15 @@ public class GrpcClientContextPropagationInterceptor implements ClientIntercepto
                                                                    CallOptions callOptions,
                                                                    Channel next) {
             ClientCall<ReqT, RespT> call = next.newCall(method, callOptions);
-            PropagatedContext context = callOptions.getOption(CONTEXT);
-            if (context == null) {
+            AtomicReference<@Nullable PropagatedContext> holder = callOptions.getOption(CONTEXT);
+            if (holder == null) {
                 return call;
             }
             return new ForwardingClientCall.SimpleForwardingClientCall<>(call) {
                 @Override
                 public void start(Listener<RespT> responseListener, Metadata headers) {
-                    super.start(new PropagatingListener<>(responseListener, context), headers);
+                    PropagatedContext context = holder.get();
+                    super.start(context == null ? responseListener : new PropagatingListener<>(responseListener, context), headers);
                 }
             };
         }
@@ -111,6 +137,11 @@ public class GrpcClientContextPropagationInterceptor implements ClientIntercepto
         }
     }
 
+    /**
+     * Runs each callback inside the captured context, unless a context is already current.
+     *
+     * @param <RespT> The response type
+     */
     private static final class PropagatingListener<RespT> extends ForwardingClientCallListener.SimpleForwardingClientCallListener<RespT> {
 
         private final PropagatedContext context;
@@ -122,23 +153,31 @@ public class GrpcClientContextPropagationInterceptor implements ClientIntercepto
 
         @Override
         public void onHeaders(Metadata headers) {
-            // propagate(Runnable) also works in the scoped-value propagation mode, where Scope-based propagation is not supported.
-            context.propagate(() -> super.onHeaders(headers));
+            run(() -> super.onHeaders(headers));
         }
 
         @Override
         public void onMessage(RespT message) {
-            context.propagate(() -> super.onMessage(message));
+            run(() -> super.onMessage(message));
         }
 
         @Override
         public void onClose(Status status, Metadata trailers) {
-            context.propagate(() -> super.onClose(status, trailers));
+            run(() -> super.onClose(status, trailers));
         }
 
         @Override
         public void onReady() {
-            context.propagate(() -> super.onReady());
+            run(super::onReady);
+        }
+
+        private void run(Runnable callback) {
+            if (PropagatedContext.exists()) {
+                callback.run();
+            } else {
+                // propagate(Runnable) also works in the scoped-value propagation mode, where Scope-based propagation is not supported.
+                context.propagate(callback);
+            }
         }
     }
 }

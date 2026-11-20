@@ -119,6 +119,8 @@ public class TenantInterceptor implements ServerInterceptor {
 }
 ----
 
+This covers interceptors registered as beans. Interceptors applied to a single service with `ServerInterceptors.intercept(..)` run inside Micronaut's interceptor, so a context they make current is not carried to later events. The captured context is only a fallback: if an interceptor makes a context current around a later event, for example around one message, that context takes precedence.
+
 To turn this off, set `grpc.server.context-propagation.enabled` to `false`.
 
 === Health checks

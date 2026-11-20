@@ -169,6 +169,74 @@ class GrpcContextPropagationSpec extends Specification {
         server?.close()
     }
 
+    void "client callbacks see the context of the thread that starts the call, not the one that creates it"() {
+        given:
+        EmbeddedServer server = start([:])
+        Channel channel = server.applicationContext.getBean(Client).channel
+        CompletableFuture<String> seenInCallback = new CompletableFuture<>()
+        ClientCall<String, String> call = channel.newCall(ECHO, CallOptions.DEFAULT)
+
+        when: 'the call is created outside any scope and started inside one'
+        try (PropagatedContext.Scope ignored = PropagatedContext.getOrEmpty().plus(new Tenant('started')).propagate()) {
+            ClientCalls.asyncUnaryCall(call, 'hi', observer(seenInCallback))
+        }
+
+        then:
+        seenInCallback.get(10, TimeUnit.SECONDS) == 'started'
+
+        cleanup:
+        server?.close()
+    }
+
+    void "callbacks of a call completed by an interceptor without reaching the transport see the caller's context"() {
+        given:
+        EmbeddedServer server = start(['short-circuit': true])
+        Channel channel = server.applicationContext.getBean(Client).channel
+        CompletableFuture<String> seenInCallback = new CompletableFuture<>()
+
+        when:
+        try (PropagatedContext.Scope ignored = PropagatedContext.getOrEmpty().plus(new Tenant('acme')).propagate()) {
+            ClientCalls.asyncUnaryCall(channel.newCall(ECHO, CallOptions.DEFAULT), 'hi', observer(seenInCallback))
+        }
+
+        then:
+        seenInCallback.get(10, TimeUnit.SECONDS) == 'acme'
+
+        cleanup:
+        server?.close()
+    }
+
+    void "context an outer server interceptor makes current during an event takes precedence over the startup context"() {
+        given:
+        EmbeddedServer server = start(['callback-tenant': true])
+        Channel channel = server.applicationContext.getBean(Client).channel
+
+        expect:
+        ClientCalls.blockingUnaryCall(channel, ECHO, CallOptions.DEFAULT.withDeadlineAfter(10, TimeUnit.SECONDS), 'hi') == 'hi from tenant-from-callback'
+
+        cleanup:
+        server?.close()
+    }
+
+    private static StreamObserver<String> observer(CompletableFuture<String> seenInCallback) {
+        new StreamObserver<String>() {
+            @Override
+            void onNext(String value) {
+                seenInCallback.complete(currentTenant())
+            }
+
+            @Override
+            void onError(Throwable t) {
+                seenInCallback.completeExceptionally(t)
+            }
+
+            @Override
+            void onCompleted() {
+                // Nothing to do: the reply is handled in onNext.
+            }
+        }
+    }
+
     private static EmbeddedServer start(Map<String, Object> extra) {
         int port = SocketUtils.findAvailableTcpPort()
         ApplicationContext.run(EmbeddedServer, [
@@ -288,6 +356,99 @@ class GrpcContextPropagationSpec extends Specification {
         void onClose(Status status, Metadata trailers) {
             recorder.seenInOnClose.complete(GrpcContextPropagationSpec.currentTenant())
             next.onClose(status, trailers)
+        }
+
+        @Override
+        void onReady() {
+            next.onReady()
+        }
+    }
+
+    /**
+     * Completes calls itself on another thread, without calling the next channel, as a cache or fallback would.
+     */
+    @Singleton
+    @Requires(property = 'short-circuit', value = 'true')
+    static class ShortCircuitInterceptor implements ClientInterceptor {
+        @Override
+        <ReqT, RespT> ClientCall<ReqT, RespT> interceptCall(MethodDescriptor<ReqT, RespT> method, CallOptions callOptions, Channel next) {
+            new CachedCall()
+        }
+    }
+
+    static class CachedCall extends ClientCall {
+        @Override
+        void start(ClientCall.Listener responseListener, Metadata headers) {
+            Thread.start {
+                responseListener.onHeaders(new Metadata())
+                responseListener.onMessage('cached')
+                responseListener.onClose(Status.OK, new Metadata())
+            }
+        }
+
+        @Override
+        void request(int numMessages) {
+            // Nothing to do: the reply is pushed when the call starts.
+        }
+
+        @Override
+        void cancel(String message, Throwable cause) {
+            // Nothing to do: the call completes on its own.
+        }
+
+        @Override
+        void halfClose() {
+            // Nothing to do: the request is ignored.
+        }
+
+        @Override
+        void sendMessage(Object message) {
+            // Nothing to do: the request is ignored.
+        }
+    }
+
+    /**
+     * Makes a different tenant current around onHalfClose, where the unary service method runs.
+     */
+    @Singleton
+    @Requires(property = 'callback-tenant', value = 'true')
+    static class CallbackTenantInterceptor implements ServerInterceptor, Ordered {
+        @Override
+        <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call, Metadata headers, ServerCallHandler<ReqT, RespT> next) {
+            new CallbackTenantListener(next.startCall(call, headers))
+        }
+
+        @Override
+        int getOrder() {
+            return 1
+        }
+    }
+
+    static class CallbackTenantListener extends ServerCall.Listener {
+        final ServerCall.Listener next
+
+        CallbackTenantListener(ServerCall.Listener next) {
+            this.next = next
+        }
+
+        @Override
+        void onMessage(Object message) {
+            next.onMessage(message)
+        }
+
+        @Override
+        void onHalfClose() {
+            PropagatedContext.getOrEmpty().plus(new Tenant('tenant-from-callback')).propagate({ next.onHalfClose() } as Runnable)
+        }
+
+        @Override
+        void onCancel() {
+            next.onCancel()
+        }
+
+        @Override
+        void onComplete() {
+            next.onComplete()
         }
 
         @Override

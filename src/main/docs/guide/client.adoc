@@ -52,7 +52,7 @@ By default, each channel will automatically be dependency injected with beans of
 
 ==== Context Propagation
 
-gRPC runs a call's response callbacks, such as `StreamObserver.onNext` of an async stub, on the channel's executor. Micronaut captures the `PropagatedContext` of the thread that starts the call and makes it current again in those callbacks, so MDC entries, tracing context and other context elements of the caller are available there.
+gRPC runs a call's response callbacks, such as `StreamObserver.onNext` of an async stub, on the channel's executor. Micronaut captures the `PropagatedContext` of the thread that starts the call (when `ClientCall.start` runs, which a stub does for you) and makes it current again in those callbacks, so MDC entries, tracing context and other context elements of the caller are available there. Client interceptors see it in their response listeners too, including calls an interceptor completes itself without reaching the server. A callback that already runs inside a propagated context keeps it.
 
 To turn this off, set `grpc.client.context-propagation.enabled` to `false`.
 

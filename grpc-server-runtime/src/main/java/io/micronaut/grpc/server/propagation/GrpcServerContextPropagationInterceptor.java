@@ -25,6 +25,7 @@ import io.micronaut.core.order.Ordered;
 import io.micronaut.core.propagation.PropagatedContext;
 import io.micronaut.core.util.StringUtils;
 import jakarta.inject.Singleton;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Carries the Micronaut {@link PropagatedContext} that outer server interceptors make current when they start a call
@@ -36,7 +37,10 @@ import jakarta.inject.Singleton;
  * with {@code context.plus(element).propagate(() -> next.startCall(call, headers))}, would otherwise be lost before the
  * method runs.</p>
  *
- * <p>The interceptor runs last, closest to the service. It does nothing when no context is propagated.
+ * <p>The interceptor runs last, closest to the service, so it captures the context of interceptors registered as beans.
+ * Interceptors applied to a single service with {@code ServerInterceptors.intercept(..)} run inside it and are not
+ * captured. The snapshot is only a fallback: an event that already runs inside a propagated context, for example one an
+ * outer interceptor set around that event, keeps it. The interceptor does nothing when no context is propagated.
  * Enabled by default; disable with {@code grpc.server.context-propagation.enabled=false}.</p>
  *
  * @since 5.3.0
@@ -54,7 +58,7 @@ public class GrpcServerContextPropagationInterceptor implements ServerIntercepto
     public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call,
                                                                  Metadata headers,
                                                                  ServerCallHandler<ReqT, RespT> next) {
-        PropagatedContext context = PropagatedContext.find().orElse(null);
+        @Nullable PropagatedContext context = PropagatedContext.find().orElse(null);
         ServerCall.Listener<ReqT> listener = next.startCall(call, headers);
         if (context == null || context.isEmpty()) {
             return listener;
@@ -72,6 +76,11 @@ public class GrpcServerContextPropagationInterceptor implements ServerIntercepto
         return Ordered.LOWEST_PRECEDENCE;
     }
 
+    /**
+     * Runs each event inside the context captured when the call started, unless a context is already current.
+     *
+     * @param <ReqT> The request type
+     */
     private static final class PropagatingListener<ReqT> extends ForwardingServerCallListener.SimpleForwardingServerCallListener<ReqT> {
 
         private final PropagatedContext context;
@@ -83,28 +92,37 @@ public class GrpcServerContextPropagationInterceptor implements ServerIntercepto
 
         @Override
         public void onMessage(ReqT message) {
-            // propagate(Runnable) also works in the scoped-value propagation mode, where Scope-based propagation is not supported.
-            context.propagate(() -> super.onMessage(message));
+            run(() -> super.onMessage(message));
         }
 
         @Override
         public void onHalfClose() {
-            context.propagate(() -> super.onHalfClose());
+            run(super::onHalfClose);
         }
 
         @Override
         public void onCancel() {
-            context.propagate(() -> super.onCancel());
+            run(super::onCancel);
         }
 
         @Override
         public void onComplete() {
-            context.propagate(() -> super.onComplete());
+            run(super::onComplete);
         }
 
         @Override
         public void onReady() {
-            context.propagate(() -> super.onReady());
+            run(super::onReady);
+        }
+
+        private void run(Runnable event) {
+            if (PropagatedContext.exists()) {
+                // An outer interceptor made a context current for this event: it takes precedence over the startup snapshot.
+                event.run();
+            } else {
+                // propagate(Runnable) also works in the scoped-value propagation mode, where Scope-based propagation is not supported.
+                context.propagate(event);
+            }
         }
     }
 }
