@@ -12,10 +12,7 @@ snippet::helloworld.GreetingEndpoint[tags="imports,clazz", source="main"]
 
 If you generate Reactor bindings with `reactive-grpc`, Micronaut can register the generated `BindableService` implementation in exactly the same way. Implement the generated Reactor base class as a singleton bean:
 
-[source,java]
-----
-include::test-suite-java/src/main/java/helloworld/ReactiveGreetingEndpoint.java[tags=reactive-service]
-----
+snippet::helloworld.ReactiveGreetingEndpoint[tags="reactive-service", source="main"]
 
 === Running the gRPC Server
 
@@ -31,7 +28,7 @@ The server can be configured in a number of different ways. By default, Micronau
 For example:
 
 .Configuring the gRPC server
-[source,yaml]
+[configuration]
 ----
 grpc:
     server:
@@ -50,7 +47,7 @@ By default, the gRPC server will be enabled. To disable the gRPC server, set `gr
 For tests, add the `io.micronaut.grpc:micronaut-grpc-inprocess` module and set `grpc.server.in-process-name` to switch the embedded server and the injected `@GrpcChannel("grpc-server")` test channel to gRPC's in-process transport instead of opening a TCP port.
 
 .Using the in-process server for tests
-[source,yaml]
+[configuration]
 ----
 grpc:
     server:
@@ -59,13 +56,9 @@ grpc:
 
 The in-process transport avoids port management and is managed by the Micronaut application lifecycle. SSL is not supported in this mode, and the support lives in the optional `micronaut-grpc-inprocess` module so the Netty-based server runtime does not require the extra dependency.
 
-Alternatively if you prefer programmatic configuration you can write a `BeanCreationListener` for example:
+Alternatively if you prefer programmatic configuration you can write a `BeanCreatedEventListener` for example:
 
-.Configuring the ServerBuilder
-[source,java]
-----
-include::grpc-server-runtime/src/test/groovy/io/micronaut/grpc/ServerBuilderListener.java[]
-----
+snippet::helloworld.ServerBuilderListener[tags="imports,clazz", source="main", title="Configuring the ServerBuilder"]
 
 === Auto Injected Types
 
@@ -78,42 +71,30 @@ By default, the server will automatically be dependency injected with beans of t
 In addition, by default the server will be setup to use Micronaut's I/O executor service.
 Set `grpc.server.executor` to the name of an `Executor` bean to override that default from configuration.
 
+To run service methods on virtual threads, use Micronaut's `blocking` executor, which uses virtual threads when the JVM supports them:
+
+.Running gRPC service methods on virtual threads
+[configuration]
+----
+grpc:
+    server:
+        executor: blocking
+----
+
+Virtual threads suit blocking stubs and service methods that call databases or other services synchronously. Kotlin coroutine and Reactor services don't need them.
+
 ==== Server Interceptor Ordering
 To produce a consistent and predictable order of execution for server interceptors, it is required
 for the `io.grpc.ServerInterceptor` implementation to do one of the following:
 
-.Implement `io.micronaut.core.order.Ordered` interface
-[source,java,opts=novalidate]
-----
-@Singleton // <1>
-public class CustomInterceptor implements ServerInterceptor, Ordered { // <2>
-    ...
+snippet::helloworld.CustomInterceptor[tags="imports,clazz", source="main", title="Implement the io.micronaut.core.order.Ordered interface"]
 
-    @Override
-    public int getOrder() {
-        return 10; // <3>
-    }
-
-}
-----
 <1> Declare the server interceptor as a bean to have it registered automatically
 <2> Implement `Ordered` in addition to `ServerInterceptor`
 <3> Provide the specified order of execution in the server interceptor chain
 
-.Wrap with `io.micronaut.grpc.server.interceptor.OrderedServerInterceptor`
-[source,java]
-----
-@Factory // <1>
-public class ServerInterceptorFactory {
+snippet::helloworld.ServerInterceptorFactory[tags="imports,clazz", source="main", title="Wrap with io.micronaut.grpc.server.interceptor.OrderedServerInterceptor"]
 
-    @Bean // <2>
-    @Singleton
-    public ServerInterceptor customServerInterceptor() {
-        return new OrderedServerInterceptor(new CustomInterceptor(), 10); // <3>
-    }
-
-}
-----
 <1> Use a `@Factory` to create an instance of `ServerInterceptor` bean
 <2> Register the created sever interceptor as a bean
 <3> Wrap the `CustomInterceptor` with `OrderedServerInterceptor` and provide the `order` of execution
@@ -126,6 +107,33 @@ and then the order will be reversed when sending the response message.
 ----
 Request -> 1 -> 2 -> 3 -> business logic -> 3 -> 2 -> 1 -> Response
 ----
+
+=== Context Propagation
+
+gRPC delivers each event of a call (messages, half-close, cancellation) as a separate task on the server executor, possibly on a different thread. A unary service method runs when the client half-closes the call, so a Micronaut `PropagatedContext` that a server interceptor makes current while it starts the call would otherwise be gone by the time the method runs.
+
+Micronaut registers an interceptor that runs last, closest to the service, and makes that context current again for every later event of the call. A server interceptor can therefore add context elements, for example an authenticated user or MDC entries, and the service method sees them:
+
+[source,java]
+----
+@Singleton
+public class TenantInterceptor implements ServerInterceptor {
+    private static final Metadata.Key<String> TENANT = Metadata.Key.of("x-tenant", Metadata.ASCII_STRING_MARSHALLER);
+
+    @Override
+    public <ReqT, RespT> ServerCall.Listener<ReqT> interceptCall(ServerCall<ReqT, RespT> call,
+                                                                 Metadata headers,
+                                                                 ServerCallHandler<ReqT, RespT> next) {
+        return PropagatedContext.getOrEmpty()
+            .plus(new Tenant(headers.get(TENANT))) // your own PropagatedContextElement
+            .propagate(() -> next.startCall(call, headers));
+    }
+}
+----
+
+This covers interceptors registered as beans. Interceptors applied to a single service with `ServerInterceptors.intercept(..)` run inside Micronaut's interceptor, so a context they make current is not carried to later events. The captured context is only a fallback: if an interceptor makes a context current around a later event, for example around one message, that context takes precedence.
+
+To turn this off, set `grpc.server.context-propagation.enabled` to `false`.
 
 === Health checks
 
@@ -164,20 +172,40 @@ For example, if gRPC is running then the `/health` endpoint will return:
 
 If you wish to disable the Micronaut gRPC server health check while still using the management dependency you can set the property `grpc.server.health.enabled` to `false` in your application configuration.
 
+=== Server Reflection
+
+The https://github.com/grpc/grpc/blob/master/doc/server-reflection.md[gRPC server reflection] service lets tools such as https://github.com/fullstorydev/grpcurl[grpcurl], Postman and grpcui discover the services, methods and message types exposed by the server without a copy of the `.proto` files.
+
+Reflection exposes your whole API surface, so it is disabled by default. To enable it, add the gRPC services dependency (`io.grpc:grpc-services`) and set `grpc.server.reflection.enabled` to `true`:
+
+.Enabling server reflection
+[configuration]
+----
+grpc:
+    server:
+        reflection:
+            enabled: true
+----
+
+Micronaut registers the `grpc.reflection.v1.ServerReflection` service. It lists the services generated by `protoc` (whose descriptors carry the `.proto` schema), plus the health service when gRPC health checks are enabled. A service you build by hand as a `ServerServiceDefinition` without a schema descriptor still accepts calls but doesn't appear in reflection results. You can then list the services with:
+
+[source,bash]
+----
+grpcurl -plaintext localhost:50051 list
+----
+
+TIP: Consider enabling reflection only in development, for example in `application-dev.yml`.
+
 === Testing the Server
 
 To test the server it is recommended that you use https://github.com/micronaut-projects/micronaut-test[Micronaut Test].
 
-TIP: For detailed instructions on how to set up Micronaut Test for either Spock or JUnit 5 see the https://micronaut-projects.github.io/micronaut-test/latest/guide/index.html[documentation] on the subject.
+TIP: For detailed instructions on how to set up Micronaut Test for Spock, JUnit 5, or Kotest see the https://micronaut-projects.github.io/micronaut-test/latest/guide/index.html[documentation] on the subject.
 
 
-You can then define a blocking stub bean in `src/test/java`. For example:
+You can then define a blocking stub bean in your test sources. For example:
 
-.Defining Test Clients
-[source,java]
-----
-include::test-suite-java/src/test/java/helloworld/GreetingEndpointTest.java[tags=clients]
-----
+snippet::helloworld.GreetingEndpointTest[tags="clients", title="Defining Test Clients"]
 
 <1> A `ManagedChannel` is injected that can communicate with the server.
 <2> The generated gRPC client blocking stub is created.
