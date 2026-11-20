@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package library.v1;
+
+option java_package = "io.micronaut.protobuf.transcoding.library";
+option java_multiple_files = true;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+service LibraryService {
+  rpc GetShelf(GetShelfRequest) returns (Shelf) {
+    option (google.api.http) = { get: "/v1/{name=shelves/*}" };
+  }
+  rpc ListBooks(ListBooksRequest) returns (ListBooksResponse) {
+    option (google.api.http) = { get: "/v1/{parent=shelves/*}/books" };
+  }
+  rpc CreateShelf(CreateShelfRequest) returns (Shelf) {
+    option (google.api.http) = { post: "/v1/shelves" body: "shelf" };
+  }
+  rpc CreateBook(Book) returns (Book) {
+    option (google.api.http) = { post: "/v1/books" body: "*" };
+  }
+  rpc UpdateBook(UpdateBookRequest) returns (Book) {
+    option (google.api.http) = {
+      put: "/v1/books/{book.id}"
+      body: "book"
+      additional_bindings { patch: "/v1/books/{book.id}" body: "book" }
+    };
+  }
+  rpc DeleteBook(DeleteBookRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = { delete: "/v1/books/{id}" };
+  }
+  rpc GetBookTitle(DeleteBookRequest) returns (Book) {
+    option (google.api.http) = { get: "/v1/books/{id}/title" response_body: "title" };
+  }
+  rpc ArchiveBook(DeleteBookRequest) returns (Book) {
+    option (google.api.http) = { post: "/v1/books/{id}:archive" body: "*" };
+  }
+  rpc SearchBooks(ListBooksRequest) returns (ListBooksResponse) {
+    option (google.api.http) = { custom: { kind: "search" path: "/v1/books" } };
+  }
+  rpc BrokenRule(DeleteBookRequest) returns (Book) {
+    option (google.api.http) = { get: "v1/no-leading-slash" };
+  }
+  rpc StreamBooks(ListBooksRequest) returns (stream Book) {
+    option (google.api.http) = { get: "/v1/stream" };
+  }
+}
+
+message Shelf {
+  string name = 1;
+  string theme = 2;
+}
+
+message GetShelfRequest {
+  string name = 1;
+}
+
+message CreateShelfRequest {
+  Shelf shelf = 1;
+  bool validate_only = 2;
+}
+
+message Book {
+  int64 id = 1;
+  string title = 2;
+  string author = 3;
+  repeated string tags = 4;
+  bool archived = 5;
+}
+
+message ListBooksRequest {
+  string parent = 1;
+  int32 page_size = 2;
+  repeated string tags = 3;
+  Paging paging = 4;
+}
+
+message Paging {
+  string token = 1;
+}
+
+message ListBooksResponse {
+  repeated Book books = 1;
+  string next_page_token = 2;
+}
+
+message UpdateBookRequest {
+  Book book = 1;
+  string reason = 2;
+}
+
+message DeleteBookRequest {
+  int64 id = 1;
+}

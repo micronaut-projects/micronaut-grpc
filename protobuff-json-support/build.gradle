@@ -29,6 +29,7 @@ dependencies {
     api libs.managed.grpc.stub
     api libs.managed.grpc.protobuf
     api projects.micronautGrpcAnnotation
+    implementation libs.managed.grpc.inprocess
 
     implementation(libs.gson) {
         because("Vulnerability in 2.11.0")

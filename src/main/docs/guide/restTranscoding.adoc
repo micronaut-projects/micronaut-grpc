@@ -1,0 +1,61 @@
+The `micronaut-protobuff-json-support` module can expose unary gRPC methods as REST endpoints, following the https://cloud.google.com/endpoints/docs/grpc/transcoding[HTTP to gRPC transcoding] rules in the `google.api.http` annotations of your `.proto` files. This feature is experimental.
+
+Enable it with:
+
+[configuration]
+----
+grpc:
+  rest:
+    transcoding:
+      enabled: true
+      timeout: 30s
+----
+
+Annotate the methods you want to expose:
+
+[source,protobuf]
+----
+import "google/api/annotations.proto";
+
+service LibraryService {
+  rpc GetShelf(GetShelfRequest) returns (Shelf) {
+    option (google.api.http) = { get: "/v1/{name=shelves/*}" };
+  }
+  rpc UpdateBook(UpdateBookRequest) returns (Book) {
+    option (google.api.http) = {
+      put: "/v1/books/{book.id}"
+      body: "book"
+      additional_bindings { patch: "/v1/books/{book.id}" body: "book" }
+    };
+  }
+  rpc GetBookTitle(GetBookRequest) returns (Book) {
+    option (google.api.http) = { get: "/v1/books/{id}/title" response_body: "title" };
+  }
+}
+----
+
+The rules are read from the service's protobuf descriptors when the application starts. The module uses no reflection and needs no generated code. It supports the following:
+
+* The `get`, `post`, `put`, `patch` and `delete` methods, custom methods (`custom: { kind: "..." }`) and `additional_bindings`.
+* Path templates with literal segments, `*` and `**` wildcards, variables with or without a sub-template (`{name=shelves/*}`), nested field paths (`{book.id}`) and a verb suffix (`/v1/books/{id}:archive`).
+* `body: "*"`, `body: "<field>"` or no body. When the body is not `*`, query parameters set the remaining fields. Query parameters may use proto field names or JSON names, including nested paths like `paging.token`, and a repeated field takes repeated parameters.
+* `response_body`, which returns a single field of the response instead of the whole message.
+
+A request is matched against the rules before routing. Requests that match no rule continue to your controllers. A matching request is dispatched in-process to the gRPC service, through the `ServerInterceptor` beans of the application. The HTTP request headers become gRPC metadata, except for hop-by-hop and transport headers, `grpc-*` headers and binary (`-bin`) headers. Interceptors that authenticate from metadata therefore also apply to REST calls.
+
+The request and response bodies use the protobuf JSON mapping. When a call fails, the gRPC status is mapped to an HTTP status in the same way as Google APIs: `INVALID_ARGUMENT` becomes `400`, `NOT_FOUND` becomes `404`, `UNAUTHENTICATED` becomes `401`, and so on. The body has the following form:
+
+[source,json]
+----
+{"error": {"code": 404, "message": "Shelf not found", "status": "NOT_FOUND"}}
+----
+
+A request body that is not valid JSON, or that does not match the request message, is rejected with `400`.
+
+The following are not supported:
+
+* Streaming methods: rules on client, server or bidirectional streaming methods are skipped with a warning.
+* `google.protobuf.Any` fields, because no type registry is configured.
+* Unknown query parameters are ignored, not rejected.
+
+Unlike the `/grpc-json` endpoints described above, transcoding does not use the `@GrpcRestJsonExposed` annotation. It exposes only the methods annotated with `google.api.http`, with the paths and HTTP methods those annotations define.
