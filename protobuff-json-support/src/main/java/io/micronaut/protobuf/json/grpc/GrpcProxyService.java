@@ -20,12 +20,14 @@ import io.grpc.stub.StreamObserver;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.inject.ExecutableMethod;
 import io.micronaut.protobuf.json.ProtobufJsonTranscoder;
+import io.micronaut.protobuf.json.GrpcJsonConfiguration;
 import io.micronaut.protobuf.json.exception.GrpcInvocationException;
 import io.micronaut.protobuf.json.exception.MethodNotFoundException;
 import io.micronaut.protobuf.json.exception.ProtobufTranscodingException;
 import io.micronaut.protobuf.json.exception.ServiceNotFoundException;
 import io.micronaut.protobuf.json.registry.GrpcServiceRegistry;
 import jakarta.inject.Singleton;
+import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +37,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A service responsible for enabling interaction with gRPC methods through a JSON-based interface.
@@ -67,19 +70,57 @@ import java.util.stream.Collectors;
 @Singleton
 public class GrpcProxyService {
     private static final Logger LOG = LoggerFactory.getLogger(GrpcProxyService.class);
-    // Consider making the timeout configurable
     private static final long GRPC_CALL_TIMEOUT_SECONDS = 10;
+    private static final int DEFAULT_MAX_RESPONSE_MESSAGES = 10_000;
+    private static final long DEFAULT_MAX_RESPONSE_BYTES = 16L * 1024 * 1024;
 
     private final GrpcServiceRegistry registry;
     private final ApplicationContext context;
     private final ProtobufJsonTranscoder transcoder;
+    private final int maxResponseMessages;
+    private final long maxResponseBytes;
 
+    /**
+     * Creates a proxy service using the configured streaming response limits.
+     *
+     * @param registry gRPC service registry
+     * @param context application context
+     * @param transcoder protobuf JSON transcoder
+     * @param configuration JSON proxy configuration
+     * @since 5.1.0
+     */
+    @Inject
     public GrpcProxyService(GrpcServiceRegistry registry,
                             ApplicationContext context,
-                            ProtobufJsonTranscoder transcoder) {
+                            ProtobufJsonTranscoder transcoder,
+                            GrpcJsonConfiguration configuration) {
+        this(registry, context, transcoder, configuration.getMaxResponseMessages(), configuration.getMaxResponseBytes());
+    }
+
+    private GrpcProxyService(GrpcServiceRegistry registry,
+                             ApplicationContext context,
+                             ProtobufJsonTranscoder transcoder,
+                             int maxResponseMessages,
+                             long maxResponseBytes) {
         this.registry = registry;
         this.context = context;
         this.transcoder = transcoder;
+        this.maxResponseMessages = maxResponseMessages;
+        this.maxResponseBytes = maxResponseBytes;
+    }
+
+    /**
+     *
+     * @param registry gRPC service registry
+     * @param context application context
+     * @param transcoder protobuf JSON transcoder
+     * @deprecated Use {@link GrpcProxyService(GrpcServiceRegistry, ApplicationContext, ProtobufJsonTranscoder, GrpcJsonConfiguration)} instead.
+     */
+    @Deprecated(forRemoval = true, since = "5.1.0")
+    public GrpcProxyService(GrpcServiceRegistry registry,
+                            ApplicationContext context,
+                            ProtobufJsonTranscoder transcoder) {
+        this(registry, context, transcoder, DEFAULT_MAX_RESPONSE_MESSAGES, DEFAULT_MAX_RESPONSE_BYTES);
     }
 
     /**
@@ -143,14 +184,9 @@ public class GrpcProxyService {
         } else if (responseMessages.size() == 1) {
             // If only one message was received, return it as a single JSON object
             // This preserves behavior for standard unary calls.
-            return transcoder.toJson(responseMessages.get(0));
+            return toJsonWithinLimit(responseMessages.get(0));
         } else {
-            // If multiple messages were received (streaming), format as a JSON array
-            List<String> jsonResponses = responseMessages.stream()
-                .map(transcoder::toJson)
-                .collect(Collectors.toList());
-            // Construct the JSON array string
-            return "[" + String.join(",", jsonResponses) + "]";
+            return toJsonArray(responseMessages);
         }
     }
 
@@ -172,8 +208,9 @@ public class GrpcProxyService {
         // Use a list to hold potentially multiple response messages
         // ArrayList is sufficient here as it's only modified by the gRPC thread
         // before the latch countdown, and read by the calling thread after await().
-        final List<Message> responseHolder = Collections.synchronizedList(new ArrayList<>()); // Use synchronized list for safety
-        final Throwable[] errorHolder = new Throwable[1];
+        final List<Message> responseHolder = Collections.synchronizedList(new ArrayList<>());
+        final AtomicReference<Throwable> errorHolder = new AtomicReference<>();
+        final long[] responseBytes = new long[1];
 
         // Assuming the method signature is (RequestType, StreamObserver<ResponseType>)
         // The second argument should be the StreamObserver
@@ -181,14 +218,23 @@ public class GrpcProxyService {
 
             @Override
             public void onNext(Message message) {
-                // Add the message to the list instead of overwriting
-                responseHolder.add(message);
+                synchronized (responseHolder) {
+                    if (responseHolder.size() >= maxResponseMessages) {
+                        fail(responseHolder, errorHolder, latch, "gRPC response exceeded the maximum response message count.");
+                    }
+                    int messageBytes = message.getSerializedSize();
+                    if (responseBytes[0] > maxResponseBytes - messageBytes) {
+                        fail(responseHolder, errorHolder, latch, "gRPC response exceeded the maximum response size.");
+                    }
+                    responseHolder.add(message);
+                    responseBytes[0] += messageBytes;
+                }
             }
 
             @Override
             public void onError(Throwable t) {
                 LOG.error("gRPC method invocation resulted in error for method {} on bean {}", method.getName(), beanInstance.getClass().getSimpleName(), t);
-                errorHolder[0] = t;
+                errorHolder.compareAndSet(null, t);
                 latch.countDown(); // Signal completion (with error)
             }
 
@@ -208,11 +254,52 @@ public class GrpcProxyService {
         }
 
         // Check if an error occurred during the gRPC call
-        if (errorHolder[0] != null) {
-            throw new GrpcInvocationException("Error executing gRPC method: " + errorHolder[0].getMessage(), errorHolder[0]);
+        if (errorHolder.get() != null) {
+            throw new GrpcInvocationException("Error executing gRPC method: " + errorHolder.get().getMessage(), errorHolder.get());
         }
 
         // Return the list of collected messages
         return responseHolder;
+    }
+
+    private void fail(List<Message> responseHolder,
+                      AtomicReference<Throwable> errorHolder,
+                      CountDownLatch latch,
+                      String message) {
+        GrpcInvocationException exception = new GrpcInvocationException(message);
+        errorHolder.compareAndSet(null, exception);
+        responseHolder.clear();
+        latch.countDown();
+        throw exception;
+    }
+
+    private String toJsonWithinLimit(Message responseMessage) {
+        String responseJson = transcoder.toJson(responseMessage);
+        if (responseJson.getBytes(StandardCharsets.UTF_8).length > maxResponseBytes) {
+            throw new GrpcInvocationException("gRPC response exceeded the maximum JSON response size.");
+        }
+        return responseJson;
+    }
+
+    private String toJsonArray(List<Message> responseMessages) {
+        StringBuilder jsonResponse = new StringBuilder("[");
+        long responseBytes = 1;
+        for (Message responseMessage : responseMessages) {
+            String responseJson = transcoder.toJson(responseMessage);
+            long additionalBytes = responseJson.getBytes(StandardCharsets.UTF_8).length;
+            if (jsonResponse.length() > 1) {
+                additionalBytes++;
+            }
+            if (responseBytes + additionalBytes + 1 > maxResponseBytes) {
+                throw new GrpcInvocationException("gRPC response exceeded the maximum JSON response size.");
+            }
+            if (jsonResponse.length() > 1) {
+                jsonResponse.append(',');
+            }
+            jsonResponse.append(responseJson);
+            responseBytes += additionalBytes;
+        }
+        jsonResponse.append(']');
+        return jsonResponse.toString();
     }
 }

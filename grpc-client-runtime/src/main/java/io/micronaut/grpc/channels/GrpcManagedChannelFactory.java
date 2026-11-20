@@ -31,6 +31,7 @@ import io.micronaut.context.annotation.Bean;
 import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Primary;
 import io.micronaut.context.exceptions.ConfigurationException;
+import io.micronaut.context.exceptions.DisabledBeanException;
 import io.micronaut.core.type.Argument;
 import io.micronaut.core.util.StringUtils;
 import io.micronaut.grpc.annotation.GrpcChannel;
@@ -54,6 +55,8 @@ import jakarta.annotation.PreDestroy;
 public class GrpcManagedChannelFactory implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(GrpcManagedChannelFactory.class);
+    private static final String ENABLED = GrpcDefaultManagedChannelConfiguration.PREFIX + ".enabled";
+    private static final String NAMED_ENABLED = GrpcDefaultManagedChannelConfiguration.PREFIX + '.';
     private final Map<ChannelKey, ManagedChannel> channels = new ConcurrentHashMap<>();
     private final ApplicationContext beanContext;
 
@@ -90,6 +93,10 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
             throw new ConfigurationException("No value specified to @GrpcChannel annotation: " + injectionPoint);
         }
 
+        if (!isEnabled(target)) {
+            throw new DisabledBeanException("GRPC client [" + target + "] is disabled via configuration");
+        }
+
         if ("grpc-server".equalsIgnoreCase(target)) {
             return beanContext.getBean(ManagedChannel.class, Qualifiers.byName("grpc-server"));
         }
@@ -110,6 +117,11 @@ public class GrpcManagedChannelFactory implements AutoCloseable {
                 });
             return channel;
         });
+    }
+
+    private boolean isEnabled(String target) {
+        return beanContext.getEnvironment().getProperty(ENABLED, Boolean.class).orElse(true)
+            && beanContext.getEnvironment().getProperty(NAMED_ENABLED + target + ".enabled", Boolean.class).orElse(true);
     }
 
     private boolean connectOnStartup(ManagedChannel channel, Duration timeout) {
